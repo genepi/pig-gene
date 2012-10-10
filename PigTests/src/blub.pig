@@ -1,0 +1,1 @@
+a = load 'ha' as (va:int);
