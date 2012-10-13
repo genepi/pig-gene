@@ -46,7 +46,6 @@
 
 	
 	<target name="run_server" depends="copy_jar_file">	
-		
 		<echo>Run server...</echo>
 		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true"
 			command="hadoop fs -rmr clemensTests/out; ${hadoop.bin} jar ${cloud.dir}/${app.jar} clemensTests clemensTests/out" >
