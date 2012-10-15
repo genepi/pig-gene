@@ -1,6 +1,6 @@
 /* only for testing purpose... */
 
-REGISTER rsNumber.jar;
+REGISTER pigGene.jar;
 sample1 = LOAD 'GeneSamples/sample1.vcf' USING PigStorage('\t') 
 			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
 						alt:chararray, qual:float, filt:chararray, info:chararray, format:chararray, exome:chararray);

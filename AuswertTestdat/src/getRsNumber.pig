@@ -8,7 +8,7 @@
  * @author: Clemens Banas
  */
 
-REGISTER rsNumber.jar;
+REGISTER pigGene.jar;
 sample1 = LOAD 'GeneSamples/sample1.vcf' USING PigStorage('\t') 
 			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
 						alt:chararray, qual:float, filt:chararray, info:chararray, format:chararray, exome:chararray);
@@ -24,3 +24,5 @@ joined = JOIN refFileFilt BY (chrom,pos), sample1Filt BY (chrom,pos) USING 'repl
 reordered = FOREACH joined GENERATE sample1.chrom,sample1.pos,refFile.id,sample1.ref,sample1.alt,sample1.qual,
 				sample1.filt,sample1.info,sample1.format,sample1.exome;
 STORE reordered INTO 'GeneSamples/out';
+
+/* TODO: fix!!! */
