@@ -20,8 +20,8 @@ rfp = FOREACH refFile GENERATE chrom, pos, id; /* reduce data amount just before
 s1f = FILTER sample1 BY pigGene.IgnoreHeader(chrom);
 rff = FILTER rfp BY pigGene.IgnoreHeader(chrom);
 
-/* if chrome and pos match: add rs Number to the sample1 file */
-joined = JOIN rff BY (chrom,pos), s1f BY (chrom,pos);
+/* if chrome and pos match: add rsNumber to the sample1 file */
+joined = JOIN s1f BY (chrom,pos), rff BY (chrom,pos);
 reordered = FOREACH joined GENERATE s1f::chrom,s1f::pos,rff::id,s1f::ref,s1f::alt,s1f::qual,
 				s1f::filt,s1f::info,s1f::format,s1f::exome;
 
