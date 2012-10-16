@@ -1,0 +1,6 @@
+d1	20	.	ref	alt	17.5	filt	info	format	exome
+d1	21	.	ref	alt	30.5	filt	info	format	exome
+m1	56	.	ref	alt	36.5	filt	info	format	exome
+r8	00	.	ref	alt	34.5	filt	info	format	exome
+g6	44	.	ref	alt	31.5	filt	info	format	exome
+k7	05	.	ref	alt	39.5	filt	info	format	exome

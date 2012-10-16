@@ -1,0 +1,5 @@
+d1	21	rsD121	ref	alt	07.6	filt	info
+m1	55	rsM155	ref alt	68.1	filt	info
+m1	56	rsM156	ref	alt	66.4	filt	info
+k8	04	rsK804	ref	alt	46.3	filt	info
+r8	00	rsR800	ref	alt	78.9	filt	info
