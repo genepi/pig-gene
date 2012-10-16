@@ -9,20 +9,20 @@
  */
 
 REGISTER pigGene.jar;
-sample1 = LOAD 'GeneSamples/sample1.vcf' USING PigStorage('\t') 
+sample1 = LOAD 'GeneSamples/rsTestInpu1.vcf' USING PigStorage('\t') 
 			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
 						alt:chararray, qual:float, filt:chararray, info:chararray, format:chararray, exome:chararray);
-refFile = LOAD 'GeneRefFile/00-All.vcf' USING PigStorage('\t')
+refFile = LOAD 'GeneRefFile/rsTestInput2.vcf' USING PigStorage('\t')
 			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
 						alt:chararray, qual:float, filt:chararray, info:chararray);
 
-sample1Filt = FILTER sample1 BY pigGene.IgnoreHeader(chrom);
-refFileFilt = FILTER refFile BY pigGene.IgnoreHeader(chrom);
+s1f = FILTER sample1 BY pigGene.IgnoreHeader(chrom);
+rff = FILTER refFile BY pigGene.IgnoreHeader(chrom);
+rfp = FOREACH rff GENERATE id; /* reduce data amount just before join */
 
-/* wenn chrom und pos Ÿbereinstimmt, dann hol ich mir die rs nummer und erstell eine neue Relation */
-joined = JOIN refFileFilt BY (chrom,pos), sample1Filt BY (chrom,pos) USING 'replicated';
-reordered = FOREACH joined GENERATE sample1.chrom,sample1.pos,refFile.id,sample1.ref,sample1.alt,sample1.qual,
-				sample1.filt,sample1.info,sample1.format,sample1.exome;
+/* if chrome and pos match: add rs Number to the sample1 file */
+joined = JOIN rfp BY (chrom,pos), s1f BY (chrom,pos) USING 'replicated';
+reordered = FOREACH joined GENERATE s1f.chrom,s1f.pos,rfp.id,s1f.ref,s1f.alt,s1f.qual,
+				s1f.filt,s1f.info,s1f.format,s1f.exome;
+				
 STORE reordered INTO 'GeneSamples/out';
-
-/* TODO: fix!!! */
