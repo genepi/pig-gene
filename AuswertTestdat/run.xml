@@ -28,7 +28,7 @@
             <manifest>
                 <attribute name="Main1-Class" value="${app.main1}"/>
             	<attribute name="Main2-Class" value="${app.main2}"/>
-            	<attribute name="Main2-Class" value="${app.main3}"/>
+            	<attribute name="Main3-Class" value="${app.main3}"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="bin"/>
