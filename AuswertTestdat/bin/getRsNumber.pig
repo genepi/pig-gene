@@ -9,20 +9,20 @@
  */
 
 REGISTER pigGene.jar;
-sample1 = LOAD 'GeneSamples/rsTestInpu1.vcf' USING PigStorage('\t') 
+sample1 = LOAD 'GeneSamples/sample1.vcf' USING PigStorage('\t') 
 			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
 						alt:chararray, qual:float, filt:chararray, info:chararray, format:chararray, exome:chararray);
-refFile = LOAD 'GeneRefFile/rsTestInput2.vcf' USING PigStorage('\t')
+refFile = LOAD 'GeneRefFile/00-All.vcf' USING PigStorage('\t')
 			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
 						alt:chararray, qual:float, filt:chararray, info:chararray);
 
+rfp = FOREACH refFile GENERATE chrom, pos, id; /* reduce data amount just before filtering and joining */
 s1f = FILTER sample1 BY pigGene.IgnoreHeader(chrom);
-rff = FILTER refFile BY pigGene.IgnoreHeader(chrom);
-rfp = FOREACH rff GENERATE id; /* reduce data amount just before join */
+rff = FILTER rfp BY pigGene.IgnoreHeader(chrom);
 
 /* if chrome and pos match: add rs Number to the sample1 file */
-joined = JOIN rfp BY (chrom,pos), s1f BY (chrom,pos) USING 'replicated';
-reordered = FOREACH joined GENERATE s1f.chrom,s1f.pos,rfp.id,s1f.ref,s1f.alt,s1f.qual,
-				s1f.filt,s1f.info,s1f.format,s1f.exome;
-				
+joined = JOIN rff BY (chrom,pos), s1f BY (chrom,pos);
+reordered = FOREACH joined GENERATE s1f::chrom,s1f::pos,rff::id,s1f::ref,s1f::alt,s1f::qual,
+				s1f::filt,s1f::info,s1f::format,s1f::exome;
+
 STORE reordered INTO 'GeneSamples/out';
