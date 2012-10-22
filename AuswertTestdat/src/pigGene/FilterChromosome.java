@@ -1,7 +1,7 @@
 /**
  * PigGene - BACHELOR PROJECT
  * 
- * UDF to remove filter unwanted 
+ * UDF to filter unwanted 
  * chromosome information.
  * 
  * @author: Clemens Banas
