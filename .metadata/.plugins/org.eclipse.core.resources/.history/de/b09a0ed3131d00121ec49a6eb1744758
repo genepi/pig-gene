@@ -1,0 +1,6 @@
+/* pig -param input=GeneSamples/in tessssssst.pig */
+
+REGISTER pigGene.jar;
+samples = LOAD '$input' USING pigGene.PigStorageWithFilename() ;
+									
+dump samples;

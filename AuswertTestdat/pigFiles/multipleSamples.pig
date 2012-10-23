@@ -12,10 +12,10 @@
  */
  
 REGISTER pigGene.jar;
-samples = LOAD '$input' USING pigGene.PigStorageWithFilename() 
-			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
+samples = LOAD '$input' USING PigStorage('\t','-tagsource')
+			AS (filename:chararray, chrom:chararray, pos:int, id:chararray, ref:chararray, 
 						alt:chararray, qual:float, filt:chararray, info:chararray, 
-									format:chararray, exome:chararray, filename:chararray);
+									format:chararray, exome:chararray);
 
 /* filter header and chromosome & project unused columns */
 samp = FILTER samples BY pigGene.IgnoreHeader(chrom);
@@ -23,7 +23,7 @@ sampf = FILTER samp BY pigGene.FilterChromosome(chrom);
 sfu = FOREACH sampf GENERATE chrom, pos, ref, alt, filename;
 
 /* ordering */
-ordered = ORDER sfu BY chrom, pos, ref, alt ASC; /* filename */
+ordered = ORDER sfu BY chrom, pos, ref, alt, filename ASC;
 STORE ordered INTO '$outOrder';
 
 /* remove duplicates */
