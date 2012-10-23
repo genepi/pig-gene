@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="copy_jar_file" name="" >
+    
+	<property name="cloud.host" value="138.232.66.81" />
+	<property name="cloud.username" value="hadoop" />
+	<property name="cloud.password" value="" />	
+	<property name="cloud.dir" value="/home/hadoop/clemensTests/AuswertTestdat" />
+	<property name="local.pig" value="pigFiles" />
+	<property name="hadoop.bin" value="/home/hadoop/hadoop-0.20.2-cdh3u5/bin/hadoop" />
+	<property name="app.jar" value="pigGene.jar" />
+	
+	<target name="compile">
+    	<javac srcdir="src" destdir="bin" classpath="" >
+			<classpath>
+				<fileset dir="jars" />
+			</classpath>
+    	</javac>   		
+    </target>
+	
+    <target name="create_jar" depends="compile">  	
+    	<delete dir="dist"></delete>
+    	<mkdir dir="dist"></mkdir>
+    	
+        <jar destfile="dist/${app.jar}" filesetmanifest="mergewithoutmain">
+            <fileset dir="bin"/>
+        </jar>
+    </target>
+	
+	<target name="copy_jar_file" depends="create_jar">
+		<echo>Copy jar file...</echo>
+		<scp file="dist/${app.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+
+	</target>
+
+</project>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="copy_jar_file" name="" >
+    
+	<property name="cloud.host" value="138.232.66.81" />
+	<property name="cloud.username" value="hadoop" />
+	<property name="cloud.password" value="60#piggene#20" />	
+	<property name="cloud.dir" value="/home/hadoop/clemensTests/AuswertTestdat" />
+	<property name="hadoop.bin" value="/home/hadoop/hadoop-0.20.2-cdh3u5/bin/hadoop" />
+	<property name="app.jar" value="pigGene.jar" />
+
+	<property name="app.main1" value="pigGene.IgnoreHeader" />
+	<property name="app.main2" value="pigGene.FilterLines" />
+	<property name="app.main3" value="pigGene.FilterLineRange" />
+	<property name="app.main4" value="pigGene.FilterChromosome" />
+	<property name="app.main5" value="pigGene.RemoveRsNumber" />
+	
+	<target name="compile">
+    	<javac srcdir="src" destdir="bin" classpath="" >
+			<classpath>
+				<fileset dir="jars" />
+			</classpath>
+    	</javac>   		
+    </target>
+	
+    <target name="create_jar" depends="compile">  	
+    	<delete dir="dist"></delete>
+    	<mkdir dir="dist"></mkdir>
+    	
+        <jar destfile="dist/${app.jar}" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main1-Class" value="${app.main1}"/>
+            	<attribute name="Main2-Class" value="${app.main2}"/>
+            	<attribute name="Main3-Class" value="${app.main3}"/>
+            	<attribute name="Main4-Class" value="${app.main4}"/>
+            	<attribute name="Main5-Class" value="${app.main5}"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="bin"/>
+        </jar>
+    </target>
+	
+	<target name="copy_jar_file" depends="create_jar">
+		<echo>Copy jar file...</echo>
+		<scp file="dist/${app.jar}" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/ignoreHeader.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/meanQuality.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/only15Lines.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/simpleJoin.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/getRsNumber.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/getComParameter.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/medianDataFu.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/multipleSamples.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/generateID.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<scp file="pigFiles/removeRsNumber.pig" todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+	</target>
+
+</project>
