@@ -1,6 +1,11 @@
-/* only for testing purpose... */
+/* 
+ * only for testing purpose...
+ * 
+ * call this script like this:
+ * pig -param input=GeneSamples/idTest.txt generateID.pig
+ */
 
-file = LOAD 'GeneSamples/idTest.txt' AS (a:int, b:chararray, id:int);
+file = LOAD '$input' AS (a:int, b:chararray, id:int);
 DUMP file;
 
 modified = FOREACH file GENERATE a, b, 1;

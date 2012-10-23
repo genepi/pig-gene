@@ -1,21 +1,18 @@
 /**
  * PigGene - BACHELOR PROJECT
  * 
- * Pig script gets two parameters as input. These parameters define the location 
- * of the two input files. Each file defines only a single integer value which is 
- * used to identify the range which lines (their corresponding number) should be 
- * stored into the output file.
+ * Pig script gets two parameters as input. These parameters define the 
+ * range which lines (their corresponding number) should be stored into 
+ * the output file.
  * 
  * call this script like this:
- * pig -param start=comParamStart.txt -param end=comParamEnd.txt getComParameter.pig
+ * pig -param input=GeneSamples/parameterInput.txt -param start=3 -param end=11 -param output=GeneSamples/out getComParameter.pig
  * 
  * @author: Clemens Banas
  */
  
 REGISTER pigGene.jar;
-startLineNo = LOAD 'GeneSamples/$start' AS (start:int); 
-endLineNo = LOAD 'GeneSamples/$end' AS (end:int);
-inputFile = LOAD 'GeneSamples/parameterInput.txt' AS (key:int, val:chararray);
 
-outputFile = FILTER inputFile BY pigGene.FilterLineRange(startLineNo.start,endLineNo.end);
-STORE outputFile INTO 'GeneSamples/out';
+inputFile = LOAD '$input' AS (key:int, val:chararray);
+outputFile = FILTER inputFile BY pigGene.FilterLineRange($start,$end);
+STORE outputFile INTO '$output';
