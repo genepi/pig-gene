@@ -1,3 +1,12 @@
+/**
+ * PigGene - BACHELOR PROJECT
+ * 
+ * UDF to filter lines above a 
+ * specified threshold.
+ * 
+ * @author: Clemens Banas
+ */
+
 package pigGene;
 
 import java.io.IOException;

@@ -1,0 +1,17 @@
+/**
+ * PigGene - BACHELOR PROJECT
+ * 
+ * Pig script .....
+ * 
+ * call this script like this:
+ * pig -param folder=GeneSamples/input -param thres=20 getFolderPath.pig
+ * 
+ * @author: Clemens Banas
+ */
+ 
+data = LOAD '$folder' USING PigStorage() AS (id:int,name:chararray);
+datan = flatten(data);
+DUMP datan;
+/*
+out = FILTER data BY data.id <= 20;
+DUMP out; */

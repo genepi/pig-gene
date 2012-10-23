@@ -1,3 +1,12 @@
+/**
+ * PigGene - BACHELOR PROJECT
+ * 
+ * UDF to filter lines that are not
+ * in a given range.
+ * 
+ * @author: Clemens Banas
+ */
+
 package pigGene;
 
 import java.io.IOException;

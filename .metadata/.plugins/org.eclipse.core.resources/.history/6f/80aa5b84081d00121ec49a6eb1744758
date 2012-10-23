@@ -1,0 +1,18 @@
+/**
+ * PigGene - BACHELOR PROJECT
+ * 
+ * This class is just for testing purpose...
+ * 
+ * @author: Clemens Banas
+ */
+
+package pigGene;
+
+public class TestClass {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

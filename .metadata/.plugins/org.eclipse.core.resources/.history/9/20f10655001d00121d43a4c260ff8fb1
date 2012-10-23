@@ -1,0 +1,13 @@
+/**
+ * PigGene - BACHELOR PROJECT
+ * 
+ * Pig script .....
+ * 
+ * call this script like this:
+ * pig -param folder=GeneSamples/input
+ * 
+ * @author: Clemens Banas
+ */
+ 
+data = LOAD '$folder' USING PigStorage() AS (id:int,name:chararray);
+dump data;
