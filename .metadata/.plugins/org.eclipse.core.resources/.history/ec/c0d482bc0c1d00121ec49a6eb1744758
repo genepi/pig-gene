@@ -22,11 +22,3 @@ samp = FILTER samples BY pigGene.IgnoreHeader(chrom);
 sampf = FILTER samp BY pigGene.FilterChromosome(chrom);
 sfu = FOREACH sampf GENERATE chrom, pos, ref, alt, filename;
 
-/* ordering */
-ordered = ORDER sfu BY chrom, pos, ref, alt ASC; /* filename */
-STORE ordered INTO '$outOrder';
-
-/* remove duplicates */
-duplicates = FOREACH ordered GENERATE chrom, pos, ref, alt;
-noDup = DISTINCT duplicates;
-STORE noDup INTO '$output';
