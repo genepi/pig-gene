@@ -190,3 +190,18 @@ Binding(CTRL+SHIFT+I,
 
 !ENTRY org.eclipse.ui 4 4 2012-10-23 08:47:34.003
 !MESSAGE Invalid preference page path: XML Syntax
+
+!ENTRY org.eclipse.egit.ui 4 0 2012-10-23 10:16:10.419
+!MESSAGE An internal error occurred
+!STACK 0
+org.eclipse.jgit.api.errors.JGitInternalException: No changes
+	at org.eclipse.jgit.api.CommitCommand.createTemporaryIndex(CommitCommand.java:419)
+	at org.eclipse.jgit.api.CommitCommand.call(CommitCommand.java:194)
+	at org.eclipse.egit.core.op.CommitOperation.commit(CommitOperation.java:249)
+	at org.eclipse.egit.core.op.CommitOperation.access$7(CommitOperation.java:227)
+	at org.eclipse.egit.core.op.CommitOperation$1.run(CommitOperation.java:192)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2344)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2326)
+	at org.eclipse.egit.core.op.CommitOperation.execute(CommitOperation.java:202)
+	at org.eclipse.egit.ui.internal.commit.CommitUI$3.run(CommitUI.java:279)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
