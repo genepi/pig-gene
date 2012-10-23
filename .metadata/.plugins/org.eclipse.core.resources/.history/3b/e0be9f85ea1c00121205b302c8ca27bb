@@ -15,8 +15,6 @@ import java.io.IOException;
 import org.apache.pig.FilterFunc;
 import org.apache.pig.data.Tuple;
 
-
-
 public class RemoveRsNumber extends FilterFunc {
 	private static String rsNumber = "rs";
 

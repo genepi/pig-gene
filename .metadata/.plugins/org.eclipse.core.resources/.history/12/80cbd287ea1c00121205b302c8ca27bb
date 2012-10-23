@@ -1,37 +1,28 @@
 /**
  * PigGene - BACHELOR PROJECT
  * 
- * UDF to filter all lines  
- * containing an rs-Number.
+ * UDF to remove unwanted header information 
+ * in the pig relation to speed up execution.
  * 
  * @author: Clemens Banas
  */
 
-
 package pigGene;
 
 import java.io.IOException;
-
 import org.apache.pig.FilterFunc;
 import org.apache.pig.data.Tuple;
 
-
-
-public class RemoveRsNumber extends FilterFunc {
-	private static String rsNumber = "rs";
+public class IgnoreHeader extends FilterFunc {
 
 	@Override
 	public Boolean exec(Tuple input) throws IOException {
 		if(input == null || input.size() == 0) {
 			return false;
 		}
-		String rs;
-		try {
-		rs = ((String)input.get(0)).substring(0, 2);
-		} catch(IndexOutOfBoundsException e) {
-			return true;
-		}
-		return !rsNumber.equals(rs);
+		String value = (String) input.get(0);
+		String headerSymbol = "#";
+		return !(value.substring(0, 1).equals(headerSymbol)); //filter header information
 	}
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="51" version="2.0">
+<workbench progressCount="39" version="2.0">
 <workbenchAdvisor/>
 <window height="744" maximized="true" width="1020" x="124" y="34">
 <fastViewData fastViewLocation="1024"/>
@@ -40,7 +40,7 @@
 </editorArea>
 <editor activePart="true" focus="true" id="org.eclipse.ant.ui.internal.editor.AntEditor" name="run.xml" partName="run.xml" path="/home/clemens/workspace/bachelorProject/pig-gene/AuswertTestdat/run.xml" title="run.xml" tooltip="AuswertTestdat/run.xml" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/AuswertTestdat/run.xml"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="565" selectionTopPixel="0"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="469" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
@@ -105,9 +105,7 @@
 </view>
 <view id="org.eclipse.jdt.ui.PackageExplorer" partName="Package Explorer">
 <viewState group_libraries="1" layout="2" linkWithEditor="0" rootMode="1" workingSetName="">
-<customFilters userDefinedPatternsEnabled="false">
-<xmlDefinedFilters>
-<child filterId="org.eclipse.jdt.ui.PackageExplorer.LibraryFilter" isEnabled="false"/>
+<customFilters userDefinedPatternsEnabled="false">&#x0A;<xmlDefinedFilters>&#x0A;<child filterId="org.eclipse.jdt.ui.PackageExplorer.LibraryFilter" isEnabled="false"/>
 <child filterId="org.eclipse.jdt.ui.PackageExplorer.LocalTypesFilter" isEnabled="false"/>
 <child filterId="org.eclipse.jdt.ui.PackageExplorer.StaticsFilter" isEnabled="false"/>
 <child filterId="org.eclipse.pde.ui.ExternalPluginLibrariesFilter1" isEnabled="true"/>
@@ -131,8 +129,7 @@
 <child filterId="org.eclipse.pde.ui.BinaryProjectFilter1" isEnabled="false"/>
 <child filterId="org.eclipse.jdt.ui.PackageExplorer.SyntheticMembersFilter" isEnabled="true"/>
 </xmlDefinedFilters>
-<lastRecentlyUsedFilters>
-<child filterId="org.eclipse.jdt.ui.PackageExplorer_patternFilterId_.*"/>
+<lastRecentlyUsedFilters>&#x0A;<child filterId="org.eclipse.jdt.ui.PackageExplorer_patternFilterId_.*"/>
 </lastRecentlyUsedFilters>
 </customFilters>
 </viewState>
@@ -145,7 +142,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.ui.navigator.ProjectExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.ant.ui.internal.editor.AntEditor" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.egit.ui.GitRepositoriesPerspectiveFactory" id="org.eclipse.egit.ui.GitRepositoryExploring" label="Git Repository Exploring"/>
 <alwaysOnActionSet id="org.eclipse.mylyn.context.ui.actionSet"/>
@@ -370,10 +367,10 @@
 <view id="org.eclipse.jdt.ui.PackageExplorer"/>
 <view id="org.eclipse.ui.navigator.ProjectExplorer"/>
 <view id="org.eclipse.ui.views.ProblemView"/>
-<view id="org.eclipse.jdt.ui.JavadocView"/>
 <view id="org.eclipse.ui.console.ConsoleView"/>
-<view id="org.eclipse.ui.views.ProgressView"/>
 <view id="org.eclipse.search.ui.views.SearchView"/>
+<view id="org.eclipse.ui.views.ProgressView"/>
+<view id="org.eclipse.jdt.ui.JavadocView"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <view id="org.eclipse.egit.ui.RepositoriesView"/>
 <fastViewBars/>
@@ -402,7 +399,7 @@
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.22695035" ratioLeft="288" ratioRight="981" relationship="2" relative="left"/>
 <info folder="true" part="bottom" ratio="0.75750834" ratioLeft="681" ratioRight="218" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ProgressView" appearance="2" expanded="2">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.search.ui.views.SearchView" label="Search"/>
@@ -455,6 +452,17 @@
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ant.ui.internal.editor.AntEditor" path="/AuswertTestdat/run.xml"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" path="/AuswertTestdat/pigFiles/medianDataFu.pig"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" path="/AuswertTestdat/pigFiles/multipleSamples.pig"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/FilterChromosome.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/FilterLineRange.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/FilterLines.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/GeneLoader.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/IgnoreHeader.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/RemoveRsNumber.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/FilterChromosome.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/FilterLineRange.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/IgnoreHeader.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/RemoveRsNumber.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ant.ui.internal.editor.AntEditor" path="/AuswertTestdat/run.xml"/>
 </editors>
 <item historyLabel="FilterChromosome.java" index="0">
 <position info="not_deleted" x="4" y="0"/>
@@ -498,8 +506,110 @@
 <item historyLabel="run.xml" index="2">
 <position info="not_deleted" x="592" y="0"/>
 </item>
-<item active="true" historyLabel="run.xml" index="2">
+<item historyLabel="run.xml" index="2">
 <position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="608" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="592" y="0"/>
+</item>
+<item historyLabel="FilterChromosome.java" index="5">
+<position/>
+</item>
+<item historyLabel="FilterLineRange.java" index="6">
+<position/>
+</item>
+<item historyLabel="FilterLines.java" index="7">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="GeneLoader.java" index="8">
+<position/>
+</item>
+<item historyLabel="IgnoreHeader.java" index="9">
+<position info="not_deleted" x="4" y="0"/>
+</item>
+<item historyLabel="RemoveRsNumber.java" index="10">
+<position/>
+</item>
+<item historyLabel="IgnoreHeader.java" index="9">
+<position info="not_deleted" x="614" y="0"/>
+</item>
+<item historyLabel="GeneLoader.java" index="8">
+<position/>
+</item>
+<item historyLabel="FilterLines.java" index="7">
+<position info="not_deleted" x="395" y="0"/>
+</item>
+<item historyLabel="FilterLineRange.java" index="6">
+<position/>
+</item>
+<item historyLabel="FilterChromosome.java" index="5">
+<position/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="592" y="0"/>
+</item>
+<item historyLabel="GeneLoader.java" index="8">
+<position info="not_deleted" x="1005" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="592" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="497" y="53"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="584" y="4"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="608" y="0"/>
+</item>
+<item historyLabel="RemoveRsNumber.java" index="10">
+<position info="not_deleted" x="632" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="608" y="0"/>
+</item>
+<item historyLabel="FilterChromosome.java" index="5">
+<position info="not_deleted" x="447" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="608" y="0"/>
+</item>
+<item historyLabel="FilterLineRange.java" index="6">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="608" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="584" y="4"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="891" y="0"/>
+</item>
+<item historyLabel="FilterChromosome.java" index="11">
+<position info="not_deleted" x="4" y="0"/>
+</item>
+<item historyLabel="FilterLineRange.java" index="12">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="IgnoreHeader.java" index="13">
+<position info="not_deleted" x="4" y="0"/>
+</item>
+<item historyLabel="RemoveRsNumber.java" index="14">
+<position info="not_deleted" x="386" y="0"/>
+</item>
+<item historyLabel="run.xml" index="15">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="run.xml" index="15">
+<position info="not_deleted" x="1178" y="0"/>
+</item>
+<item active="true" historyLabel="run.xml" index="15">
+<position info="not_deleted" x="497" y="53"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -507,13 +617,6 @@
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 <trimLayout>
-<trimArea IMemento.internal.id="16384">
-<trimItem IMemento.internal.id="left"/>
-<trimItem IMemento.internal.id="org.eclipse.ui.internal.ViewStack@4426a725"/>
-</trimArea>
-<trimArea IMemento.internal.id="131072">
-<trimItem IMemento.internal.id="right"/>
-</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 <trimItem IMemento.internal.id="org.eclipse.mylyn.tasks.ui.trim.container"/>
@@ -522,13 +625,30 @@
 <trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
 <trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
-<trimItem IMemento.internal.id="bottom"/>
 </trimArea>
 </trimLayout>
 </window>
 <mruList>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ant.ui.internal.editor.AntEditor" name="run.xml" tooltip="AuswertTestdat/run.xml">
 <persistable path="/AuswertTestdat/run.xml"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RemoveRsNumber.java" tooltip="AuswertTestdat/src/pigGene/RemoveRsNumber.java">
+<persistable path="/AuswertTestdat/src/pigGene/RemoveRsNumber.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="IgnoreHeader.java" tooltip="AuswertTestdat/src/pigGene/IgnoreHeader.java">
+<persistable path="/AuswertTestdat/src/pigGene/IgnoreHeader.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="GeneLoader.java" tooltip="AuswertTestdat/src/pigGene/GeneLoader.java">
+<persistable path="/AuswertTestdat/src/pigGene/GeneLoader.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FilterLines.java" tooltip="AuswertTestdat/src/pigGene/FilterLines.java">
+<persistable path="/AuswertTestdat/src/pigGene/FilterLines.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FilterLineRange.java" tooltip="AuswertTestdat/src/pigGene/FilterLineRange.java">
+<persistable path="/AuswertTestdat/src/pigGene/FilterLineRange.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FilterChromosome.java" tooltip="AuswertTestdat/src/pigGene/FilterChromosome.java">
+<persistable path="/AuswertTestdat/src/pigGene/FilterChromosome.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" name="multipleSamples.pig" tooltip="AuswertTestdat/pigFiles/multipleSamples.pig">
 <persistable path="/AuswertTestdat/pigFiles/multipleSamples.pig"/>
@@ -538,9 +658,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" name="getComParameter.pig" tooltip="AuswertTestdat/pigFiles/getComParameter.pig">
 <persistable path="/AuswertTestdat/pigFiles/getComParameter.pig"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="FilterChromosome.java" tooltip="AuswertTestdat/src/pigGene/FilterChromosome.java">
-<persistable path="/AuswertTestdat/src/pigGene/FilterChromosome.java"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" name="meanQuality.pig" tooltip="AuswertTestdat/src/meanQuality.pig">
 <persistable path="/AuswertTestdat/src/meanQuality.pig"/>
