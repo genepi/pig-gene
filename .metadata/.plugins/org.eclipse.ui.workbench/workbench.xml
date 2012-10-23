@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="32" version="2.0">
+<workbench progressCount="51" version="2.0">
 <workbenchAdvisor/>
 <window height="744" maximized="true" width="1020" x="124" y="34">
 <fastViewData fastViewLocation="1024"/>
@@ -13,7 +13,7 @@
 <coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="156" y="30"/>
 <coolItem id="org.eclipse.jdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="76" y="30"/>
 <coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="104" y="30"/>
-<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="68" y="30"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="124" y="30"/>
 <coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
@@ -22,8 +22,8 @@
 <coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="org.eclipse.compare.CompareEditor" itemType="typeToolBarContribution" x="96" y="30"/>
 <coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
-<coolItem id="org.eclipse.ant.ui.internal.editor.AntEditor" itemType="typePlaceholder" x="-1" y="-1"/>
-<coolItem id="org.apache.pigeditor.Pig" itemType="typeToolBarContribution" x="40" y="30"/>
+<coolItem id="org.eclipse.ant.ui.internal.editor.AntEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.apache.pigeditor.Pig" itemType="typePlaceholder" x="40" y="30"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
@@ -38,9 +38,9 @@
 </folder>
 </info>
 </editorArea>
-<editor activePart="true" focus="true" id="org.apache.pigeditor.Pig" name="getComParameter.pig" partName="getComParameter.pig" path="/home/clemens/workspace/bachelorProject/pig-gene/AuswertTestdat/pigFiles/getComParameter.pig" title="getComParameter.pig" tooltip="AuswertTestdat/pigFiles/getComParameter.pig" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/AuswertTestdat/pigFiles/getComParameter.pig"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+<editor activePart="true" focus="true" id="org.eclipse.ant.ui.internal.editor.AntEditor" name="run.xml" partName="run.xml" path="/home/clemens/workspace/bachelorProject/pig-gene/AuswertTestdat/run.xml" title="run.xml" tooltip="AuswertTestdat/run.xml" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/AuswertTestdat/run.xml"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="565" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
@@ -83,6 +83,9 @@
 <viewState/>
 </view>
 <view id="org.eclipse.egit.ui.ReflogView" partName="Git Reflog"/>
+<view id="org.eclipse.ui.navigator.ProjectExplorer" partName="Project Explorer">
+<viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
+</view>
 <view id="org.eclipse.debug.ui.ExpressionView" partName="Expressions"/>
 <view id="org.eclipse.ui.views.PropertySheet" partName="Properties">
 <viewState/>
@@ -90,7 +93,7 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
-<category IMemento.internal.id="Errors (4 items)"/>
+<category IMemento.internal.id="Errors (8 items)"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="310" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -128,6 +131,9 @@
 <child filterId="org.eclipse.pde.ui.BinaryProjectFilter1" isEnabled="false"/>
 <child filterId="org.eclipse.jdt.ui.PackageExplorer.SyntheticMembersFilter" isEnabled="true"/>
 </xmlDefinedFilters>
+<lastRecentlyUsedFilters>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer_patternFilterId_.*"/>
+</lastRecentlyUsedFilters>
 </customFilters>
 </viewState>
 </view>
@@ -139,7 +145,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.jdt.ui.PackageExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.ui.navigator.ProjectExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.egit.ui.GitRepositoriesPerspectiveFactory" id="org.eclipse.egit.ui.GitRepositoryExploring" label="Git Repository Exploring"/>
 <alwaysOnActionSet id="org.eclipse.mylyn.context.ui.actionSet"/>
@@ -362,6 +368,7 @@
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <view id="org.eclipse.jdt.ui.PackageExplorer"/>
+<view id="org.eclipse.ui.navigator.ProjectExplorer"/>
 <view id="org.eclipse.ui.views.ProblemView"/>
 <view id="org.eclipse.jdt.ui.JavadocView"/>
 <view id="org.eclipse.ui.console.ConsoleView"/>
@@ -373,13 +380,14 @@
 <layout>
 <mainWindow>
 <info folder="true" part="left">
-<folder activePageID="org.eclipse.jdt.ui.PackageExplorer" appearance="2" expanded="2">
+<folder activePageID="org.eclipse.ui.navigator.ProjectExplorer" appearance="2" expanded="2">
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="Package Explorer"/>
+<page content="org.eclipse.ui.navigator.ProjectExplorer" label="Project Explorer"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
-<page content="org.eclipse.ui.navigator.ProjectExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.junit.ResultView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="1"/>
 <part id="0"/>
 </presentation>
 </folder>
@@ -392,26 +400,26 @@
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.27084872" ratioLeft="367" ratioRight="988" relationship="2" relative="left"/>
-<info folder="true" part="bottom" ratio="0.7402799" ratioLeft="476" ratioRight="167" relationship="4" relative="org.eclipse.ui.editorss">
+<info part="org.eclipse.ui.editorss" ratio="0.22695035" ratioLeft="288" ratioRight="981" relationship="2" relative="left"/>
+<info folder="true" part="bottom" ratio="0.75750834" ratioLeft="681" ratioRight="218" relationship="4" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.views.ProgressView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
-<page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
 <page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
-<page content="org.eclipse.ui.views.ProgressView" label="Progress"/>
 <page content="org.eclipse.search.ui.views.SearchView" label="Search"/>
+<page content="org.eclipse.ui.views.ProgressView" label="Progress"/>
+<page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
 <page content="org.eclipse.jdt.ui.SourceView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
-<part id="2"/>
-<part id="4"/>
-<part id="3"/>
 <part id="1"/>
+<part id="2"/>
+<part id="3"/>
+<part id="4"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@c8bbbf4" ratio="0.74975467" ratioLeft="764" ratioRight="255" relationship="2" relative="org.eclipse.ui.editorss">
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@c8bbbf4" ratio="0.886388" ratioLeft="827" ratioRight="106" relationship="2" relative="org.eclipse.ui.editorss">
 <folder appearance="2" expanded="2">
 <page content="org.eclipse.mylyn.tasks.ui.views.tasks" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
@@ -444,11 +452,53 @@
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/AuswertTestdat/src/pigGene/FilterChromosome.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" path="/AuswertTestdat/pigFiles/getComParameter.pig"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ant.ui.internal.editor.AntEditor" path="/AuswertTestdat/run.xml"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" path="/AuswertTestdat/pigFiles/medianDataFu.pig"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" path="/AuswertTestdat/pigFiles/multipleSamples.pig"/>
 </editors>
 <item historyLabel="FilterChromosome.java" index="0">
 <position info="not_deleted" x="4" y="0"/>
 </item>
-<item active="true" historyLabel="getComParameter.pig" index="1">
+<item historyLabel="getComParameter.pig" index="1">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position/>
+</item>
+<item historyLabel="medianDataFu.pig" index="3">
+<position info="not_deleted" x="766" y="0"/>
+</item>
+<item historyLabel="multipleSamples.pig" index="4">
+<position info="not_deleted" x="554" y="0"/>
+</item>
+<item historyLabel="medianDataFu.pig" index="3">
+<position info="not_deleted" x="114" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position/>
+</item>
+<item historyLabel="medianDataFu.pig" index="3">
+<position info="not_deleted" x="114" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="592" y="0"/>
+</item>
+<item historyLabel="multipleSamples.pig" index="4">
+<position info="not_deleted" x="554" y="0"/>
+</item>
+<item historyLabel="run.xml" index="2">
+<position info="not_deleted" x="592" y="0"/>
+</item>
+<item active="true" historyLabel="run.xml" index="2">
 <position info="not_deleted" x="0" y="0"/>
 </item>
 </navigationHistory>
@@ -457,6 +507,13 @@
 <workbenchWindowAdvisor/>
 <actionBarAdvisor/>
 <trimLayout>
+<trimArea IMemento.internal.id="16384">
+<trimItem IMemento.internal.id="left"/>
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.ViewStack@4426a725"/>
+</trimArea>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="right"/>
+</trimArea>
 <trimArea IMemento.internal.id="128">
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 <trimItem IMemento.internal.id="org.eclipse.mylyn.tasks.ui.trim.container"/>
@@ -465,10 +522,20 @@
 <trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
 <trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+<trimItem IMemento.internal.id="bottom"/>
 </trimArea>
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ant.ui.internal.editor.AntEditor" name="run.xml" tooltip="AuswertTestdat/run.xml">
+<persistable path="/AuswertTestdat/run.xml"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" name="multipleSamples.pig" tooltip="AuswertTestdat/pigFiles/multipleSamples.pig">
+<persistable path="/AuswertTestdat/pigFiles/multipleSamples.pig"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" name="medianDataFu.pig" tooltip="AuswertTestdat/pigFiles/medianDataFu.pig">
+<persistable path="/AuswertTestdat/pigFiles/medianDataFu.pig"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" name="getComParameter.pig" tooltip="AuswertTestdat/pigFiles/getComParameter.pig">
 <persistable path="/AuswertTestdat/pigFiles/getComParameter.pig"/>
 </file>
@@ -486,9 +553,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" name="getComParameter.pig" tooltip="AuswertTestdat/src/getComParameter.pig">
 <persistable path="/AuswertTestdat/src/getComParameter.pig"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ant.ui.internal.editor.AntEditor" name="run.xml" tooltip="AuswertTestdat/run.xml">
-<persistable path="/AuswertTestdat/run.xml"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.apache.pigeditor.Pig" name="getRsNumber.pig" tooltip="AuswertTestdat/src/getRsNumber.pig">
 <persistable path="/AuswertTestdat/src/getRsNumber.pig"/>
