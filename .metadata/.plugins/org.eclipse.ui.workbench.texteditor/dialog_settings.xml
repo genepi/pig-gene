@@ -3,21 +3,29 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="312" key="DIALOG_WIDTH"/>
 		<item value="389" key="DIALOG_Y_ORIGIN"/>
+		<item value="0" key="DIALOG_X_ORIGIN"/>
 		<item value="437" key="DIALOG_HEIGHT"/>
-		<item value="-9" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="cloud.password" key="selection"/>
+		<item value="RecordR" key="selection"/>
 		<list key="findhistory">
-			<item value="cloud.password"/>
+			<item value="recordR"/>
+			<item value="TextInput"/>
+			<item value="log.warn"/>
+			<item value="readField"/>
+			<item value="pig.jsonloader.schema"/>
+			<item value="outputSchema"/>
+			<item value="setUDFContextSignature"/>
+			<item value="setUDF"/>
 		</list>
 		<list key="replacehistory">
+			<item value="pig.Geneloader.schema"/>
 		</list>
 	</section>
 </section>

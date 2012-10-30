@@ -4,3 +4,6 @@
 1351593804218	Move method
 1351593996008	Rename local variable 's'
 1351595786727	Delete element
+1351601894277	Delete elements
+1351601912586	Rename type 'PigGeneLoader'
+1351603330979	Rename resource 'src'

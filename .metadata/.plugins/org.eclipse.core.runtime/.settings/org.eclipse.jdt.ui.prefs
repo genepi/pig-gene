@@ -1,4 +1,6 @@
 CustomFiltersActionGroup.org.eclipse.jdt.ui.PackageExplorer.TAG_DUMMY_TO_TEST_EXISTENCE=storedViewPreferences
+Refactoring.savealleditors=true
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="org.apache.pig.StoreFuncInterface"><rhs name\="org.apache.pig.builtin.PigStorage"/></lhs><lhs name\="org.apache.pig.LoadPushDown"><rhs name\="org.apache.pig.builtin.PigStorage"/></lhs><lhs name\="org.apache.pig.LoadMetadata"><rhs name\="org.apache.pig.builtin.PigStorage"/></lhs><lhs name\="org.apache.pig.StoreMetadata"><rhs name\="org.apache.pig.builtin.PigStorage"/></lhs><lhs name\="org.apache.pig.FileInputLoadFunc"><rhs name\="org.apache.pig.builtin.PigStorage"/></lhs><lhs name\="org.apache.pig.OrderedLoadFunc"><rhs name\="org.apache.pig.builtin.PigStorage"/></lhs><lhs name\="org.apache.pig.LoadFunc"><rhs name\="org.apache.pig.builtin.PigStorage"/></lhs><lhs name\="org.apache.pig.builtin.PigStorage"><rhs name\="org.apache.pig.builtin.PigStorage"/></lhs></history>
 content_assist_number_of_computers=13
 content_assist_proposals_background=255,255,255
 content_assist_proposals_foreground=60,60,60

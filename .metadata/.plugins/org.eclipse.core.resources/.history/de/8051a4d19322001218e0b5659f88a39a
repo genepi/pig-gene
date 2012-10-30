@@ -1,0 +1,11 @@
+package pigGene;
+
+import org.apache.hadoop.mapreduce.RecordReader;
+
+public class PigGeneInputFormat extends TextInputFormat {
+
+	@Override
+	public RecordReader getRecordReader() {
+		
+	}
+}
