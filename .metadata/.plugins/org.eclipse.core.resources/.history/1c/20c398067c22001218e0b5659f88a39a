@@ -1,0 +1,4 @@
+register pigGene.jar;
+
+A = Load '$input' USING pigGene.PigGeneLoader();
+DUMP A;

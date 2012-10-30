@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
@@ -18,23 +20,23 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.pig.Expression;
 import org.apache.pig.LoadFunc;
 import org.apache.pig.LoadMetadata;
-import org.apache.pig.LoadPushDown;
 import org.apache.pig.ResourceSchema;
-import org.apache.pig.ResourceStatistics;
-import org.apache.pig.LoadPushDown.RequiredFieldList;
 import org.apache.pig.ResourceSchema.ResourceFieldSchema;
+import org.apache.pig.ResourceStatistics;
 import org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigSplit;
+import org.apache.pig.builtin.PigStorage;
 import org.apache.pig.data.DataBag;
 import org.apache.pig.data.DataByteArray;
 import org.apache.pig.data.DataType;
 import org.apache.pig.data.Tuple;
+import org.apache.pig.impl.logicalLayer.schema.Schema;
 import org.apache.pig.impl.util.UDFContext;
 import org.apache.pig.impl.util.Utils;
-import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 
 public class PigGeneLoader extends LoadFunc implements LoadMetadata {
+	private final Log log = LogFactory.getLog(getClass());
 	private RecordReader reader = null;
 	private ResourceFieldSchema[] fields = null;
 	private String udfcSignature = null;
@@ -47,42 +49,64 @@ public class PigGeneLoader extends LoadFunc implements LoadMetadata {
         FileInputFormat.setInputPaths(job, location);
     }
     
+	public ResourceSchema getSchema(String location, Job job) throws IOException {
+	    // Open the schema file and read the schema
+	    // Get an HDFS handle.
+	    FileSystem fs = FileSystem.get(job.getConfiguration());
+	    DataInputStream in = fs.open(new Path(location + "/_schema"));
+	    String line = in.readLine();
+	    in.close();
+	
+	    // Parse the schema
+	    Schema s = Utils.getSchemaFromString(line);
+	    if (s == null) {
+	    	throw new IOException("Unable to parse schema found in file " + location + "/_schema");
+	    }
+	    ResourceSchema schema = new ResourceSchema(s);
+	
+	    // Now that we have determined the schema, store it in our
+	    // UDFContext properties object so we have it when we need it (backend)
+	    UDFContext udfc = UDFContext.getUDFContext();
+	    Properties p = udfc.getUDFProperties(this.getClass(), new String[]{udfcSignature});
+	    p.setProperty("pig.Geneloader.schema", line);
+	    return schema;
+	}
+
 	public void setUDFContextSignature(String signature) {
 	    udfcSignature = signature;
 	}
 
     public void prepareToRead(RecordReader reader, PigSplit split) throws IOException {
         this.reader = reader;
-        
-        // Get the schema string from the UDFContext object.
         UDFContext udfc = UDFContext.getUDFContext();
-        Properties p =
-            udfc.getUDFProperties(this.getClass(), new String[]{udfcSignature});
-        String strSchema = p.getProperty("pig.jsonloader.schema");
+        Properties p = udfc.getUDFProperties(this.getClass(), new String[]{udfcSignature});
+        String strSchema = p.getProperty("pig.Geneloader.schema"); 
         if (strSchema == null) {
             throw new IOException("Could not find schema in UDF context");
         }
 
         // Parse the schema from the string stored in the properties object.
-        ResourceSchema schema =
-            new ResourceSchema(Utils.getSchemaFromString(strSchema));
+        ResourceSchema schema = new ResourceSchema(Utils.getSchemaFromString(strSchema));
         fields = schema.getFields();
     }
     
     public Tuple getNext() throws IOException {
         Text val = null;
+        Text key = null;
         try {
-            // Read the next key value pair from the record reader.  If it's
-            // finished, return null
-            if (!reader.nextKeyValue()) return null;
+            // Read the next key value pair from the record reader.  
+        	// If it's finished, return null
+            if (!reader.nextKeyValue()) {
+            	return null;
+            }
 
-            // Get the current value.  We don't use the key.
+            key = (Text)reader.getCurrentKey();
             val = (Text)reader.getCurrentValue();
         } catch (InterruptedException ie) {
             throw new IOException(ie);
         }
 
-        // Create a parser specific for this input line.  This may not be the
+        // Create a parser specific for this input line. This may not be the
         // most efficient approach.
         ByteArrayInputStream bais = new ByteArrayInputStream(val.getBytes());
         JsonParser p = jsonFactory.createJsonParser(bais);
@@ -119,9 +143,8 @@ public class PigGeneLoader extends LoadFunc implements LoadMetadata {
 		// Read the next token
 		JsonToken tok = p.nextToken();
 		if (tok == null) {
-		log.warn("Early termination of record, expected " + fields.length
-		+ " fields bug found " + fieldnum);
-		return null;
+			log.warn("Early termination of record, expected " + fields.length + " fields bug found " + fieldnum);
+			return null;
 		}
 		
 		// Check to see if this value was null
@@ -129,140 +152,98 @@ public class PigGeneLoader extends LoadFunc implements LoadMetadata {
 		
 		// Read based on our expected type
 		switch (field.getType()) {
-		case DataType.INTEGER:
-		// Read the field name
-		p.nextToken();
-		return p.getValueAsInt();
-		
-		case DataType.LONG:
-		p.nextToken();
-		return p.getValueAsLong();
-		
-		case DataType.FLOAT:
-		p.nextToken();
-		return (float)p.getValueAsDouble();
-		
-		case DataType.DOUBLE:
-		p.nextToken();
-		return p.getValueAsDouble();
-		
-		case DataType.BYTEARRAY:
-		p.nextToken();
-		byte[] b = p.getBinaryValue();
-		// Use the DBA constructor that copies the bytes so that we own
-		// the memory
-		return new DataByteArray(b, 0, b.length);
-		
-		case DataType.CHARARRAY:
-		p.nextToken();
-		return p.getText();
-		
-		case DataType.MAP:
-		// Should be a start of the map object
-		if (p.nextToken() != JsonToken.START_OBJECT) {
-		log.warn("Bad map field, could not find start of object, field "
-		   + fieldnum);
-		return null;
-		}
-		Map<String, String> m = new HashMap<String, String>();
-		while (p.nextToken() != JsonToken.END_OBJECT) {
-		String k = p.getCurrentName();
-		String v = p.getText();
-		m.put(k, v);
-		}
-		return m;
-		
-		case DataType.TUPLE:
-		if (p.nextToken() != JsonToken.START_OBJECT) {
-		log.warn("Bad tuple field, could not find start of object, "
-		   + "field " + fieldnum);
-		return null;
-		}
-		
-		ResourceSchema s = field.getSchema();
-		ResourceFieldSchema[] fs = s.getFields();
-		Tuple t = tupleFactory.newTuple(fs.length);
-		
-		for (int j = 0; j < fs.length; j++) {
-		t.set(j, readField(p, fs[j], j));
-		}
-		
-		if (p.nextToken() != JsonToken.END_OBJECT) {
-		log.warn("Bad tuple field, could not find end of object, "
-		   + "field " + fieldnum);
-		return null;
-		}
-		return t;
-		
-		case DataType.BAG:
-		if (p.nextToken() != JsonToken.START_ARRAY) {
-		log.warn("Bad bag field, could not find start of array, "
-		   + "field " + fieldnum);
-		return null;
-		}
-		
-		s = field.getSchema();
-		fs = s.getFields();
-		// Drill down the next level to the tuple's schema.
-		s = fs[0].getSchema();
-		fs = s.getFields();
-		
-		DataBag bag = bagFactory.newDefaultBag();
-		
-		JsonToken innerTok;
-		while ((innerTok = p.nextToken()) != JsonToken.END_ARRAY) {
-		if (innerTok != JsonToken.START_OBJECT) {
-		   log.warn("Bad bag tuple field, could not find start of "
-		   + "object, field " + fieldnum);
-		   return null;
-		}
-		
-		t = tupleFactory.newTuple(fs.length);
-		for (int j = 0; j < fs.length; j++) {
-		   t.set(j, readField(p, fs[j], j));
-		}
-		
-		if (p.nextToken() != JsonToken.END_OBJECT) {
-		   log.warn("Bad bag tuple field, could not find end of "
-		   + "object, field " + fieldnum);
-		   return null;
-		}
-		bag.add(t);
-		}
-		return bag;
-		default:
-		throw new IOException("Unknown type in input schema: " +
-		field.getType());
-		}
+			case DataType.INTEGER:
+				// Read the field name
+				p.nextToken();
+				return p.getValueAsInt();
 
-    }
-    
-    public ResourceSchema getSchema(String location, Job job)
-    throws IOException {
-        // Open the schema file and read the schema
-        // Get an HDFS handle.
-        FileSystem fs = FileSystem.get(job.getConfiguration());
-        DataInputStream in = fs.open(new Path(location + "/_schema"));
-        String line = in.readLine();
-        in.close();
-
-        // Parse the schema
-        ResourceSchema s =
-            new ResourceSchema(Utils.getSchemaFromString(line));
-        if (s == null) {
-            throw new IOException("Unable to parse schema found in file " +
-                location + "/_schema");
-        }
-
-        // Now that we have determined the schema, store it in our
-        // UDFContext properties object so we have it when we need it on the
-        // backend
-        UDFContext udfc = UDFContext.getUDFContext();
-        Properties p =
-            udfc.getUDFProperties(this.getClass(), new String[]{udfcSignature});
-        p.setProperty("pig.jsonloader.schema", line);
-
-        return s;
+			case DataType.LONG:
+				p.nextToken();
+				return p.getValueAsLong();
+		
+			case DataType.FLOAT:
+				p.nextToken();
+				return (float)p.getValueAsDouble();
+		
+			case DataType.DOUBLE:
+				p.nextToken();
+				return p.getValueAsDouble();
+		
+			case DataType.BYTEARRAY:
+				p.nextToken();
+				byte[] b = p.getBinaryValue();
+				// Use the DBA constructor that copies the bytes so that we own
+				// the memory
+				return new DataByteArray(b, 0, b.length);
+		
+			case DataType.CHARARRAY:
+				p.nextToken();
+				return p.getText();
+			
+			case DataType.MAP:
+				// Should be a start of the map object
+				if (p.nextToken() != JsonToken.START_OBJECT) {
+					log.warn("Bad map field, could not find start of object, field " + fieldnum);
+					return null;
+				}
+				Map<String, String> m = new HashMap<String, String>();
+				while (p.nextToken() != JsonToken.END_OBJECT) {
+					String k = p.getCurrentName();
+					String v = p.getText();
+					m.put(k, v);
+				}
+				return m;
+		
+			case DataType.TUPLE:
+				if (p.nextToken() != JsonToken.START_OBJECT) {
+					log.warn("Bad tuple field, could not find start of object, " + "field " + fieldnum);
+					return null;
+				}
+				ResourceSchema s = field.getSchema();
+				ResourceFieldSchema[] fs = s.getFields();
+				Tuple t = tupleFactory.newTuple(fs.length);
+				for (int j = 0; j < fs.length; j++) {
+					t.set(j, readField(p, fs[j], j));
+				}
+				if (p.nextToken() != JsonToken.END_OBJECT) {
+					log.warn("Bad tuple field, could not find end of object, " + "field " + fieldnum);
+					return null;
+				}
+				return t;
+		
+			case DataType.BAG:
+				if (p.nextToken() != JsonToken.START_ARRAY) {
+					log.warn("Bad bag field, could not find start of array, " + "field " + fieldnum);
+					return null;
+				}
+				s = field.getSchema();
+				fs = s.getFields();
+				// Drill down the next level to the tuple's schema.
+				s = fs[0].getSchema();
+				fs = s.getFields();
+				DataBag bag = bagFactory.newDefaultBag();
+				JsonToken innerTok;
+				while ((innerTok = p.nextToken()) != JsonToken.END_ARRAY) {
+					if (innerTok != JsonToken.START_OBJECT) {
+					   log.warn("Bad bag tuple field, could not find start of " + "object, field " + fieldnum);
+					   return null;
+				}
+				t = tupleFactory.newTuple(fs.length);
+				for (int j = 0; j < fs.length; j++) {
+				   t.set(j, readField(p, fs[j], j));
+				}
+				if (p.nextToken() != JsonToken.END_OBJECT) {
+				   log.warn("Bad bag tuple field, could not find end of "
+				   + "object, field " + fieldnum);
+				   return null;
+				}
+				bag.add(t);
+				}
+				return bag;
+		
+			default:
+				throw new IOException("Unknown type in input schema: " + field.getType());
+		}
     }
     
     public ResourceStatistics getStatistics(String location, Job job) throws IOException {

@@ -1,0 +1,4 @@
+register pigGene.jar;
+
+A = LOAD '$input' USING PigStorage('\t');
+DUMP A;
