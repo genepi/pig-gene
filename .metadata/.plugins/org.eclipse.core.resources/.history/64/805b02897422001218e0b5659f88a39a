@@ -1,0 +1,7 @@
+package pigGene;
+
+import org.apache.pig.LoadMetadata;
+
+public class PigGeneLoader extends LoadFunc implements LoadMetadata {
+
+}

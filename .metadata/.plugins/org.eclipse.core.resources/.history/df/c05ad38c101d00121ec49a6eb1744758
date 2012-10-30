@@ -1,9 +1,0 @@
-/* pig -param input=GeneSamples/in tessssssst.pig */
-
-REGISTER pigGene.jar;
-samples = LOAD '$input' USING pigGene.PigStorage() 
-			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
-						alt:chararray, qual:float, filt:chararray, info:chararray, 
-									format:chararray, exome:chararray, filename:chararray);
-									
-dump samples;

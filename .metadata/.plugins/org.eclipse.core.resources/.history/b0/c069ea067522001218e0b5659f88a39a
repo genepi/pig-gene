@@ -1,0 +1,97 @@
+package pigGene;
+
+import java.io.IOException;
+
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.InputFormat;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.RecordReader;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.pig.Expression;
+import org.apache.pig.LoadFunc;
+import org.apache.pig.LoadMetadata;
+import org.apache.pig.ResourceSchema;
+import org.apache.pig.ResourceStatistics;
+import org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigSplit;
+import org.apache.pig.data.Tuple;
+import org.apache.pig.impl.util.UDFContext;
+
+public class PigGeneLoader extends LoadFunc implements LoadMetadata {
+
+	@Override
+	public String[] getPartitionKeys(String arg0, Job arg1) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResourceSchema getSchema(String arg0, Job arg1) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResourceStatistics getStatistics(String arg0, Job arg1)
+			throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPartitionFilter(Expression arg0) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Tuple getNext() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void prepareToRead(RecordReader arg0, PigSplit arg1)
+			throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+     * Communicate to the loader the location of the object(s) being loaded.  
+     * The location string passed to the LoadFunc here is the return value of 
+     * {@link LoadFunc#relativeToAbsolutePath(String, Path)}. Implementations
+     * should use this method to communicate the location (and any other
+     * information) to its underlying InputFormat through the Job object.
+     * 
+     * This method will be called in the backend multiple times. Implementations
+     * should bear in mind that this method is called multiple times and should
+     * ensure there are no inconsistent side effects due to the multiple calls.
+     * 
+     * @param location Location as returned by 
+     * {@link LoadFunc#relativeToAbsolutePath(String, Path)}
+     * @param job the {@link Job} object
+     * store or retrieve earlier stored information from the {@link UDFContext}
+     * @throws IOException if the location is not valid.
+     */
+    public void setLocation(String location, Job job) throws IOException {
+        FileInputFormat.setInputPaths(job, location);
+    }
+    
+    /**
+     * This will be called during planning on the front end. This is the
+     * instance of InputFormat (rather than the class name) because the 
+     * load function may need to instantiate the InputFormat in order 
+     * to control how it is constructed.
+     * @return the InputFormat associated with this loader.
+     * @throws IOException if there is an exception during InputFormat 
+     * construction
+     */
+    public InputFormat getInputFormat() throws IOException {
+        // We will use TextInputFormat, the default Hadoop input format for
+        // text.  It has a LongWritable key that we will ignore, and the value
+        // is a Text (a string writable) that the JSON data is in.
+        return new TextInputFormat();
+    }
+
+}

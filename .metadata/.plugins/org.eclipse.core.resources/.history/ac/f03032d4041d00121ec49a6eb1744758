@@ -1,7 +1,0 @@
-package pigGene;
-
-import org.apache.pig.builtin.PigStorage;
-
-public class PigStorageWithFilename extends PigStorage {
-
-}
