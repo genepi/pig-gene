@@ -13,14 +13,15 @@ public class PigGeneInputFormat extends PigTextInputFormat {
 
 	@Override
 	public RecordReader<LongWritable, Text> createRecordReader(InputSplit split, TaskAttemptContext context) {
-		PigGeneRecordReader r = new PigGeneRecordReader();
+		PigGeneRecordReader reader = new PigGeneRecordReader();
 		try {
-			// r.initialize(split, context);
+			reader.initialize(split, context);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return r;
+		return reader;
 	}
 
 }

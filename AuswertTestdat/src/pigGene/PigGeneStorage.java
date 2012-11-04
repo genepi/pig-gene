@@ -7,7 +7,8 @@ public class PigGeneStorage extends PigStorage {
 	
 	@Override
     public InputFormat getInputFormat() {
+//		return new PigTextInputFormat();
 		return new PigGeneInputFormat();
 	}
-
+	
 }
