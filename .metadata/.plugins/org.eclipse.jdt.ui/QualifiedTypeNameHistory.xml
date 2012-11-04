@@ -5,8 +5,18 @@
 <fullyQualifiedTypeName name="org.apache.pig.impl.logicalLayer.schema.Schema"/>
 <fullyQualifiedTypeName name="org.apache.pig.builtin.PigStorage"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.InputFormat"/>
-<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.RecordReader"/>
-<fullyQualifiedTypeName name="org.apache.hadoop.io.Text"/>
-<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.lib.input.TextInputFormat"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.InputSplit"/>
+<fullyQualifiedTypeName name="pigGene.PigGeneInputFormat"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.lib.input.TextInputFormat"/>
+<fullyQualifiedTypeName name="pigGene.PigGeneRecordReader"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapred.LineRecordReader"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.lib.input.LineRecordReader"/>
+<fullyQualifiedTypeName name="org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigRecordReader"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.util.LineReader"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.RecordReader"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapred.FileSplit"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.conf.Configuration"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.io.LongWritable"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.io.Text"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>

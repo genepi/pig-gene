@@ -1,0 +1,8 @@
+package pigGene;
+
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+
+public class PigGeneInputFormat extends TextInputFormat {
+
+	
+}

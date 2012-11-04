@@ -1,16 +1,26 @@
 package pigGene;
 
+import java.io.IOException;
+
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigTextInputFormat;
 
-public class PigGeneInputFormat extends TextInputFormat {
+public class PigGeneInputFormat extends PigTextInputFormat {
 
-	public RecordReader<LongWritable,Text> getRecordReader(InputSplit genericSplit, JobConf job, Reporter reporter) {
-		return null;
+	@Override
+	public RecordReader<LongWritable, Text> createRecordReader(InputSplit split, TaskAttemptContext context) {
+		PigGeneRecordReader r = new PigGeneRecordReader();
+		try {
+			// r.initialize(split, context);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return r;
 	}
+
 }
