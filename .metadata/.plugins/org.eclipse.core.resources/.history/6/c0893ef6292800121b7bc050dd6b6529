@@ -17,7 +17,7 @@
 REGISTER pigGene.jar;
  
 inputFile = LOAD '$input' USING pigGene.PigGeneStorage();
-Xyz = FILTER inputFile BY $chrom == ($0 + 0) AND ($1 + 0) >= ($start + 0 - $accuracy) AND ($1 + 0) <= ($end + 0 + $accuracy);
+Xyz = FILTER inputFile BY $chrom == ($0 + 0) AND ($1 + 0) >= ($start + 0) AND ($1 + 0) <= ($end + 0);
 DUMP Xyz;
 
 /* 

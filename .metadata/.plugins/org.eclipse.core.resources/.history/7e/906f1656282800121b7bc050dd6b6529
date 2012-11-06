@@ -9,7 +9,7 @@
  * and the genotype information
  * 
  * call this script like this:
- * pig -param input=GeneSamples/input/range.txt -param ref=GeneRefFile/00-All.vcf -param chrom=20 -param start=70 -param end=80 -param accuracy=10 positionRange.pig
+ * pig -param input=GeneSamples/input/range.txt -param ref=GeneRefFile/00-All.vcf -param chrom=20 -param start=70 -param end=80 -param accuracy=0 positionRange.pig
  * 
  * @author: Clemens Banas
  */
@@ -17,11 +17,9 @@
 REGISTER pigGene.jar;
  
 inputFile = LOAD '$input' USING pigGene.PigGeneStorage();
-Xyz = FILTER inputFile BY $chrom == ($0 + 0) AND ($1 + 0) >= ($start + 0 - $accuracy) AND ($1 + 0) <= ($end + 0 + $accuracy);
-DUMP Xyz;
+zw = FILTER inputFile BY 0 == $chrom pigGene.FilterRange(($1 + 0), $accuracy, $start, $end);
 
 /* 
-Abc = FILTER inputFile BY $chrom == ($0 + 0) AND pigGene.FilterRange(($1 + 0), $accuracy, $start, $end);
 A = FILTER inputFile BY $chrom == $0 ;
 B = FILTER A BY pigGene.FilterRange(A.$1, $accuracy, $start, $end);
 refFile = LOAD '$ref' USING PigStorage();
