@@ -3,8 +3,6 @@ package pigGene;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -17,11 +15,9 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
-import org.apache.hadoop.mapreduce.lib.input.LineRecordReader;
 import org.apache.hadoop.util.LineReader;
 
 public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
-	private static final Log LOG = LogFactory.getLog(LineRecordReader.class);
 	private static final int leadingInfoFields = 9;
 	private static final String delimiter = "\t";
 	private final LinkedList<Text> readLines = new LinkedList<Text>();
@@ -31,6 +27,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	private Text value = null;
 	private LineReader in;
 
+	private long keyCounter = 0;
 	private long start;
 	private long pos;
 	private long end;
@@ -91,33 +88,30 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 
 	@Override
 	public boolean nextKeyValue() throws IOException, InterruptedException {
-		if (key == null) {
-			key = new LongWritable();
-		}
-
-		key.set(pos);
-		if (value == null) {
-			value = new Text();
-		}
-
 		// if LinkedList containes elements - consume them
 		if (!readLines.isEmpty()) {
 			return true;
 		}
 
+		if (value == null) {
+			value = new Text();
+		}
+
 		int newSize = 0;
-		while (pos < end) {
+		boolean headerLine = false;
+		while (pos < end || headerLine) {
 			newSize = in.readLine(value, maxLineLength, Math.max((int) Math.min(Integer.MAX_VALUE, end - pos), maxLineLength));
 			if (newSize == 0) { // every line was read
 				break;
 			}
 			pos += newSize;
-			if (newSize < maxLineLength) {
-				break; // line length was okay - finished this line..
+			if (newSize < maxLineLength) { // line length okay?
+				if (value.charAt(0) == '#') { // ignore! -> header line
+					headerLine = true;
+				} else { // normal line - continue
+					break;
+				}
 			}
-
-			// only logs if the line was too long to read...
-			LOG.info("Skipped line of size " + newSize + " at pos " + (pos - newSize));
 		}
 
 		// only return FALSE if LinkedList is empty and nothing more to read...
@@ -127,45 +121,40 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			value = null;
 			return false;
 		}
+
+		if (key == null) {
+			key = new LongWritable();
+		}
+		key.set(keyCounter++);
 		splitLine(key, value);
 		return true;
 	}
 
-	// hier delimiter evtl auch noch dynamisch anhand des pig-skripts setzen...
 	private void splitLine(LongWritable key, Text value) {
-		Text leadingInfo = new Text();
+		StringBuilder leadingInfoBuffer = new StringBuilder();
 		String inputLine = value.toString();
-
 		String[] tmpSplits = inputLine.split(delimiter);
 		int noOfTestPersons = tmpSplits.length - leadingInfoFields;
 
-		int start = 0;
-		for (int i = 0; i < leadingInfoFields; i++) { // create leading info
-			byte[] split = tmpSplits[i].getBytes();
-			int curLen = split.length;
-			leadingInfo.append(split, start, curLen);
-			start += curLen;
+		// create leading info
+		for (int i = 0; i < leadingInfoFields; i++) {
+			leadingInfoBuffer.append(tmpSplits[i]).append(delimiter);
 		}
 
+		// append person and id column
 		int idCounter = 0;
-		for (int i = 0; i < noOfTestPersons; i++) { // append person and id
-													// column
-			int startPerson = start;
-			Text data = new Text();
-			data.append(leadingInfo.getBytes(), 0, leadingInfo.getLength());
+		String leadingInfo = leadingInfoBuffer.toString();
+		for (int i = 0; i < noOfTestPersons; i++) {
+			StringBuilder text = new StringBuilder();
+			text.append(leadingInfo); // first leadingInfoField-number fields
+			text.append(tmpSplits[leadingInfoFields + idCounter]).append(delimiter); // testPerson
+			text.append(Integer.toString(idCounter)); // testPersonId
+			idCounter++;
 
-			// append test person gene-info-column
-			byte[] split = tmpSplits[leadingInfoFields + idCounter].getBytes();
-			int curLen = split.length;
-			data.append(split, startPerson, curLen);
-
-			// append test person id-column
-			String id = Integer.toString(idCounter++);
-			split = id.getBytes();
-			data.append(split, startPerson + curLen, split.length);
-			readLines.add(data);
+			Text textLine = new Text();
+			textLine.set(text.toString());
+			readLines.add(textLine);
 		}
-
 	}
 
 	@Override
