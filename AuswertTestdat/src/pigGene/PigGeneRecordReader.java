@@ -20,7 +20,7 @@ import org.apache.hadoop.util.LineReader;
 public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	private static final int leadingInfoFields = 9;
 	private static final String delimiter = "\t";
-	private final LinkedList<Text> readLines = new LinkedList<Text>();
+	private final LinkedList<String> readLines = new LinkedList<String>();
 	private CompressionCodecFactory compressionCodecs = null;
 	private final byte[] recordDelimiterBytes;
 	private LongWritable key = null;
@@ -32,6 +32,8 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	private long pos;
 	private long end;
 	private int maxLineLength;
+
+	private final Text textLine = new Text();
 
 	public PigGeneRecordReader(byte[] recordDelimiter) {
 		recordDelimiterBytes = recordDelimiter;
@@ -146,14 +148,13 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		String leadingInfo = leadingInfoBuffer.toString();
 		for (int i = 0; i < noOfTestPersons; i++) {
 			StringBuilder text = new StringBuilder();
+
 			text.append(leadingInfo); // first leadingInfoField-number fields
 			text.append(tmpSplits[leadingInfoFields + idCounter]).append(delimiter); // testPerson
 			text.append(Integer.toString(idCounter)); // testPersonId
 			idCounter++;
 
-			Text textLine = new Text();
-			textLine.set(text.toString());
-			readLines.add(textLine);
+			readLines.add(text.toString());
 		}
 	}
 
@@ -164,7 +165,8 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 
 	@Override
 	public Text getCurrentValue() throws IOException, InterruptedException {
-		return readLines.poll();
+		textLine.set(readLines.poll());
+		return textLine;
 	}
 
 	@Override

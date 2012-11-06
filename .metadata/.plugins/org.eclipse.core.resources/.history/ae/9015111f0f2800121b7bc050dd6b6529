@@ -1,0 +1,17 @@
+/**
+ * PigGene - BACHELOR PROJECT
+ * 
+ * Pig script to test my own
+ * Storage implementation.
+ * 
+ * call this script like this:
+ * pig -param input=GeneSamples/input/readInput.txt input2=GeneSamples/in pigGeneLoaderTest.pig
+ * 
+ * @author: Clemens Banas
+ */
+
+
+REGISTER pigGene.jar;
+
+A = LOAD '$input' USING pigGene.PigGeneStorage();
+DUMP A;

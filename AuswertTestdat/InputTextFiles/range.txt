@@ -1,0 +1,13 @@
+1	50	das	ist	der	text	der	hier	steht	a	b	
+1	60	das	ist	der	text	der	hier	steht	a	b	
+3	60	das	ist	der	text	der	hier	steht	a	b	
+4	60	das	ist	der	text	der	hier	steht	a	b	
+20	60	das	ist	der	text	der	hier	steht	a	b	
+20	70	das	ist	der	text	der	hier	steht	a	b	
+20	71	das	ist	der	text	der	hier	steht	a	b	
+20	80	das	ist	der	text	der	hier	steht	a	b	
+20	200	das	ist	der	text	der	hier	steht	a	b	
+23	60	das	ist	der	text	der	hier	steht	a	b	
+23	60	das	ist	der	text	der	hier	steht	a	b	
+23	60	das	ist	der	text	der	hier	steht	a	b	
+80	60	das	ist	der	text	der	hier	steht	a	b	

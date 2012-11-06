@@ -1,5 +1,0 @@
-register pigGene.jar;
-
-A = LOAD '$input' USING PigStorage('\t');
-A = Load 'blub' USING PigStorage();
-DUMP A;

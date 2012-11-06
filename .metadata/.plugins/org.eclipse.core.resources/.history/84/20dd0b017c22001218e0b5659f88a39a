@@ -1,5 +1,0 @@
-register pigGene.jar;
-
-X = LOAD '$input' USING PigStorage('\t');
-A = Load '$input' USING pigGene.PigGeneLoader();
-DUMP A;

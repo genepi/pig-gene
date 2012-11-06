@@ -1,0 +1,32 @@
+package pigGene;
+
+import java.io.IOException;
+
+import org.apache.pig.FilterFunc;
+import org.apache.pig.data.Tuple;
+
+public class FilterRange extends FilterFunc {
+
+	@Override
+	public Boolean exec(Tuple input) throws IOException {
+		if(input == null || input.size() != 2) {
+			return false;
+		}
+		long position = (Long)input.get(0);
+		long accuracy = (Long)input.get(1);
+		
+		long start = (Long)input.get(2) - accuracy;
+		long end = (Long)input.get(3) + accuracy;
+		return null;
+	}
+	
+	
+	if(input == null || input.size() != 2) {
+		return false;
+	}
+	int start = (Integer)input.get(0);
+	int end = (Integer)input.get(1);
+	countLines++;
+	return (countLines >= start && countLines <= end);
+
+}

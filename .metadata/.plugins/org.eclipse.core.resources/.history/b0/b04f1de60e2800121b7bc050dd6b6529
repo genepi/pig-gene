@@ -1,0 +1,22 @@
+package pigGene;
+
+import org.apache.hadoop.mapreduce.InputFormat;
+import org.apache.pig.builtin.PigStorage;
+
+public class PigGeneStorage extends PigStorage {
+
+	public PigGeneStorage() {
+		super();
+	}
+	
+	public PigGeneStorage(String delimiter) {
+		super(delimiter);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public InputFormat getInputFormat() {
+		return new PigGeneInputFormat();
+	}
+
+}
