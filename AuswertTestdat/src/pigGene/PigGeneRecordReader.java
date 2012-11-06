@@ -22,6 +22,8 @@ import org.apache.hadoop.util.LineReader;
 
 public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	private static final Log LOG = LogFactory.getLog(LineRecordReader.class);
+	private static final int leadingInfoFields = 9;
+	private static final String delimiter = "\t";
 	private final LinkedList<Text> readLines = new LinkedList<Text>();
 	private CompressionCodecFactory compressionCodecs = null;
 	private final byte[] recordDelimiterBytes;
@@ -60,6 +62,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		// open the file and seek the start of the split
 		FileSystem fs = file.getFileSystem(job);
 		FSDataInputStream fileIn = fs.open(split.getPath());
+		boolean skipFirstLine = false;
 
 		if (codec != null) {
 			if (null == recordDelimiterBytes) {
@@ -70,6 +73,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			end = Long.MAX_VALUE;
 		} else {
 			if (start != 0) {
+				skipFirstLine = true;
 				--start;
 				fileIn.seek(start);
 			}
@@ -78,6 +82,9 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			} else {
 				in = new LineReader(fileIn, job, recordDelimiterBytes);
 			}
+		}
+		if (skipFirstLine) { // skip first line and re-establish "start".
+			start += in.readLine(new Text(), 0, (int) Math.min(Integer.MAX_VALUE, end - start));
 		}
 		pos = start;
 	}
@@ -101,7 +108,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			}
 			pos += newSize;
 			if (newSize < maxLineLength) {
-				break;
+				break; // line length was okay - finished this line..
 			}
 
 			// only logs if the line was too long to read...
@@ -123,37 +130,37 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	}
 
 	// hier delimiter evtl auch noch dynamisch anhand des pig-skripts setzen...
-	// TODO: unbedingt die laenge des jeweiligen bytes beruecksichtigen und
-	// start und laenge immer neu anpassen
 	private void splitLine(LongWritable key, Text value) {
-		int leadingInfoFields = 9;
-		String delimiter = "\t";
-		int idCounter = 0;
 		Text leadingInfo = new Text();
 		String inputLine = value.toString();
 
 		String[] tmpSplits = inputLine.split(delimiter);
 		int noOfTestPersons = tmpSplits.length - leadingInfoFields;
-		int start = 0;
-		int len = 0; // redefine... !!!!!!!!!!!!!!
 
-		for (int i = 0; i < leadingInfoFields; i++) {
-			// zusammenbauen von leadinginfo
-			leadingInfo.append(tmpSplits[i].getBytes(), start, len);
+		int start = 0;
+		for (int i = 0; i < leadingInfoFields; i++) { // create leading info
+			byte[] split = tmpSplits[i].getBytes();
+			int curLen = split.length;
+			leadingInfo.append(split, start, curLen);
+			start += curLen;
 		}
 
-		for (int i = 0; i < noOfTestPersons; i++) {
+		int idCounter = 0;
+		for (int i = 0; i < noOfTestPersons; i++) { //append person and id column
+			int startPerson = start;
 			Text data = new Text();
 			data.append(leadingInfo.getBytes(), 0, leadingInfo.getLength());
 
-			// append von der jeweiligen Personenspalte
-			data.append(tmpSplits[leadingInfoFields + idCounter].getBytes(), start, len);
+			// append test person gene-info-column
+			byte[] split = tmpSplits[leadingInfoFields + idCounter].getBytes();
+			int curLen = split.length;
+			data.append(split, startPerson, curLen);
 
-			// append der jeweiligen ID (ID startet bei 0)
-			String id = Integer.toString(idCounter);
-			data.append(id.getBytes(), start, len);
+			// append test person id-column
+			String id = Integer.toString(idCounter++);
+			split = id.getBytes();
+			data.append(split, startPerson + curLen, split.length);
 			readLines.add(data);
-			idCounter++;
 		}
 
 	}

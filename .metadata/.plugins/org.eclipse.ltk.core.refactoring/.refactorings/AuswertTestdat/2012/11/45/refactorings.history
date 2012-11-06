@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;reader&apos; in &apos;pigGene.PigGeneInputFormat.createRecordReader(...)&apos; to &apos;recordReader&apos;&#x0A;- Original project: &apos;AuswertTestdat&apos;&#x0A;- Original element: &apos;pigGene.PigGeneInputFormat.createRecordReader(InputSplit, TaskAttemptContext).reader&apos;&#x0A;- Renamed element: &apos;reader&apos;&#x0A;- Update references to refactored element" description="Rename local variable &apos;reader&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;pigGene{PigGeneInputFormat.java[PigGeneInputFormat~createRecordReader~QInputSplit;~QTaskAttemptContext;@reader!546!600!566!571!QPigGeneRecordReader;!0!false" name="recordReader" references="true" stamp="1352186074392" version="1.0"/>
+</session>
