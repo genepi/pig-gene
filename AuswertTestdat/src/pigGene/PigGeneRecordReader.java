@@ -13,10 +13,10 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.io.compress.CompressionCodecFactory;
-import org.apache.hadoop.mapred.FileSplit;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.input.LineRecordReader;
 import org.apache.hadoop.util.LineReader;
 
@@ -100,6 +100,11 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			value = new Text();
 		}
 
+		// if LinkedList containes elements - consume them
+		if (!readLines.isEmpty()) {
+			return true;
+		}
+
 		int newSize = 0;
 		while (pos < end) {
 			newSize = in.readLine(value, maxLineLength, Math.max((int) Math.min(Integer.MAX_VALUE, end - pos), maxLineLength));
@@ -115,17 +120,14 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			LOG.info("Skipped line of size " + newSize + " at pos " + (pos - newSize));
 		}
 
-		// only return FALSE if linesQueue is empty and nothing more to read...
+		// only return FALSE if LinkedList is empty and nothing more to read...
 		// something new to read: split the new line and put it into queue
-		// if nothing new to read - get existing values from the queue
-		if (newSize == 0 && readLines.isEmpty()) {
+		if (newSize == 0) {
 			key = null;
 			value = null;
 			return false;
-		} else if (newSize != 0) {
-			splitLine(key, value);
 		}
-
+		splitLine(key, value);
 		return true;
 	}
 
@@ -146,7 +148,8 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		}
 
 		int idCounter = 0;
-		for (int i = 0; i < noOfTestPersons; i++) { //append person and id column
+		for (int i = 0; i < noOfTestPersons; i++) { // append person and id
+													// column
 			int startPerson = start;
 			Text data = new Text();
 			data.append(leadingInfo.getBytes(), 0, leadingInfo.getLength());
@@ -164,11 +167,6 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		}
 
 	}
-
-	// TODO: nextKey methode... - kann der Key beibehalten werden? der ist
-	// ohnehin
-	// egal und dann wird als key immer die urspruengliche Zeile bleiben in der
-	// alle Werte (von allen Testpersonen) drin stehen...
 
 	@Override
 	public LongWritable getCurrentKey() throws IOException, InterruptedException {

@@ -9,7 +9,7 @@
 	<property name="app.jar" value="pigGene.jar" />
 	
 	<target name="compile">
-    	<javac srcdir="src" destdir="bin" classpath="" >
+    	<javac srcdir="src" destdir="bin" classpath="" target="1.6">
 			<classpath>
 				<fileset dir="lib" />
 			</classpath>

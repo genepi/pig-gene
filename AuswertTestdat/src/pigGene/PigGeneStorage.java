@@ -4,11 +4,16 @@ import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.pig.builtin.PigStorage;
 
 public class PigGeneStorage extends PigStorage {
-	
+
 	@Override
-    public InputFormat getInputFormat() {
-//		return new PigTextInputFormat();
+	public int hashCode() {
+		return 256546451;
+	}
+
+	@Override
+	public InputFormat getInputFormat() {
+		// return new PigTextInputFormat();
 		return new PigGeneInputFormat();
 	}
-	
+
 }
