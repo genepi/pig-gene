@@ -15,7 +15,8 @@
  */
  
 REGISTER pigGene.jar;
-in = LOAD '$input' USING pigGene.PigGeneStorate();
+input = LOAD '$input' USING pigGene.PigGeneStorate();
+in = FOREACH input GENERATE chrom, pos, exome, persID;
 inFilter = FILTER in BY $chrom == in.chrom AND in.pos >= $start-$accuracy AND in.pos <= $end+$accuracy;
 
 ref = LOAD '$ref' USING pigGene.PigGeneStorage(); /* last column is not needed -> exome */
