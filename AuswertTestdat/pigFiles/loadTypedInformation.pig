@@ -11,6 +11,6 @@
  */
 
 REGISTER pigGene.jar;
-in = LOAD '$input' USING pigGene.PigGeneTestStorage();
-ext = FOREACH in GENERATE exome;
+in = LOAD '$input' USING pigGene.PigGeneStorage();
+ext = FOREACH in GENERATE exome,persID;
 DUMP ext;

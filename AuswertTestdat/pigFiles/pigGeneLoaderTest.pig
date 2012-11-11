@@ -13,5 +13,5 @@
 
 REGISTER pigGene.jar;
 
-A = LOAD '$input' USING pigGene.PigGeneStorage();
-DUMP A;
+in = LOAD '$input' USING pigGene.PigGeneStorage();
+DUMP in;
