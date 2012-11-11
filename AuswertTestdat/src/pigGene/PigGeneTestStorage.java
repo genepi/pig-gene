@@ -3,6 +3,7 @@ package pigGene;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.pig.ResourceSchema;
 import org.apache.pig.builtin.PigStorage;
@@ -11,11 +12,11 @@ import org.apache.pig.impl.logicalLayer.schema.Schema.FieldSchema;
 
 public class PigGeneTestStorage extends PigStorage {
 
-	// @SuppressWarnings("rawtypes")
-	// @Override
-	// public InputFormat getInputFormat() {
-	// return new PigGeneInputFormat();
-	// }
+	@SuppressWarnings("rawtypes")
+	@Override
+	public InputFormat getInputFormat() {
+		return new PigGeneInputFormat();
+	}
 
 	@Override
 	public ResourceSchema getSchema(final String location, final Job job) throws IOException {
