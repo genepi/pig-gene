@@ -9,7 +9,7 @@
  * and the genotype information
  * 
  * call this script like this:
- * pig -param input=GeneSamples/input/range.txt -param output=GeneSamples/output -param ref=GeneRefFile/00-All.vcf -param chrom=20 -param start=70 -param end=80 -param accuracy=10 retrieveGenotypeInformation.pig
+ * pig -param input=GeneSamples/input/range.txt -param output=GeneSamples/output -param ref=GeneRefFile/00-All.vcf -param chr=20 -param start=70 -param end=80 -param accuracy=0 retrieveGenotypeInformation.pig
  * 
  * @author: Clemens Banas
  */
@@ -17,12 +17,12 @@
 REGISTER pigGene.jar;
 data = LOAD '$input' USING pigGene.PigGeneStorage();
 in = FOREACH data GENERATE chrom, pos, exome, persID;
-inFilter = FILTER in BY pos == 60;
-DUMP in;
+inFilter = FILTER in BY pigGene.FilterChromPositions(chrom,$chr,pos,$start,$end,$accuracy);
+DUMP inFilter;
 
 
 /* 
-inFilter = FILTER in BY pos >= $start-$accuracy AND pos <= $end+$accuracy;
+inFilter = FILTER in BY chrom == $chr AND pos >= $start-$accuracy AND pos <= $end+$accuracy;
 ref = LOAD '$ref' USING PigStorage('\t') AS (chrom:chararray, pos:long, id:chararray, ref:chararray, alt:chararray, qual:double, filt:chararray, info:chararray);
 refFilter = FOREACH ref GENERATE chrom, pos, id;
 
