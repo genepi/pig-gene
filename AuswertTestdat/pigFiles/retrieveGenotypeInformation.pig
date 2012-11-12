@@ -15,13 +15,18 @@
  */
  
 REGISTER pigGene.jar;
-input = LOAD '$input' USING pigGene.PigGeneStorate();
-in = FOREACH input GENERATE chrom, pos, exome, persID;
-inFilter = FILTER in BY $chrom == in.chrom AND in.pos >= $start-$accuracy AND in.pos <= $end+$accuracy;
+data = LOAD '$input' USING pigGene.PigGeneStorage();
+in = FOREACH data GENERATE chrom, pos, exome, persID;
+inFilter = FILTER in BY pos == 60;
+DUMP in;
 
-ref = LOAD '$ref' USING pigGene.PigGeneStorage(); /* last column is not needed -> exome */
+
+/* 
+inFilter = FILTER in BY pos >= $start-$accuracy AND pos <= $end+$accuracy;
+ref = LOAD '$ref' USING PigStorage('\t') AS (chrom:chararray, pos:long, id:chararray, ref:chararray, alt:chararray, qual:double, filt:chararray, info:chararray);
 refFilter = FOREACH ref GENERATE chrom, pos, id;
 
 joined = JOIN inFilter BY (chrom,pos), refFilter BY (chrom,pos);
 out = FOREACH joined GENERATE inFilter::chrom, inFilter::pos, refFilter::id, SUBSTRING(inFilter::exome,0,3), inFilter::persID;
 STORE out INTO '$output';
+*/

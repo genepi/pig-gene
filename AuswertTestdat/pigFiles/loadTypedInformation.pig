@@ -12,7 +12,5 @@
 
 REGISTER pigGene.jar;
 in = LOAD '$input' USING pigGene.PigGeneStorage();
-ext = FOREACH in GENERATE exome,persID;
+ext = FOREACH in GENERATE exome, persID;
 DUMP ext;
-
-/* zusaetzlich noch einmal mit dem typed...3 testen und irgendeine spalte ausgeben... */
