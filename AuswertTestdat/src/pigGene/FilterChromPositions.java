@@ -9,7 +9,7 @@ public class FilterChromPositions extends FilterFunc {
 
 	@Override
 	public Boolean exec(final Tuple input) throws IOException {
-		if (input == null || input.size() != 4) {
+		if (input == null || input.size() != 6) {
 			return false;
 		}
 
