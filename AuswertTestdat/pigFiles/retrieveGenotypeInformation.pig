@@ -18,7 +18,7 @@ REGISTER pigGene.jar;
 data = LOAD '$input' USING pigGene.PigGeneStorage();
 in = FOREACH data GENERATE chrom, pos, exome, persID;
 inFilter = FILTER in BY pigGene.FilterChromPositions(chrom,$chr,pos,$start,$end,$accuracy);
-DUMP inFilter;
+DUMP in;
 
 
 /* 
