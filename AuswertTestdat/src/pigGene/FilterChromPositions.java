@@ -20,9 +20,9 @@ public class FilterChromPositions extends FilterFunc {
 		}
 
 		final long pos = (Long) input.get(2);
-		final long accuracy = (Long) input.get(5);
-		final long start = (Long) input.get(3) - accuracy;
-		final long end = (Long) input.get(4) + accuracy;
+		final int accuracy = (Integer) input.get(5);
+		final int start = (Integer) input.get(3) - accuracy;
+		final int end = (Integer) input.get(4) + accuracy;
 
 		return (pos >= start && pos <= end);
 	}

@@ -1,4 +1,4 @@
 CloneWizard_ImportProjects=true
-commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\n<messages>\n<message>modified the RecordReader</message>\n<message>momentaner Zwischenstand</message>\n<message>added hadoop sources for eclipse</message>\n<message>added PIG src files for Eclipse</message>\n<message>added PigGeneLoader</message>\n<message>1</message>\n<message>1&\#x0A;</message>\n<message>removed</message>\n<message>2</message>\n</messages>
+commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\n<messages>\n<message>removed not needed UDF</message>\n<message>updated positionRange</message>\n<message>optimized PigGeneRecordReader</message>\n<message>modified the RecordReader</message>\n<message>momentaner Zwischenstand</message>\n<message>added hadoop sources for eclipse</message>\n<message>added PIG src files for Eclipse</message>\n<message>added PigGeneLoader</message>\n<message>1</message>\n<message>1&\#x0A;</message>\n</messages>
 commit_dialog_push_upstream=true
 eclipse.preferences.version=1

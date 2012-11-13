@@ -9,24 +9,21 @@
  * and the genotype information
  * 
  * call this script like this:
- * pig -param input=GeneSamples/input/range.txt -param output=GeneSamples/output -param ref=GeneRefFile/00-All.vcf -param chr=20 -param start=70 -param end=80 -param accuracy=0 retrieveGenotypeInformation.pig
+ * pig -param input=GeneSamples/in/6exomes.vcf -param output=GeneSamples/output -param ref=GeneRefFile/00-All.vcf -param chr=12 -param start=51373184 -param end=51422349 -param accuracy=0 retrieveGenotypeInformation.pig
  * 
  * @author: Clemens Banas
  */
  
 REGISTER pigGene.jar;
 data = LOAD '$input' USING pigGene.PigGeneStorage();
-in = FOREACH data GENERATE chrom, pos, exome, persID;
-inFilter = FILTER in BY pigGene.FilterChromPositions(chrom,$chr,pos,$start,$end,$accuracy);
-DUMP inFilter;
+in = FOREACH data GENERATE chrom, pos, genotype, persID;
+inFilter = FILTER in BY chrom == '$chr' AND pos >= $start-$accuracy AND pos <= $end+$accuracy;
 
+referenceFile = LOAD '$ref' USING PigStorage('\t') AS (REFchrom:chararray, REFpos:long, REFid:chararray, REFr:chararray, REFalt:chararray, REFqual:double, REFfilt:chararray, REFinfo:chararray);
+ref = FOREACH referenceFile GENERATE REFchrom, REFpos, REFid;
+refFilter = FILTER ref BY REFchrom == '$chr' AND REFpos >= $start-$accuracy AND REFpos <= $end+$accuracy;
 
-/* 
-inFilter = FILTER in BY chrom == $chr AND pos >= $start-$accuracy AND pos <= $end+$accuracy;
-ref = LOAD '$ref' USING PigStorage('\t') AS (chrom:chararray, pos:long, id:chararray, ref:chararray, alt:chararray, qual:double, filt:chararray, info:chararray);
-refFilter = FOREACH ref GENERATE chrom, pos, id;
-
-joined = JOIN inFilter BY (chrom,pos), refFilter BY (chrom,pos);
-out = FOREACH joined GENERATE inFilter::chrom, inFilter::pos, refFilter::id, SUBSTRING(inFilter::exome,0,3), inFilter::persID;
-STORE out INTO '$output';
-*/
+joined = JOIN inFilter BY (chrom,pos), refFilter BY (REFchrom,REFpos);
+DUMP joined;
+out = FOREACH joined GENERATE chrom, pos, REFid, SUBSTRING(genotype,0,3), persID;
+DUMP out;

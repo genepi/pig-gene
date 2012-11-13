@@ -6,7 +6,6 @@
 <fullyQualifiedTypeName name="org.apache.pig.builtin.PigStorage"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.InputFormat"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.InputSplit"/>
-<fullyQualifiedTypeName name="pigGene.PigGeneInputFormat"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.lib.input.TextInputFormat"/>
 <fullyQualifiedTypeName name="pigGene.PigGeneRecordReader"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.mapred.LineRecordReader"/>
@@ -19,4 +18,6 @@
 <fullyQualifiedTypeName name="org.apache.hadoop.io.LongWritable"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.io.Text"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="pigGene.PigGeneInputFormat"/>
+<fullyQualifiedTypeName name="pigGene.PigGeneStorage"/>
 </qualifiedTypeNameHistroy>

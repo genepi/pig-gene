@@ -34,6 +34,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	private int maxLineLength;
 
 	private final Text textLine = new Text();
+	private final String referenceValue = "0/0";
 
 	public PigGeneRecordReader(byte[] recordDelimiter) {
 		recordDelimiterBytes = recordDelimiter;
@@ -146,15 +147,19 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		// append person and id column
 		int idCounter = 0;
 		String leadingInfo = leadingInfoBuffer.toString();
+		String genotype;
 		for (int i = 0; i < noOfTestPersons; i++) {
 			StringBuilder text = new StringBuilder();
+			genotype = tmpSplits[leadingInfoFields + idCounter];
 
-			text.append(leadingInfo); // first leadingInfoField-number fields
-			text.append(tmpSplits[leadingInfoFields + idCounter]).append(delimiter); // testPerson
-			text.append(Integer.toString(idCounter)); // testPersonId
+			// ignore lines that equal the reference
+			if (!referenceValue.equals(genotype.substring(0, 3))) {
+				text.append(leadingInfo); // first fields
+				text.append(genotype).append(delimiter); // testPerson
+				text.append(Integer.toString(idCounter)); // testPersonId
+				readLines.add(text.toString());
+			}
 			idCounter++;
-
-			readLines.add(text.toString());
 		}
 	}
 

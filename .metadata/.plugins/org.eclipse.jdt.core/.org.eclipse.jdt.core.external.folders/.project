@@ -10,6 +10,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>.link0</name>
+			<type>2</type>
+			<location>/Users/clemens/Documents/Eclipse/pig-gene/AuswertTestdat/lib</location>
+		</link>
+		<link>
 			<name>.link1</name>
 			<type>2</type>
 			<location>/home/clemens/workspace/bachelorProject/pig-gene/AuswertTestdat/lib</location>
