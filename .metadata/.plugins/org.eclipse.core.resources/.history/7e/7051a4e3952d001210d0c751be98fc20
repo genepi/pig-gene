@@ -1,0 +1,7 @@
+package pigGene;
+
+import org.apache.pig.EvalFunc;
+
+public class GenotypeMapping extends EvalFunc<String> {
+
+}
