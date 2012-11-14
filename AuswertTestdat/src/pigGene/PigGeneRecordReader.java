@@ -35,6 +35,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 
 	private final Text textLine = new Text();
 	private final String referenceValue = "0/0";
+	private final String indelValue = "INDEL";
 
 	public PigGeneRecordReader(byte[] recordDelimiter) {
 		recordDelimiterBytes = recordDelimiter;
@@ -153,7 +154,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			genotype = tmpSplits[leadingInfoFields + idCounter];
 
 			// ignore lines that equal the reference
-			if (!referenceValue.equals(genotype.substring(0, 3))) {
+			if (!isLineSuperfluous(genotype.substring(0, 3), tmpSplits[leadingInfoFields - 2])) {
 				text.append(leadingInfo); // first fields
 				text.append(genotype).append(delimiter); // testPerson
 				text.append(Integer.toString(idCounter)); // testPersonId
@@ -161,6 +162,20 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			}
 			idCounter++;
 		}
+	}
+
+	private boolean isLineSuperfluous(String genotypeSub, String infoSub) {
+		// TODO: INDEL filtern...; bei der Übergabe besser auf die Korrektheit
+		// der Daten achten! Komische Warning beseitigen!
+
+		if (referenceValue.equals(genotypeSub)) {
+			return true;
+		}
+		if (infoSub.length() >= 5 && indelValue.equals(infoSub.substring(0, 5))) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

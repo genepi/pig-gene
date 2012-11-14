@@ -2,7 +2,6 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="org.apache.pig.FilterFunc"/>
 <fullyQualifiedTypeName name="org.apache.pig.LoadMetadata"/>
-<fullyQualifiedTypeName name="org.apache.pig.impl.logicalLayer.schema.Schema"/>
 <fullyQualifiedTypeName name="org.apache.pig.builtin.PigStorage"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.InputFormat"/>
 <fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.InputSplit"/>
@@ -20,4 +19,9 @@
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="pigGene.PigGeneInputFormat"/>
 <fullyQualifiedTypeName name="pigGene.PigGeneStorage"/>
+<fullyQualifiedTypeName name="org.apache.pig.LoadCaster"/>
+<fullyQualifiedTypeName name="org.apache.pig.builtin.Utf8StorageConverter"/>
+<fullyQualifiedTypeName name="org.apache.pig.ResourceSchema"/>
+<fullyQualifiedTypeName name="org.apache.pig.impl.logicalLayer.schema.Schema"/>
+<fullyQualifiedTypeName name="org.apache.pig.EvalFunc"/>
 </qualifiedTypeNameHistroy>
