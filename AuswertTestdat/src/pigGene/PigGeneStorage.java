@@ -16,14 +16,14 @@ public class PigGeneStorage extends PigStorage {
 	static ResourceSchema schema;
 
 	static {
-		ArrayList<FieldSchema> fieldSchemaList = new ArrayList<FieldSchema>();
+		final ArrayList<FieldSchema> fieldSchemaList = new ArrayList<FieldSchema>();
 		fieldSchemaList.add(new FieldSchema("chrom", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("pos", org.apache.pig.data.DataType.LONG));
 		fieldSchemaList.add(new FieldSchema("id", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("ref", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("alt", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("qual", org.apache.pig.data.DataType.DOUBLE));
-		fieldSchemaList.add(new FieldSchema("filter", org.apache.pig.data.DataType.CHARARRAY));
+		fieldSchemaList.add(new FieldSchema("filt", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("info", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("format", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("genotype", org.apache.pig.data.DataType.CHARARRAY));
@@ -39,7 +39,7 @@ public class PigGeneStorage extends PigStorage {
 
 	@Override
 	public ResourceSchema getSchema(final String location, final Job job) throws IOException {
-		Properties p = UDFContext.getUDFContext().getUDFProperties(this.getClass(), new String[] { signature });
+		final Properties p = UDFContext.getUDFContext().getUDFProperties(this.getClass(), new String[] { signature });
 		p.setProperty(signature + ".schema", schema.toString());
 		return schema;
 	}

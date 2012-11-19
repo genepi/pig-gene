@@ -131,6 +131,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			key = new LongWritable();
 		}
 		key.set(keyCounter++);
+		// TODO: Problem mit dem Rausfiltern - besprechen!
 		return splitLine(key, value);
 		// return true;
 	}

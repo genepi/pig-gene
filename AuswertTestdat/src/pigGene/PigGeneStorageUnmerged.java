@@ -2,25 +2,21 @@ package pigGene;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
-import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.pig.ResourceSchema;
 import org.apache.pig.builtin.PigStorage;
 import org.apache.pig.impl.logicalLayer.schema.Schema;
 import org.apache.pig.impl.logicalLayer.schema.Schema.FieldSchema;
+import org.apache.pig.impl.util.UDFContext;
 
-public class PigGeneTestStorage extends PigStorage {
+public class PigGeneStorageUnmerged extends PigStorage {
+	static ResourceSchema schema;
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public InputFormat getInputFormat() {
-		return new PigGeneInputFormat();
-	}
-
-	@Override
-	public ResourceSchema getSchema(final String location, final Job job) throws IOException {
+	static {
 		final ArrayList<FieldSchema> fieldSchemaList = new ArrayList<FieldSchema>();
+		fieldSchemaList.add(new FieldSchema("file", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("chrom", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("pos", org.apache.pig.data.DataType.LONG));
 		fieldSchemaList.add(new FieldSchema("id", org.apache.pig.data.DataType.CHARARRAY));
@@ -30,8 +26,27 @@ public class PigGeneTestStorage extends PigStorage {
 		fieldSchemaList.add(new FieldSchema("filt", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("info", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("format", org.apache.pig.data.DataType.CHARARRAY));
-		fieldSchemaList.add(new FieldSchema("exome", org.apache.pig.data.DataType.CHARARRAY));
-		return new ResourceSchema(new Schema(fieldSchemaList));
+		fieldSchemaList.add(new FieldSchema("genotype", org.apache.pig.data.DataType.CHARARRAY));
+		schema = new ResourceSchema(new Schema(fieldSchemaList));
+	}
+
+	public PigGeneStorageUnmerged() {
+		super();
+	}
+
+	public PigGeneStorageUnmerged(final String delimiter) {
+		super(delimiter);
+	}
+
+	public PigGeneStorageUnmerged(final String delimiter, final String options) {
+		super(delimiter, options);
+	}
+
+	@Override
+	public ResourceSchema getSchema(final String location, final Job job) throws IOException {
+		final Properties p = UDFContext.getUDFContext().getUDFProperties(this.getClass(), new String[] { signature });
+		p.setProperty(signature + ".schema", schema.toString());
+		return schema;
 	}
 
 }
