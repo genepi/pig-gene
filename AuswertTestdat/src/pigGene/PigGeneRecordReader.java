@@ -19,6 +19,7 @@ import org.apache.hadoop.util.LineReader;
 
 public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	private static final int leadingInfoFields = 9;
+	private static final int infoColOffset = 7;
 	private static final String delimiter = "\t";
 	private final LinkedList<String> readLines = new LinkedList<String>();
 	private CompressionCodecFactory compressionCodecs = null;
@@ -37,7 +38,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	private final String referenceValue = "0/0";
 	private final String indelValue = "INDEL";
 
-	public PigGeneRecordReader(byte[] recordDelimiter) {
+	public PigGeneRecordReader(final byte[] recordDelimiter) {
 		recordDelimiterBytes = recordDelimiter;
 	}
 
@@ -46,9 +47,9 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	}
 
 	@Override
-	public void initialize(InputSplit genericSplit, TaskAttemptContext context) throws IOException, InterruptedException {
-		FileSplit split = (FileSplit) genericSplit;
-		Configuration job = context.getConfiguration();
+	public void initialize(final InputSplit genericSplit, final TaskAttemptContext context) throws IOException, InterruptedException {
+		final FileSplit split = (FileSplit) genericSplit;
+		final Configuration job = context.getConfiguration();
 
 		// using the maximum length specified in
 		// the configuration of the LineRecordReader...
@@ -61,8 +62,8 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		final CompressionCodec codec = compressionCodecs.getCodec(file);
 
 		// open the file and seek the start of the split
-		FileSystem fs = file.getFileSystem(job);
-		FSDataInputStream fileIn = fs.open(split.getPath());
+		final FileSystem fs = file.getFileSystem(job);
+		final FSDataInputStream fileIn = fs.open(split.getPath());
 		boolean skipFirstLine = false;
 
 		if (codec != null) {
@@ -130,51 +131,56 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			key = new LongWritable();
 		}
 		key.set(keyCounter++);
-		splitLine(key, value);
-		return true;
+		return splitLine(key, value);
+		// return true;
 	}
 
-	private void splitLine(LongWritable key, Text value) {
-		StringBuilder leadingInfoBuffer = new StringBuilder();
-		String inputLine = value.toString();
-		String[] tmpSplits = inputLine.split(delimiter);
-		int noOfTestPersons = tmpSplits.length - leadingInfoFields;
+	private boolean splitLine(final LongWritable key, final Text value) {
+		boolean addedLine = false;
+		final String inputLine = value.toString();
+		final String[] tmpSplits = inputLine.split(delimiter);
 
-		// create leading info
-		for (int i = 0; i < leadingInfoFields; i++) {
-			leadingInfoBuffer.append(tmpSplits[i]).append(delimiter);
-		}
-
-		// append person and id column
-		int idCounter = 0;
-		String leadingInfo = leadingInfoBuffer.toString();
-		String genotype;
-		for (int i = 0; i < noOfTestPersons; i++) {
-			StringBuilder text = new StringBuilder();
-			genotype = tmpSplits[leadingInfoFields + idCounter];
-
-			// ignore lines that equal the reference
-			if (!isLineSuperfluous(genotype.substring(0, 3), tmpSplits[leadingInfoFields - 2])) {
-				text.append(leadingInfo); // first fields
-				text.append(genotype).append(delimiter); // testPerson
-				text.append(Integer.toString(idCounter)); // testPersonId
-				readLines.add(text.toString());
+		if (!infoMatchesINDEL(tmpSplits[infoColOffset])) {
+			// create leading info
+			final StringBuilder leadingInfoBuffer = new StringBuilder();
+			for (int i = 0; i < leadingInfoFields; i++) {
+				leadingInfoBuffer.append(tmpSplits[i]).append(delimiter);
 			}
-			idCounter++;
+
+			// append person and id column
+			int idCounter = 0;
+			final String leadingInfo = leadingInfoBuffer.toString();
+			final int noOfTestPersons = tmpSplits.length - leadingInfoFields;
+			String genotype;
+			for (int i = 0; i < noOfTestPersons; i++) {
+				final StringBuilder text = new StringBuilder();
+				genotype = tmpSplits[leadingInfoFields + idCounter];
+
+				// ignore lines that equal the reference
+				if (!genotypeMatchesReference(genotype)) {
+					text.append(leadingInfo); // first fields
+					text.append(genotype).append(delimiter); // testPerson
+					text.append(Integer.toString(idCounter)); // testPersonId
+					readLines.add(text.toString());
+					addedLine = true;
+				}
+				idCounter++;
+			}
 		}
+		return addedLine;
 	}
 
-	private boolean isLineSuperfluous(String genotypeSub, String infoSub) {
-		// TODO: INDEL filtern...; bei der Übergabe besser auf die Korrektheit
-		// der Daten achten! Komische Warning beseitigen!
-
-		if (referenceValue.equals(genotypeSub)) {
+	private boolean infoMatchesINDEL(final String infoSub) {
+		if (infoSub != null && infoSub.length() >= 5 && indelValue.equals(infoSub.substring(0, 5))) {
 			return true;
 		}
-		if (infoSub.length() >= 5 && indelValue.equals(infoSub.substring(0, 5))) {
+		return false;
+	}
+
+	private boolean genotypeMatchesReference(final String genotype) {
+		if (genotype != null && genotype.length() >= 3 && referenceValue.equals(genotype.substring(0, 3))) {
 			return true;
 		}
-
 		return false;
 	}
 
