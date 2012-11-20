@@ -1,0 +1,27 @@
+package pigGene;
+
+import java.io.IOException;
+
+import org.apache.pig.EvalFunc;
+import org.apache.pig.data.Tuple;
+
+public class ExtractGeneInfo extends EvalFunc<String> {
+
+	@Override
+	public String exec(Tuple input) throws IOException {
+		if (input == null || input.size() != 1) {
+			throw new IOException("input is null or input is not exactly one string");
+		}
+
+		String infoCol = (String) input.get(0);
+
+		int startOffset = infoCol.indexOf("GENEINFO=") + 9;
+		if (startOffset == -1) {
+			return "geneinfo missing:0";
+		}
+
+		int endOffset = infoCol.indexOf(";", startOffset);
+		return infoCol.substring(startOffset, endOffset);
+	}
+
+}
