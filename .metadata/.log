@@ -231,3 +231,9 @@ Caused by: java.lang.NoClassDefFoundError: org/eclipse/xtext/xtend2/resource/Xte
 !ENTRY org.apache.log4j 4 0 2012-11-20 14:08:02.335
 !MESSAGE org.eclipse.xtext.xtend2.ui.Xtend2ExecutableExtensionFactory  - com.google.common.util.concurrent.UncheckedExecutionException: com.google.inject.internal.util.$ComputationException: com.google.inject.internal.util.$ComputationException: java.lang.NoClassDefFoundError: org/eclipse/xtext/xbase/services/XbaseGrammarAccess$XIntLiteralElements
 
+
+!ENTRY org.eclipse.ui 4 4 2012-11-20 15:08:16.803
+!MESSAGE Conflicting handlers for org.eclipse.jdt.ui.edit.text.java.open.editor: {ActionHandler(org.eclipse.ant.internal.ui.editor.actions.OpenDeclarationAction@78c700b4)} vs {ActionHandler(org.eclipse.ant.internal.ui.editor.actions.OpenDeclarationAction@7d413f8e)}
+
+!ENTRY org.eclipse.ui 4 4 2012-11-20 15:10:59.463
+!MESSAGE Conflicting handlers for org.eclipse.jdt.ui.edit.text.java.open.editor: {ActionHandler(org.eclipse.ant.internal.ui.editor.actions.OpenDeclarationAction@561d26ff)} vs {ActionHandler(org.eclipse.ant.internal.ui.editor.actions.OpenDeclarationAction@66872811)}

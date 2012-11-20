@@ -3,7 +3,7 @@
     
 	<property name="cloud.host" value="138.232.66.81" />
 	<property name="cloud.username" value="hadoop" />
-	<property name="cloud.dir" value="/data/clemens/tests/auswertungen" />
+	<property name="cloud.dir" value="/home/hadoop/clemensTests/AuswertTestdat" />
 	<property name="local.pig" value="pigFiles" />
 	<property name="hadoop.bin" value="/home/hadoop/hadoop-0.20.2-cdh3u5/bin/hadoop" />
 	<property name="app.jar" value="pigGene.jar" />

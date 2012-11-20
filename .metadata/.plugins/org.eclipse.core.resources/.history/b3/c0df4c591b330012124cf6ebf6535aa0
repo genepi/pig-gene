@@ -15,7 +15,7 @@ dump data;
 
 
 /* 
- * Testing of my schema-implementation with multiple files - PigStorage('\t','-tagsource') */
+ * Testing of my schema-implementation with multiple files - PigStorage('\t','-tagsource') 
 data = LOAD 'GeneSamples/in/test' USING pigGene.PigGeneStorageUnmerged('\t','-tagsource');
 filtering = FOREAcH data GENERATE file, chrom, pos;
 DUMP filtering;
