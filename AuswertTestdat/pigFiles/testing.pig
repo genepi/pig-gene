@@ -8,14 +8,14 @@ Store referenceFile into 'GeneSamples/output';
 
 
 /*
- * Testing the filtering of the reference and indel values
-data = LOAD 'GeneSamples/input/indelTest.txt' USING pigGene.PigGeneStorage();
+ * Testing the filtering of the reference and indel values 
+data = LOAD 'GeneSamples/input/indelTest2.txt' USING pigGene.PigGeneStorage();
 dump data;
- */
+*/
 
 
 /* 
- * Testing of my schema-implementation with multiple files - PigStorage('\t','-tagsource') */
+ * Testing of my schema-implementation with multiple files - PigStorage('\t','-tagsource') 
 data = LOAD 'GeneSamples/in/test' USING pigGene.PigGeneStorageUnmerged('\t','-tagsource');
 filtering = FOREAcH data GENERATE file, chrom, pos;
 DUMP filtering;

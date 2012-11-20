@@ -25,9 +25,4 @@ refFilter = FILTER ref BY REFchrom == '$chr' AND REFpos >= $start-$accuracy AND 
 
 joined = JOIN inFilter BY (chrom,pos), refFilter BY (REFchrom,REFpos);
 out = FOREACH joined GENERATE chrom, pos, REFid, pigGene.GenotypeMapping(ref,alt,SUBSTRING(genotype,0,3)), persID; 
-
-DUMP out;
-
-/* 
 STORE out INTO '$output';
-*/

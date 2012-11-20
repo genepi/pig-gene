@@ -93,7 +93,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 
 	@Override
 	public boolean nextKeyValue() throws IOException, InterruptedException {
-		// if LinkedList containes elements - consume them
+		// if LinkedList contains elements - consume them
 		if (!readLines.isEmpty()) {
 			return true;
 		}
@@ -101,9 +101,14 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		if (value == null) {
 			value = new Text();
 		}
+		if (key == null) {
+			key = new LongWritable();
+		}
+		key.set(keyCounter++);
 
 		int newSize = 0;
 		boolean headerLine = false;
+		boolean addedLine = false;
 		while (pos < end || headerLine) {
 			newSize = in.readLine(value, maxLineLength, Math.max((int) Math.min(Integer.MAX_VALUE, end - pos), maxLineLength));
 			if (newSize == 0) { // every line was read
@@ -113,27 +118,21 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 			if (newSize < maxLineLength) { // line length okay?
 				if (value.charAt(0) == '#') { // ignore! -> header line
 					headerLine = true;
-				} else { // normal line - continue
-					break;
+				} else { // something new to read: split the new line and put it
+							// into queue if split is possible (not the whole
+							// line filtered) otherwise continue reading
+					addedLine = splitLine(key, value);
+					if (addedLine) {
+						return true;
+					}
 				}
 			}
 		}
 
 		// only return FALSE if LinkedList is empty and nothing more to read...
-		// something new to read: split the new line and put it into queue
-		if (newSize == 0) {
-			key = null;
-			value = null;
-			return false;
-		}
-
-		if (key == null) {
-			key = new LongWritable();
-		}
-		key.set(keyCounter++);
-		// TODO: Problem mit dem Rausfiltern - besprechen!
-		return splitLine(key, value);
-		// return true;
+		key = null;
+		value = null;
+		return false;
 	}
 
 	private boolean splitLine(final LongWritable key, final Text value) {
@@ -171,6 +170,15 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		return addedLine;
 	}
 
+	/**
+	 * The infoMatchesINDEL method checks if the given String (infoSub
+	 * parameter) matches "INDEL".
+	 * 
+	 * @param infoSub
+	 * @return true if given String is not null, it's length is larger or equal
+	 *         than 5 and the first 5 characters match the "INDEL" keyword.
+	 *         false otherwise.
+	 */
 	private boolean infoMatchesINDEL(final String infoSub) {
 		if (infoSub != null && infoSub.length() >= 5 && indelValue.equals(infoSub.substring(0, 5))) {
 			return true;
@@ -178,6 +186,15 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		return false;
 	}
 
+	/**
+	 * The genotypeMatchesReference method checks if the given String (genotype
+	 * parameter) matches the reference value (which is "0/0").
+	 * 
+	 * @param genotype
+	 * @return true if given String is not null, it's length is larger or equal
+	 *         than 5 and the first 3 characters match the reference value
+	 *         ("0/0"). false otherwise.
+	 */
 	private boolean genotypeMatchesReference(final String genotype) {
 		if (genotype != null && genotype.length() >= 3 && referenceValue.equals(genotype.substring(0, 3))) {
 			return true;

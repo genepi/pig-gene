@@ -13,6 +13,7 @@
 package pigGene;
 
 import java.io.IOException;
+
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigSplit;
@@ -23,7 +24,7 @@ import org.apache.pig.data.Tuple;
 
 public class PigStorageWithFilename extends PigStorage {
 	private String filename = null;
-	
+
 	public PigStorageWithFilename(String delimiter) {
 		super(delimiter);
 	}
@@ -33,22 +34,20 @@ public class PigStorageWithFilename extends PigStorage {
 	}
 
 	@Override
-	public void prepareToRead(RecordReader reader, PigSplit split) {
+	public void prepareToRead(@SuppressWarnings("rawtypes") RecordReader reader, PigSplit split) {
 		super.prepareToRead(reader, split);
-		String path = ((FileSplit)split.getWrappedSplit()).getPath().toString();
+		String path = ((FileSplit) split.getWrappedSplit()).getPath().toString();
 		int offset = path.lastIndexOf('/');
-		this.filename = path.substring(offset+1, path.length());
+		filename = path.substring(offset + 1, path.length());
 	}
 
-	
-	
 	@Override
 	public Tuple getNext() throws IOException {
-		BinSedesTuple myTuple = (BinSedesTuple)super.getNext();
+		BinSedesTuple myTuple = (BinSedesTuple) super.getNext();
 		if (myTuple != null) {
 			System.out.println(myTuple.size());
 			myTuple.append(filename);
-			for (int i = 0;i<myTuple.size();i++){
+			for (int i = 0; i < myTuple.size(); i++) {
 				System.out.println(DataType.findTypeName(myTuple.getType(i)));
 			}
 		}
