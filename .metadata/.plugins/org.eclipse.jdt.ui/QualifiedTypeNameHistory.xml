@@ -24,4 +24,6 @@
 <fullyQualifiedTypeName name="org.apache.pig.ResourceSchema"/>
 <fullyQualifiedTypeName name="org.apache.pig.impl.logicalLayer.schema.Schema"/>
 <fullyQualifiedTypeName name="org.apache.pig.EvalFunc"/>
+<fullyQualifiedTypeName name="java.lang.Throwable"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
 </qualifiedTypeNameHistroy>

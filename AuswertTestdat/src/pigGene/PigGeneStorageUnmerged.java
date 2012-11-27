@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.apache.hadoop.mapreduce.InputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.pig.ResourceSchema;
 import org.apache.pig.builtin.PigStorage;
@@ -16,7 +17,6 @@ public class PigGeneStorageUnmerged extends PigStorage {
 
 	static {
 		final ArrayList<FieldSchema> fieldSchemaList = new ArrayList<FieldSchema>();
-		fieldSchemaList.add(new FieldSchema("file", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("chrom", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("pos", org.apache.pig.data.DataType.LONG));
 		fieldSchemaList.add(new FieldSchema("id", org.apache.pig.data.DataType.CHARARRAY));
@@ -27,19 +27,28 @@ public class PigGeneStorageUnmerged extends PigStorage {
 		fieldSchemaList.add(new FieldSchema("info", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("format", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("genotype", org.apache.pig.data.DataType.CHARARRAY));
+		// fieldSchemaList.add(new FieldSchema("file",
+		// org.apache.pig.data.DataType.CHARARRAY));
 		schema = new ResourceSchema(new Schema(fieldSchemaList));
 	}
 
-	public PigGeneStorageUnmerged() {
-		super();
-	}
+	// public PigGeneStorageUnmerged() {
+	// super();
+	// }
+	//
+	// public PigGeneStorageUnmerged(final String delimiter) {
+	// super(delimiter);
+	// }
+	//
+	// public PigGeneStorageUnmerged(final String delimiter, final String
+	// options) {
+	// super(delimiter, options);
+	// }
 
-	public PigGeneStorageUnmerged(final String delimiter) {
-		super(delimiter);
-	}
-
-	public PigGeneStorageUnmerged(final String delimiter, final String options) {
-		super(delimiter, options);
+	@SuppressWarnings("rawtypes")
+	@Override
+	public InputFormat getInputFormat() {
+		return new PigGeneInputFormatUnmerged();
 	}
 
 	@Override
