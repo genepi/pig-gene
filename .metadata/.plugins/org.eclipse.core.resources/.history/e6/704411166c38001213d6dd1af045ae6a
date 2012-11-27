@@ -32,6 +32,19 @@ public class PigGeneStorageUnmerged extends PigStorage {
 		schema = new ResourceSchema(new Schema(fieldSchemaList));
 	}
 
+	// public PigGeneStorageUnmerged() {
+	// super();
+	// }
+	//
+	// public PigGeneStorageUnmerged(final String delimiter) {
+	// super(delimiter);
+	// }
+	//
+	// public PigGeneStorageUnmerged(final String delimiter, final String
+	// options) {
+	// super(delimiter, options);
+	// }
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public InputFormat getInputFormat() {

@@ -15,5 +15,5 @@
 REGISTER pigGene.jar;
 
 in = LOAD '$input' USING pigGene.PigGeneStorageUnmerged();
-/* filt = FOREACH in GENERATE id, qual; */
-DUMP in;
+filt = FOREACH in GENERATE chrom, qual;
+DUMP filt;

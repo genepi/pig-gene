@@ -95,22 +95,22 @@ public class PigGeneRecordReaderUnmerged extends RecordReader<LongWritable, Text
 			value = new Text();
 		}
 		int newSize = 0;
-		if (pos < end) {
-			boolean skipped;
+		while (pos < end) {
 			do {
 				newSize = in.readLine(value, maxLineLength, Math.max((int) Math.min(Integer.MAX_VALUE, end - pos), maxLineLength));
-				skipped = skipLine(value);
 				pos += newSize;
-			} while (skipped && pos < end);
+			} while (skipLine(value) && pos < end);
 
-			if (!skipped && newSize != 0 && newSize < maxLineLength) {
-				return true;
+			if (newSize == 0) {
+				key = null;
+				value = null;
+				return false;
+			}
+			if (newSize < maxLineLength) {
+				break;
 			}
 		}
-
-		key = null;
-		value = null;
-		return false;
+		return true;
 	}
 
 	/**
@@ -124,11 +124,12 @@ public class PigGeneRecordReaderUnmerged extends RecordReader<LongWritable, Text
 	 *         false otherwise.
 	 */
 	private boolean skipLine(final Text value) {
-		final String[] tmpSplits = value.toString().split(delimiter);
-		if (tmpSplits.length <= leadingInfoFields) {
-			return true;
-		}
-		return infoMatchesINDEL(tmpSplits[infoColOffset]);
+		return false;
+		// if (value.getLength() <= leadingInfoFields) {
+		// return true;
+		// }
+		// final String[] tmpSplits = value.toString().split(delimiter);
+		// return infoMatchesINDEL(tmpSplits[infoColOffset]);
 	}
 
 	/**
