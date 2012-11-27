@@ -13,12 +13,10 @@ import org.apache.pig.impl.logicalLayer.schema.Schema.FieldSchema;
 import org.apache.pig.impl.util.UDFContext;
 
 public class PigGeneStorageUnmerged extends PigStorage {
-	boolean dontLoadSchema = false;
 	static ResourceSchema schema;
 
 	static {
 		final ArrayList<FieldSchema> fieldSchemaList = new ArrayList<FieldSchema>();
-		fieldSchemaList.add(new FieldSchema("file", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("chrom", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("pos", org.apache.pig.data.DataType.LONG));
 		fieldSchemaList.add(new FieldSchema("id", org.apache.pig.data.DataType.CHARARRAY));
@@ -29,19 +27,8 @@ public class PigGeneStorageUnmerged extends PigStorage {
 		fieldSchemaList.add(new FieldSchema("info", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("format", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("genotype", org.apache.pig.data.DataType.CHARARRAY));
+		fieldSchemaList.add(new FieldSchema("file", org.apache.pig.data.DataType.CHARARRAY));
 		schema = new ResourceSchema(new Schema(fieldSchemaList));
-	}
-
-	public PigGeneStorageUnmerged() {
-		this("\t", "");
-	}
-
-	public PigGeneStorageUnmerged(String delimiter) {
-		this(delimiter, "");
-	}
-
-	public PigGeneStorageUnmerged(String delimiter, String options) {
-		super(delimiter, options);
 	}
 
 	@SuppressWarnings("rawtypes")

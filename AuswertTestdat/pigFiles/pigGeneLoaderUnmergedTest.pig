@@ -14,6 +14,6 @@
 
 REGISTER pigGene.jar;
 
-in = LOAD '$input' USING pigGene.PigGeneStorageUnmerged('\t','-tagsource');
-/* filt = FOREACH in GENERATE id, qual; */
-DUMP in;
+in = LOAD '$input' USING pigGene.PigGeneStorageUnmerged(); 
+filt = FOREACH in GENERATE pos,ref,file;
+DUMP filt;
