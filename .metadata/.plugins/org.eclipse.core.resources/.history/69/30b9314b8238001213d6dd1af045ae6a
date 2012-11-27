@@ -6,7 +6,7 @@
  * relation by CHROM POS REF ALT SAMPLE. 
  * 
  * call this script like this:
- * pig -param input=GeneSamples/unmerged -param outOrder=GeneSamples/outOrder -param output=GeneSamples/out multipleSamples.pig
+ * pig -param input=GeneSamples/in -param outOrder=GeneSamples/outOrder -param output=GeneSamples/out multipleSamples.pig
  * 
  * @author: Clemens Banas
  */
