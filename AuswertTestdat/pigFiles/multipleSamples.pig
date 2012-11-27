@@ -12,11 +12,6 @@
  */
  
 REGISTER pigGene.jar;
-/*samples = LOAD '$input' USING PigStorage('\t','-tagsource')
-			AS (file:chararray, chrom:chararray, pos:int, id:chararray, ref:chararray, 
-						alt:chararray, qual:float, filt:chararray, info:chararray, 
-									format:chararray, exome:chararray);
-*/
 samples = LOAD '$input' USING pigGene.PigGeneStorageUnmerged(); 
 
 /* filter header and chromosome & project unused columns */

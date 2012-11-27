@@ -129,6 +129,9 @@ public class PigGeneRecordReaderUnmerged extends RecordReader<LongWritable, Text
 	 *         false otherwise.
 	 */
 	private boolean skipLine(final Text value) {
+		if (value.charAt(0) == '#') {
+			return true;
+		}
 		final String[] tmpSplits = value.toString().split(delimiter);
 		if (tmpSplits.length <= leadingInfoFields) {
 			return true;

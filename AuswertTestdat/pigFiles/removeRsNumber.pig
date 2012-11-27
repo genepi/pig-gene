@@ -13,8 +13,10 @@
  */
  
 REGISTER pigGene.jar;
+/* 
 refFile = LOAD '$sample' USING PigStorage('\t')
 			AS (chrom:chararray, pos:int, id:chararray, ref:chararray, 
-						alt:chararray, qual:float, filt:chararray, info:chararray);
+						alt:chararray, qual:float, filt:chararray, info:chararray);*/
+refFile = LOAD '$sample' USING pigGene.PigGeneStorageUnmerged();
 outputFile = FILTER refFile BY pigGene.RemoveRsNumber(id);
 STORE outputFile INTO '$output';
