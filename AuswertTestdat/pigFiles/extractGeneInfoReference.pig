@@ -2,7 +2,7 @@
  * PigGene - BACHELOR PROJECT
  * 
  * Pig script to extract the 
- * geneinfo from the info column 
+ * GENEINFO from the info column 
  * of the reference file.
  * 
  * call this script like this:
@@ -10,10 +10,11 @@
  * 
  * @author: Clemens Banas
  */
- 
+
  REGISTER pigGene.jar;
  
  in = LOAD '$input' USING PigStorage('\t') AS (REFchrom:chararray, REFpos:long, REFid:chararray, REFr:chararray, REFalt:chararray, REFqual:double, REFfilt:chararray, REFinfo:chararray);
- out = FOREACH in GENERATE pigGene.ExtractGeneInfo(REFinfo);
+ tmp = FILTER in BY pigGene.IgnoreHeader(REFchrom);
+ out = FOREACH tmp GENERATE pigGene.ExtractGeneInfo(REFinfo) AS REFinfo;
  
  STORE out INTO '$output';
