@@ -1,17 +1,29 @@
 package piggene.resources;
 
+import net.sf.json.JSONObject;
+
+import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.Get;
+import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 public class GetJobs extends ServerResource {
-
-	@Get
-	public Representation get() {
-
-		return new StringRepresentation("Test Res!");
-
+	
+	@Post
+	public Representation post(Representation entity) {
+//		Form form = new Form(entity);
+//		String name = (String) form.getFirstValue("name");
+//		return new StringRepresentation("Hallo " + name);
+		
+		MyObject o = new MyObject();
+		o.setRel("a");
+		o.setOper("FILTER");
+		o.setRel2("b");
+		o.setOpt("<3");
+		
+		JSONObject object = JSONObject.fromObject(o);
+		return new StringRepresentation(object.toString(),MediaType.APPLICATION_JSON);
 	}
-
+	
 }
