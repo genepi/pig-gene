@@ -16,6 +16,7 @@ public class GetJobs extends ServerResource {
 //		String name = (String) form.getFirstValue("name");
 //		return new StringRepresentation("Hallo " + name);
 		
+		
 		MyObject o = new MyObject();
 		o.setRel("a");
 		o.setOper("FILTER");

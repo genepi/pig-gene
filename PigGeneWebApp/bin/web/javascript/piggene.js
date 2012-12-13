@@ -5,19 +5,21 @@ $(document).ready(function() {
 	 */
     $("#myForm").on('submit', function(){
     	console.log($(this).serialize());
-    	
     	var myJson =  {"a": "b"};
-    	    
     	$.ajax({
     	     type: "POST",
     	     url: "http://localhost:8082/jobs",
     	     data: myJson,//$(this).serialize(),
     	     dataType: "json",
     	     success: function(data) {
-//    	    	 alert(data);
-    	    	 var tab = convertJsonToTable(eval(data), "myTab", "table table-striped table-hover", "link");
-    	    	 alert(tab);
-//    	    	 $("#tableContainer").html(tab);
+    	    	 //alert(data);
+    	    	 var zw = '[{"Total":"34","Version":"1.0.4","Office":"New York"}]';
+    	    	 console.log(zw);
+    	    	 console.log(data);
+    	    	 var a = JSON.stringify(data);
+    	    	 console.log(a);
+    	    	 var tab = convertJsonToTable(a, "myTab", "table table-striped table-hover", "link");
+    	    	 $("#tableContainer").html(tab);
     	     }
     	});
     	return false;
