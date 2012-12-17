@@ -18,21 +18,19 @@ public class WebApp extends Application {
 	 */
 	@Override
 	public synchronized Restlet createRoot() {
+
 		// Create a router Restlet that routes each call to a
-		Router router = new Router(getContext());
-		String target = "riap://host/index.html";
-		Redirector redirector = new Redirector(getContext(), target,
-				Redirector.MODE_SERVER_OUTBOUND);
+		final Router router = new Router(getContext());
+		final String target = "riap://host/index.html";
+		final Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_SERVER_OUTBOUND);
 		TemplateRoute route = router.attach("/", redirector);
 		route.setMatchingMode(Template.MODE_EQUALS);
 
-		//routes
+		// routes
 		router.attach("/jobs", GetJobs.class);
-		
-		
+
 		// clap protocol for usage in jar files
-		Directory dir = new Directory(getContext(), new LocalReference(
-				"clap://thread/web"));
+		final Directory dir = new Directory(getContext(), new LocalReference("clap://thread/web"));
 		dir.setListingAllowed(false);
 
 		route = router.attach("/", dir);

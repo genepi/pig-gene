@@ -1,24 +1,17 @@
 $(document).ready(function() {
 	
 	/**
-	 * Sends an ajax-Request to the server and alerts the returned data.
+	 * Sends an ajax-Request to the server. The returned json-object is parsed  
+	 * into a html-table with the help of the convertJsonToTable-function.
 	 */
-    $("#myForm").on('submit', function(){
-    	console.log($(this).serialize());
-    	var myJson =  {"a": "b"};
+    $("#myForm").on('submit', function() {
     	$.ajax({
     	     type: "POST",
     	     url: "http://localhost:8080/jobs",
-    	     data: myJson,//$(this).serialize(),
+    	     data: $(this).serialize(),
     	     dataType: "json",
     	     success: function(data) {
-    	    	 //alert(data);
-    	    	 var zw = '[{"Total":"34","Version":"1.0.4","Office":"New York"}]';
-    	    	 console.log(zw);
-    	    	 console.log(data);
-    	    	 var a = JSON.stringify(data);
-    	    	 console.log(a);
-    	    	 var tab = convertJsonToTable(a, "myTab", "table table-striped table-hover", "link");
+    	    	 var tab = convertJsonToTable(data, "operationTable", "table table-striped table-hover", "link");
     	    	 $("#tableContainer").html(tab);
     	     }
     	});
@@ -27,7 +20,7 @@ $(document).ready(function() {
     
     
     /**
-     * Convert a Javascript Oject array or String array to an HTML table
+     * Convert a Javascript Object array or String array to an HTML table
      * JSON parsing has to be made before function call
      * It allows use of other JSON parsing methods like jQuery.parseJSON
      * http(s)://, ftp://, file:// and javascript:; links are automatically computed
@@ -68,7 +61,7 @@ $(document).ready(function() {
 
         var classMarkup = tableClassName ? ' class="' + tableClassName + '"' : '';
 
-        var tbl = '<table border="1" cellpadding="1" cellspacing="1"' + idMarkup + classMarkup + '>{0}{1}</table>';
+        var tbl = '<table' + idMarkup + classMarkup + '>{0}{1}</table>';
 
         //Patterns for table content
         var th = '<thead>{0}</thead>';

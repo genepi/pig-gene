@@ -8,14 +8,14 @@ import org.apache.commons.logging.LogFactory;
 public class Main {
 	private static final Log log = LogFactory.getLog(Main.class);
 
-	public static void main(String[] args) throws IOException {
+	public static void main(final String[] args) throws IOException {
 		try {
-			int port = 8080;
+			final int port = 8080;
 			new WebServer(port).start();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			log.error("Can't launch the web server.\nAn unexpected exception occured:", e);
 			System.exit(1);
 		}
 	}
-	
+
 }
