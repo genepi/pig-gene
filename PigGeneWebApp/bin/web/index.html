@@ -17,38 +17,44 @@
 	<li><a href="#">Aborted Jobs</a></li>
 </ul>
 
-<div class="well span12">
-
-	<div class="well span2" style="background-color: #FFFFFF; min-height: 300px; margin-bottom: 5px;">
+<div class="well" style:"height:100%;">
+	<div class="well span4" style="background-color: #FFFFFF; min-height: 300px; margin-bottom: 5px;">
 	
 <!-- TODO: Button anpassen (soll direkt an Auswahl dran sein - ohne Rundung); Spaltenbreite anpassen; Bei Auswahl des Buttons: Action-Label neu setzen! -->	
-		<div class="input-append">
-  			<input class="span1" id="selectionAttribute" type="text">
-  				<div class="btn-group">
-    				<button class="btn dropdown-toggle" data-toggle="dropdown" id="selection">
-      					Action
-      					<span class="caret"></span>
-    				</button>
-   					
-   					<ul class="dropdown-menu">
-      					<li id="eq"><a href="#">equals</a></li>
-    					<li id="gt"><a href="#">greater</a></li>
-    					<li id="st"><a href="#">smaller</a></li>
-    					<li class="divider"></li>
-    					<li id="get"><a href="#">greater of equal</a></li>
-    					<li id="set"><a href="#">smaller of equal</a></li>
-    				</ul>
-  				</div>
- 		<input class="span1" id="selectionValue" type="text">
-		</div>
+		<form class="form-search">
+			<div class="btn-group">
+			<div class="input-append">
+	  			<input class="span2" id="selectionAttribute" type="text">
+	  				<div class="btn-group">
+	    				<button class="btn dropdown-toggle" data-toggle="dropdown" id="selection">
+	      					Action
+	      					<span class="caret"></span>
+	    				</button>
+	   					
+	   					<ul class="dropdown-menu">
+	      					<li id="eq"><a href="#">equals</a></li>
+	    					<li id="gt"><a href="#">greater</a></li>
+	    					<li id="st"><a href="#">smaller</a></li>
+	    					<li class="divider"></li>
+	    					<li id="get"><a href="#">greater of equal</a></li>
+	    					<li id="set"><a href="#">smaller of equal</a></li>
+	    				</ul>
+	  				</div>
+			</div>
+			<div class="input-prepend">
+	 			<input class="span1" id="selectionValue" type="text">
+	 		</div>
+	 		</div>
+		</form>
+
+		<form class="form-signin" id="myForm">
+		<input type="text" id="name" name="name" placeholder="type your name...">
+		<button class="btn btn-large btn-primary" type="submit">Login in</button>
+		</form>
 	
-	<form class="form-signin" id="myForm">
-	<input type="text" id="name" name="name" placeholder="type your name...">
-	<button class="btn btn-large btn-primary" type="submit">Login in</button>
-	</form>
 	</div>
 	
-	<div class="well span8" id="tableContainer" style="background-color: #FFFFFF; min-height: 300px; margin-bottom: 5px;">
+	<div class="well span10" id="tableContainer" style="background-color: #FFFFFF; min-height: 300px; margin-bottom: 5px;">
 		<table class="table table-striped table-hover" id="operationTable">
 			<thead>
 				<tr>

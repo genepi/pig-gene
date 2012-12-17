@@ -20,10 +20,10 @@ public class GetJobs extends ServerResource {
 
 		// testing JSON representation...
 		final MyTestObject objectJAVA = new MyTestObject();
-		objectJAVA.setRel("a");
 		objectJAVA.setOper("FILTER");
-		objectJAVA.setRel2("b");
 		objectJAVA.setOpt("<5");
+		objectJAVA.setRel("a");
+		objectJAVA.setRel2("b");
 
 		final JSONArray jArray = JSONArray.fromObject(objectJAVA);
 		return new StringRepresentation(jArray.toString(), MediaType.APPLICATION_JSON);
