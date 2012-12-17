@@ -1,6 +1,6 @@
 package piggene.resources;
 
-public class MyObject extends Object {
+public class MyTestObject extends Object {
 	private String rel;
 	private String oper;
 	private String rel2;

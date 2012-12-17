@@ -8,7 +8,7 @@ $(document).ready(function() {
     	var myJson =  {"a": "b"};
     	$.ajax({
     	     type: "POST",
-    	     url: "http://localhost:8082/jobs",
+    	     url: "http://localhost:8080/jobs",
     	     data: myJson,//$(this).serialize(),
     	     dataType: "json",
     	     success: function(data) {

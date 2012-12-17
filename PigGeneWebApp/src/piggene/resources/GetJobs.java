@@ -17,7 +17,7 @@ public class GetJobs extends ServerResource {
 //		return new StringRepresentation("Hallo " + name);
 		
 		
-		MyObject o = new MyObject();
+		MyTestObject o = new MyTestObject();
 		o.setRel("a");
 		o.setOper("FILTER");
 		o.setRel2("b");

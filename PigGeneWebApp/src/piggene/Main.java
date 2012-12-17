@@ -13,7 +13,7 @@ public class Main {
 
 		try {
 
-			int port = 8082;
+			int port = 8080;
 
 			new WebServer(port).start();
 
