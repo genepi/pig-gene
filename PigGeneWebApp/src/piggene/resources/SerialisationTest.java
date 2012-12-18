@@ -38,7 +38,6 @@ public class SerialisationTest extends ServerResource {
 			message = "json -> exception!!!";
 			e.printStackTrace();
 		}
-
 		return new StringRepresentation(message); // message just for testing...
 	}
 

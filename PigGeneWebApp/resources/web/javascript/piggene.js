@@ -17,19 +17,15 @@ $(document).ready(function() {
 //    	    data: $(this).serialize(),
     	    dataType: "json",
     	    success: function(data) {
+    	    	if(data.success) {
+    	    		
+    	    	}
+    	    	
+    	    	
     	    	$("#tableContainer").html(data);
 //    	    	var tab = convertJsonToTable(data, "operationTable", "table table-striped table-hover");
 //    	    	$("#tableContainer").html(tab);
     	    }
-//    		error: function(jqXHR, exception) {
-//    			if (jqXHR.status === 0) {
-//                    alert('Not connect.\n Verify Network.');
-//                } else if (exception === 'parsererror') {
-//                    alert('Requested JSON parse failed.');
-//                } else {
-//                    alert('Uncaught Error.\n' + jqXHR.responseText);
-//                }
-//    		}
     	});
     	return false;
     });

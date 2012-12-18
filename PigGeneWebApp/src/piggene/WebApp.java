@@ -23,8 +23,7 @@ public class WebApp extends Application {
 		// Create a router Restlet that routes each call to a
 		final Router router = new Router(getContext());
 		final String target = "riap://host/index.html";
-		final Redirector redirector = new Redirector(getContext(), target,
-				Redirector.MODE_SERVER_OUTBOUND);
+		final Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_SERVER_OUTBOUND);
 		TemplateRoute route = router.attach("/", redirector);
 		route.setMatchingMode(Template.MODE_EQUALS);
 
@@ -33,8 +32,7 @@ public class WebApp extends Application {
 		router.attach("/ser", SerialisationTest.class);
 
 		// clap protocol for usage in jar files
-		final Directory dir = new Directory(getContext(), new LocalReference(
-				"clap://thread/web"));
+		final Directory dir = new Directory(getContext(), new LocalReference("clap://thread/web"));
 		dir.setListingAllowed(false);
 
 		route = router.attach("/", dir);
