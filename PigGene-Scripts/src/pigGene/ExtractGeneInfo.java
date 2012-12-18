@@ -12,7 +12,7 @@ public class ExtractGeneInfo extends EvalFunc<String> {
 	@Override
 	public String exec(final Tuple input) throws IOException {
 		if (input == null || input.size() != 1) {
-			return "the given tuple was null";
+			return "given tuple was null";
 		}
 
 		final String infoCol = (String) input.get(0);
