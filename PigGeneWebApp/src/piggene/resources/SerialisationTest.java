@@ -3,14 +3,18 @@ package piggene.resources;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.sf.json.JSONObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.restlet.data.MediaType;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import piggene.ServerResponseObject;
 import piggene.serialisation.JSONConverter;
 import piggene.serialisation.WorkflowComponent;
 import piggene.serialisation.WorkflowWriter;
@@ -19,30 +23,39 @@ public class SerialisationTest extends ServerResource {
 
 	@Override
 	@Post
-	// TODO: sinnvolles Exception-Handling einbauen...
 	public Representation post(final Representation entity) {
-		String message = null;
-
-		JSONArray array = null;
+		final ServerResponseObject obj = new ServerResponseObject();
 		try {
-			array = getJsonArray(entity);
-			ArrayList<WorkflowComponent> workflow = JSONConverter.convertJsonArrayIntoWorkflow(array);
+			final JSONArray array = getJsonArray(entity);
+			final ArrayList<WorkflowComponent> workflow = JSONConverter.convertJsonArrayIntoWorkflow(array);
 			WorkflowWriter.write(workflow, "myWorkflow");
-			message = "output written...";
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			message = "io -> exception!!!";
+			obj.setSuccess(true);
+			obj.setMessage("success");
+
+			// Test-object will be returned...
+			final MyTestObject objectJava = new MyTestObject();
+			objectJava.setOper("FILTER");
+			objectJava.setOpt("<5");
+			objectJava.setRel("a");
+			objectJava.setRel2("b");
+			final MyTestObject[] objectJavaArr = new MyTestObject[] { objectJava };
+			obj.setData(objectJavaArr);
+
+		} catch (final IOException e) {
+			obj.setSuccess(false);
+			obj.setMessage(e.getMessage());
 			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			message = "json -> exception!!!";
+		} catch (final JSONException e) {
+			obj.setSuccess(false);
+			obj.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
-		return new StringRepresentation(message); // message just for testing...
+		final JSONObject responseObj = JSONObject.fromObject(obj);
+		return new StringRepresentation(responseObj.toString(), MediaType.APPLICATION_JSON);
 	}
 
 	private JSONArray getJsonArray(final Representation entity) throws IOException, JSONException {
-		JsonRepresentation representant = new JsonRepresentation(entity);
+		final JsonRepresentation representant = new JsonRepresentation(entity);
 		return representant.getJsonArray();
 	}
 

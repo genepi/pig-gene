@@ -1,6 +1,5 @@
 package piggene.resources;
 
-@SuppressWarnings("unused")
 public class MyTestObject extends Object {
 	private String rel;
 	private String oper;
@@ -21,6 +20,22 @@ public class MyTestObject extends Object {
 
 	public void setOpt(final String opt) {
 		this.opt = opt;
+	}
+
+	public String getRel() {
+		return rel;
+	}
+
+	public String getOper() {
+		return oper;
+	}
+
+	public String getRel2() {
+		return rel2;
+	}
+
+	public String getOpt() {
+		return opt;
 	}
 
 }

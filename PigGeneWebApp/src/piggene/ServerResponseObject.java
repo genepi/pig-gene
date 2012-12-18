@@ -10,7 +10,6 @@ public class ServerResponseObject {
 	}
 
 	public void setSuccess(final boolean success) {
-
 		this.success = success;
 	}
 
