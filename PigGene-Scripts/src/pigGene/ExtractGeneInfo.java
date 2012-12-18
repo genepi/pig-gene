@@ -6,26 +6,26 @@ import org.apache.pig.EvalFunc;
 import org.apache.pig.data.Tuple;
 
 public class ExtractGeneInfo extends EvalFunc<String> {
-	private String geneinfo = "GENEINFO=";
-	private int offset = geneinfo.length();
+	private final String geneinfo = "GENEINFO=";
+	private final int offset = geneinfo.length();
 
 	@Override
-	public String exec(Tuple input) throws IOException {
+	public String exec(final Tuple input) throws IOException {
 		if (input == null || input.size() != 1) {
-			return "given tuple was null";
+			return "the given tuple was null";
 		}
 
-		String infoCol = (String) input.get(0);
+		final String infoCol = (String) input.get(0);
 		if (infoCol == null) {
 			return "could not read given tuple";
 		}
 
-		int startOffset = infoCol.indexOf(geneinfo) + offset;
+		final int startOffset = infoCol.indexOf(geneinfo) + offset;
 		if (startOffset < 0) {
 			return "GENEINFO= could was not found";
 		}
 
-		int endOffset = infoCol.indexOf(";", startOffset);
+		final int endOffset = infoCol.indexOf(";", startOffset);
 
 		if (endOffset < 0) {
 			return "index problem: end < 0";
