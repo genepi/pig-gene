@@ -34,11 +34,17 @@ public class SerialisationTest extends ServerResource {
 
 			// Test-object will be returned...
 			final MyTestObject objectJava = new MyTestObject();
-			objectJava.setOper("FILTER");
-			objectJava.setOpt("<5");
 			objectJava.setRel("a");
+			objectJava.setOper("FILTER");
 			objectJava.setRel2("b");
-			final MyTestObject[] objectJavaArr = new MyTestObject[] { objectJava };
+			objectJava.setOpt("<5");
+			final MyTestObject object2Java = new MyTestObject();
+			object2Java.setRel("c");
+			object2Java.setOper("JOIN");
+			object2Java.setRel2("d");
+			object2Java.setOpt("c.id==d.id");
+			final MyTestObject[] objectJavaArr = new MyTestObject[] { objectJava, object2Java };
+
 			obj.setData(objectJavaArr);
 
 		} catch (final IOException e) {

@@ -15,12 +15,12 @@ $(document).ready(function() {
 //    	    data: $(this).serialize(),
     	    dataType: "json",
     	    success: function(response) {
-    	    	console.log(response);
     	    	if(response.success) { // show table
     	    		var tab = convertJsonToTable(response.data, "operationTable", "table table-striped table-hover");
     	    		$("#tableContainer").html(tab);
     	    	} else { // show modal dialogue
-    	    		
+    	    		$("#errormsg").html(response.message);
+    	    		$("#errorModal").modal('show');
     	    	}
     	    }
     	
