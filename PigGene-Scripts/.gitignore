@@ -1,3 +1,5 @@
 /dist
 /bin
 /.settings
+/lib/hadoop_src
+/lib/pig_src
