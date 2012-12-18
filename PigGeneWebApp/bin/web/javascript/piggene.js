@@ -5,62 +5,56 @@ $(document).ready(function() {
 	 * into a html-table with the help of the convertJsonToTable-function.
 	 */
     $("#myForm").on('submit', function() {
+    	
+//    	console.log($("#name"));
+    	var myJSONString = '[{"relation":"a","operation":"FILTER","relation2":"-","options":"chrom==20"},{"relation":"c","operation":"JOIN","relation2":"d","options":"c.id==d.id"},{"relation":"f","operation":"FILTER","relation2":"-","options":"pos>10000"}]';
+    	
     	$.ajax({
-    	     type: "POST",
-    	     url: "http://localhost:8080/jobs",
-    	     data: $(this).serialize(),
-    	     dataType: "json",
-    	     success: function(data) {
-    	    	 var tab = convertJsonToTable(data, "operationTable", "table table-striped table-hover", "link");
-    	    	 $("#tableContainer").html(tab);
-    	     }
+    		type: "POST",
+//    	    url: "http://localhost:8080/jobs",
+    	    url: "http://localhost:8080/ser",
+    	    data: myJSONString,
+//    	    data: $(this).serialize(),
+    	    dataType: "json",
+    	    success: function(data) {
+    	    	$("#tableContainer").html(data);
+//    	    	var tab = convertJsonToTable(data, "operationTable", "table table-striped table-hover");
+//    	    	$("#tableContainer").html(tab);
+    	    }
+//    		error: function(jqXHR, exception) {
+//    			if (jqXHR.status === 0) {
+//                    alert('Not connect.\n Verify Network.');
+//                } else if (exception === 'parsererror') {
+//                    alert('Requested JSON parse failed.');
+//                } else {
+//                    alert('Uncaught Error.\n' + jqXHR.responseText);
+//                }
+//    		}
     	});
     	return false;
     });
     
-    
     /**
-     * Convert a Javascript Object array or String array to an HTML table
-     * JSON parsing has to be made before function call
-     * It allows use of other JSON parsing methods like jQuery.parseJSON
-     * http(s)://, ftp://, file:// and javascript:; links are automatically computed
-     *
-     * JSON data samples that should be parsed and then can be converted to an HTML table
-     *     var objectArray = '[{"Total":"34","Version":"1.0.4","Office":"New York"},{"Total":"67","Version":"1.1.0","Office":"Paris"}]';
-     *     var stringArray = '["New York","Berlin","Paris","Marrakech","Moscow"]';
-     *     var nestedTable = '[{ key1: "val1", key2: "val2", key3: { tableId: "tblIdNested1", tableClassName: "clsNested", linkText: "Download", data: [{ subkey1: "subval1", subkey2: "subval2", subkey3: "subval3" }] } }]'; 
-     *
-     * Code sample to create a HTML table Javascript String
-     *     var jsonHtmlTable = ConvertJsonToTable(eval(dataString), 'jsonTable', null, 'Download');
-     *
-     * Code sample explaned
-     *  - eval is used to parse a JSON dataString
-     *  - table HTML id attribute will be 'jsonTable'
-     *  - table HTML class attribute will not be added
-     *  - 'Download' text will be displayed instead of the link itself
-     *
+     * Convert a Javascript Object array or String array to an HTML table.
+     * JSON parsing has to be made before function call; that allows use 
+     * of other JSON parsing methods like jQuery.parseJSON.
+     * 
+     * @param parsedJson JSON data
+     * @param tableId - String
+     * @param tableClassName table css class name - String
+     * 
+     * original:
      * @author Afshin Mehrabani <afshin dot meh at gmail dot com>
      * 
-     * @param parsedJson object Parsed JSON data
-     * @param tableId string Optional table id 
-     * @param tableClassName string Optional table css class name
-     * @param linkText string Optional text replacement for link pattern
+     * modified by:
+     * @author Clemens Banas
      * 
-     * @return string Converted JSON to HTML table
+     * @return String - converted JSON to HTML table
      */
-    function convertJsonToTable(parsedJson, tableId, tableClassName, linkText)
-    {
-        //Patterns for links and NULL value
-        var italic = '<i>{0}</i>';
-        var link = linkText ? '<a href="{0}">' + linkText + '</a>' :
-                              '<a href="{0}">{0}</a>';
-
+    function convertJsonToTable(parsedJson, tableId, tableClassName) {
         //Pattern for table                          
-        var idMarkup = tableId ? ' id="' + tableId + '"' :
-                                 '';
-
+    	var idMarkup = tableId ? ' id="' + tableId + '"' : '';
         var classMarkup = tableClassName ? ' class="' + tableClassName + '"' : '';
-
         var tbl = '<table' + idMarkup + classMarkup + '>{0}{1}</table>';
 
         //Patterns for table content
@@ -73,77 +67,54 @@ $(document).ready(function() {
         var tbCon = '';
         var trCon = '';
 
-        if (parsedJson)
-        {
+        if (parsedJson) {
             var isStringArray = typeof(parsedJson[0]) == 'string';
             var headers;
 
-            // Create table headers from JSON data
-            // If JSON data is a simple string array we create a single table header
-            if(isStringArray)
+            // Create table header from JSON data
+            if(isStringArray) { // If JSON data is a string array a single table header is created
                 thCon += thRow.format('value');
-            else
-            {
-                // If JSON data is an object array, headers are automatically computed
-                if(typeof(parsedJson[0]) == 'object')
-                {
+            } else { // If JSON data is an object array, headers are computed
+                if(typeof(parsedJson[0]) == 'object') {
                     headers = array_keys(parsedJson[0]);
-
-                    for (i = 0; i < headers.length; i++)
+                    for (i = 0; i < headers.length; i++) {
                         thCon += thRow.format(headers[i]);
+                    }
                 }
             }
             th = th.format(tr.format(thCon));
             
-            // Create table rows from Json data
-            if(isStringArray)
-            {
-                for (i = 0; i < parsedJson.length; i++)
-                {
+            // Create table rows from JSON data
+            if(isStringArray) { //JSON data is a string array
+                for (i = 0; i < parsedJson.length; i++) {
                     tbCon += tdRow.format(parsedJson[i]);
                     trCon += tr.format(tbCon);
                     tbCon = '';
                 }
-            }
-            else
-            {
-                if(headers)
-                {
-                    var urlRegExp = new RegExp(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
-                    var javascriptRegExp = new RegExp(/(^javascript:[\s\S]*;$)/ig);
-                    
-                    for (i = 0; i < parsedJson.length; i++)
-                    {
-                        for (j = 0; j < headers.length; j++)
-                        {
+            } else {
+                if(headers) { //JSON data is an object array
+                    for (i = 0; i < parsedJson.length; i++) {
+                        for (j = 0; j < headers.length; j++) {
                             var value = parsedJson[i][headers[j]];
-                            var isUrl = urlRegExp.test(value) || javascriptRegExp.test(value);
-
-                            if(isUrl)   // If value is URL we auto-create a link
-                                tbCon += tdRow.format(link.format(value));
-                            else
-                            {
-                                if(value){
-                                	if(typeof(value) == 'object'){
-                                		//for supporting nested tables
-                                		tbCon += tdRow.format(ConvertJsonToTable(eval(value.data), value.tableId, value.tableClassName, value.linkText));
-                                	} else {
-                                		tbCon += tdRow.format(value);
-                                	}
-                                    
-                                } else {    // If value == null we format it like PhpMyAdmin NULL values
-                                    tbCon += tdRow.format(italic.format(value).toUpperCase());
-                                }
+                            if(value) {
+                            	if(typeof(value) == 'object') {
+                            		//for supporting nested tables
+                            		tbCon += tdRow.format(ConvertJsonToTable(eval(value.data), value.tableId, value.tableClassName, value.linkText));
+                            	} else {
+                            		tbCon += tdRow.format(value);
+                            	}
+                                
+                            } else {    // If value == null we format it like PhpMyAdmin NULL values
+                                tbCon += tdRow.format(italic.format(value).toUpperCase());
                             }
                         }
                         trCon += tr.format(tbCon);
-                        tbCon = '';
+                    	tbCon = '';
                     }
                 }
             }
             tb = tb.format(trCon);
             tbl = tbl.format(th, tb);
-
             return tbl;
         }
         return null;
@@ -164,46 +135,37 @@ $(document).ready(function() {
      *  *     example 1: array_keys( {firstname: 'Kevin', surname: 'van Zonneveld'} );
      *  *     returns 1: {0: 'firstname', 1: 'surname'}
      */
-    function array_keys(input, search_value, argStrict)
-    {
+    function array_keys(input, search_value, argStrict) {
         var search = typeof search_value !== 'undefined', tmp_arr = [], strict = !!argStrict, include = true, key = '';
-
         if (input && typeof input === 'object' && input.change_key_case) { // Duck-type check for our own array()-created PHPJS_Array
             return input.keys(search_value, argStrict);
         }
      
-        for (key in input)
-        {
-            if (input.hasOwnProperty(key))
-            {
+        for (key in input) {
+            if (input.hasOwnProperty(key)) {
                 include = true;
-                if (search)
-                {
-                    if (strict && input[key] !== search_value)
+                if (search) {
+                    if (strict && input[key] !== search_value) {
                         include = false;
-                    else if (input[key] != search_value)
+                    } else if (input[key] != search_value) {
                         include = false;
+                    }
                 } 
-                if (include)
+                if (include) {
                     tmp_arr[tmp_arr.length] = key;
+                }
             }
         }
         return tmp_arr;
     }
     
-    
     /**
      * JavaScript format string function
-     * 
      */
-    String.prototype.format = function()
-    {
+    String.prototype.format = function() {
       var args = arguments;
-
-      return this.replace(/{(\d+)}/g, function(match, number)
-      {
-        return typeof args[number] != 'undefined' ? args[number] :
-                                                    '{' + number + '}';
+      return this.replace(/{(\d+)}/g, function(match, number) {
+        return typeof args[number] != 'undefined' ? args[number] : '{' + number + '}';
       });
     };
     

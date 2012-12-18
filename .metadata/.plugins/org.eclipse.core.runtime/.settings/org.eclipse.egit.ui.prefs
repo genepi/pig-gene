@@ -1,4 +1,0 @@
-CloneWizard_ImportProjects=true
-commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\n<messages>\n<message>small modifications</message>\n<message>extract geneinfo from reference file - TODO\: discuss handling of&\#x0A;different information columns</message>\n<message>extract PL AND GQ values - generate new columns -&gt; works \:-)</message>\n<message>INDEL filter works &amp;&amp; retrieveGenotypeInformation.pig works</message>\n<message>current</message>\n<message>updated script</message>\n<message>implemented the genotype mapping in the retrieveGenotypeInformation.pig</message>\n<message>basically working retrieveGenotypeInformation and finalized&\#x0A;PigGeneStorage</message>\n<message>removed not needed UDF</message>\n<message>updated positionRange</message>\n</messages>
-commit_dialog_push_upstream=true
-eclipse.preferences.version=1

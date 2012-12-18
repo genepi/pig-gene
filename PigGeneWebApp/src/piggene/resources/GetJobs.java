@@ -24,7 +24,7 @@ public class GetJobs extends ServerResource {
 		objectJAVA.setOpt("<5");
 		objectJAVA.setRel("a");
 		objectJAVA.setRel2("b");
-
+		
 		final JSONArray jArray = JSONArray.fromObject(objectJAVA);
 		return new StringRepresentation(jArray.toString(), MediaType.APPLICATION_JSON);
 	}
