@@ -33,17 +33,17 @@ public class SerialisationTest extends ServerResource {
 			obj.setMessage("success");
 
 			// Test-object will be returned...
-			final MyTestObject objectJava = new MyTestObject();
-			objectJava.setRel("a");
-			objectJava.setOper("FILTER");
-			objectJava.setRel2("b");
-			objectJava.setOpt("<5");
-			final MyTestObject object2Java = new MyTestObject();
-			object2Java.setRel("c");
-			object2Java.setOper("JOIN");
-			object2Java.setRel2("d");
-			object2Java.setOpt("c.id==d.id");
-			final MyTestObject[] objectJavaArr = new MyTestObject[] { objectJava, object2Java };
+			final WorkflowComponent objectJava = new WorkflowComponent();
+			objectJava.setRelation("a");
+			objectJava.setOperation("FILTER");
+			objectJava.setRelation2("b");
+			objectJava.setOptions("<5");
+			final WorkflowComponent object2Java = new WorkflowComponent();
+			object2Java.setRelation("c");
+			object2Java.setOperation("JOIN");
+			object2Java.setRelation2("d");
+			object2Java.setOptions("c.id==d.id");
+			final WorkflowComponent[] objectJavaArr = new WorkflowComponent[] { objectJava, object2Java };
 
 			obj.setData(objectJavaArr);
 

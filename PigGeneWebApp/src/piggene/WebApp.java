@@ -10,7 +10,6 @@ import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
 import piggene.resources.GetJobs;
-import piggene.resources.SerialisationTest;
 
 public class WebApp extends Application {
 
@@ -29,7 +28,7 @@ public class WebApp extends Application {
 
 		// routes
 		router.attach("/jobs", GetJobs.class);
-		router.attach("/ser", SerialisationTest.class);
+		router.attach("/ser", QueryProcessor.class);
 
 		// clap protocol for usage in jar files
 		final Directory dir = new Directory(getContext(), new LocalReference("clap://thread/web"));

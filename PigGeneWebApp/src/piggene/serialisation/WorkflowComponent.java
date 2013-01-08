@@ -3,7 +3,7 @@ package piggene.serialisation;
 import java.io.Serializable;
 
 public class WorkflowComponent implements Serializable {
-	private static final long serialVersionUID = -5650647560516160486L;
+	private static final long serialVersionUID = -7293718140809017884L;
 
 	private String relation;
 	private String operation;
@@ -44,6 +44,24 @@ public class WorkflowComponent implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("relation: ");
+		sb.append(relation);
+		sb.append(" ");
+		sb.append("operation: ");
+		sb.append(operation);
+		sb.append(" ");
+		sb.append("relation2: ");
+		sb.append(relation2);
+		sb.append(" ");
+		sb.append("options: ");
+		sb.append(options);
+		sb.append(" ");
+		return sb.toString();
 	}
 
 }

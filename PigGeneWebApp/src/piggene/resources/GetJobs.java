@@ -8,6 +8,8 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import piggene.serialisation.WorkflowComponent;
+
 public class GetJobs extends ServerResource {
 
 	@Override
@@ -19,11 +21,11 @@ public class GetJobs extends ServerResource {
 		// return new StringRepresentation("Hallo " + name);
 
 		// testing JSON representation...
-		final MyTestObject objectJAVA = new MyTestObject();
-		objectJAVA.setRel("a");
-		objectJAVA.setOper("FILTER");
-		objectJAVA.setOpt("<5");
-		objectJAVA.setRel2("b");
+		final WorkflowComponent objectJAVA = new WorkflowComponent();
+		objectJAVA.setRelation("a");
+		objectJAVA.setOperation("FILTER");
+		objectJAVA.setOptions("<5");
+		objectJAVA.setRelation2("b");
 
 		final JSONArray jArray = JSONArray.fromObject(objectJAVA);
 		return new StringRepresentation(jArray.toString(), MediaType.APPLICATION_JSON);
