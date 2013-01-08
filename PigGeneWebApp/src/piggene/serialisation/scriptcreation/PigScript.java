@@ -1,4 +1,4 @@
-package piggene.scriptCreation;
+package piggene.serialisation.scriptcreation;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

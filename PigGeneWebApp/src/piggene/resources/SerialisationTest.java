@@ -14,7 +14,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
-import piggene.ServerResponseObject;
+import piggene.response.ServerResponseObject;
 import piggene.serialisation.JSONConverter;
 import piggene.serialisation.WorkflowComponent;
 import piggene.serialisation.WorkflowWriter;

@@ -1,4 +1,4 @@
-package piggene;
+package piggene.response;
 
 public class ServerResponseObject {
 	private boolean success;

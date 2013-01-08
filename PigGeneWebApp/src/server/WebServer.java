@@ -1,4 +1,4 @@
-package piggene;
+package server;
 
 import org.restlet.Component;
 import org.restlet.data.Protocol;

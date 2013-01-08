@@ -5,7 +5,7 @@ $(document).ready(function() {
 	 * into a html-table with the help of the convertJsonToTable-function.
 	 */
     $("#myForm").on('submit', function() {
-    	var myJSONString = '[{"relName":"r1","relation":"a","operation":"FILTER","relation2":"-","options":"chrom==20"},{"relName":"r2","relation":"c","operation":"JOIN","relation2":"d","options":"id","options2":"id1"},{"relName":"r3","relation":"f","operation":"FILTER","relation2":"-","options":"pos>10000"}]';
+    	var myJSONString = '[{"relName":"R1","relation":"a","operation":"FILTER","relation2":"-","options":"chrom==20"},{"relName":"R2","relation":"c","operation":"JOIN","relation2":"d","options":"id","options2":"id1"},{"relName":"R3","relation":"f","operation":"FILTER","relation2":"-","options":"pos>10000"}]';
     	
     	$.ajax({
     		type: "POST",

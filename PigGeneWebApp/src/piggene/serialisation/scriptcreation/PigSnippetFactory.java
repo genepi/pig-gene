@@ -1,4 +1,4 @@
-package piggene.scriptCreation;
+package piggene.serialisation.scriptcreation;
 
 import piggene.serialisation.WorkflowComponent;
 

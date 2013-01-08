@@ -1,4 +1,4 @@
-package piggene;
+package server;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
@@ -10,6 +10,7 @@ import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
 import piggene.resources.GetJobs;
+import piggene.resources.QueryProcessor;
 
 public class WebApp extends Application {
 

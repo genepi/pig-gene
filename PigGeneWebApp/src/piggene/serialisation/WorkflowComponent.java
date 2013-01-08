@@ -67,18 +67,23 @@ public class WorkflowComponent implements Serializable {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("relation: ");
+		sb.append("relName:");
+		sb.append(relName);
+		sb.append(" ");
+		sb.append("relation:");
 		sb.append(relation);
 		sb.append(" ");
-		sb.append("operation: ");
+		sb.append("operation:");
 		sb.append(operation);
 		sb.append(" ");
-		sb.append("relation2: ");
+		sb.append("relation2:");
 		sb.append(relation2);
 		sb.append(" ");
-		sb.append("options: ");
+		sb.append("options:");
 		sb.append(options);
 		sb.append(" ");
+		sb.append("options2:");
+		sb.append(options2);
 		return sb.toString();
 	}
 

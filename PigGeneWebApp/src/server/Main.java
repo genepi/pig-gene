@@ -1,4 +1,4 @@
-package piggene;
+package server;
 
 import java.io.IOException;
 
