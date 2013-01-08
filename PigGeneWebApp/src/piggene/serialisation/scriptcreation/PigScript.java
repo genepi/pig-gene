@@ -12,7 +12,7 @@ public class PigScript {
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private static final char SEMICOLON = ';';
 
-	public static void generateAndWrite(final ArrayList<WorkflowComponent> workflow, final String name) {
+	public static void generateAndWrite(final ArrayList<WorkflowComponent> workflow, final String name) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(insertHeader());
 
@@ -33,14 +33,11 @@ public class PigScript {
 		return sb.toString();
 	}
 
-	private static void write(final String pigScript, final String name) {
+	private static void write(final String pigScript, final String name) throws IOException {
 		BufferedWriter out = null;
 		try {
 			out = new BufferedWriter(new FileWriter(name.concat(".pig")));
 			out.write(pigScript);
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} finally {
 			try {
 				out.close();

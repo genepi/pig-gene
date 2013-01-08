@@ -26,14 +26,18 @@ public class QueryProcessor extends ServerResource {
 		final ArrayList<WorkflowComponent> workflow = processClientData(entity);
 
 		// pig-script
-		PigScript.generateAndWrite(workflow, "myScript"); // exceptions...
+		try {
+			PigScript.generateAndWrite(workflow, "myScript");
+		} catch (final IOException e1) {
+			// TODO return pigscript-error info...
+		}
 
 		// yaml-file
 		try {
 			WorkflowWriter.write(workflow, "myWorkflow");
 		} catch (final IOException e) {
 			e.printStackTrace();
-			// TODO return error info...
+			// TODO return yaml-error info...
 		}
 
 		// /////////// just for testing purpose...
