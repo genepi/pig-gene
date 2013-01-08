@@ -1,15 +1,19 @@
 - !piggene.serialisation.WorkflowComponent
    operation: FILTER
    options: chrom==20
+   relName: r1
    relation: a
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    operation: JOIN
-   options: c.id==d.id
+   options: id
+   options2: id1
+   relName: r2
    relation: c
    relation2: d
 - !piggene.serialisation.WorkflowComponent
    operation: FILTER
    options: pos>10000
+   relName: r3
    relation: f
    relation2: '-'

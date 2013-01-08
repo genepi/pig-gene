@@ -5,10 +5,20 @@ import java.io.Serializable;
 public class WorkflowComponent implements Serializable {
 	private static final long serialVersionUID = -7293718140809017884L;
 
+	private String relName;
 	private String relation;
 	private String operation;
 	private String relation2;
 	private String options;
+	private String options2;
+
+	public String getRelName() {
+		return relName;
+	}
+
+	public void setRelName(final String relName) {
+		this.relName = relName;
+	}
 
 	public String getRelation() {
 		return relation;
@@ -40,6 +50,14 @@ public class WorkflowComponent implements Serializable {
 
 	public void setOptions(final String options) {
 		this.options = options;
+	}
+
+	public String getOptions2() {
+		return options2;
+	}
+
+	public void setOptions2(final String options2) {
+		this.options2 = options2;
 	}
 
 	public static long getSerialversionuid() {

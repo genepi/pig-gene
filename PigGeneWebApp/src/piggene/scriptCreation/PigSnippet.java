@@ -1,12 +1,16 @@
 package piggene.scriptCreation;
 
-public abstract class PigSnippet implements PigScript {
-	private static final String header = "REGISTER pigGene.jar;";
+import piggene.serialisation.WorkflowComponent;
 
-	public abstract String toPigScript();
+public abstract class PigSnippet implements IPigSnippet {
+	protected static final String EQUAL_SYMBOL = " = ";
+	protected WorkflowComponent comp;
 
-	public static String getHeader() {
-		return header;
+	public PigSnippet(final WorkflowComponent comp) {
+		this.comp = comp;
 	}
+
+	@Override
+	public abstract String toPigScript();
 
 }
