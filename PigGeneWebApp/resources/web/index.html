@@ -22,6 +22,28 @@
 	<div class="well span4" style="background-color: #FFFFFF; min-height: 300px; margin-bottom: 5px;">
 	
 <!-- TODO: Button anpassen (soll direkt an Auswahl dran sein - ohne Rundung); Spaltenbreite anpassen; Bei Auswahl des Buttons: Action-Label neu setzen! -->	
+		<form class="form-search" id="selectionForm">
+			<label class="radio">
+				<input type="radio" name="operation" id="filterRadio" value="FILTER" checked>
+				Filter
+			</label>
+			<label class="radio">
+				<input type="radio" name="operation" id="joinRadio" value="JOIN">
+				Join
+			</label>
+			<p>
+			<input class="span2" id="testinputname" name="name" type="text" placeholder="relname..." value="">
+			<p>
+			<input class="span2" id="testinputrela" name="relation" type="text" placeholder="relation..." value="">
+			<input class="span2" id="testinputrela2" name="relation2" type="text" placeholder="relation2..." value="">
+			<input class="span2" id="testinputopt" name="options" type="text" placeholder="option..." value="">
+			<button class="btn" type="submit">ok</button>
+		</form>
+		
+		<button class="btn btn-large btn-primary" id="sendToServer" type="submit">send to server</button>
+		
+		
+		<!--  
 		<form class="form-search">
 			<div class="btn-group">
 			<div class="input-append">
@@ -52,6 +74,7 @@
 		<input type="text" id="name" name="name" placeholder="type your name...">
 		<button class="btn btn-large btn-primary" type="submit">Login in</button>
 		</form>
+		-->
 	
 	</div>
 	
@@ -59,39 +82,45 @@
 		<table class="table table-striped table-hover" id="operationTable">
 			<thead>
 				<tr>
-					<th>relation name</th>
+					<th>name</th>
+					<th>relation</th>
 					<th>operation</th>
-					<th>second relation (opt)</th>
+					<th>relation2</th>
 					<th>options</th>
 				</tr>
 			</thead>
 				
 			<tbody>
 				<tr>
+					<td>1</td>
 					<td>input</td>
 					<td>FILTER</td>
 					<td></td>
 					<td>chrom == 20</td>
 				</tr>
 				<tr class="success">
+					<td>2</td>
 					<td>zw</td>
 					<td>JOIN</td>
 					<td>ref</td>
 					<td>zw.ID == ref.ID</td>
 				</tr>
 				<tr class="error">
+					<td>3</td>
 					<td>abc</td>
 					<td>FILTER</td>
 					<td></td>
 					<td>id == 2</td>
 				</tr>
 				<tr>
+					<td>4</td>
 					<td>def</td>
 					<td>FILTER</td>
 					<td></td>
 					<td>chrom == 1</td>
 				</tr>
 				<tr>
+					<td>5</td>
 					<td>xyz</td>
 					<td>FILTER</td>
 					<td></td>
@@ -103,6 +132,20 @@
 	
 </div>
 
+<!-- modal dialogues ... -->
+
+<div class="modal hide fade" id="successModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Saving...</h3>
+  </div>
+  <div class="modal-body">
+    <p id="msg">Your workflow was saved successfully!</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" data-dismiss="modal" aria-hidden="true">close</a>
+  </div>
+</div>
 
 <div class="modal hide fade" id="errorModal">
   <div class="modal-header">
@@ -110,13 +153,14 @@
     <h3> An error occured!</h3>
   </div>
   <div class="modal-body">
-    <p id="errormsg"></p>
+    <p id="errmsg"></p>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">close</a>
   </div>
 </div>
 
+<!-- ... modal dialogues -->
 
 </body>
 </html>
