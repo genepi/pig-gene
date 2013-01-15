@@ -15,14 +15,15 @@ $(document).ready(function() {
 		var rel1 = values[2].value;
 		var rel2 = values[3].value;
 		var opt = values[4].value;
+		var opt2 = values[5].value;
 		
 		if(name == null || name == "") {
 			name = "R" + nameCounter;
 		}
 		nameCounter++;
 		
-		workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt});
-		console.log(workflow);
+		workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt, options2:opt2});
+//		console.log(workflow);
 		showTable();
 		return false;
 	});
@@ -40,12 +41,13 @@ $(document).ready(function() {
 	 * send data to the server
 	 */
 	$('#sendToServer').on('click',function() {
-//		alert("click");
+		var data = JSON.stringify(workflow);
+		console.log(data);
 
 		$.ajax({
     		type: "POST",
     	    url: "http://localhost:8080/ser",
-    	    data: workflow,
+    	    data: data,
     	    dataType: "json",
     	    success: function(response) {
     	    	if(response.success) {
@@ -54,12 +56,11 @@ $(document).ready(function() {
     	    		$("#errormsg").html(response.message);
     	    		$("#errorModal").modal('show');
     	    	}
-    	    }
-//			,
-//    	    error: function (xhr, ajaxOptions, thrownError) {
-//    	    	$("#errormsg").html(xhr.responseText);
-//	    		$("#errorModal").modal('show');
-//    	   }
+    	    },
+    	    error: function (xhr, ajaxOptions, thrownError) {
+    	    	$("#errormsg").html(xhr.responseText);
+	    		$("#errorModal").modal('show');
+    	   }
     	});
 	});
 			

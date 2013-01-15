@@ -5,19 +5,19 @@ import java.io.Serializable;
 public class WorkflowComponent implements Serializable {
 	private static final long serialVersionUID = -7293718140809017884L;
 
-	private String relName;
+	private String name;
 	private String relation;
 	private String operation;
 	private String relation2;
 	private String options;
 	private String options2;
 
-	public String getRelName() {
-		return relName;
+	public String getName() {
+		return name;
 	}
 
-	public void setRelName(final String relName) {
-		this.relName = relName;
+	public void setName(final String name) {
+		this.name = name;
 	}
 
 	public String getRelation() {
@@ -67,8 +67,8 @@ public class WorkflowComponent implements Serializable {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("relName:");
-		sb.append(relName);
+		sb.append("name:");
+		sb.append(name);
 		sb.append(" ");
 		sb.append("relation:");
 		sb.append(relation);

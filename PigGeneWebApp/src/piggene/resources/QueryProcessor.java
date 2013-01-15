@@ -3,13 +3,18 @@ package piggene.resources;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.sf.json.JSONObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.restlet.data.MediaType;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import piggene.response.ServerResponseObject;
 import piggene.serialisation.JSONConverter;
 import piggene.serialisation.WorkflowComponent;
 import piggene.serialisation.WorkflowReader;
@@ -23,6 +28,7 @@ public class QueryProcessor extends ServerResource {
 	@Override
 	@Post
 	public Representation post(final Representation entity) {
+		final ServerResponseObject obj = new ServerResponseObject();
 		final ArrayList<WorkflowComponent> workflow = processClientData(entity);
 
 		// pig-script
@@ -49,7 +55,9 @@ public class QueryProcessor extends ServerResource {
 		}
 		// ///////////////////////////
 
-		return null; // return info - e.g.: saved successfully
+		obj.setSuccess(true);
+		obj.setMessage("success");
+		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 
 	private ArrayList<WorkflowComponent> processClientData(final Representation entity) {

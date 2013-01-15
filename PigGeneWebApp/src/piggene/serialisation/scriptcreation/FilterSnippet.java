@@ -11,7 +11,7 @@ public class FilterSnippet extends PigSnippet {
 	@Override
 	public String toPigScript() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(comp.getRelName());
+		sb.append(comp.getName());
 		sb.append(EQUAL_SYMBOL);
 		sb.append(comp.getOperation());
 		sb.append(" ");
