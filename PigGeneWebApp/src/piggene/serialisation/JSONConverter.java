@@ -14,12 +14,10 @@ public class JSONConverter {
 		final ArrayList<WorkflowComponent> workflow = new ArrayList<WorkflowComponent>();
 		final Gson gson = new Gson();
 		WorkflowComponent comp;
-		System.out.println(array);
 
 		for (int i = 0; i < array.length(); i++) {
 			comp = gson.fromJson(array.getString(i), WorkflowComponent.class);
 			workflow.add(comp);
-			System.out.println(comp);
 		}
 		return workflow;
 	}

@@ -28,15 +28,24 @@
 			</a>	
 			<ul class="dropdown-menu">
 				<li id="loadItem"><a id="loadLink" title="click to select the load task" href="#">LOAD</a></li>
+				<li id="storeItem"><a id="storeLink" title="click to select the store task" href="#">STORE</a></li>
 				<li id="filterItem"><a id="filterLink" title="click to select the filter task" href="#">FILTER</a></li>
 				<li id="joinItem"><a id="joinLink" title="click to select the join task" href="#">JOIN</a></li>
 			</ul>
 		</div>
 
 		<form class="form-search hide" id="loadDialog">
-			<input class="span2" id="fileName" name="name" type="text" placeholder="type file name" value=""><p>
+			<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" value="">
+			<input class="span2" id="fileName" name="relation" type="text" placeholder="type file name" value=""><p>
 			<button class="btn btn-danger" id="loadClear">cancel</button>
 			<button class="btn btn-success" id="loadSubmit" type="submit">add LOAD operation</button><p>
+		</form>
+		
+		<form class="form-search hide" id="storeDialog">
+			<input class="span2" id="storeName" name="name" type="text" placeholder="type file name" value="">
+			<input class="span2" id="relStoreName" name="relation" type="text" placeholder="relation to store" value=""><p>
+			<button class="btn btn-danger" id="loadClear">cancel</button>
+			<button class="btn btn-success" id="loadSubmit" type="submit">add STORE operation</button><p>
 		</form>
 
 		<form class="form-search hide" id="filterDialog">

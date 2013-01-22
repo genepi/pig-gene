@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	
+	//TODO: check if all values are given correctly
 	//TODO: when deleting a line - check if workflow array is empty - if so: hide save button
 	
 	var workflow = [];
@@ -8,6 +9,11 @@ $(document).ready(function() {
 	$('#loadLink').on('click', function() {
 		$('#loadDialog').show('slow');
 		hideInputDialogs('load');
+	});
+	
+	$('#storeLink').on('click', function() {
+		$('#storeDialog').show('slow');
+		hideInputDialogs('store');
 	});
 
 	$('#filterLink').on('click', function() {
@@ -24,6 +30,9 @@ $(document).ready(function() {
 		if(elem != 'load') {
 			$('#loadDialog').hide('slow');
 		}
+		if(elem != 'store') {
+			$('#storeDialog').hide('slow');
+		}
 		if(elem != 'filter') {
 			$('#filterDialog').hide('slow');
 		}
@@ -31,6 +40,42 @@ $(document).ready(function() {
 			$('#joinDialog').hide('slow');
 		}
 	}
+	
+	$('#loadDialog').on('submit',function() {
+		var values = $('#loadDialog').serializeArray();
+		var oper = 'LOAD';
+		var name = values[0].value;
+		var rel = values[1].value;
+		
+		if(name == null || name == '') {
+			name = getArtificialName();
+		}
+		
+		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
+		showTable();
+		showSaveWorkflowButton();
+		$(this).hide('slow');
+		//TODO: clear the input fields...
+		return false;
+	});
+	
+	$('#storeDialog').on('submit',function() {
+		var values = $('#storeDialog').serializeArray();
+		var oper = 'STORE';
+		var name = values[0].value;
+		var rel = values[1].value;
+		
+		if(name == null || name == '') {
+			name = getArtificialName();
+		}
+		
+		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
+		showTable();
+		showSaveWorkflowButton();
+		$(this).hide('slow');
+		//TODO: clear the input fields...
+		return false;
+	});
 	
 	$('#filterDialog').on('submit',function() {
 		var values = $('#filterDialog').serializeArray();
@@ -40,9 +85,8 @@ $(document).ready(function() {
 		var opt = values[2].value;
 		
 		if(name == null || name == '') {
-			name = 'R' + nameCounter;
+			name = getArtificialName();
 		}
-		nameCounter++;
 		
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-'});
 		showTable();
@@ -62,51 +106,28 @@ $(document).ready(function() {
 		var opt2 = values[4].value;
 		
 		if(name == null || name == '') {
-			name = 'R' + nameCounter;
+			name = getArtificialName();
 		}
-		nameCounter++;
 		
 		workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2});
 		showTable();
 		showSaveWorkflowButton();
 		$(this).hide('slow');
+		//TODO: clear the input fields...
 		return false;
 	});
 	
-	function showSaveWorkflowButton() {
-		$('#saveWorkflow').show("fast");
+	function getArtificialName() {
+		return 'R' + nameCounter++;
 	}
 	
-	//TODO: check if all values are given correctly
-	/**
-	 * get form data & show table update...
-	 */
-	$('#selectionForm').on('submit', function() {
-		var values = $('#selectionForm').serializeArray();
-		var oper = values[0].value;
-		var name = values[1].value;
-		var rel1 = values[2].value;
-		var rel2 = values[3].value;
-		var opt = values[4].value;
-		var opt2 = values[5].value;
-		
-		if(name == null || name == '') {
-			name = 'R' + nameCounter;
-		}
-		nameCounter++;
-		
-		workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt, options2:opt2});
-//		console.log(workflow);
-		showTable();
-		return false;
-	});
-	
-	/**
-	 * show Table
-	 */
 	function showTable() {
 		var tab = convertJsonToTable(workflow, 'operationTable', 'table table-striped table-hover');
 		$('#tableContainer').html(tab);
+	}
+	
+	function showSaveWorkflowButton() {
+		$('#saveWorkflow').show("fast");
 	}
 	
 	/**
@@ -137,6 +158,9 @@ $(document).ready(function() {
     	});
 	});
 	
+	/**
+	 * loads data from the server
+	 */
 	$('#loadWorkflow').on('click', function() {
 		$.ajax({
     		type: 'POST',
