@@ -41,6 +41,10 @@ $(document).ready(function() {
 		}
 	}
 	
+	$("button[type='reset']").on('click', function() {
+		hideInputDialogs('all');
+	});
+	
 	$('#loadDialog').on('submit',function() {
 		var values = $('#loadDialog').serializeArray();
 		var oper = 'LOAD';
@@ -52,10 +56,7 @@ $(document).ready(function() {
 		}
 		
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
-		showTable();
-		showSaveWorkflowButton();
-		$(this).hide('slow');
-		//TODO: clear the input fields...
+		finalizeSubmit(this);
 		return false;
 	});
 	
@@ -70,10 +71,7 @@ $(document).ready(function() {
 		}
 		
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
-		showTable();
-		showSaveWorkflowButton();
-		$(this).hide('slow');
-		//TODO: clear the input fields...
+		finalizeSubmit(this);
 		return false;
 	});
 	
@@ -89,10 +87,7 @@ $(document).ready(function() {
 		}
 		
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-'});
-		showTable();
-		showSaveWorkflowButton();
-		$(this).hide('slow');
-		//TODO: clear the input fields...
+		finalizeSubmit(this);
 		return false;
 	});
 	
@@ -110,10 +105,7 @@ $(document).ready(function() {
 		}
 		
 		workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2});
-		showTable();
-		showSaveWorkflowButton();
-		$(this).hide('slow');
-		//TODO: clear the input fields...
+		finalizeSubmit(this);
 		return false;
 	});
 	
@@ -121,13 +113,16 @@ $(document).ready(function() {
 		return 'R' + nameCounter++;
 	}
 	
+	function finalizeSubmit(obj) {
+		showTable();
+		$('#saveWorkflow').show("fast");
+		$(obj).hide('slow');
+		$(obj).children('input[type=text]').val('');
+	}
+	
 	function showTable() {
 		var tab = convertJsonToTable(workflow, 'operationTable', 'table table-striped table-hover');
 		$('#tableContainer').html(tab);
-	}
-	
-	function showSaveWorkflowButton() {
-		$('#saveWorkflow').show("fast");
 	}
 	
 	/**

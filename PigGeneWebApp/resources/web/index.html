@@ -37,32 +37,32 @@
 		<form class="form-search hide" id="loadDialog">
 			<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" value="">
 			<input class="span2" id="fileName" name="relation" type="text" placeholder="type file name" value=""><p>
-			<button class="btn btn-danger" id="loadClear">cancel</button>
+			<button class="btn btn-danger" id="loadClear" type="reset">cancel</button>
 			<button class="btn btn-success" id="loadSubmit" type="submit">add LOAD operation</button><p>
 		</form>
 		
 		<form class="form-search hide" id="storeDialog">
 			<input class="span2" id="storeName" name="name" type="text" placeholder="type file name" value="">
 			<input class="span2" id="relStoreName" name="relation" type="text" placeholder="relation to store" value=""><p>
-			<button class="btn btn-danger" id="loadClear">cancel</button>
+			<button class="btn btn-danger" id="loadClear" type="reset">cancel</button>
 			<button class="btn btn-success" id="loadSubmit" type="submit">add STORE operation</button><p>
 		</form>
 
 		<form class="form-search hide" id="filterDialog">
-			<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" value=""><p>
+			<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" value=""><br/>
 			<input class="span2" id="rel1" name="relation" type="text" placeholder="relation to filter" value="">
-			<input class="span2" id="opt" name="options" type="text" placeholder="filter option(s)" value="">
-			<button class="btn btn-danger" id="filterClear">cancel</button>
+			<input class="span2" id="opt" name="options" type="text" placeholder="filter option(s)" value=""><p>
+			<button class="btn btn-danger" id="filterClear" type="reset">cancel</button>
 			<button class="btn btn-success" id="filterSubmit" type="submit">add FILTER operation</button><p>
 		</form>
 		
 		<form class="form-search hide" id="joinDialog">
-			<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" value=""><p>
+			<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" value=""><br/>
 			<input class="span2" id="rel1" name="relation" type="text" placeholder="relation to join" value="">
-			<input class="span2" id="opt" name="options" type="text" placeholder="join option(s) rel1" value=""><p>
+			<input class="span2" id="opt" name="options" type="text" placeholder="join option(s) rel1" value=""><br/>
 			<input class="span2" id="rel2" name="relation2" type="text" placeholder="relation to join with" value="">
-			<input class="span2" id="opt2" name="options2" type="text" placeholder="join option(s) rel2" value="">
-			<button class="btn btn-danger" id="joinClear">cancel</button>
+			<input class="span2" id="opt2" name="options2" type="text" placeholder="join option(s) rel2" value=""><p>
+			<button class="btn btn-danger" id="joinClear" type="reset">cancel</button>
 			<button class="btn btn-success" id="joinSubmit" type="submit">add JOIN operation</button><p>
 		</form>
 		
