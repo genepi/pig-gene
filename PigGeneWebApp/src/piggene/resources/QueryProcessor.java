@@ -17,7 +17,6 @@ import org.restlet.resource.ServerResource;
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.JSONConverter;
 import piggene.serialisation.WorkflowComponent;
-import piggene.serialisation.WorkflowReader;
 import piggene.serialisation.WorkflowWriter;
 import piggene.serialisation.scriptcreation.PigScript;
 
@@ -29,65 +28,59 @@ public class QueryProcessor extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		final ArrayList<WorkflowComponent> workflow = processClientData(entity);
+		ArrayList<WorkflowComponent> workflow;
 
-		// pig-script
-		try {
+		try { // parse the input
+			workflow = processClientData(entity);
+		} catch (final JsonSyntaxException e2) {
+			obj.setSuccess(false);
+			obj.setMessage("The workflow could not be parsed because of a syntax error.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+		} catch (final JSONException e2) {
+			obj.setSuccess(false);
+			obj.setMessage("An error occured while processing the workflow.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+		}
+
+		try { // write pig-script
 			PigScript.generateAndWrite(workflow, "myScript");
 		} catch (final IOException e1) {
-			// TODO return pigscript-error info...
+			obj.setSuccess(false);
+			obj.setMessage("An error occured while creating the pig-script.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
-		// yaml-file
-		try {
+		try { // write yaml-file
 			WorkflowWriter.write(workflow, "myWorkflow");
 		} catch (final IOException e) {
-			e.printStackTrace();
-			// TODO return yaml-error info...
+			obj.setSuccess(false);
+			obj.setMessage("An error occured while saving the workflow.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
-
-		// /////////// just for testing purpose...
-		try {
-			System.out.println("output: " + WorkflowReader.read("myWorkflow"));
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// ///////////////////////////
 
 		obj.setSuccess(true);
 		obj.setMessage("success");
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 
-	private ArrayList<WorkflowComponent> processClientData(final Representation entity) {
+	private ArrayList<WorkflowComponent> processClientData(final Representation entity) throws JsonSyntaxException, JSONException {
 		final JSONArray array = getJsonArray(entity);
 		ArrayList<WorkflowComponent> workflow = null;
-		try {
-			workflow = JSONConverter.convertJsonArrayIntoWorkflow(array);
-		} catch (final JsonSyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		workflow = JSONConverter.convertJsonArrayIntoWorkflow(array);
 		return workflow;
 	}
 
-	private JSONArray getJsonArray(final Representation entity) {
-		JsonRepresentation representant;
+	// TODO: think about the exception handling of this method...
+	private JSONArray getJsonArray(final Representation entity) throws JSONException {
+		JsonRepresentation representant = null;
 		JSONArray data = null;
 		try {
 			representant = new JsonRepresentation(entity);
-			data = representant.getJsonArray();
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (final JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		data = representant.getJsonArray();
 		return data;
 	}
 

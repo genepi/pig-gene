@@ -1,0 +1,17 @@
+form input[type=text] {
+	margin-bottom: 5px;
+}
+
+#contentBackground {
+	heigth: 100%;
+}
+
+#stepAction {
+  margin-bottom: 5px;
+}
+
+#formContainer, #tableContainer {
+	background-color: #FFFFFF;
+	min-height: 300px;
+	margin-bottom: 5px;
+}
