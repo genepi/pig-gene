@@ -1,14 +1,7 @@
 - !piggene.serialisation.WorkflowComponent
-   name: as
+   name: er
    operation: LOAD
    options: '-'
    options2: '-'
-   relation: se
-   relation2: '-'
-- !piggene.serialisation.WorkflowComponent
-   name: sd
-   operation: LOAD
-   options: '-'
-   options2: '-'
-   relation: as
+   relation: 323
    relation2: '-'

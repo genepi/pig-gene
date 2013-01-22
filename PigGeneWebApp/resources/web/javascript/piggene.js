@@ -51,7 +51,6 @@ $(document).ready(function() {
 		$('#inputError').show('slow');
 	}
 	
-	
     $('input[type=text]').on('change invalid', function() {
         var textfield = $(this).get(0);
         textfield.setCustomValidity('');
@@ -60,7 +59,6 @@ $(document).ready(function() {
           textfield.setCustomValidity('this field cannot be left blank');  
         }
     }); 
-	    
 	
 	$('#loadDialog').on('submit',function() {
 		var values = $('#loadDialog').serializeArray();
@@ -147,7 +145,7 @@ $(document).ready(function() {
 	/**
 	 * send data to the server
 	 */
-	$('#saveWorkflow').on('click',function() {
+	$('#saveBtn').on('click',function() {
 		var data = JSON.stringify(workflow);
 		console.log(data);
 
@@ -175,7 +173,7 @@ $(document).ready(function() {
 	/**
 	 * loads data from the server
 	 */
-	$('#loadWorkflow').on('click', function() {
+	$('#loadBtn').on('click', function() {
 		$.ajax({
     		type: 'POST',
     	    url: 'http://localhost:8080/ld',

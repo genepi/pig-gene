@@ -12,6 +12,14 @@ form input[type=text] {
 
 #formContainer, #tableContainer {
 	background-color: #FFFFFF;
-	min-height: 300px;
+	min-height: 350px;
 	margin-bottom: 5px;
+}
+
+#loadWorkflowName, #saveWorkflowName {
+	width: 160px;
+}
+
+#loadBtn, #saveBtn {
+	width: 125px;
 }
