@@ -43,7 +43,24 @@ $(document).ready(function() {
 	
 	$("button[type='reset']").on('click', function() {
 		hideInputDialogs('all');
+		$('#inputError').hide();
 	});
+	
+	function showInputErrorMsg(errText) {
+		$('#inputErrMsg').html(errText);
+		$('#inputError').show('slow');
+	}
+	
+	
+    $('input[type=text]').on('change invalid', function() {
+        var textfield = $(this).get(0);
+        textfield.setCustomValidity('');
+        
+        if (!textfield.validity.valid) {
+          textfield.setCustomValidity('this field cannot be left blank');  
+        }
+    }); 
+	    
 	
 	$('#loadDialog').on('submit',function() {
 		var values = $('#loadDialog').serializeArray();
@@ -51,8 +68,9 @@ $(document).ready(function() {
 		var name = values[0].value;
 		var rel = values[1].value;
 		
-		if(name == null || name == '') {
-			name = getArtificialName();
+		if(name.length < 2 || rel.length < 2) {
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			return false;
 		}
 		
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
@@ -114,6 +132,7 @@ $(document).ready(function() {
 	}
 	
 	function finalizeSubmit(obj) {
+		$('#inputError').hide();
 		showTable();
 		$('#saveWorkflow').show("fast");
 		$(obj).hide('slow');

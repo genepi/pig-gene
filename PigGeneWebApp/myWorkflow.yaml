@@ -1,35 +1,14 @@
 - !piggene.serialisation.WorkflowComponent
-   name: R1
+   name: as
    operation: LOAD
    options: '-'
    options2: '-'
-   relation: 6exomes.vcf
+   relation: se
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
-   name: R2
-   operation: FILTER
-   options: chrom == 12
-   options2: '-'
-   relation: R1
-   relation2: '-'
-- !piggene.serialisation.WorkflowComponent
-   name: R3
+   name: sd
    operation: LOAD
    options: '-'
    options2: '-'
-   relation: reference.vcf
-   relation2: '-'
-- !piggene.serialisation.WorkflowComponent
-   name: R4
-   operation: JOIN
-   options: chrom,id
-   options2: chrom,id
-   relation: R2
-   relation2: R3
-- !piggene.serialisation.WorkflowComponent
-   name: end
-   operation: STORE
-   options: '-'
-   options2: '-'
-   relation: R4
+   relation: as
    relation2: '-'
