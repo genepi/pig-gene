@@ -9,8 +9,8 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
-import piggene.resources.GetJobs;
-import piggene.resources.QueryProcessor;
+import piggene.resources.DeserialisationProcessor;
+import piggene.resources.SerialisationProcessor;
 
 public class WebApp extends Application {
 
@@ -28,8 +28,9 @@ public class WebApp extends Application {
 		route.setMatchingMode(Template.MODE_EQUALS);
 
 		// routes
-		router.attach("/jobs", GetJobs.class);
-		router.attach("/ser", QueryProcessor.class);
+		// router.attach("/jobs", GetJobs.class);
+		router.attach("/ser", SerialisationProcessor.class);
+		router.attach("/ld", DeserialisationProcessor.class);
 
 		// clap protocol for usage in jar files
 		final Directory dir = new Directory(getContext(), new LocalReference("clap://thread/web"));
@@ -40,5 +41,4 @@ public class WebApp extends Application {
 
 		return router;
 	}
-
 }

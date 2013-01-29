@@ -22,7 +22,7 @@ import piggene.serialisation.scriptcreation.PigScript;
 
 import com.google.gson.JsonSyntaxException;
 
-public class QueryProcessor extends ServerResource {
+public class SerialisationProcessor extends ServerResource {
 
 	@Override
 	@Post

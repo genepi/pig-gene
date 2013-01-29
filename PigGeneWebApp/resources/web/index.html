@@ -74,12 +74,12 @@
          <!-- ...Alert -->
 		
 		<div id="operationButtons">
-			<div class="input-append" id="loadWorkflow">
-				<input id="loadWorkflowName" type="text" placeholder="type file name" value="" required>
+			<form class="input-append" id="loadWorkflow">
+				<input id="loadWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
 				<button class="btn btn-inverse" id="loadBtn" type="submit">load Workflow</button>
-			</div>
+			</form>
 			<form class="input-append hide" id="saveWorkflow">
-				<input id="saveWorkflowName" type="text" placeholder="type file name" value="" required>
+				<input id="saveWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
 				<button class="btn btn-primary" id="saveBtn" type="submit">save Workflow</button>
 			</form>
 		</div>
@@ -95,7 +95,7 @@
 	<div class="modal hide fade" id="successModal">
 	  <div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	    <h3>Saving...</h3>
+	    <p id="modalHeaderContent"></p>
 	  </div>
 	  <div class="modal-body">
 	    <p id="msg"></p>

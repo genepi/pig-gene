@@ -156,7 +156,7 @@ $(document).ready(function() {
 	/**
 	 * send data to the server
 	 */
-	$('#saveBtn').on('click',function() {
+	$('#saveWorkflow').on('submit',function() {
 		var filename = $('#saveWorkflowName').val();
 		if(!inputLongEnough(filename)) {
 			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
@@ -173,7 +173,9 @@ $(document).ready(function() {
     	    data: data,
     	    dataType: 'json',
     	    success: function(response) {
+    	    	console.log(response);
     	    	if(response.success) {
+    	    		$('#modalHeaderContent').html('<h3>Saving...</h3>');
     	    		$('#msg').html('Your workflow was saved successfully!');
 					$('#successModal').modal('show');
     	    	} else {
@@ -186,20 +188,31 @@ $(document).ready(function() {
 	    		$('#errorModal').modal('show');
     	   }
     	});
+		return false;
 	});
 	
 	/**
 	 * loads data from the server
 	 */
-	$('#loadBtn').on('click', function() {
+	$('#loadWorkflow').on('submit', function() {
+		var filename = $('#loadWorkflowName').val();
+		if(!inputLongEnough(filename)) {
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			return false;
+		}
+
+		$('#inputError').hide('slow');
+		var data = '{"filename":"' + filename + '"}';
+		
 		$.ajax({
     		type: 'POST',
     	    url: 'http://localhost:8080/ld',
-    	    data: null,
+    	    data: data,
+    	    dataType:'json',
     	    success: function(response) {
     	    	if(response.success) {
-    	    		//TODO: load workflow in background
-    	    		
+    	    		initializeLoadedWorkflow(response.data);
+    	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
     	    		$('#msg').html('Your workflow was loaded successfully!');
 					$('#successModal').modal('show');
     	    	} else {
@@ -212,6 +225,13 @@ $(document).ready(function() {
 	    		$('#errorModal').modal('show');
     	   }
     	});
+		return false;
 	}); 
+	
+	function initializeLoadedWorkflow(data) {
+		workflow = data;
+		nameCounter = workflow.length;
+		showTable();
+	}
     
 });
