@@ -66,9 +66,13 @@ $(document).ready(function() {
 		var name = values[0].value;
 		var rel = values[1].value;
 		
-		if(name.length < 2 || rel.length < 2) {
+		if(!inputLongEnough(rel)) {
 			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
 			return false;
+		}
+
+		if(name == null || name == '') {
+			name = getArtificialName();
 		}
 		
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
@@ -129,6 +133,13 @@ $(document).ready(function() {
 		return 'R' + nameCounter++;
 	}
 	
+	function inputLongEnough(input) {
+		if(input.length < 2) {
+			return false;
+		}
+		return true;
+	}
+	
 	function finalizeSubmit(obj) {
 		$('#inputError').hide();
 		showTable();
@@ -146,9 +157,16 @@ $(document).ready(function() {
 	 * send data to the server
 	 */
 	$('#saveBtn').on('click',function() {
+		var filename = $('#saveWorkflowName').val();
+		if(!inputLongEnough(filename)) {
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			return false;
+		}
+		
+		$('#inputError').hide('slow');
+		workflow.push(filename);
 		var data = JSON.stringify(workflow);
-		console.log(data);
-
+		
 		$.ajax({
     		type: 'POST',
     	    url: 'http://localhost:8080/ser',

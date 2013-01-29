@@ -29,9 +29,12 @@ public class QueryProcessor extends ServerResource {
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
 		ArrayList<WorkflowComponent> workflow;
+		String filename = "filename";
 
 		try { // parse the input
-			workflow = processClientData(entity);
+			final JSONArray array = getJsonArray(entity);
+			filename = array.getString(array.length() - 1);
+			workflow = processClientData(array);
 		} catch (final JsonSyntaxException e2) {
 			obj.setSuccess(false);
 			obj.setMessage("The workflow could not be parsed because of a syntax error.");
@@ -43,7 +46,7 @@ public class QueryProcessor extends ServerResource {
 		}
 
 		try { // write pig-script
-			PigScript.generateAndWrite(workflow, "myScript");
+			PigScript.generateAndWrite(workflow, filename);
 		} catch (final IOException e1) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while creating the pig-script.");
@@ -51,7 +54,7 @@ public class QueryProcessor extends ServerResource {
 		}
 
 		try { // write yaml-file
-			WorkflowWriter.write(workflow, "myWorkflow");
+			WorkflowWriter.write(workflow, filename);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while saving the workflow.");
@@ -63,8 +66,7 @@ public class QueryProcessor extends ServerResource {
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 
-	private ArrayList<WorkflowComponent> processClientData(final Representation entity) throws JsonSyntaxException, JSONException {
-		final JSONArray array = getJsonArray(entity);
+	private ArrayList<WorkflowComponent> processClientData(final JSONArray array) throws JsonSyntaxException, JSONException {
 		ArrayList<WorkflowComponent> workflow = null;
 		workflow = JSONConverter.convertJsonArrayIntoWorkflow(array);
 		return workflow;

@@ -15,7 +15,8 @@ public class JSONConverter {
 		final Gson gson = new Gson();
 		WorkflowComponent comp;
 
-		for (int i = 0; i < array.length(); i++) {
+		// length-1: last element is just the name for the output file
+		for (int i = 0; i < array.length() - 1; i++) {
 			comp = gson.fromJson(array.getString(i), WorkflowComponent.class);
 			workflow.add(comp);
 		}

@@ -11,6 +11,7 @@ public class PigScript {
 	private static final String JAR_FILENAME = "pigGene.jar";
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private static final char SEMICOLON = ';';
+	private static final String PATH = "pigScripts/";
 
 	public static void generateAndWrite(final ArrayList<WorkflowComponent> workflow, final String name) throws IOException {
 		final StringBuilder sb = new StringBuilder();
@@ -36,7 +37,7 @@ public class PigScript {
 	private static void write(final String pigScript, final String name) throws IOException {
 		BufferedWriter out = null;
 		try {
-			out = new BufferedWriter(new FileWriter(name.concat(".pig")));
+			out = new BufferedWriter(new FileWriter(PATH.concat(name.concat(".pig"))));
 			out.write(pigScript);
 		} finally {
 			try {
