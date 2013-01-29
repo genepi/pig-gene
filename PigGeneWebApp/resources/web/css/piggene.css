@@ -16,10 +16,19 @@ form input[type=text] {
 	margin-bottom: 5px;
 }
 
-#loadWorkflowName, #saveWorkflowName {
-	width: 160px;
+#loadWorkflowName {
+	width: 135px;
+}
+
+#saveWorkflowName {
+	width: 165px;
 }
 
 #loadBtn, #saveBtn {
-	width: 125px;
+	width: 120px;
+}
+
+#showWfBtn {
+	width: 32px;
+	padding-left: 8px;
 }

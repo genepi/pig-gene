@@ -76,11 +76,13 @@
 		<div id="operationButtons">
 			<form class="input-append" id="loadWorkflow">
 				<input id="loadWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
-				<button class="btn btn-inverse" id="loadBtn" type="submit">load Workflow</button>
-			</form>
+				<button class="btn" id="showWfBtn" rel="popover"><i class="icon-info-sign"></i></button>
+				<button class="btn btn-inverse" id="loadBtn" type="submit" title="click to load a workflow" >load Workflow</button>
+			</form>			
+			
 			<form class="input-append hide" id="saveWorkflow">
 				<input id="saveWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
-				<button class="btn btn-primary" id="saveBtn" type="submit">save Workflow</button>
+				<button class="btn btn-primary" id="saveBtn" type="submit" title="click to save your worflow">save Workflow</button>
 			</form>
 		</div>
 	</div>

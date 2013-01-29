@@ -191,6 +191,45 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	$('#showWfBtn').on('click', function() {
+		$.ajax({
+    		type: 'POST',
+    	    url: 'http://localhost:8080/wf',
+    	    data: null,
+    	    dataType:'json',
+    	    success: function(response) {
+    	    	if(response.success) {
+    	    		var popContent = convertFilenamesToLinks(response.data);
+    	    		$('#showWfBtn').popover({
+    	    			html: true,
+    	    			placement: 'bottom',
+    	    			title: 'already existing workflows',
+    	    			content: popContent,
+    	    		});
+    	    		$('#showWfBtn').popover('show');
+    	    	} else {
+    	    		$('#errmsg').html(response.message);
+    	    		$('#errorModal').modal('show');
+    	    	}
+    	    },
+    	    error: function (xhr, ajaxOptions, thrownError) {
+    	    	$('#errmsg').html(xhr.responseText);
+	    		$('#errorModal').modal('show');
+    	   }
+    	});
+		return false;
+	});
+	
+	function convertFilenamesToLinks(data) {
+		var toRemove = '.yaml';
+		var content = "";
+		for(var i=0; i<data.length; i++) {
+			content += '<a>'+data[i].replace(toRemove,'')+'</a><br>'
+		}
+		alert(content);
+		return content;
+	}
+	
 	/**
 	 * loads data from the server
 	 */
