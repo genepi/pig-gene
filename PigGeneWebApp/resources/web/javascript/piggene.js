@@ -284,6 +284,22 @@ $(document).ready(function() {
 	$('#tableContainer').on('click', 'tr', function() {
 		var rowIndex = $(this).index();
 		$(this).addClass('warning');
+		var tdData = $(this).children('td');
+
+		if(tdData[1].innerHTML=='LOAD'){
+			$('#loadName').val(tdData[0].innerHTML);
+			$('#fileName').val(tdData[4].innerHTML);
+			//TODO: Save Button name und action aendern
+			$('#loadDialog').show('slow');
+		} else if(tdData[1].innerHTML=='STORE'){
+			
+		} else if(tdData[1].innerHTML=='FILTER') {
+			
+		} else if(tdData[1].innerHTML=='JOIN') {
+			
+		}
+		
+		//flow should not come to this point...
 	});
     
 });
