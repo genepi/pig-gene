@@ -47,7 +47,7 @@
 			<button class="btn btn-danger" id="loadClear" type="reset">cancel</button>
 			<button class="btn btn-success" id="loadSubmit" type="submit">add STORE operation</button><p>
 		</form>
-
+		
 		<form class="form-search hide" id="filterDialog">
 			<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" value=""><br/>
 			<input class="span2" id="rel1" name="relation" type="text" placeholder="relation to filter" value="" required>
@@ -55,7 +55,7 @@
 			<button class="btn btn-danger" id="filterClear" type="reset">cancel</button>
 			<button class="btn btn-success" id="filterSubmit" type="submit">add FILTER operation</button><p>
 		</form>
-		
+
 		<form class="form-search hide" id="joinDialog">
 			<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" value=""><br/>
 			<input class="span2" id="rel1" name="relation" type="text" placeholder="relation to join" value="" required>
@@ -74,8 +74,6 @@
          <!-- ...Alert -->
 		
 		<div id="operationButtons">
-
-			<!-- class="input-append" -->
 			<form class="input-append" id="loadWorkflow">
 				<input id="loadWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
 				<a id="showWfBtn" class="btn" rel="popover" data-content="" data-original-title="already existing workflows:"><i class="icon-info-sign"></i></a>
@@ -91,36 +89,37 @@
 	
 	<div class="well span10" id="tableContainer">
 		<h2>Workflow</h2>
-		There is no workflow specified at the moment. Please create a new workflow by adding new operations in the panel on the left side or load an existing workflow you want to modify.
+		There is no workflow specified at the moment. Please create a new workflow by adding new operations in the panel on the left side or load an existing workflow if you want to modify it.
+		<table id="operationTable"><tr><td>lukas luaks lukas</td></tr></table>
 	</div>
 </div>
 
 <!-- modal Dialogs ... -->
-	<div class="modal hide fade" id="successModal">
-	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	    <p id="modalHeaderContent"></p>
-	  </div>
-	  <div class="modal-body">
-	    <p id="msg"></p>
-	  </div>
-	  <div class="modal-footer">
-	    <button type="button" class="btn btn-success" data-dismiss="modal" aria-hidden="true">close</a>
-	  </div>
-	</div>
-	
-	<div class="modal hide fade" id="errorModal">
-	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	    <h3> An error occured!</h3>
-	  </div>
-	  <div class="modal-body">
-	    <p id="errmsg"></p>
-	  </div>
-	  <div class="modal-footer">
-	    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">close</a>
-	  </div>
-	</div>
+<div class="modal hide fade" id="successModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <p id="modalHeaderContent"></p>
+  </div>
+  <div class="modal-body">
+    <p id="msg"></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" data-dismiss="modal" aria-hidden="true">close</a>
+  </div>
+</div>
+
+<div class="modal hide fade" id="errorModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3> An error occured!</h3>
+  </div>
+  <div class="modal-body">
+    <p id="errmsg"></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">close</a>
+  </div>
+</div>
 <!-- ... modal Dialogs -->
 
 </body>

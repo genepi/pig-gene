@@ -222,12 +222,17 @@ $(document).ready(function() {
 		var content = '';
 		for(var i=0; i<data.length; i++) {
 			var name = data[i].replace(toRemove,'');
-			content += '<a href="javascript:setSelectedFileName(\''+name+'\');" class="fileNames">'+name+'</a><br>'
+			content += '<a class="fileNames">'+name+'</a><br>'
 		}
 		return content;
 	}
 	
-
+	$('#operationButtons').on('click', 'a.fileNames', function() {
+		var fileName = $(this).html();
+		$('#loadWorkflowName').val(fileName);
+		$('#saveWorkflowName').val(fileName);
+		$('#showWfBtn').popover('hide').removeClass('pop');
+	});
 	
 	/**
 	 * loads data from the server
@@ -265,7 +270,6 @@ $(document).ready(function() {
     	});
 		
 		$('#loadWorkflowName').val('');
-		$('#saveWorkflowName').val('');
 		$('#saveWorkflow').show("fast");
 		return false;
 	}); 
@@ -275,10 +279,11 @@ $(document).ready(function() {
 		nameCounter = workflow.length;
 		showTable();
 	}
+	
+	//modify selected line...
+	$('#tableContainer').on('click', 'tr', function() {
+		var rowIndex = $(this).index();
+		$(this).addClass('warning');
+	});
     
 });
-
-function setSelectedFileName(fileName) {
-	$('#loadWorkflowName').val(fileName);
-	$('#showWfBtn').popover('hide').removeClass('pop');
-}
