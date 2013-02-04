@@ -29,6 +29,14 @@ form input[type=text] {
 }
 
 #showWfBtn {
-	width: 32px;
+	width: 10px;
 	padding-left: 8px;
+}
+
+.popover-title {
+	font-weight: bold;
+}
+
+.fileNames {
+	font-size: 11pt;
 }

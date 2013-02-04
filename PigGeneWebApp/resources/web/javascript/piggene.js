@@ -190,43 +190,62 @@ $(document).ready(function() {
     	});
 		return false;
 	});
-	
-	$('#showWfBtn').on('click', function() {
-		$.ajax({
-    		type: 'POST',
-    	    url: 'http://localhost:8080/wf',
-    	    data: null,
-    	    dataType:'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-    	    		var popContent = convertFilenamesToLinks(response.data);
-    	    		$('#showWfBtn').popover({
-    	    			html: true,
-    	    			placement: 'bottom',
-    	    			title: 'already existing workflows',
-    	    			content: popContent,
-    	    		});
-    	    		$('#showWfBtn').popover('show');
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-		return false;
+		
+	$('#showWfBtn')
+		.popover({
+			trigger: 'manual', 
+			html: true, 
+			placement: 'bottom',
+		})
+		.click(function() {
+			if($(this).hasClass('pop')) {
+				$(this)
+					.popover('hide')
+					.removeClass('pop');
+			} else {
+				$.ajax({
+		    		type: 'POST',
+		    	    url: 'http://localhost:8080/wf',
+		    	    data: null,
+		    	    dataType:'json',
+		    	    success: function(response) {
+		    	    	if(response.success) {
+		    	    		var popContent = convertFilenamesToLinks(response.data);
+		    	    		$('#showWfBtn')
+		    	    			.attr('data-content', popContent)
+		    	    			.popover('show')
+		    	    			.addClass('pop');
+		    	    	} else {
+		    	    		$('#errmsg').html(response.message);
+		    	    		$('#errorModal').modal('show');
+		    	    	}
+		    	    },
+		    	    error: function (xhr, ajaxOptions, thrownError) {
+		    	    	$('#errmsg').html(xhr.responseText);
+			    		$('#errorModal').modal('show');
+		    	   }
+		    	});
+				
+			}
+		});
+
+	$('a.fileNames').on('click', function() {
+		alert('link clicked');
+		echo.log($(this));
+		
+//		var name = $(this).attr('');
+		$('#loadWorkflowName').val('hallo');
+		$('#showWfBtn').clickover('hide');
 	});
 	
 	function convertFilenamesToLinks(data) {
 		var toRemove = '.yaml';
-		var content = "";
+		var content = '';
 		for(var i=0; i<data.length; i++) {
-			content += '<a>'+data[i].replace(toRemove,'')+'</a><br>'
+			var name = data[i].replace(toRemove,'');
+			content += '<a href="#" class="fileNames">'+name+'</a><br>'
 		}
-		alert(content);
+		
 		return content;
 	}
 	
@@ -264,6 +283,9 @@ $(document).ready(function() {
 	    		$('#errorModal').modal('show');
     	   }
     	});
+		
+		$('#loadWorkflowName').val('');
+		$('#saveWorkflowName').val('');
 		return false;
 	}); 
 	
