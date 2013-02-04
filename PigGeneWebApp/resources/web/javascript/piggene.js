@@ -191,17 +191,9 @@ $(document).ready(function() {
 		return false;
 	});
 		
-	$('#showWfBtn')
-		.popover({
-			trigger: 'manual', 
-			html: true, 
-			placement: 'bottom',
-		})
-		.click(function() {
+	$('#showWfBtn').popover({ trigger: 'manual', html: true, placement: 'bottom', }).click(function() {
 			if($(this).hasClass('pop')) {
-				$(this)
-					.popover('hide')
-					.removeClass('pop');
+				$(this).popover('hide').removeClass('pop');
 			} else {
 				$.ajax({
 		    		type: 'POST',
@@ -211,10 +203,7 @@ $(document).ready(function() {
 		    	    success: function(response) {
 		    	    	if(response.success) {
 		    	    		var popContent = convertFilenamesToLinks(response.data);
-		    	    		$('#showWfBtn')
-		    	    			.attr('data-content', popContent)
-		    	    			.popover('show')
-		    	    			.addClass('pop');
+		    	    		$('#showWfBtn').attr('data-content', popContent).popover('show').addClass('pop');
 		    	    	} else {
 		    	    		$('#errmsg').html(response.message);
 		    	    		$('#errorModal').modal('show');
@@ -225,29 +214,20 @@ $(document).ready(function() {
 			    		$('#errorModal').modal('show');
 		    	   }
 		    	});
-				
 			}
 		});
-
-	$('a.fileNames').on('click', function() {
-		alert('link clicked');
-		echo.log($(this));
-		
-//		var name = $(this).attr('');
-		$('#loadWorkflowName').val('hallo');
-		$('#showWfBtn').clickover('hide');
-	});
 	
 	function convertFilenamesToLinks(data) {
 		var toRemove = '.yaml';
 		var content = '';
 		for(var i=0; i<data.length; i++) {
 			var name = data[i].replace(toRemove,'');
-			content += '<a href="#" class="fileNames">'+name+'</a><br>'
+			content += '<a href="javascript:setSelectedFileName(\''+name+'\');" class="fileNames">'+name+'</a><br>'
 		}
-		
 		return content;
 	}
+	
+
 	
 	/**
 	 * loads data from the server
@@ -286,6 +266,7 @@ $(document).ready(function() {
 		
 		$('#loadWorkflowName').val('');
 		$('#saveWorkflowName').val('');
+		$('#saveWorkflow').show("fast");
 		return false;
 	}); 
 	
@@ -296,3 +277,8 @@ $(document).ready(function() {
 	}
     
 });
+
+function setSelectedFileName(fileName) {
+	$('#loadWorkflowName').val(fileName);
+	$('#showWfBtn').popover('hide').removeClass('pop');
+}
