@@ -20,39 +20,61 @@ $(document).ready(function() {
     });
 	
 	$('#loadLink').on('click', function() {
+		cleanModificationDialogs();
 		$('#loadDialog').show('slow');
 		hideInputDialogs('load');
 	});
 	
 	$('#storeLink').on('click', function() {
+		cleanModificationDialogs();
 		$('#storeDialog').show('slow');
 		hideInputDialogs('store');
 	});
 
 	$('#filterLink').on('click', function() {
+		cleanModificationDialogs();
 		$('#filterDialog').show('slow');
 		hideInputDialogs('filter');
 	});
 	
 	$('#joinLink').on('click', function() {
+		cleanModificationDialogs();
 		$('#joinDialog').show('slow');
 		hideInputDialogs('join');
 	});
+	
+	function cleanModificationDialogs() {
+		//TODO for all dialogs: hide unwanted buttons and show the other ones 
+		removeTableRowLabeling('warning');
+	}
 	
 	/**
 	 * Cancellation-Handling of input forms.
 	 */
 	$("button[type='reset']").on('click', function() {
-		$(this).removeClass('modification');
+		if($(this).hasClass('delete')) { //delete line handling...
+			workflow.splice(highlightedRowIndex,1);
+			if(workflow.length == 0) {
+				//TODO setzen des neuen contents...
+				var content = '<h2>Workflow</h2>There is no workflow specified at the moment. Please create a new workflow by adding new operations in the panel on the left side or load an existing workflow if you want to modify it.<table id="operationTable"></table>';
+				$('#tableContainer').html('<p>blub</p>');
+				$('#saveWorkflow').hide('slow');
+			}
+			$('#inputError').hide();
+			showTable();
+		} else {
+			$(this).removeClass('modification');
+		}
+		
 		var buttonName = $(this).attr('id');
 		if(buttonName.indexOf('load') == 0) {
-			resetStandardBehavior('#loadSubmit','#loadSubmitChange');
+			resetStandardBehavior('load');
 		} else if (buttonName.indexOf('store') == 0) {
-			resetStandardBehavior('#storeSubmit','#storeSubmitChange');
+			resetStandardBehavior('store');
 		} else if (buttonName.indexOf('filter') == 0) {
-			resetStandardBehavior('#filterSubmit','#filterSubmitChange');
+			resetStandardBehavior('filter');
 		} else if (buttonName.indexOf('join') == 0) {
-			resetStandardBehavior('#joinSubmit','#joinSubmitChange');
+			resetStandardBehavior('join');
 		}		
 		$('#inputError').hide();
 	});
@@ -62,7 +84,7 @@ $(document).ready(function() {
 		$('#inputError').show('slow');
 	}
 	
-	$('#loadDialog').on('submit',function() {
+	$('#loadDialog').on('submit', function() {
 		var values = $('#loadDialog').serializeArray();
 		var oper = 'LOAD';
 		var name = values[0].value;
@@ -77,7 +99,7 @@ $(document).ready(function() {
 
 		if($('#loadSubmitChange').hasClass('modification')) {
 			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'};
-			resetStandardBehavior('#loadSubmit','#loadSubmitChange');
+			resetStandardBehavior('load');
 		} else {
 			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
 		}
@@ -96,7 +118,7 @@ $(document).ready(function() {
 		
 		if($('#storeSubmitChange').hasClass('modification')) {
 			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'};
-			resetStandardBehavior('#storeSubmit','#storeSubmitChange');
+			resetStandardBehavior('store');
 		} else {
 			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
 		}
@@ -116,7 +138,7 @@ $(document).ready(function() {
 		
 		if($('#filterSubmitChange').hasClass('modification')) {
 			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-'};
-			resetStandardBehavior('#filterSubmit','#filterSubmitChange');
+			resetStandardBehavior('filter');
 		} else {
 			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-'});
 		}
@@ -138,7 +160,7 @@ $(document).ready(function() {
 		
 		if($('#joinSubmitChange').hasClass('modification')) {
 			workflow[highlightedRowIndex] = {name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2};
-			resetStandardBehavior('#joinSubmit','#joinSubmitChange');
+			resetStandardBehavior('join');
 		} else {
 			workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2});
 		}
@@ -150,13 +172,19 @@ $(document).ready(function() {
 	 * Removes the highlighting from the selected table row and changes the visibility of the
 	 * "standard" submit and the "modification" submit buttons. Also hides all input dialogs.
 	 */
-	function resetStandardBehavior(submitBtn, submitChangeBtn) {
+	function resetStandardBehavior(operation) {
 		if(~highlightedRowIndex) {
 			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').removeClass('warning');
 		}
+		
+		var submitBtn = '#' + operation + 'Submit';
+		var submitChangeBtn = '#' + operation + 'SubmitChange';
+		var deleteBtn = '#' + operation + 'Delete';
+		
 		$(submitBtn).removeClass('hide');
 		$(submitChangeBtn).removeClass('modification');
 		$(submitChangeBtn).addClass('hide');
+		$(deleteBtn).addClass('hide');
 		hideInputDialogs('all');
 	}
 	
@@ -251,6 +279,7 @@ $(document).ready(function() {
 	 * Modification-Handling of table row.
 	 */
 	$('#tableContainer').on('click', 'tr', function() {
+		removeTableRowLabeling('warning');
 		$(this).addClass('warning');
 		highlightedRowIndex = $(this).index();
 		var data = workflow[highlightedRowIndex];
@@ -258,32 +287,45 @@ $(document).ready(function() {
 		if(data.operation=='LOAD') {
 			$('#loadName').val(data.name);
 			$('#fileName').val(data.relation);
-			setModificationBehavior('#loadSubmit','#loadSubmitChange','#loadDialog','load');
+			$('#loadDelete').removeClass('hide');
+			setModificationBehavior('load');
 		} else if(data.operation=='STORE'){
 			$('#storeName').val(data.name);
 			$('#relToStore').val(data.relation);
-			setModificationBehavior('#storeSubmit','#storeSubmitChange','#storeDialog','store');
+			setModificationBehavior('store');
 		} else if(data.operation=='FILTER') {
 			$('#filtName').val(data.name);
 			$('#filtRel').val(data.relation);
 			$('#filtOpt').val(data.options);
-			setModificationBehavior('#filterSubmit','#filterSubmitChange','#filterDialog','filter');
+			setModificationBehavior('filter');
 		} else if(data.operation=='JOIN') {
 			$('#joinName').val(data.name);
 			$('#joinRel').val(data.relation);
 			$('#joinOpt').val(data.options);
 			$('#joinRel2').val(data.relation2);
 			$('#joinOpt2').val(data.options2);
-			setModificationBehavior('#joinSubmit','#joinSubmitChange','#joinDialog','join');
+			setModificationBehavior('join');
 		}
 		
 		//flow should not come to this point...
 	});
 	
-	function setModificationBehavior(submitBtn, submitChangeBtn, dialog, operation) {
+	function removeTableRowLabeling(label) {
+		$('#tableContainer tr').each(function(){
+			$(this).removeClass(label);
+		});
+	}
+	
+	function setModificationBehavior(operation) {
+		var submitBtn = '#' + operation + 'Submit';
+		var submitChangeBtn = '#' + operation + 'SubmitChange';
+		var deleteBtn = '#' + operation + 'Delete';
+		var dialog = '#' + operation + 'Dialog';
+
 		$(submitBtn).addClass('hide');
 		$(submitChangeBtn).addClass('modification');
 		$(submitChangeBtn).removeClass('hide');
+		$(deleteBtn).removeClass('hide');
 		$(dialog).show('slow');
 		hideInputDialogs(operation);
 	}
