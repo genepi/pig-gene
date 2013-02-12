@@ -6,6 +6,7 @@ $(document).ready(function() {
 	var workflow = [];
 	var nameCounter = 1;
 	var highlightedRowIndex = -1;
+	var downloadPossible = false;
 	
 	/**
 	 * Shows an English error-message if form should be submitted 
@@ -65,6 +66,7 @@ $(document).ready(function() {
 		modifyDialog('store');
 		modifyDialog('filter');
 		modifyDialog('join');
+		$('#inputError').hide();
 		$('#showWfBtn').popover('hide').removeClass('pop');
 	}
 	
@@ -115,6 +117,7 @@ $(document).ready(function() {
 	}
 	
 	$('#registerDialog').on('submit', function() {
+		downloadPossible = false;
 		var values = $('#registerDialog').serializeArray();
 		var oper = 'REGISTER';
 		var rel = values[0].value;
@@ -134,6 +137,7 @@ $(document).ready(function() {
 	});
 	
 	$('#loadDialog').on('submit', function() {
+		downloadPossible = false;
 		var values = $('#loadDialog').serializeArray();
 		var oper = 'LOAD';
 		var name = values[0].value;
@@ -157,6 +161,7 @@ $(document).ready(function() {
 	});
 	
 	$('#storeDialog').on('submit',function() {
+		downloadPossible = false;
 		var values = $('#storeDialog').serializeArray();
 		var oper = 'STORE';
 		var name = values[0].value;
@@ -176,6 +181,7 @@ $(document).ready(function() {
 	});
 	
 	$('#filterDialog').on('submit',function() {
+		downloadPossible = false;
 		var values = $('#filterDialog').serializeArray();
 		var oper = 'FILTER';
 		var name = values[0].value;
@@ -196,6 +202,7 @@ $(document).ready(function() {
 	});
 	
 	$('#joinDialog').on('submit',function() {
+		downloadPossible = false;
 		var values = $('#joinDialog').serializeArray();
 		var oper = 'JOIN';
 		var name = values[0].value;
@@ -377,6 +384,7 @@ $(document).ready(function() {
 	
 	$('#orderUp').on('click', function() {
 		if(~highlightedRowIndex && highlightedRowIndex!=0 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').hasClass('warning')) {
+			downloadPossible = false;
 			var tmp = workflow[highlightedRowIndex-1];
 			workflow[highlightedRowIndex-1] = workflow[highlightedRowIndex];
 			workflow[highlightedRowIndex] = tmp;
@@ -393,6 +401,7 @@ $(document).ready(function() {
 	$('#orderDown').on('click', function(){
 		var rowCount = $('#operationTable tr').length;
 		if (~highlightedRowIndex && highlightedRowIndex!=rowCount-2 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')')) {
+			downloadPossible = false;
 			var tmp = workflow[highlightedRowIndex+1];
 			workflow[highlightedRowIndex+1] = workflow[highlightedRowIndex];
 			workflow[highlightedRowIndex] = tmp;
@@ -421,10 +430,14 @@ $(document).ready(function() {
     	    dataType: 'json',
     	    success: function(response) {
     	    	if(response.success) {
+    	    		resetStandardBehavior($('#workflowOps').html().toLowerCase());
+    	    		$('#stepAction').removeClass('hide');
+    	    		$('#workflowOps').html('workflow operations');
     	    		$('#workflowName').html(filename);
     	    		$('#modalHeaderContent').html('<h3>Saving...</h3>');
     	    		$('#msg').html('Your workflow was saved successfully!');
 					$('#successModal').modal('show');
+					downloadPossible = true;
     	    	} else {
     	    		$('#errmsg').html(response.message);
     	    		$('#errorModal').modal('show');
@@ -476,10 +489,6 @@ $(document).ready(function() {
 		$('#showWfBtn').popover('hide').removeClass('pop');
 	});
 	
-	$('#downloadScript').on('click', function() {
-		//TODO
-	});
-		
 	function loadWorkflow(filename) {
 		var data = '{"filename":"' + filename + '"}';
 		
@@ -495,6 +504,7 @@ $(document).ready(function() {
     	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
     	    		$('#msg').html('Your workflow was loaded successfully!');
 					$('#successModal').modal('show');
+					downloadPossible = true;
     	    	} else {
     	    		$('#errmsg').html(response.message);
     	    		$('#errorModal').modal('show');
@@ -516,5 +526,16 @@ $(document).ready(function() {
 		nameCounter = workflow.length;
 		showTable();
 	}
+	
+	$('#downloadScript').on('click', function() {
+		if(downloadPossible) {
+			var filename = $('#workflowName').html();
+			$(this).attr('download', filename + '.pig');
+			$(this).attr('href', 'http://localhost:8080/dwld/' + filename);
+		} else {
+			showInputErrorMsg('You have to save your workflow first.');
+			return false;
+		}
+	});
     
 });
