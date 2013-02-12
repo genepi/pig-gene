@@ -20,34 +20,44 @@ $(document).ready(function() {
     });
 	
     $('#registerLink').on('click', function() {
+    	setCurrentOperation('REGISTER');
 		cleanModificationDialogs();
 		$('#registerDialog').show('slow');
 		hideInputDialogs('register');
 	});
     
     $('#loadLink').on('click', function() {
+    	setCurrentOperation('LOAD');
 		cleanModificationDialogs();
 		$('#loadDialog').show('slow');
 		hideInputDialogs('load');
 	});
 	
 	$('#storeLink').on('click', function() {
+		setCurrentOperation('STORE');
 		cleanModificationDialogs();
 		$('#storeDialog').show('slow');
 		hideInputDialogs('store');
 	});
 
 	$('#filterLink').on('click', function() {
+		setCurrentOperation('FILTER');
 		cleanModificationDialogs();
 		$('#filterDialog').show('slow');
 		hideInputDialogs('filter');
 	});
 	
 	$('#joinLink').on('click', function() {
+		setCurrentOperation('JOIN');
 		cleanModificationDialogs();
 		$('#joinDialog').show('slow');
 		hideInputDialogs('join');
 	});
+	
+	function setCurrentOperation(operation) {
+		$('#stepAction').addClass('hide');
+		$('#workflowOps').html(operation);
+	}
 	
 	function cleanModificationDialogs() {
 		modifyDialog('register');
@@ -93,7 +103,9 @@ $(document).ready(function() {
 			resetStandardBehavior('filter');
 		} else if (buttonName.indexOf('join') == 0) {
 			resetStandardBehavior('join');
-		}		
+		}	
+		$('#stepAction').removeClass('hide');
+		$('#workflowOps').html('workflow operations');
 		$('#inputError').hide();
 	});
 	
@@ -224,7 +236,7 @@ $(document).ready(function() {
 		$(deleteBtn).addClass('hide');
 		hideInputDialogs('all');
 		$('#orderBtns').addClass('hide');
-		$('#tableContainer.well').css('min-height','324px');
+		$('#tableContainer.well').css('min-height','288px');
 	}
 	
 	/**
@@ -254,6 +266,8 @@ $(document).ready(function() {
 		showTable();
 		$('#downloadScript').removeClass('hide');
 		$('#saveWorkflow').removeClass('hide');
+		$('#stepAction').removeClass('hide');
+		$('#workflowOps').html('workflow operations');
 		$(obj).hide('slow');
 		$(obj).children('input[type=text]').val('');
 	}
@@ -284,9 +298,6 @@ $(document).ready(function() {
 		$(this).addClass('warning');
 		highlightedRowIndex = $(this).index();
 		var data = workflow[highlightedRowIndex];
-
-		//
-//		alert(highlightedRowIndex);
 	
 		if(data.operation=='REGISTER') {
 			$('#regFileName').val(data.relation);
@@ -334,8 +345,9 @@ $(document).ready(function() {
 		$(deleteBtn).removeClass('hide');
 		$(dialog).show('slow');
 		hideInputDialogs(operation);
+		setCurrentOperation(operation.toUpperCase());
 		$('#orderBtns').removeClass('hide');
-		$('#tableContainer.well').css('min-height','396px');
+		$('#tableContainer.well').css('min-height','360px');
 	}
 	
 	/**
@@ -462,6 +474,10 @@ $(document).ready(function() {
 		loadWorkflow(fileName);
 		$('#saveWorkflowName').val(fileName);
 		$('#showWfBtn').popover('hide').removeClass('pop');
+	});
+	
+	$('#downloadScript').on('click', function() {
+		//TODO
 	});
 		
 	function loadWorkflow(filename) {

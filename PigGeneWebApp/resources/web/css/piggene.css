@@ -40,7 +40,7 @@ form input[type=text] {
 }
 
 #tableContainer.well {
-	min-height: 324px;
+	min-height: 288px;
 }
 
 #operationPanels {
@@ -81,7 +81,7 @@ form input[type=text] {
 
 #formContainer {
 	background-color: #FFFFFF;
-	height: 210px;
+	height: 174px;
 	padding: 5px 0px 20px 20px;
 }
 
