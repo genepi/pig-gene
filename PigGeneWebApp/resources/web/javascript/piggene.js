@@ -19,7 +19,13 @@ $(document).ready(function() {
         }
     });
 	
-	$('#loadLink').on('click', function() {
+    $('#registerLink').on('click', function() {
+		cleanModificationDialogs();
+		$('#registerDialog').show('slow');
+		hideInputDialogs('register');
+	});
+    
+    $('#loadLink').on('click', function() {
 		cleanModificationDialogs();
 		$('#loadDialog').show('slow');
 		hideInputDialogs('load');
@@ -44,21 +50,31 @@ $(document).ready(function() {
 	});
 	
 	function cleanModificationDialogs() {
-		//TODO for all dialogs: hide unwanted buttons and show the other ones 
-		removeTableRowLabeling('warning');
+		modifyDialog('register');
+		modifyDialog('load');
+		modifyDialog('store');
+		modifyDialog('filter');
+		modifyDialog('join');
+		$('#showWfBtn').popover('hide').removeClass('pop');
+	}
+	
+	function modifyDialog(operation) {
+		var obj = '#' + operation + 'Dialog';
+		resetStandardBehavior(operation);
+		$(obj).children('input[type=text]').val('');
 	}
 	
 	/**
 	 * Cancellation-Handling of input forms.
 	 */
 	$("button[type='reset']").on('click', function() {
-		if($(this).hasClass('delete')) { //delete line handling...
+		if($(this).hasClass('delete')) {
 			workflow.splice(highlightedRowIndex,1);
 			if(workflow.length == 0) {
 				//TODO setzen des neuen contents...
 				var content = '<h2>Workflow</h2>There is no workflow specified at the moment. Please create a new workflow by adding new operations in the panel on the left side or load an existing workflow if you want to modify it.<table id="operationTable"></table>';
 				$('#tableContainer').html('<p>blub</p>');
-				$('#saveWorkflow').hide('slow');
+				$('#saveWorkflow').addClass('hide');
 			}
 			$('#inputError').hide();
 			showTable();
@@ -67,7 +83,9 @@ $(document).ready(function() {
 		}
 		
 		var buttonName = $(this).attr('id');
-		if(buttonName.indexOf('load') == 0) {
+		if(buttonName.indexOf('register') == 0) {
+			resetStandardBehavior('register');
+		} else if(buttonName.indexOf('load') == 0) {
 			resetStandardBehavior('load');
 		} else if (buttonName.indexOf('store') == 0) {
 			resetStandardBehavior('store');
@@ -83,6 +101,25 @@ $(document).ready(function() {
 		$('#inputErrMsg').html(errText);
 		$('#inputError').show('slow');
 	}
+	
+	$('#registerDialog').on('submit', function() {
+		var values = $('#registerDialog').serializeArray();
+		var oper = 'REGISTER';
+		var rel = values[0].value;
+		if(!inputLongEnough(rel)) {
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			return false;
+		}
+		
+		if($('#registerSubmitChange').hasClass('modification')) {
+			workflow[highlightedRowIndex] = {name:'-', relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'};
+			resetStandardBehavior('register');
+		} else {
+			workflow.push({name:'-', relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
+		}
+		finalizeSubmit(this);
+		return false;
+	});
 	
 	$('#loadDialog').on('submit', function() {
 		var values = $('#loadDialog').serializeArray();
@@ -186,6 +223,8 @@ $(document).ready(function() {
 		$(submitChangeBtn).addClass('hide');
 		$(deleteBtn).addClass('hide');
 		hideInputDialogs('all');
+		$('#orderBtns').addClass('hide');
+		$('#tableContainer.well').css('min-height','324px');
 	}
 	
 	/**
@@ -213,7 +252,8 @@ $(document).ready(function() {
 	function finalizeSubmit(obj) {
 		$('#inputError').hide();
 		showTable();
-		$('#saveWorkflow').show("fast");
+		$('#downloadScript').removeClass('hide');
+		$('#saveWorkflow').removeClass('hide');
 		$(obj).hide('slow');
 		$(obj).children('input[type=text]').val('');
 	}
@@ -226,37 +266,6 @@ $(document).ready(function() {
 		$('#tableContainer').html(tab);
 	}
 	
-	/**
-	 * Method handles a user request for already existing workflow definitions. Ajax request returns all
-	 * existing workflow names. These names get converted into links and are shown in a popover. The user
-	 * can select one of the links to avoid typing it manually.
-	 */
-	$('#showWfBtn').popover({ trigger: 'manual', html: true, placement: 'bottom', }).click(function() {
-		if($(this).hasClass('pop')) {
-			$(this).popover('hide').removeClass('pop');
-		} else {
-			$.ajax({
-	    		type: 'POST',
-	    	    url: 'http://localhost:8080/wf',
-	    	    data: null,
-	    	    dataType:'json',
-	    	    success: function(response) {
-	    	    	if(response.success) {
-	    	    		var popContent = convertFilenamesToLinks(response.data);
-	    	    		$('#showWfBtn').attr('data-content', popContent).popover('show').addClass('pop');
-	    	    	} else {
-	    	    		$('#errmsg').html(response.message);
-	    	    		$('#errorModal').modal('show');
-	    	    	}
-	    	    },
-	    	    error: function (xhr, ajaxOptions, thrownError) {
-	    	    	$('#errmsg').html(xhr.responseText);
-		    		$('#errorModal').modal('show');
-	    	   }
-	    	});
-		}
-	});
-
 	function convertFilenamesToLinks(data) {
 		var toRemove = '.yaml';
 		var content = '';
@@ -267,14 +276,6 @@ $(document).ready(function() {
 		return content;
 	}
 	
-	$('#operationButtons').on('click', 'a.fileNames', function() {
-		var fileName = $(this).html();
-		$('#loadWorkflowName').val(fileName);
-		$('#saveWorkflowName').val(fileName);
-		$('#showWfBtn').popover('hide').removeClass('pop');
-		$('#loadWorkflowName').select();
-	});
-	
 	/**
 	 * Modification-Handling of table row.
 	 */
@@ -283,11 +284,16 @@ $(document).ready(function() {
 		$(this).addClass('warning');
 		highlightedRowIndex = $(this).index();
 		var data = workflow[highlightedRowIndex];
+
+		//
+//		alert(highlightedRowIndex);
 	
-		if(data.operation=='LOAD') {
+		if(data.operation=='REGISTER') {
+			$('#regFileName').val(data.relation);
+			setModificationBehavior('register');
+		} else if(data.operation=='LOAD') {
 			$('#loadName').val(data.name);
 			$('#fileName').val(data.relation);
-			$('#loadDelete').removeClass('hide');
 			setModificationBehavior('load');
 		} else if(data.operation=='STORE'){
 			$('#storeName').val(data.name);
@@ -328,12 +334,17 @@ $(document).ready(function() {
 		$(deleteBtn).removeClass('hide');
 		$(dialog).show('slow');
 		hideInputDialogs(operation);
+		$('#orderBtns').removeClass('hide');
+		$('#tableContainer.well').css('min-height','396px');
 	}
 	
 	/**
 	 * Hides all input-dialog-forms except the form given to the function.
 	 */
 	function hideInputDialogs(elem) {
+		if(elem != 'register') {
+			$('#registerDialog').hide('slow');
+		}
 		if(elem != 'load') {
 			$('#loadDialog').hide('slow');
 		}
@@ -347,6 +358,38 @@ $(document).ready(function() {
 			$('#joinDialog').hide('slow');
 		}
 	}
+	
+	$('#orderUp').hover(function() {
+		$('#up').toggleClass('icon-white');
+	});
+	
+	$('#orderUp').on('click', function() {
+		if(~highlightedRowIndex && highlightedRowIndex!=0 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').hasClass('warning')) {
+			var tmp = workflow[highlightedRowIndex-1];
+			workflow[highlightedRowIndex-1] = workflow[highlightedRowIndex];
+			workflow[highlightedRowIndex] = tmp;
+			showTable();
+			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex)+')').addClass('warning');
+			highlightedRowIndex--;
+		}
+	});
+	
+	$('#orderDown').hover(function() {
+		$('#down').toggleClass('icon-white');
+	});
+	
+	$('#orderDown').on('click', function(){
+		var rowCount = $('#operationTable tr').length;
+		if (~highlightedRowIndex && highlightedRowIndex!=rowCount-2 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')')) {
+			var tmp = workflow[highlightedRowIndex+1];
+			workflow[highlightedRowIndex+1] = workflow[highlightedRowIndex];
+			workflow[highlightedRowIndex] = tmp;
+			showTable();
+			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex+2)+')').addClass('warning');
+			highlightedRowIndex++;
+		}
+		
+	});
 	
 	$('#saveWorkflow').on('submit',function() {
 		var filename = $('#saveWorkflowName').val();
@@ -365,8 +408,8 @@ $(document).ready(function() {
     	    data: data,
     	    dataType: 'json',
     	    success: function(response) {
-    	    	console.log(response);
     	    	if(response.success) {
+    	    		$('#workflowName').html(filename);
     	    		$('#modalHeaderContent').html('<h3>Saving...</h3>');
     	    		$('#msg').html('Your workflow was saved successfully!');
 					$('#successModal').modal('show');
@@ -382,15 +425,46 @@ $(document).ready(function() {
     	});
 		return false;
 	});
-		
-	$('#loadWorkflow').on('submit', function() {
-		var filename = $('#loadWorkflowName').val();
-		if(!inputLongEnough(filename)) {
-			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
-			return false;
+	
+	/**
+	 * Method handles a user request for already existing workflow definitions. Ajax request returns all
+	 * existing workflow names. These names get converted into links and are shown in a popover. The user
+	 * can select one of the links to avoid typing it manually.
+	 */
+	$('#showWfBtn').popover({ trigger: 'manual', html: true, placement: 'bottom', }).click(function() {
+		if($(this).hasClass('pop')) {
+			$(this).popover('hide').removeClass('pop');
+		} else {
+			$.ajax({
+	    		type: 'POST',
+	    	    url: 'http://localhost:8080/wf',
+	    	    data: null,
+	    	    dataType:'json',
+	    	    success: function(response) {
+	    	    	if(response.success) {
+	    	    		var popContent = convertFilenamesToLinks(response.data);
+	    	    		$('#showWfBtn').attr('data-content', popContent).popover('show').addClass('pop');
+	    	    	} else {
+	    	    		$('#errmsg').html(response.message);
+	    	    		$('#errorModal').modal('show');
+	    	    	}
+	    	    },
+	    	    error: function (xhr, ajaxOptions, thrownError) {
+	    	    	$('#errmsg').html(xhr.responseText);
+		    		$('#errorModal').modal('show');
+	    	   }
+	    	});
 		}
-
-		$('#inputError').hide('slow');
+	});
+	
+	$('#processElements').on('click', 'a.fileNames', function() {
+		var fileName = $(this).html();
+		loadWorkflow(fileName);
+		$('#saveWorkflowName').val(fileName);
+		$('#showWfBtn').popover('hide').removeClass('pop');
+	});
+		
+	function loadWorkflow(filename) {
 		var data = '{"filename":"' + filename + '"}';
 		
 		$.ajax({
@@ -401,6 +475,7 @@ $(document).ready(function() {
     	    success: function(response) {
     	    	if(response.success) {
     	    		initializeLoadedWorkflow(response.data);
+    	    		$('#workflowName').html(filename);
     	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
     	    		$('#msg').html('Your workflow was loaded successfully!');
 					$('#successModal').modal('show');
@@ -414,11 +489,11 @@ $(document).ready(function() {
 	    		$('#errorModal').modal('show');
     	   }
     	});
-		
-		$('#loadWorkflowName').val('');
-		$('#saveWorkflow').show("fast");
+
+		$('#downloadScript').removeClass('hide');
+		$('#saveWorkflow').removeClass('hide');
 		return false;
-	}); 
+	}
 	
 	function initializeLoadedWorkflow(data) {
 		workflow = data;

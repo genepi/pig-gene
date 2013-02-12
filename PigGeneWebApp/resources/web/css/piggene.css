@@ -1,36 +1,21 @@
+body.well {
+	border: 0px;
+}
+
 form input[type=text] {
 	margin-bottom: 5px;
 }
 
-#contentBackground {
-	heigth: 100%;
+.affix {
+	top: 20px;
 }
 
-#stepAction {
-  margin-bottom: 5px;
+.span10 {
+	width: 800px;
 }
 
-#formContainer, #tableContainer {
-	background-color: #FFFFFF;
-	min-height: 350px;
-	margin-bottom: 5px;
-}
-
-#loadWorkflowName {
-	width: 135px;
-}
-
-#saveWorkflowName {
-	width: 165px;
-}
-
-#loadBtn, #saveBtn {
-	width: 120px;
-}
-
-#showWfBtn {
-	width: 10px;
-	padding-left: 8px;
+.span5 {
+	width: 340px;
 }
 
 .popover-title {
@@ -39,4 +24,92 @@ form input[type=text] {
 
 .fileNames {
 	font-size: 11pt;
+}
+
+#title {
+	padding-left: 0px;
+	margin-bottom: 10px;
+}
+
+#workflowName {
+	padding-left: 40px;
+}
+
+#tableContainer {
+	background-color: #FFFFFF;
+}
+
+#tableContainer.well {
+	min-height: 324px;
+}
+
+#operationPanels {
+	margin-left: 0px;
+	margin-bottom: 20px;
+}
+
+#processElements {
+	background-color: #FFFFFF;
+	height: 67px;
+	margin-bottom: 20px;
+}
+
+#showWfBtn {
+	width: 138px;
+	margin-bottom: 8px;
+  	webkit-border-radius: 4px;
+    moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#downloadScript {
+	width: 100px;
+	margin-left: 4px;
+	margin-bottom: 8px;
+  	webkit-border-radius: 4px;
+    moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#saveWorkflowName {
+	width: 150px;
+}
+
+#saveBtn {
+	width: 135px;
+}
+
+#formContainer {
+	background-color: #FFFFFF;
+	height: 210px;
+	padding: 5px 0px 20px 20px;
+}
+
+#workflowOps {
+	padding: 0px;
+}
+
+#stepAction {
+	margin-bottom: 5px;
+}
+
+#action {
+	width: 99px;
+	padding-left: 9px;
+}
+
+#orderBtns {
+	background-color: #FFFFFF;
+	height: 20px;
+	padding: 10px 0px 20px 20px;
+}
+
+#orderUp {
+	width: 17px;
+	padding-left: 5px;
+}
+
+#orderDown {
+	width: 17px;
+	padding-left: 0px;
 }

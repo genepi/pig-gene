@@ -12,6 +12,8 @@ public class PigSnippetFactory {
 			return new JoinSnippet(comp).toPigScript();
 		} else if (comp.getOperation().equals("LOAD")) {
 			return new LoadSnippet(comp).toPigScript();
+		} else if (comp.getOperation().equals("REGISTER")) {
+			return new RegisterSnippet(comp).toPigScript();
 		} else {
 			return new StoreSnippet(comp).toPigScript();
 		}

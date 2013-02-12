@@ -11,93 +11,108 @@
 <script type="text/javascript" src="javascript/piggene.js"></script>
 </head>
 
-<body>
-
-<ul class="well nav nav-pills">
-	<li><a href="#">YAML-Files</a></li>
-	<li class="active"><a href="#">Running Jobs</a></li>
-	<li><a href="#">Aborted Jobs</a></li>
-</ul>
-
-<div class="well" id="contentBackground">
-	<div class="well span10" id="tableContainer">
-		<h2>Workflow</h2>
-		There is no workflow specified at the moment. Please create a new workflow by adding new operations in the panel on the left side or load an existing workflow if you want to modify it.
+<body class="well">
+<div id="content">
+	<div id="title">
+		<h3 id="workflowName">Workflow</h3>
+	</div>
+	
+	<div class="span10 well" id="tableContainer">
+		<b>There is no workflow specified at the moment.</b><br> 
+		Please create a new workflow by adding new operations in the panel on the 
+		right side or load an existing workflow if you want to modify it.
 		<table id="operationTable"></table>
 	</div>
 
-	<div class="well span4" id="formContainer">
-		<div class="btn-group" id="stepAction">
-			<a class="btn dropdown-toggle" data-toggle="dropdown" id="action" href="#">
-				add operation 
-				<span class="caret"></span>
-			</a>	
-			<ul class="dropdown-menu">
-				<li id="loadItem"><a id="loadLink" title="click to select the load task" href="#">LOAD</a></li>
-				<li id="storeItem"><a id="storeLink" title="click to select the store task" href="#">STORE</a></li>
-				<li id="filterItem"><a id="filterLink" title="click to select the filter task" href="#">FILTER</a></li>
-				<li id="joinItem"><a id="joinLink" title="click to select the join task" href="#">JOIN</a></li>
-			</ul>
-		</div>
-
-		<form class="form-search hide" id="loadDialog">
-			<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" value="">
-			<input class="span2" id="fileName" name="relation" type="text" placeholder="type file name" value="" required><p>
-			<button class="btn" id="loadClear" type="reset">cancel</button>
-			<button class="btn btn-danger hide delete" id="loadDelete" type="reset">delete</button>
-			<button class="btn btn-success hide" id="loadSubmitChange" type="submit">save changes</button>
-			<button class="btn btn-success" id="loadSubmit" type="submit">add LOAD operation</button><br>
-		</form>
-		
-		<form class="form-search hide" id="storeDialog">
-			<input class="span2" id="storeName" name="name" type="text" placeholder="type file name" value="" required>
-			<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" value="" required><p>
-			<button class="btn" id="storeClear" type="reset">cancel</button>
-			<button class="btn btn-danger hide delete" id="storeDelete" type="reset">delete</button>
-			<button class="btn btn-success hide" id="storeSubmitChange" type="submit">save changes</button>
-			<button class="btn btn-success" id="storeSubmit" type="submit">add STORE operation</button><br>
-		</form>
-		
-		<form class="form-search hide" id="filterDialog">
-			<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" value=""><br/>
-			<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" value="" required>
-			<input class="span2" id="filtOpt" name="options" type="text" placeholder="filter option(s)" value="" required><p>
-			<button class="btn" id="filterClear" type="reset">cancel</button>
-			<button class="btn btn-danger hide delete" id="filterDelete" type="reset">delete</button>
-			<button class="btn btn-success hide" id="filterSubmitChange" type="submit">save changes</button>
-			<button class="btn btn-success" id="filterSubmit" type="submit">add FILTER operation</button><br>
-		</form>
-
-		<form class="form-search hide" id="joinDialog">
-			<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" value=""><br/>
-			<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" value="" required>
-			<input class="span2" id="joinOpt" name="options" type="text" placeholder="join option(s) rel1" value="" required><br/>
-			<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" value="" required>
-			<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join option(s) rel2" value="" required><p>
-			<button class="btn" id="joinClear" type="reset">cancel</button>
-			<button class="btn btn-danger hide delete" id="joinDelete" type="reset">delete</button>
-			<button class="btn btn-success hide" id="joinSubmitChange" type="submit">save changes</button>
-			<button class="btn btn-success" id="joinSubmit" type="submit">add JOIN operation</button><br>
-		</form>
-
-		<!-- Alert... -->
-		<div class="alert alert-block alert-warning fade in hide" id="inputError">
-	        <h4 class="alert-heading">Warning! Input error!</h4>
-	        <p id="inputErrMsg"></p>
-         </div>
-         <!-- ...Alert -->
-		
-		<div id="operationButtons">
-			<form class="input-append" id="loadWorkflow">
-				<input id="loadWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
-				<a id="showWfBtn" class="btn" rel="popover" data-content="" data-original-title="already existing workflows:"><i class="icon-info-sign"></i></a>
-				<button class="btn btn-inverse" id="loadBtn" type="submit" title="click to load a workflow">load Workflow</button>
-			</form>			
+	<div class="span5" id="affixContainer">
+		<div class="span5 affix-top" data-spy="affix" data-offset-top="105" id="operationPanels">
+			<div class="well" id="processElements">
+				<a id="showWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="already existing workflows:"><i class="icon-edit icon-white"></i> load workflow</a>
+				<a id="downloadScript" class="btn btn-inverse hide"  download="" title="download pig script"><i class="icon-download icon-white"></i> download</a>
+				
+				<form class="input-append hide" id="saveWorkflow">
+					<input id="saveWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
+					<button class="btn btn-primary" id="saveBtn" type="submit" title="click to save your worflow"><i class="icon-folder-open icon-white"></i> save workflow</button>
+				</form>
+			</div>
 			
-			<form class="input-append hide" id="saveWorkflow">
-				<input id="saveWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
-				<button class="btn btn-primary" id="saveBtn" type="submit" title="click to save your worflow">save Workflow</button>
-			</form>
+			<div class="well hide" id="orderBtns">
+				line ordering: 
+				<button class="btn btn-link" id="orderUp"><i id="up" class="icon-arrow-up"></i></button>
+				<button class="btn btn-link" id="orderDown"><i id="down" class="icon-arrow-down"></i></button>
+			</div>
+		
+			<div class="well" id="formContainer">
+				<h4 id="workflowOps">workflow operations</h4>
+				<div class="btn-group" id="stepAction">
+					<a class="btn dropdown-toggle" data-toggle="dropdown" id="action">
+						add operation 
+						<span class="caret"></span>
+					</a>	
+					<ul class="dropdown-menu">
+						<li id="registerItem"><a id="registerLink" title="click to select the register task">REGISTER</a></li>
+						<li id="loadItem"><a id="loadLink" title="click to select the load task">LOAD</a></li>
+						<li id="storeItem"><a id="storeLink" title="click to select the store task">STORE</a></li>
+						<li id="filterItem"><a id="filterLink" title="click to select the filter task">FILTER</a></li>
+						<li id="joinItem"><a id="joinLink" title="click to select the join task">JOIN</a></li>
+					</ul>
+				</div>
+		
+				<form class="form-search hide" id="registerDialog">
+					<input class="span2" id="regFileName" name="relation" type="text" placeholder="type jar file name" value="" required><p>
+					<button class="btn" id="registerClear" type="reset">cancel</button>
+					<button class="btn btn-danger hide delete" id="registerDelete" type="reset">delete</button>
+					<button class="btn btn-success hide" id="registerSubmitChange" type="submit">save changes</button>
+					<button class="btn btn-success" id="registerSubmit" type="submit">add REGISTER operation</button><br>
+				</form>
+		
+				<form class="form-search hide" id="loadDialog">
+					<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" value="">
+					<input class="span2" id="fileName" name="relation" type="text" placeholder="type file name" value="" required><p>
+					<button class="btn" id="loadClear" type="reset">cancel</button>
+					<button class="btn btn-danger hide delete" id="loadDelete" type="reset">delete</button>
+					<button class="btn btn-success hide" id="loadSubmitChange" type="submit">save changes</button>
+					<button class="btn btn-success" id="loadSubmit" type="submit">add LOAD operation</button><br>
+				</form>
+				
+				<form class="form-search hide" id="storeDialog">
+					<input class="span2" id="storeName" name="name" type="text" placeholder="type file name" value="" required>
+					<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" value="" required><p>
+					<button class="btn" id="storeClear" type="reset">cancel</button>
+					<button class="btn btn-danger hide delete" id="storeDelete" type="reset">delete</button>
+					<button class="btn btn-success hide" id="storeSubmitChange" type="submit">save changes</button>
+					<button class="btn btn-success" id="storeSubmit" type="submit">add STORE operation</button><br>
+				</form>
+				
+				<form class="form-search hide" id="filterDialog">
+					<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" value=""><br/>
+					<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" value="" required>
+					<input class="span2" id="filtOpt" name="options" type="text" placeholder="filter option(s)" value="" required><p>
+					<button class="btn" id="filterClear" type="reset">cancel</button>
+					<button class="btn btn-danger hide delete" id="filterDelete" type="reset">delete</button>
+					<button class="btn btn-success hide" id="filterSubmitChange" type="submit">save changes</button>
+					<button class="btn btn-success" id="filterSubmit" type="submit">add FILTER operation</button><br>
+				</form>
+		
+				<form class="form-search hide" id="joinDialog">
+					<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" value=""><br/>
+					<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" value="" required>
+					<input class="span2" id="joinOpt" name="options" type="text" placeholder="join option(s) rel1" value="" required><br/>
+					<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" value="" required>
+					<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join option(s) rel2" value="" required><p>
+					<button class="btn" id="joinClear" type="reset">cancel</button>
+					<button class="btn btn-danger hide delete" id="joinDelete" type="reset">delete</button>
+					<button class="btn btn-success hide" id="joinSubmitChange" type="submit">save changes</button>
+					<button class="btn btn-success" id="joinSubmit" type="submit">add JOIN operation</button><br>
+				</form>
+			</div>
+			
+			<!-- Alert... -->
+			<div class="alert alert-block alert-error fade in hide" id="inputError">
+		        <h4 class="alert-heading">Warning! Input error!</h4>
+		        <p id="inputErrMsg"></p>
+		        </div>
+		        <!-- ...Alert -->
 		</div>
 	</div>
 </div>
