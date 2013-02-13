@@ -99,6 +99,9 @@ $(document).ready(function() {
 			resetStandardBehavior('register');
 		} else if(buttonName.indexOf('load') == 0) {
 			resetStandardBehavior('load');
+			$('#loadFiletypeSeparator.btn-group').css('display','none');
+			$('#loadVcf').addClass('active');
+			$('#loadTxt').removeClass('active');
 		} else if (buttonName.indexOf('store') == 0) {
 			resetStandardBehavior('store');
 		} else if (buttonName.indexOf('filter') == 0) {
@@ -136,6 +139,14 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	$('#loadVcf').on('click', function() {
+		$('#loadFiletypeSeparator.btn-group').css('display','none');
+	});
+	
+	$('#loadTxt').on('click', function() {
+		$('#loadFiletypeSeparator.btn-group').css('display','inline-block');
+	});
+	
 	$('#loadDialog').on('submit', function() {
 		downloadPossible = false;
 		var values = $('#loadDialog').serializeArray();
@@ -149,12 +160,18 @@ $(document).ready(function() {
 		if(name == null || name == '') {
 			name = getArtificialName();
 		}
+		
+		var opt = $('#loadFiletype.btn-group > button.btn.active').html();
+		var opt2 = '-';
+		if($('#loadTxt').hasClass('active')) {
+			opt2 = $('#loadFiletypeSeparator.btn-group > button.btn.active').html();
+		}
 
 		if($('#loadSubmitChange').hasClass('modification')) {
-			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'};
+			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2};
 			resetStandardBehavior('load');
 		} else {
-			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
+			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2});
 		}
 		finalizeSubmit(this);
 		return false;

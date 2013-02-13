@@ -98,6 +98,11 @@ form input[type=text] {
 	padding-left: 9px;
 }
 
+#loadFiletypeSeparator.btn-group {
+	display: none;
+	margin-left: 0px;
+}
+
 #loadName, #fileName {
 	margin-top: 4px;
 }

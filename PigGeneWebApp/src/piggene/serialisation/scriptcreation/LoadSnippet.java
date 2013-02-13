@@ -6,7 +6,7 @@ public class LoadSnippet extends PigSnippet {
 	private static final String TXT_STORAGE = "PigStorage";
 	private static final String VCF_STORAGE = "pigGene.PigGeneStorage()";
 
-	private static final String TXT_STORAGE_TAB_SEPARATOR = "('\t')";
+	private static final String TXT_STORAGE_TAB_SEPARATOR = "('\\t')";
 	private static final String TXT_STORAGE_SPACE_SEPARATOR = "(' ')";
 	private static final String TXT_STORAGE_COMMA_SEPARATOR = "(',')";
 
