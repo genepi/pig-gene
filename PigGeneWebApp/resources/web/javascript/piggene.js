@@ -1,8 +1,4 @@
 $(document).ready(function() {
-	
-	//TODO: check if all values are given correctly
-	//TODO: when deleting a line - check if workflow array is empty - if so: hide save button
-	
 	var workflow = [];
 	var nameCounter = 1;
 	var highlightedRowIndex = -1;
@@ -111,6 +107,7 @@ $(document).ready(function() {
 		} else if (buttonName.indexOf('join') == 0) {
 			resetStandardBehavior('join');
 		}	
+		$('#comments').val('');
 		$('#stepAction').removeClass('hide');
 		$('#workflowOps').html('workflow operations');
 		$('#inputError').hide();
@@ -126,16 +123,20 @@ $(document).ready(function() {
 		var values = $('#registerDialog').serializeArray();
 		var oper = 'REGISTER';
 		var rel = values[0].value;
+		var comm = $('#comments').val();
 		if(!inputLongEnough(rel)) {
 			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
 			return false;
 		}
+		if(comm == null || comm == ''){
+			comm = '-';
+		}
 		
 		if($('#registerSubmitChange').hasClass('modification')) {
-			workflow[highlightedRowIndex] = {name:'-', relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'};
+			workflow[highlightedRowIndex] = {name:'-', relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm};
 			resetStandardBehavior('register');
 		} else {
-			workflow.push({name:'-', relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
+			workflow.push({name:'-', relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm});
 		}
 		finalizeSubmit(this);
 		return false;
@@ -155,12 +156,16 @@ $(document).ready(function() {
 		var oper = 'LOAD';
 		var name = values[0].value;
 		var rel = values[1].value;
+		var comm = $('#comments').val();
 		if(!inputLongEnough(rel)) {
 			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
 			return false;
 		}
 		if(name == null || name == '') {
 			name = getArtificialName();
+		}
+		if(comm == null || comm == ''){
+			comm = '-';
 		}
 		
 		var opt = $('#loadFiletype.btn-group > button.btn.active').html();
@@ -170,10 +175,10 @@ $(document).ready(function() {
 		}
 
 		if($('#loadSubmitChange').hasClass('modification')) {
-			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2};
+			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2, comment:comm};
 			resetStandardBehavior('load');
 		} else {
-			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2});
+			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2, comment:comm});
 		}
 		finalizeSubmit(this);
 		return false;
@@ -185,15 +190,19 @@ $(document).ready(function() {
 		var oper = 'STORE';
 		var name = values[0].value;
 		var rel = values[1].value;
+		var comm = $('#comments').val();
 		if(name == null || name == '') {
 			name = getArtificialName();
 		}
+		if(comm == null || comm == ''){
+			comm = '-';
+		}
 		
 		if($('#storeSubmitChange').hasClass('modification')) {
-			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'};
+			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm};
 			resetStandardBehavior('store');
 		} else {
-			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-'});
+			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm});
 		}
 		finalizeSubmit(this);
 		return false;
@@ -206,15 +215,19 @@ $(document).ready(function() {
 		var name = values[0].value;
 		var rel = values[1].value;
 		var opt = values[2].value;
+		var comm = $('#comments').val();
 		if(name == null || name == '') {
 			name = getArtificialName();
 		}
+		if(comm == null || comm == ''){
+			comm = '-';
+		}
 		
 		if($('#filterSubmitChange').hasClass('modification')) {
-			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-'};
+			workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-', comment:comm};
 			resetStandardBehavior('filter');
 		} else {
-			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-'});
+			workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-', comment:comm});
 		}
 		finalizeSubmit(this);
 		return false;
@@ -229,15 +242,19 @@ $(document).ready(function() {
 		var opt1 = values[2].value;
 		var rel2 = values[3].value;
 		var opt2 = values[4].value;
+		var comm = $('#comments').val();
 		if(name == null || name == '') {
 			name = getArtificialName();
 		}
+		if(comm == null || comm == ''){
+			comm = '-';
+		}
 		
 		if($('#joinSubmitChange').hasClass('modification')) {
-			workflow[highlightedRowIndex] = {name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2};
+			workflow[highlightedRowIndex] = {name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2, comment:comm};
 			resetStandardBehavior('join');
 		} else {
-			workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2});
+			workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2, comment:comm});
 		}
 		finalizeSubmit(this);
 		return false;
@@ -261,7 +278,7 @@ $(document).ready(function() {
 		$(submitChangeBtn).addClass('hide');
 		$(deleteBtn).addClass('hide');
 		hideInputDialogs('all');
-		$('#orderBtns').addClass('hide');
+		$('#lineDetails').addClass('hide');
 		$('#tableContainer.well').css('min-height','288px');
 	}
 	
@@ -296,6 +313,7 @@ $(document).ready(function() {
 		$('#workflowOps').html('workflow operations');
 		$(obj).hide('slow');
 		$(obj).children('input[type=text]').val('');
+		$('#comments').val('');
 	}
 	
 	/**
@@ -324,6 +342,12 @@ $(document).ready(function() {
 		$(this).addClass('warning');
 		highlightedRowIndex = $(this).index();
 		var data = workflow[highlightedRowIndex];
+		var comment = data.comment;
+		if(comment == '-') {
+			$('#comments').val('');
+		} else {
+			$('#comments').val(comment);
+		}
 	
 		if(data.operation=='REGISTER') {
 			$('#regFileName').val(data.relation);
@@ -349,8 +373,6 @@ $(document).ready(function() {
 			$('#joinOpt2').val(data.options2);
 			setModificationBehavior('join');
 		}
-		
-		//flow should not come to this point...
 	});
 	
 	function removeTableRowLabeling(label) {
@@ -364,7 +386,7 @@ $(document).ready(function() {
 		var submitChangeBtn = '#' + operation + 'SubmitChange';
 		var deleteBtn = '#' + operation + 'Delete';
 		var dialog = '#' + operation + 'Dialog';
-
+		
 		$(submitBtn).addClass('hide');
 		$(submitChangeBtn).addClass('modification');
 		$(submitChangeBtn).removeClass('hide');
@@ -372,8 +394,8 @@ $(document).ready(function() {
 		$(dialog).show('slow');
 		hideInputDialogs(operation);
 		setCurrentOperation(operation.toUpperCase());
-		$('#orderBtns').removeClass('hide');
-		$('#tableContainer.well').css('min-height','360px');
+		$('#lineDetails').removeClass('hide');
+		$('#tableContainer.well').css('min-height','456px');
 	}
 	
 	/**
@@ -438,11 +460,13 @@ $(document).ready(function() {
 			return false;
 		}
 		
-		$('#inputError').hide('slow');
 		//last element just needed for the ajax request, remove afterwards
 		workflow.push(filename); 
 		var data = JSON.stringify(workflow);
 		workflow.splice(-1,1);
+		
+		$('#inputError').hide('slow');
+		$('#comments').val('');
 		
 		$.ajax({
     		type: 'POST',
@@ -508,6 +532,9 @@ $(document).ready(function() {
 		loadWorkflow(fileName);
 		$('#saveWorkflowName').val(fileName);
 		$('#showWfBtn').popover('hide').removeClass('pop');
+		$('#comments').val('');
+		$('#lineDetails').addClass('hide');
+		$('#tableContainer.well').css('min-height','288px');
 	});
 	
 	function loadWorkflow(filename) {

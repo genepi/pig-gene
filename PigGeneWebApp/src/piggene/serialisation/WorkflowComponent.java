@@ -11,6 +11,7 @@ public class WorkflowComponent implements Serializable {
 	private String relation2;
 	private String options;
 	private String options2;
+	private String comment;
 
 	public String getName() {
 		return name;
@@ -58,6 +59,14 @@ public class WorkflowComponent implements Serializable {
 
 	public void setOptions2(final String options2) {
 		this.options2 = options2;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(final String comment) {
+		this.comment = comment;
 	}
 
 	public static long getSerialversionuid() {

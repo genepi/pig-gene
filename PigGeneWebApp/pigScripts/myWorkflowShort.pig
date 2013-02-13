@@ -1,2 +1,2 @@
 REGISTER pigGene.jar;
-R1 = LOAD '$input.txt' USING pigGene.PigGeneStorage();
+R1 = LOAD '$input.txt' USING PigStorage(',');

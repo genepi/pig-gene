@@ -111,9 +111,9 @@ form input[type=text] {
 	margin-top: 4px;
 }
 
-#orderBtns {
+#lineDetails {
 	background-color: #FFFFFF;
-	height: 10px;
+	height: 114px;
 	padding: 13px 0px 20px 20px;
 }
 
@@ -133,4 +133,14 @@ form input[type=text] {
 
 #up, #down {
 	margin-top: -2px;
+}
+
+#comText {
+	margin-bottom: 2px;
+}
+
+#comments {
+	resize: none;
+	height: 42px;
+	width: 282px;
 }

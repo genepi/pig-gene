@@ -1,5 +1,6 @@
 - !piggene.serialisation.WorkflowComponent
    name: R1
+   comment: my comment
    operation: LOAD
    options: vcf
    options2: '-'
@@ -7,6 +8,7 @@
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    name: R2
+   comment: blub ist super!
    operation: FILTER
    options: chrom == 12
    options2: '-'
@@ -14,6 +16,7 @@
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    name: R3
+   comment: '-'
    operation: LOAD
    options: vcf
    options2: '-'
@@ -21,6 +24,7 @@
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    name: R4
+   comment: '-'
    operation: JOIN
    options: chrom,pos
    options2: chrom,pos
@@ -28,8 +32,17 @@
    relation2: R3
 - !piggene.serialisation.WorkflowComponent
    name: output
+   comment: test
    operation: STORE
    options: '-'
    options2: '-'
    relation: R4
+   relation2: '-'
+- !piggene.serialisation.WorkflowComponent
+   name: '-'
+   comment: test it
+   operation: REGISTER
+   options: '-'
+   options2: '-'
+   relation: asdsdg
    relation2: '-'
