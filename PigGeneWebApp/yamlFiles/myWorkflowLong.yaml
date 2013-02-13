@@ -1,16 +1,23 @@
 - !piggene.serialisation.WorkflowComponent
+   name: '-'
+   operation: REGISTER
+   options: '-'
+   options2: '-'
+   relation: asdf
+   relation2: '-'
+- !piggene.serialisation.WorkflowComponent
+   name: '-'
+   operation: REGISTER
+   options: '-'
+   options2: '-'
+   relation: asdge
+   relation2: '-'
+- !piggene.serialisation.WorkflowComponent
    name: R1
    operation: LOAD
    options: '-'
    options2: '-'
    relation: input.txt
-   relation2: '-'
-- !piggene.serialisation.WorkflowComponent
-   name: output
-   operation: STORE
-   options: '-'
-   options2: '-'
-   relation: R4
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    name: R2
@@ -34,11 +41,11 @@
    relation: R2
    relation2: R3
 - !piggene.serialisation.WorkflowComponent
-   name: '-'
-   operation: REGISTER
+   name: output
+   operation: STORE
    options: '-'
    options2: '-'
-   relation: asdf
+   relation: R4
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    name: '-'
@@ -53,13 +60,6 @@
    options: '-'
    options2: '-'
    relation: asdf
-   relation2: '-'
-- !piggene.serialisation.WorkflowComponent
-   name: '-'
-   operation: REGISTER
-   options: '-'
-   options2: '-'
-   relation: asdg
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    name: '-'

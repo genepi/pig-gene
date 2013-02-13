@@ -420,8 +420,10 @@ $(document).ready(function() {
 		}
 		
 		$('#inputError').hide('slow');
-		workflow.push(filename);
+		//last element just needed for the ajax request, remove afterwards
+		workflow.push(filename); 
 		var data = JSON.stringify(workflow);
+		workflow.splice(-1,1);
 		
 		$.ajax({
     		type: 'POST',

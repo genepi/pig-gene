@@ -98,6 +98,10 @@ form input[type=text] {
 	padding-left: 9px;
 }
 
+#loadName, #fileName {
+	margin-top: 4px;
+}
+
 #orderBtns {
 	background-color: #FFFFFF;
 	height: 20px;

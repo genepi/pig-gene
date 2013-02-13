@@ -16,12 +16,12 @@
  * @return String - converted JSON to HTML table
  */
 function convertJsonToTable(parsedJson, tableId, tableClassName) {
-    //Pattern for table                          
+    //pattern for table                          
 	var idMarkup = tableId ? ' id="' + tableId + '"' : '';
     var classMarkup = tableClassName ? ' class="' + tableClassName + '"' : '';
     var tbl = '<table' + idMarkup + classMarkup + '>{0}{1}</table>';
 
-    //Patterns for table content
+    //patterns for table content
     var th = '<thead>{0}</thead>';
     var tb = '<tbody>{0}</tbody>';
     var tr = '<tr>{0}</tr>';
@@ -30,97 +30,33 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
     var thCon = '';
     var tbCon = '';
     var trCon = '';
+    
+    //guarantee fixed column order
+    var headers = new Array();
+    headers.push('name');
+    headers.push('relation');
+    headers.push('operation');
+    headers.push('relation2');
+    headers.push('options');
+    headers.push('options2');
 
-    if (parsedJson) {
-        var isStringArray = typeof(parsedJson[0]) == 'string';
-        var headers;
-
-        // Create table header from JSON data
-        if(isStringArray) { // If JSON data is a string array a single table header is created
-            thCon += thRow.format('value');
-        } else { // If JSON data is an object array, headers are computed
-            if(typeof(parsedJson[0]) == 'object') {
-                headers = array_keys(parsedJson[0]);
-                for (i = 0; i < headers.length; i++) {
-                    thCon += thRow.format(headers[i]);
-                }
-            }
-        }
-        th = th.format(tr.format(thCon));
-        
-        // Create table rows from JSON data
-        if(isStringArray) { //JSON data is a string array
-            for (i = 0; i < parsedJson.length; i++) {
-                tbCon += tdRow.format(parsedJson[i]);
-                trCon += tr.format(tbCon);
-                tbCon = '';
-            }
-        } else {
-            if(headers) { //JSON data is an object array
-                for (i = 0; i < parsedJson.length; i++) {
-                    for (j = 0; j < headers.length; j++) {
-                        var value = parsedJson[i][headers[j]];
-                        if(value) {
-                        	if(typeof(value) == 'object') {
-                        		//for supporting nested tables
-                        		tbCon += tdRow.format(ConvertJsonToTable(eval(value.data), value.tableId, value.tableClassName, value.linkText));
-                        	} else {
-                        		tbCon += tdRow.format(value);
-                        	}
-                            
-                        } else {    // If value == null we format it like PhpMyAdmin NULL values
-                            tbCon += tdRow.format(italic.format(value).toUpperCase());
-                        }
-                    }
-                    trCon += tr.format(tbCon);
-                	tbCon = '';
-                }
-            }
-        }
-        tb = tb.format(trCon);
-        tbl = tbl.format(th, tb);
-        return tbl;
+    for (i = 0; i < headers.length; i++) {
+        thCon += thRow.format(headers[i]);
     }
-    return null;
-}
 
-
-/**
- * Return just the keys from the input array, optionally only for the specified search_value
- * version: 1109.2015
- *  discuss at: http://phpjs.org/functions/array_keys
- *  +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
- *  +      input by: Brett Zamir (http://brett-zamir.me)
- *  +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
- *  +   improved by: jd
- *  +   improved by: Brett Zamir (http://brett-zamir.me)
- *  +   input by: P
- *  +   bugfixed by: Brett Zamir (http://brett-zamir.me)
- *  *     example 1: array_keys( {firstname: 'Kevin', surname: 'van Zonneveld'} );
- *  *     returns 1: {0: 'firstname', 1: 'surname'}
- */
-function array_keys(input, search_value, argStrict) {
-    var search = typeof search_value !== 'undefined', tmp_arr = [], strict = !!argStrict, include = true, key = '';
-    if (input && typeof input === 'object' && input.change_key_case) { // Duck-type check for our own array()-created PHPJS_Array
-        return input.keys(search_value, argStrict);
-    }
- 
-    for (key in input) {
-        if (input.hasOwnProperty(key)) {
-            include = true;
-            if (search) {
-                if (strict && input[key] !== search_value) {
-                    include = false;
-                } else if (input[key] != search_value) {
-                    include = false;
-                }
-            } 
-            if (include) {
-                tmp_arr[tmp_arr.length] = key;
-            }
+    for (i = 0; i < parsedJson.length; i++) {
+        for (j = 0; j < headers.length; j++) {
+            var value = parsedJson[i][headers[j]];
+    		tbCon += tdRow.format(value);
         }
+        trCon += tr.format(tbCon);
+    	tbCon = '';
     }
-    return tmp_arr;
+    
+    th = th.format(tr.format(thCon));
+    tb = tb.format(trCon);
+    tbl = tbl.format(th, tb);
+    return tbl;
 }
 
 /**
