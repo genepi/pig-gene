@@ -1,7 +1,7 @@
 - !piggene.serialisation.WorkflowComponent
    name: R1
    operation: LOAD
-   options: '-'
+   options: vcf
    options2: '-'
    relation: input.txt
    relation2: '-'
@@ -15,7 +15,7 @@
 - !piggene.serialisation.WorkflowComponent
    name: R3
    operation: LOAD
-   options: '-'
+   options: vcf
    options2: '-'
    relation: reference.vcf
    relation2: '-'

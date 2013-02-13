@@ -2,6 +2,10 @@ body.well {
 	border: 0px;
 }
 
+.well {
+	min-height: 17px;
+}
+
 form input[type=text] {
 	margin-bottom: 5px;
 }
@@ -109,8 +113,12 @@ form input[type=text] {
 
 #orderBtns {
 	background-color: #FFFFFF;
-	height: 20px;
-	padding: 10px 0px 20px 20px;
+	height: 10px;
+	padding: 13px 0px 20px 20px;
+}
+
+#lineOrdering {
+	display: inline;
 }
 
 #orderUp {
@@ -121,4 +129,8 @@ form input[type=text] {
 #orderDown {
 	width: 17px;
 	padding-left: 0px;
+}
+
+#up, #down {
+	margin-top: -2px;
 }

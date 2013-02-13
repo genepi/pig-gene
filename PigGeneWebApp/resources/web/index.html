@@ -31,13 +31,13 @@
 				<a href="" id="downloadScript" class="btn btn-inverse hide" download="" title="download pig script"><i class="icon-download icon-white"></i> download</a>
 				
 				<form class="input-append hide" id="saveWorkflow">
-					<input id="saveWorkflowName" name="filename" type="text" placeholder="type file name" value="" required>
+					<input id="saveWorkflowName" name="filename" type="text" placeholder="type file name" title="file name" value="" required>
 					<button class="btn btn-primary" id="saveBtn" type="submit" title="click to save your worflow"><i class="icon-folder-open icon-white"></i> save workflow</button>
 				</form>
 			</div>
 			
 			<div class="well hide" id="orderBtns">
-				line ordering: 
+				<h4 id="lineOrdering">LINE</h4>
 				<button class="btn btn-link" id="orderUp"><i id="up" class="icon-arrow-up"></i></button>
 				<button class="btn btn-link" id="orderDown"><i id="down" class="icon-arrow-down"></i></button>
 			</div>
@@ -59,7 +59,7 @@
 				</div>
 		
 				<form class="form-search hide" id="registerDialog">
-					<input class="span2" id="regFileName" name="relation" type="text" placeholder="type jar file name" value="" required><p>
+					<input class="span2" id="regFileName" name="relation" type="text" placeholder="type jar file name" title="jar file name" value="" required><p>
 					<button class="btn" id="registerClear" type="reset">cancel</button>
 					<button class="btn btn-danger hide delete" id="registerDelete" type="reset">delete</button>
 					<button class="btn btn-success hide" id="registerSubmitChange" type="submit">save changes</button>
@@ -79,8 +79,8 @@
 						</div>
 						<br>
 					</div>
-					<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" value="">
-					<input class="span2" id="fileName" name="relation" type="text" placeholder="type file name" value="" required><p>
+					<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" title="new relation name" value="">
+					<input class="span2" id="fileName" name="relation" type="text" placeholder="type file name" title="file name" value="" required><p>
 					<button class="btn" id="loadClear" type="reset">cancel</button>
 					<button class="btn btn-danger hide delete" id="loadDelete" type="reset">delete</button>
 					<button class="btn btn-success hide" id="loadSubmitChange" type="submit">save changes</button>
@@ -88,8 +88,8 @@
 				</form>
 				
 				<form class="form-search hide" id="storeDialog">
-					<input class="span2" id="storeName" name="name" type="text" placeholder="type file name" value="" required>
-					<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" value="" required><p>
+					<input class="span2" id="storeName" name="name" type="text" placeholder="type file name" title="file name" value="" required>
+					<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" title="relation to store" value="" required><p>
 					<button class="btn" id="storeClear" type="reset">cancel</button>
 					<button class="btn btn-danger hide delete" id="storeDelete" type="reset">delete</button>
 					<button class="btn btn-success hide" id="storeSubmitChange" type="submit">save changes</button>
@@ -97,9 +97,9 @@
 				</form>
 				
 				<form class="form-search hide" id="filterDialog">
-					<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" value=""><br/>
-					<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" value="" required>
-					<input class="span2" id="filtOpt" name="options" type="text" placeholder="filter option(s)" value="" required><p>
+					<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" title="new relation name" value=""><br/>
+					<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" title="relation to filter" value="" required>
+					<input class="span2" id="filtOpt" name="options" type="text" placeholder="filter option(s)" title="filter option(s)" value="" required><p>
 					<button class="btn" id="filterClear" type="reset">cancel</button>
 					<button class="btn btn-danger hide delete" id="filterDelete" type="reset">delete</button>
 					<button class="btn btn-success hide" id="filterSubmitChange" type="submit">save changes</button>
@@ -107,11 +107,11 @@
 				</form>
 		
 				<form class="form-search hide" id="joinDialog">
-					<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" value=""><br/>
-					<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" value="" required>
-					<input class="span2" id="joinOpt" name="options" type="text" placeholder="join option(s) rel1" value="" required><br/>
-					<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" value="" required>
-					<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join option(s) rel2" value="" required><p>
+					<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" title="new relation name" value=""><br/>
+					<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" title="relation to join" value="" required>
+					<input class="span2" id="joinOpt" name="options" type="text" placeholder="join option(s) rel1" title="join option(s) rel1" value="" required><br/>
+					<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" title="relation to join with" value="" required>
+					<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join option(s) rel2" title="join option(s) rel2" value="" required><p>
 					<button class="btn" id="joinClear" type="reset">cancel</button>
 					<button class="btn btn-danger hide delete" id="joinDelete" type="reset">delete</button>
 					<button class="btn btn-success hide" id="joinSubmitChange" type="submit">save changes</button>

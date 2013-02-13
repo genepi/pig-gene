@@ -7,6 +7,7 @@ $(document).ready(function() {
 	var nameCounter = 1;
 	var highlightedRowIndex = -1;
 	var downloadPossible = false;
+	var stdContent = $('#tableContainer').html();
 	
 	/**
 	 * Shows an English error-message if form should be submitted 
@@ -81,15 +82,16 @@ $(document).ready(function() {
 	 */
 	$("button[type='reset']").on('click', function() {
 		if($(this).hasClass('delete')) {
+			$('#inputError').hide();
 			workflow.splice(highlightedRowIndex,1);
 			if(workflow.length == 0) {
-				//TODO setzen des neuen contents...
-				var content = '<h2>Workflow</h2>There is no workflow specified at the moment. Please create a new workflow by adding new operations in the panel on the left side or load an existing workflow if you want to modify it.<table id="operationTable"></table>';
-				$('#tableContainer').html('<p>blub</p>');
+				$('#tableContainer').html(stdContent);
+				$('#workflowName').html('Workflow');
 				$('#saveWorkflow').addClass('hide');
+				$('#downloadScript').addClass('hide');
+			} else {
+				showTable();
 			}
-			$('#inputError').hide();
-			showTable();
 		} else {
 			$(this).removeClass('modification');
 		}
