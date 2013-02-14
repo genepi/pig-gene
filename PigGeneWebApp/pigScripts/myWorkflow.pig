@@ -1,15 +1,13 @@
+//this is a dummy workflow that is used for testing purpose while developing the application1
 REGISTER pigGene.jar;
+REGISTER dataFu.jar;
+R1 = LOAD '$input.vcf' USING pigGene.PigGeneStorage();
 
-//my comment
-R1 = LOAD '$input.txt' USING pigGene.PigGeneStorage();
-
-//blub ist super!
+//filter
 R2 = FILTER R1 BY chrom == 12;
-R3 = LOAD '$reference.vcf' USING pigGene.PigGeneStorage();
+R3 = LOAD '$input2.txt' USING PigStorage(' ');
+
+//join
 R4 = JOIN R2 BY (chrom,pos), R3 BY (chrom,pos);
-
-//test
-STORE R4 INTO '$output';
-
-//test it
-REGISTER asdsdg;
+R5 = FILTER R4 BY x==2;
+STORE R5 INTO '$output.txt';

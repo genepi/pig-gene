@@ -27,7 +27,8 @@
 	<div class="span5" id="affixContainer">
 		<div class="span5 affix-top" data-spy="affix" data-offset-top="105" id="operationPanels">
 			<div class="well" id="processElements">
-				<a id="showWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="already existing workflows:"><i class="icon-edit icon-white"></i> load workflow</a>
+				<a id="showWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="already existing workflows"><i class="icon-edit icon-white"></i> load</a>
+				<a id="descriptionBtn" class="btn btn-inverse" title="add workflow description"><i class="icon-plus-sign icon-white"></i> description</a>
 				<a href="" id="downloadScript" class="btn btn-inverse hide" download="" title="download pig script"><i class="icon-download icon-white"></i> download</a>
 				
 				<form class="input-append hide" id="saveWorkflow">
@@ -36,16 +37,25 @@
 				</form>
 			</div>
 			
+			<div class="well hide" id="workflowDescription">
+				<h4 id="descrText">DESCRIPTION</h4>
+				<textarea id="description" placeholder="type your workflow description" title="workflow description"></textarea>
+				<button class="btn" id="workflowDescrClear">cancel</button>
+				<button class="btn btn-success" id="workflowDescrSubmit">add description</button>
+			</div>
+			
 			<div class="well hide" id="lineDetails">
 				<h4 id="lineOrdering">LINE</h4>
 				<button class="btn btn-link" id="orderUp"><i id="up" class="icon-arrow-up"></i></button>
 				<button class="btn btn-link" id="orderDown"><i id="down" class="icon-arrow-down"></i></button><p>
-				<h4 id="comText">COMMENTS</h4>
-				<textarea id="comments" placeholder="type your comment for the selected line" title="comments")></textarea>
+				<h4 id="comText">COMMENT</h4>
+				<textarea id="comments" placeholder="type your comment for the selected line" title="comments"></textarea>
+				<button class="btn" id="lineCommentClear">cancel</button>
+				<button class="btn btn-success" id="lineCommentSubmit">add comment</button>
 			</div>
 		
 			<div class="well" id="formContainer">
-				<h4 id="workflowOps">workflow operations</h4>
+				<h4 id="workflowOps">OPERATIONS</h4>
 				<div class="btn-group" id="stepAction" title="click to select an operation">
 					<a class="btn dropdown-toggle" data-toggle="dropdown" id="action">
 						add operation 

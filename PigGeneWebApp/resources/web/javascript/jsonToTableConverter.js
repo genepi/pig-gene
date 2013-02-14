@@ -24,9 +24,10 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
     //patterns for table content
     var th = '<thead>{0}</thead>';
     var tb = '<tbody>{0}</tbody>';
-    var tr = '<tr>{0}</tr>';
+    var tr = '<tr class="tablerow">{0}</tr>';
     var thRow = '<th>{0}</th>';
     var tdRow = '<td>{0}</td>';
+    var tdRow2 = '<td colspan={0}>{1}</td>';
     var thCon = '';
     var tbCon = '';
     var trCon = '';
@@ -47,7 +48,12 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
     for (i = 0; i < parsedJson.length; i++) {
         for (j = 0; j < headers.length; j++) {
             var value = parsedJson[i][headers[j]];
-    		tbCon += tdRow.format(value);
+//            if (value != 'p0'){
+        		tbCon += tdRow.format(value);
+//            }else{
+//            	tbCon += tdRow2.format(headers.length - j, value);
+//            	j = headers.length;
+//            }
         }
         trCon += tr.format(tbCon);
     	tbCon = '';

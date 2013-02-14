@@ -3,8 +3,8 @@ package piggene.serialisation.scriptcreation;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
+import piggene.serialisation.Workflow;
 import piggene.serialisation.WorkflowComponent;
 
 public class PigScript {
@@ -13,16 +13,21 @@ public class PigScript {
 	private static final char SEMICOLON = ';';
 	private static final String PATH = "pigScripts/";
 
-	public static void generateAndWrite(final ArrayList<WorkflowComponent> workflow, final String name) throws IOException {
+	public static void generateAndWrite(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(insertHeader());
+		if (!workflow.getDescription().equals("")) {
+			sb.append("//");
+			sb.append(workflow.getDescription());
+			sb.append(System.getProperty("line.separator"));
+		}
 
-		for (final WorkflowComponent comp : workflow) {
+		sb.append(insertHeader());
+		for (final WorkflowComponent comp : workflow.getWorkflow()) {
 			sb.append(PigSnippetFactory.getPigScriptSnippet(comp));
 			sb.append(SEMICOLON);
 			sb.append(LINE_SEPARATOR);
 		}
-		PigScript.write(sb.toString(), name);
+		PigScript.write(sb.toString(), workflow.getName());
 	}
 
 	private static String insertHeader() {

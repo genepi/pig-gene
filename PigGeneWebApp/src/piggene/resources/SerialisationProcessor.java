@@ -16,6 +16,7 @@ import org.restlet.resource.ServerResource;
 
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.JSONConverter;
+import piggene.serialisation.Workflow;
 import piggene.serialisation.WorkflowComponent;
 import piggene.serialisation.WorkflowWriter;
 import piggene.serialisation.scriptcreation.PigScript;
@@ -28,12 +29,10 @@ public class SerialisationProcessor extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		ArrayList<WorkflowComponent> workflow;
-		String filename = "filename";
+		Workflow workflow;
 
 		try { // parse the input
 			final JSONArray array = getJsonArray(entity);
-			filename = array.getString(array.length() - 1);
 			workflow = processClientData(array);
 		} catch (final JsonSyntaxException e2) {
 			obj.setSuccess(false);
@@ -46,7 +45,7 @@ public class SerialisationProcessor extends ServerResource {
 		}
 
 		try { // write pig-script
-			PigScript.generateAndWrite(workflow, filename);
+			PigScript.generateAndWrite(workflow);
 		} catch (final IOException e1) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while creating the pig-script.");
@@ -54,8 +53,9 @@ public class SerialisationProcessor extends ServerResource {
 		}
 
 		try { // write yaml-file
-			WorkflowWriter.write(workflow, filename);
+			WorkflowWriter.write(workflow);
 		} catch (final IOException e) {
+			e.printStackTrace();
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while saving the workflow.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
@@ -66,10 +66,12 @@ public class SerialisationProcessor extends ServerResource {
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 
-	private ArrayList<WorkflowComponent> processClientData(final JSONArray array) throws JsonSyntaxException, JSONException {
+	private Workflow processClientData(final JSONArray array) throws JsonSyntaxException, JSONException {
 		ArrayList<WorkflowComponent> workflow = null;
+		final String description = array.getString(array.length() - 2);
+		final String filename = array.getString(array.length() - 1);
 		workflow = JSONConverter.convertJsonArrayIntoWorkflow(array);
-		return workflow;
+		return new Workflow(filename, description, workflow);
 	}
 
 	// TODO: think about the exception handling of this method...

@@ -1,10 +1,6 @@
 package piggene.serialisation;
 
-import java.io.Serializable;
-
-public class WorkflowComponent implements Serializable {
-	private static final long serialVersionUID = -7293718140809017884L;
-
+public class WorkflowComponent {
 	private String name;
 	private String relation;
 	private String operation;
@@ -67,10 +63,6 @@ public class WorkflowComponent implements Serializable {
 
 	public void setComment(final String comment) {
 		this.comment = comment;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	@Override

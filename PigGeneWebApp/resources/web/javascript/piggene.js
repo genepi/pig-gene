@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	var workflow = [];
+	var description = "";
+	
 	var nameCounter = 1;
 	var highlightedRowIndex = -1;
 	var downloadPossible = false;
@@ -83,8 +85,13 @@ $(document).ready(function() {
 			if(workflow.length == 0) {
 				$('#tableContainer').html(stdContent);
 				$('#workflowName').html('Workflow');
+				$('#saveWorkflowName').val('');
 				$('#saveWorkflow').addClass('hide');
 				$('#downloadScript').addClass('hide');
+				$('#workflowDescription').addClass('hide');
+				$('#descriptionBtn').addClass('hide');
+				description = '';
+				$('#description').val(description);
 			} else {
 				showTable();
 			}
@@ -109,7 +116,7 @@ $(document).ready(function() {
 		}	
 		$('#comments').val('');
 		$('#stepAction').removeClass('hide');
-		$('#workflowOps').html('workflow operations');
+		$('#workflowOps').html('OPERATIONS');
 		$('#inputError').hide();
 	});
 	
@@ -279,7 +286,7 @@ $(document).ready(function() {
 		$(deleteBtn).addClass('hide');
 		hideInputDialogs('all');
 		$('#lineDetails').addClass('hide');
-		$('#tableContainer.well').css('min-height','288px');
+		modifyTabContainerHeight();
 	}
 	
 	/**
@@ -307,6 +314,7 @@ $(document).ready(function() {
 	function finalizeSubmit(obj) {
 		$('#inputError').hide();
 		showTable();
+		$('#descriptionBtn').removeClass('hide');
 		$('#downloadScript').removeClass('hide');
 		$('#saveWorkflow').removeClass('hide');
 		$('#stepAction').removeClass('hide');
@@ -333,6 +341,13 @@ $(document).ready(function() {
 		}
 		return content;
 	}
+	
+	$('#tableContainer').on('click', function(e) {
+		var target = $(e.target);
+		if(target != null && target.context != null && target.context.tagName != null && target.context.tagName == 'DIV') {
+			$('#registerClear').trigger('click');
+		}
+	});
 	
 	/**
 	 * Modification-Handling of table row.
@@ -395,7 +410,7 @@ $(document).ready(function() {
 		hideInputDialogs(operation);
 		setCurrentOperation(operation.toUpperCase());
 		$('#lineDetails').removeClass('hide');
-		$('#tableContainer.well').css('min-height','456px');
+		modifyTabContainerHeight();
 	}
 	
 	/**
@@ -460,10 +475,11 @@ $(document).ready(function() {
 			return false;
 		}
 		
-		//last element just needed for the ajax request, remove afterwards
+		//last two elements just needed for the ajax request, remove afterwards
+		workflow.push(description);
 		workflow.push(filename); 
 		var data = JSON.stringify(workflow);
-		workflow.splice(-1,1);
+		workflow.splice(-2,2);
 		
 		$('#inputError').hide('slow');
 		$('#comments').val('');
@@ -527,11 +543,79 @@ $(document).ready(function() {
 		}
 	});
 	
+	$('#descriptionBtn').on('click', function() {
+		if($('#workflowDescription').hasClass('hide')) {
+			$('#workflowDescription').removeClass('hide');
+			$('#description').val(description);
+			modifyTabContainerHeight();
+		} else {
+			$('#workflowDescrClear').trigger('click');
+		}
+	});
+	
+	$('#workflowDescrClear').on('click', function() {
+		$('#description').val(description);
+		descriptionButtonsHandling();
+	});
+	
+	$('#workflowDescrSubmit').on('click', function() {
+		description = $('#description').val();
+		downloadPossible = false;
+		descriptionButtonsHandling();
+	});
+	
+	function descriptionButtonsHandling() {
+		$('#workflowDescription').addClass('hide');
+		modifyTabContainerHeight();
+	}
+	
+	$('#lineCommentClear').on('click', function() {
+		var oldComment = workflow[highlightedRowIndex].comment;
+		if(oldComment == '-') {
+			$('#comments').val('');
+		} else {
+			$('#comments').val(oldComment);
+		}
+	});
+	
+	$('#lineCommentSubmit').on('click', function() {
+		blinkEffectComments();
+		var newValue = $('#comments').val();
+		if(newValue == '') {
+			workflow[highlightedRowIndex].comment = '-';
+		} else {
+			workflow[highlightedRowIndex].comment = newValue;
+		}
+		downloadPossible = false;
+	});
+	
+	function blinkEffectComments() {
+		setTimeout(function() {
+			$('#comments').focus();
+		}, 100);
+		setTimeout(function() {
+			$('#comments').blur();
+		}, 350);
+	}
+
+	function modifyTabContainerHeight() {
+		if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','288px');
+		} else if($('#workflowDescription').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','486px');
+		} else if($('#lineDetails').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','457px');
+		} else {
+			$('#tableContainer.well').css('min-height','656px');
+		}
+	}
+	
 	$('#processElements').on('click', 'a.fileNames', function() {
 		var fileName = $(this).html();
 		loadWorkflow(fileName);
 		$('#saveWorkflowName').val(fileName);
 		$('#showWfBtn').popover('hide').removeClass('pop');
+		$('#description').val(description);
 		$('#comments').val('');
 		$('#lineDetails').addClass('hide');
 		$('#tableContainer.well').css('min-height','288px');
@@ -570,7 +654,8 @@ $(document).ready(function() {
 	}
 	
 	function initializeLoadedWorkflow(data) {
-		workflow = data;
+		description = data.description;
+		workflow = data.workflow;
 		nameCounter = workflow.length;
 		showTable();
 	}

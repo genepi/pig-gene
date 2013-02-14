@@ -1,7 +1,6 @@
 package piggene.resources;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import net.sf.json.JSONObject;
 
@@ -14,7 +13,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import piggene.response.ServerResponseObject;
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.Workflow;
 import piggene.serialisation.WorkflowReader;
 
 public class DeserialisationProcessor extends ServerResource {
@@ -26,7 +25,7 @@ public class DeserialisationProcessor extends ServerResource {
 		try {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
 			final String filename = representant.getJsonObject().getString("filename");
-			final ArrayList<WorkflowComponent> workflow = WorkflowReader.read(filename);
+			final Workflow workflow = WorkflowReader.read(filename);
 			obj.setData(workflow);
 		} catch (final IOException e) {
 			obj.setSuccess(false);

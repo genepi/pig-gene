@@ -36,10 +36,11 @@ form input[type=text] {
 }
 
 #workflowName {
+	display: inline;
 	padding-left: 40px;
 }
 
-#tableContainer {
+#tableContainer, #processElements, #lineDetails, #formContainer, #workflowDescription {
 	background-color: #FFFFFF;
 }
 
@@ -53,26 +54,30 @@ form input[type=text] {
 }
 
 #processElements {
-	background-color: #FFFFFF;
-	height: 67px;
+	height: 66px;
 	margin-bottom: 20px;
 }
 
-#showWfBtn {
-	width: 138px;
-	margin-bottom: 8px;
+#showWfBtn, #descriptionBtn, #downloadScript {
+	padding-left: 8px;
+	padding-right: 10px;
+	margin-left: 0px;
+	margin-bottom: 5px;
   	webkit-border-radius: 4px;
     moz-border-radius: 4px;
     border-radius: 4px;
 }
 
+#showWfBtn {
+	width: 52px;
+}
+
+#descriptionBtn {
+	width: 93px;
+}
+
 #downloadScript {
-	width: 100px;
-	margin-left: 4px;
-	margin-bottom: 8px;
-  	webkit-border-radius: 4px;
-    moz-border-radius: 4px;
-    border-radius: 4px;
+	width: 85px;
 }
 
 #saveWorkflowName {
@@ -84,8 +89,7 @@ form input[type=text] {
 }
 
 #formContainer {
-	background-color: #FFFFFF;
-	height: 174px;
+	height: 175px;
 	padding: 5px 0px 20px 20px;
 }
 
@@ -111,14 +115,22 @@ form input[type=text] {
 	margin-top: 4px;
 }
 
+#workflowDescription {
+	height: 110px;
+}
+
 #lineDetails {
-	background-color: #FFFFFF;
-	height: 114px;
+	height: 144px;
 	padding: 13px 0px 20px 20px;
+}
+
+#lineDetails p {
+	margin-bottom: 5px;
 }
 
 #lineOrdering {
 	display: inline;
+	margin: 10px 0px 0px 0px; 
 }
 
 #orderUp {
@@ -135,12 +147,14 @@ form input[type=text] {
 	margin-top: -2px;
 }
 
-#comText {
+#comText, #descrText {
+	margin-top: 0px;
 	margin-bottom: 2px;
 }
 
-#comments {
+#description, #comments {
 	resize: none;
 	height: 42px;
 	width: 282px;
+	margin-bottom: 5px;
 }
