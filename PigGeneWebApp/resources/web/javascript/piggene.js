@@ -54,6 +54,15 @@ $(document).ready(function() {
 		hideInputDialogs('join');
 	});
 	
+	$('#userScriptLink').on('click', function() {
+		setCurrentOperation('USER SCRIPT');
+		cleanModificationDialogs();
+		$('#scriptDialog').show('slow');
+		$('#scriptDialog').removeClass('hide');
+		hideInputDialogs('script');
+		modifyContainerHeight();
+	});
+	
 	function setCurrentOperation(operation) {
 		$('#stepAction').addClass('hide');
 		$('#workflowOps').html(operation);
@@ -65,6 +74,7 @@ $(document).ready(function() {
 		modifyDialog('store');
 		modifyDialog('filter');
 		modifyDialog('join');
+		modifyDialog('script');
 		$('#inputError').hide();
 		$('#showWfBtn').popover('hide').removeClass('pop');
 	}
@@ -113,7 +123,10 @@ $(document).ready(function() {
 			resetStandardBehavior('filter');
 		} else if (buttonName.indexOf('join') == 0) {
 			resetStandardBehavior('join');
-		}	
+		} else if (buttonName.indexOf('script') == 0) {
+			$('#scriptDialog').addClass('hide');
+			resetStandardBehavior('script');
+		}
 		$('#comments').val('');
 		$('#stepAction').removeClass('hide');
 		$('#workflowOps').html('OPERATIONS');
@@ -191,7 +204,7 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$('#storeDialog').on('submit',function() {
+	$('#storeDialog').on('submit', function() {
 		downloadPossible = false;
 		var values = $('#storeDialog').serializeArray();
 		var oper = 'STORE';
@@ -216,7 +229,7 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$('#filterDialog').on('submit',function() {
+	$('#filterDialog').on('submit', function() {
 		downloadPossible = false;
 		var values = $('#filterDialog').serializeArray();
 		var oper = 'FILTER';
@@ -245,7 +258,7 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$('#joinDialog').on('submit',function() {
+	$('#joinDialog').on('submit', function() {
 		downloadPossible = false;
 		var values = $('#joinDialog').serializeArray();
 		var oper = 'JOIN';
@@ -276,6 +289,25 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	$('#scriptDialog').on('submit', function() {
+		var script = $('#scriptTextarea').val();
+		var oper = 'SCRIPT';
+		var comm = $('#comments').val();
+		if(comm == null || comm == ''){
+			comm = '-';
+		}
+		if($('#scriptSubmitChange').hasClass('modification')) {
+			workflow[highlightedRowIndex] = {name:'script', relation:'-', operation:oper, relation2:'-', options:script, options2:'-', comment:comm};
+			resetStandardBehavior('script');
+		} else {
+			workflow.push({name:'script', relation:'-', operation:oper, relation2:'-', options:script, options2:'-', comment:comm});
+		}
+		finalizeSubmit(this);
+		$('#scriptDialog').addClass('hide');
+		modifyContainerHeight();
+		return false;
+	});
+	
 	/**
 	 * Removes the highlighting from the selected table row and changes the visibility of the
 	 * "standard" submit and the "modification" submit buttons. Also hides all input dialogs.
@@ -288,14 +320,16 @@ $(document).ready(function() {
 		var submitBtn = '#' + operation + 'Submit';
 		var submitChangeBtn = '#' + operation + 'SubmitChange';
 		var deleteBtn = '#' + operation + 'Delete';
+		var dialog = '#' + operation + 'Dialog';
 		
 		$(submitBtn).removeClass('hide');
 		$(submitChangeBtn).removeClass('modification');
 		$(submitChangeBtn).addClass('hide');
 		$(deleteBtn).addClass('hide');
+		$(dialog).addClass('hide');
 		hideInputDialogs('all');
 		$('#lineDetails').addClass('hide');
-		modifyTabContainerHeight();
+		modifyContainerHeight();
 	}
 	
 	/**
@@ -327,7 +361,7 @@ $(document).ready(function() {
 		$('#downloadScript').removeClass('hide');
 		$('#saveWorkflow').removeClass('hide');
 		$('#stepAction').removeClass('hide');
-		$('#workflowOps').html('workflow operations');
+		$('#workflowOps').html('OPERATIONS');
 		$(obj).hide('slow');
 		$(obj).children('input[type=text]').val('');
 		$('#comments').val('');
@@ -363,6 +397,7 @@ $(document).ready(function() {
 	 */
 	$('#tableContainer').on('click', 'tr', function() {
 		removeTableRowLabeling('warning');
+		hideLargeContainers();
 		$(this).addClass('warning');
 		highlightedRowIndex = $(this).index();
 		var data = workflow[highlightedRowIndex];
@@ -396,6 +431,9 @@ $(document).ready(function() {
 			$('#joinRel2').val(data.relation2);
 			$('#joinOpt2').val(data.options2);
 			setModificationBehavior('join');
+		} else if(data.operation=='SCRIPT') {
+			$('#scriptTextarea').val(data.options);
+			setModificationBehavior('script');
 		}
 	});
 	
@@ -403,6 +441,10 @@ $(document).ready(function() {
 		$('#tableContainer tr').each(function(){
 			$(this).removeClass(label);
 		});
+	}
+	
+	function hideLargeContainers() {
+		$('#scriptDialog').addClass('hide');
 	}
 	
 	function setModificationBehavior(operation) {
@@ -416,10 +458,11 @@ $(document).ready(function() {
 		$(submitChangeBtn).removeClass('hide');
 		$(deleteBtn).removeClass('hide');
 		$(dialog).show('slow');
+		$(dialog).removeClass('hide');
 		hideInputDialogs(operation);
 		setCurrentOperation(operation.toUpperCase());
 		$('#lineDetails').removeClass('hide');
-		modifyTabContainerHeight();
+		modifyContainerHeight();
 	}
 	
 	/**
@@ -440,6 +483,9 @@ $(document).ready(function() {
 		}
 		if(elem != 'join') {
 			$('#joinDialog').hide('slow');
+		}
+		if(elem != 'script') {
+			$('#scriptDialog').hide('slow');
 		}
 	}
 	
@@ -591,7 +637,7 @@ $(document).ready(function() {
 		if($('#workflowDescription').hasClass('hide')) {
 			$('#workflowDescription').removeClass('hide');
 			$('#description').val(description);
-			modifyTabContainerHeight();
+			modifyContainerHeight();
 		} else {
 			$('#workflowDescrClear').trigger('click');
 		}
@@ -610,7 +656,7 @@ $(document).ready(function() {
 	
 	function descriptionButtonsHandling() {
 		$('#workflowDescription').addClass('hide');
-		modifyTabContainerHeight();
+		modifyContainerHeight();
 	}
 	
 	$('#lineCommentClear').on('click', function() {
@@ -642,15 +688,34 @@ $(document).ready(function() {
 		}, 350);
 	}
 
-	function modifyTabContainerHeight() {
-		if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide')) {
+	function modifyContainerHeight() {
+		if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
+			//smallest possible illustration
 			$('#tableContainer.well').css('min-height','288px');
+			$('#formContainer.well').css('height','175px');
+		} else if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide')) {
+			//larger because of script dialog window
+			$('#tableContainer.well').css('min-height','396px');
+			$('#formContainer.well').css('height','284px');
+		} else if($('#workflowDescription').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
+			//table container higher because of the lineDetails window
+			$('#tableContainer.well').css('min-height','495px');
+			$('#formContainer.well').css('height','175px');
 		} else if($('#workflowDescription').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','486px');
+			//table container even higher - lineDetails and script dialog window
+			$('#tableContainer.well').css('min-height','604px');
+			$('#formContainer.well').css('height','284px');
+		} else if($('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
+			//table container higher because of the workflowDescription window
+			$('#tableContainer.well').css('min-height','466px');
+			$('#formContainer.well').css('height','175px');
 		} else if($('#lineDetails').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','457px');
+			//table container even higher - workflowDescription and script dialog window
+			$('#tableContainer.well').css('min-height','575px');
+			$('#formContainer.well').css('height','284px');
 		} else {
-			$('#tableContainer.well').css('min-height','656px');
+			//highest - every window open
+			$('#tableContainer.well').css('min-height','673px');
 		}
 	}
 	

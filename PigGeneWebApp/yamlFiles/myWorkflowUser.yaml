@@ -1,5 +1,5 @@
 !piggene.serialisation.Workflow
-name: myWorkflow
+name: myWorkflowUser
 description: this is a dummy workflow that is used for testing purpose while developing the application1
 workflow: 
 - !piggene.serialisation.WorkflowComponent
@@ -25,14 +25,6 @@ workflow:
    options: chrom == 12
    options2: '-'
    relation: R1
-   relation2: '-'
-- !piggene.serialisation.WorkflowComponent
-   name: script
-   comment: '-'
-   operation: SCRIPT
-   options: R2a = FILTER R2 BY pos==5;
-   options2: '-'
-   relation: '-'
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    name: R3

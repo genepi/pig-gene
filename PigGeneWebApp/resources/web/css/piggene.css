@@ -116,11 +116,11 @@ form input[type=text] {
 }
 
 #workflowDescription {
-	height: 110px;
+	height: 119px;
 }
 
 #lineDetails {
-	height: 144px;
+	height: 152px;
 	padding: 13px 0px 20px 20px;
 }
 
@@ -149,12 +149,17 @@ form input[type=text] {
 
 #comText, #descrText {
 	margin-top: 0px;
-	margin-bottom: 2px;
+	margin-bottom: 11px;
 }
 
-#description, #comments {
+#description, #comments, #scriptTextarea {
 	resize: none;
 	height: 42px;
 	width: 282px;
 	margin-bottom: 5px;
+}
+
+#scriptTextarea {
+	height: 200px;
+	white-space: nowrap;
 }

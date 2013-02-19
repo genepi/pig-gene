@@ -5,7 +5,6 @@ R1 = LOAD '$input.vcf' USING pigGene.PigGeneStorage();
 
 //filter
 R2 = FILTER R1 BY chrom == 12;
-R2a = FILTER R2 BY pos==5;
 R3 = LOAD '$input2.txt' USING PigStorage(' ');
 
 //join
@@ -14,5 +13,5 @@ R5 = FILTER R4 BY x==2;
 
 //comment for user script...
 R9 = FILTER R5 BY chrom==1;
-STORE R9 INTO output2.txt;
+STORE R9 INTO output2.txt;;
 STORE R5 INTO '$output.txt';
