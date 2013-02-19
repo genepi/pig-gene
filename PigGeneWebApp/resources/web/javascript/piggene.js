@@ -198,8 +198,9 @@ $(document).ready(function() {
 		var name = values[0].value;
 		var rel = values[1].value;
 		var comm = $('#comments').val();
-		if(name == null || name == '') {
-			name = getArtificialName();
+		if(!inputLongEnough(name) || !inputLongEnough(rel)) {
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			return false;
 		}
 		if(comm == null || comm == ''){
 			comm = '-';
@@ -223,6 +224,10 @@ $(document).ready(function() {
 		var rel = values[1].value;
 		var opt = values[2].value;
 		var comm = $('#comments').val();
+		if(!inputLongEnough(rel) || !inputLongEnough(opt)) {
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			return false;
+		}
 		if(name == null || name == '') {
 			name = getArtificialName();
 		}
@@ -250,6 +255,10 @@ $(document).ready(function() {
 		var rel2 = values[3].value;
 		var opt2 = values[4].value;
 		var comm = $('#comments').val();
+		if(!inputLongEnough(rel1) || !inputLongEnough(opt1) || !inputLongEnough(rel2) || !inputLongEnough(opt2)) {
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			return false;
+		}
 		if(name == null || name == '') {
 			name = getArtificialName();
 		}
@@ -475,6 +484,41 @@ $(document).ready(function() {
 			return false;
 		}
 		
+		var data = '{"filename":"' + filename + '"}';
+		$.ajax({
+    		type: 'POST',
+    	    url: 'http://localhost:8080/ex',
+    	    data: data,
+    	    dataType: 'json',
+    	    success: function(response) {
+    	    	if(response.success) {
+					if(response.data) {
+						showSecurityAlert(filename);
+					} else {
+						saveWorkflow(filename);
+					}
+    	    	} else {
+    	    		$('#errmsg').html(response.message);
+    	    		$('#errorModal').modal('show');
+    	    	}
+    	    },
+    	    error: function (xhr, ajaxOptions, thrownError) {
+    	    	$('#errmsg').html(xhr.responseText);
+	    		$('#errorModal').modal('show');
+    	   }
+    	});
+		return false;
+	});
+	
+	function showSecurityAlert(filename) {
+		$('#saveCheckModal').modal('show');
+		$('#overrideBtn').on('click', function() {
+			$('#saveCheckModal').modal('hide');
+			saveWorkflow(filename);
+		});
+	}
+	
+	function saveWorkflow(filename) {
 		//last two elements just needed for the ajax request, remove afterwards
 		workflow.push(description);
 		workflow.push(filename); 
@@ -510,7 +554,7 @@ $(document).ready(function() {
     	   }
     	});
 		return false;
-	});
+	}
 	
 	/**
 	 * Method handles a user request for already existing workflow definitions. Ajax request returns all

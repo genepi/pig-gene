@@ -167,6 +167,21 @@
     <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">close</a>
   </div>
 </div>
+
+<div class="modal hide fade" id="saveCheckModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>override file?</h3>
+  </div>
+  <div class="modal-body">
+    <p id="saveMsg">Your specified filename corresponds to an already existing file.<br>
+    Do you really want to override it?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
+    <button type="button" class="btn btn-success" id="overrideBtn">yes</a>
+  </div>
+</div>
 <!-- ... modal Dialogs -->
 
 </body>
