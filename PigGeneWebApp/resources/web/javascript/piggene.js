@@ -43,7 +43,7 @@ $(document).ready(function() {
 	});
 	
 	$('#userScriptLink').on('click', function() {
-		setCurrentOperation('USER SCRIPT');
+		setCurrentOperation('USER DEFINED SCRIPT');
 		cleanModificationDialogs();
 		$('#scriptDialog').show('slow');
 		$('#scriptDialog').removeClass('hide');
@@ -235,13 +235,6 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$('#tableContainer').on('click', function(e) {
-		var target = $(e.target);
-		if(target != null && target.context != null && target.context.tagName != null && target.context.tagName == 'DIV') {
-			$('#registerClear').trigger('click');
-		}
-	});
-	
 	$('#saveWorkflow').on('submit',function() {
 		var filename = $('#saveWorkflowName').val();
 		if(!inputLongEnough(filename)) {
@@ -275,6 +268,10 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	$('#newWfBtn').on('click', function(){
+		initializeButtons();
+	});
+	
 	$('#processElements').on('click', 'a.fileNames', function() {
 		var fileName = $(this).html();
 		loadWorkflow(fileName);
@@ -283,7 +280,7 @@ $(document).ready(function() {
 		$('#description').val(description);
 		$('#comments').val('');
 		$('#lineDetails').addClass('hide');
-		$('#tableContainer.well').css('min-height','288px');
+//		$('#tableContainer.well').css('min-height','288px');
 	});
 	
 	function loadWorkflow(filename) {
@@ -313,9 +310,18 @@ $(document).ready(function() {
     	   }
     	});
 
-		$('#downloadScript').removeClass('hide');
-		$('#saveWorkflow').removeClass('hide');
+		initializeButtons();
 		return false;
+	}
+	
+	function initializeButtons() {
+		$('#downloadScript').removeClass('hide');
+		$('#saveWfBtn').removeClass('hide');
+		$('#descriptionBtn').removeClass('hide');
+		$('#workflowContainer').removeClass('span12').addClass('span10');
+		$('#formContainer').removeClass('hide');
+		$('#saveState').addClass('saved');
+		toggleSaveStateVisualisation();
 	}
 	
 	function saveWorkflow(filename) {
@@ -337,11 +343,13 @@ $(document).ready(function() {
     	    	if(response.success) {
     	    		resetStandardBehavior($('#workflowOps').html().toLowerCase());
     	    		$('#stepAction').removeClass('hide');
-    	    		$('#workflowOps').html('workflow operations');
+    	    		$('#workflowOps').html('OPERATIONS');
     	    		$('#workflowName').html(filename);
     	    		$('#modalHeaderContent').html('<h3>Saving...</h3>');
     	    		$('#msg').html('Your workflow was saved successfully!');
 					$('#successModal').modal('show');
+					$('#saveState').addClass('saved');
+					toggleSaveStateVisualisation();
 					downloadPossible = true;
     	    	} else {
     	    		$('#errmsg').html(response.message);
@@ -362,6 +370,8 @@ $(document).ready(function() {
 	$("button[type='reset']").on('click', function() {
 		if($(this).hasClass('delete')) {
 			$('#inputError').hide();
+			$('#saveState').removeClass('saved');
+			toggleSaveStateVisualisation();
 			workflow.splice(highlightedRowIndex,1);
 			if(workflow.length == 0) {
 				$('#tableContainer').html(stdContent);
@@ -371,6 +381,8 @@ $(document).ready(function() {
 				$('#downloadScript').addClass('hide');
 				$('#workflowDescription').addClass('hide');
 				$('#descriptionBtn').addClass('hide');
+				$('#workflowContainer').removeClass('span10').addClass('span12');
+				$('#formContainer').addClass('hide');
 				description = '';
 				$('#description').val(description);
 			} else {
@@ -439,7 +451,7 @@ $(document).ready(function() {
 		if($('#workflowDescription').hasClass('hide')) {
 			$('#workflowDescription').removeClass('hide');
 			$('#description').val(description);
-			modifyContainerHeight();
+			$('#descriptionIcon').removeClass('icon-plus-sign').addClass('icon-minus-sign');
 		} else {
 			$('#workflowDescrClear').trigger('click');
 		}
@@ -473,6 +485,13 @@ $(document).ready(function() {
 			$('#comments').val('');
 		} else {
 			$('#comments').val(oldComment);
+		}
+	});
+	
+	$('#tableContainer').on('click', function(e) {
+		var target = $(e.target);
+		if(target != null && target.context != null && target.context.tagName != null && target.context.tagName == 'DIV') {
+			$('#registerClear').trigger('click');
 		}
 	});
 	
@@ -518,6 +537,7 @@ $(document).ready(function() {
 		} else if(data.operation=='SCRIPT') {
 			$('#scriptTextarea').val(data.options);
 			setModificationBehavior('script');
+			setCurrentOperation('USER DEFINED SCRIPT');
 		}
 	});
 	
@@ -580,29 +600,17 @@ $(document).ready(function() {
 	}
 
 	function modifyContainerHeight() {
-		if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','288px');
+		if($('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
+			$('#workflowContainer.well').css('min-height','193px');
 			$('#formContainer.well').css('height','175px');
-		} else if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','396px');
-			$('#formContainer.well').css('height','284px');
-		} else if($('#workflowDescription').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','495px');
-			$('#formContainer.well').css('height','175px');
-		} else if($('#workflowDescription').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','604px');
-			$('#formContainer.well').css('height','284px');
-		} else if($('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','466px');
+		} else if($('#scriptDialog').hasClass('hide')) {
+			$('#workflowContainer.well').css('min-height','401px');
 			$('#formContainer.well').css('height','175px');
 		} else if($('#lineDetails').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','575px');
+			$('#workflowContainer.well').css('min-height','302px');
 			$('#formContainer.well').css('height','284px');
-		} else if($('#scriptDialog').hasClass('hide')) {
-			$('#tableContainer.well').css('min-height','673px');
-			$('#formContainer.well').css('height','175px');
 		} else {
-			$('#tableContainer.well').css('min-height','783px');
+			$('#workflowContainer.well').css('min-height','510px');
 			$('#formContainer.well').css('height','284px');
 		}
 	}
@@ -618,14 +626,9 @@ $(document).ready(function() {
 		$('#showWfBtn').popover('hide').removeClass('pop');
 	}
 
-	function setCurrentOperation(operation) {
-		$('#stepAction').addClass('hide');
-		$('#workflowOps').html(operation);
-	}
-
 	function descriptionButtonsHandling() {
 		$('#workflowDescription').addClass('hide');
-		modifyContainerHeight();
+		$('#descriptionIcon').removeClass('icon-minus-sign').addClass('icon-plus-sign');
 	}
 
 	function removeTableRowLabeling(label) {
@@ -694,7 +697,7 @@ $(document).ready(function() {
 		$('#lineDetails').removeClass('hide');
 		modifyContainerHeight();
 	}
-
+	
 	/**
 	 * Removes the highlighting from the selected table row and changes the visibility of the
 	 * "standard" submit and the "modification" submit buttons. Also hides all input dialogs.
@@ -717,6 +720,19 @@ $(document).ready(function() {
 		hideInputDialogs('all');
 		$('#lineDetails').addClass('hide');
 		modifyContainerHeight();
+	}
+	
+	function setCurrentOperation(operation) {
+		$('#stepAction').addClass('hide');
+		$('#workflowOps').html(operation);
+	}
+	
+	function toggleSaveStateVisualisation() {
+		if($('#saveState').hasClass('saved')) {
+			$('#saveState').html('');
+		} else {
+			$('#saveState').html(' *');
+		}
 	}
 
 	/**
@@ -782,6 +798,8 @@ $(document).ready(function() {
 		$('#workflowOps').html('OPERATIONS');
 		$(obj).hide('slow');
 		$(obj).children('input[type=text]').val('');
+		$('#saveState').removeClass('saved');
+		toggleSaveStateVisualisation();
 		$('#comments').val('');
 	}
     

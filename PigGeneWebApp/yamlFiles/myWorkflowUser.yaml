@@ -43,7 +43,7 @@ workflow:
    relation: R2
    relation2: R3
 - !piggene.serialisation.WorkflowComponent
-   name: R5
+   name: R3
    comment: '-'
    operation: FILTER
    options: x==2

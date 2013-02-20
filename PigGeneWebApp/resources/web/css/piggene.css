@@ -14,8 +14,12 @@ form input[type=text] {
 	top: 20px;
 }
 
+.span12 {
+	width: 1200px;
+}
+
 .span10 {
-	width: 800px;
+	width: 840px;
 }
 
 .span5 {
@@ -30,22 +34,48 @@ form input[type=text] {
 	font-size: 11pt;
 }
 
+#logoContainer.well {
+	margin-top: 10px;
+	margin-right: 10px;
+	padding: 3px 2px 3px 10px;
+	height: 40px;
+	width: 200px;
+	float: right;
+}
+
+#pigIcon {
+	margin-top: -10px;
+}
+
+#saveState {
+	display: inline;
+}
+
 #title {
-	padding-left: 0px;
-	margin-bottom: 10px;
+	padding: 0px 19px 0 19px;
+	margin-bottom: 5px;
+}
+
+#tableContainer {
+	padding: 0px 19px 0px 19px;
 }
 
 #workflowName {
 	display: inline;
-	padding-left: 40px;
 }
 
-#tableContainer, #processElements, #lineDetails, #formContainer, #workflowDescription {
+#actionBtns {
+	padding: 19px;
+	margin-left: 0px;
+}
+
+#workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDescription {
 	background-color: #FFFFFF;
 }
 
-#tableContainer.well {
-	min-height: 288px;
+#workflowContainer.well {
+	padding: 5px 0px 0px 0px;
+	min-height: 193px;
 }
 
 #operationPanels {
@@ -54,11 +84,12 @@ form input[type=text] {
 }
 
 #processElements {
-	height: 66px;
+	height: 68px;
 	margin-bottom: 20px;
+	padding: 0px;
 }
 
-#showWfBtn, #descriptionBtn, #downloadScript {
+#newWfBtn, #showWfBtn, #saveWfBtn, #deleteWfBtn, #downloadScript {
 	padding-left: 8px;
 	padding-right: 10px;
 	margin-left: 0px;
@@ -68,12 +99,18 @@ form input[type=text] {
     border-radius: 4px;
 }
 
-#showWfBtn {
-	width: 52px;
+#descriptionBtn {
+	padding: 0px 2px 0px 0px;
+	width: 10px;
+	margin-top: -7px;
 }
 
-#descriptionBtn {
-	width: 93px;
+#projectName {
+	display: inline;
+}
+
+#showWfBtn {
+	width: 52px;
 }
 
 #downloadScript {
@@ -90,7 +127,7 @@ form input[type=text] {
 
 #formContainer {
 	height: 175px;
-	padding: 5px 0px 20px 20px;
+	padding: 5px 0px 19px 19px;
 }
 
 #workflowOps {
@@ -157,6 +194,10 @@ form input[type=text] {
 	height: 42px;
 	width: 282px;
 	margin-bottom: 5px;
+}
+
+#description {
+	width: 747px;
 }
 
 #scriptTextarea {
