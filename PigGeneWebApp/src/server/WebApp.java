@@ -23,7 +23,7 @@ public class WebApp extends Application {
 	@Override
 	public synchronized Restlet createRoot() {
 
-		// Create a router Restlet that routes each call to a
+		// Create a router Restlet that routes each call
 		final Router router = new Router(getContext());
 		final String target = "riap://host/index.html";
 		final Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_SERVER_OUTBOUND);
@@ -31,7 +31,6 @@ public class WebApp extends Application {
 		route.setMatchingMode(Template.MODE_EQUALS);
 
 		// routes
-		// router.attach("/jobs", GetJobs.class);
 		router.attach("/ser", SerialisationProcessor.class);
 		router.attach("/ld", DeserialisationProcessor.class);
 		router.attach("/wf", WorkflowPresenter.class);
@@ -47,4 +46,5 @@ public class WebApp extends Application {
 
 		return router;
 	}
+
 }

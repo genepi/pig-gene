@@ -7,18 +7,6 @@ $(document).ready(function() {
 	var downloadPossible = false;
 	var stdContent = $('#tableContainer').html();
 	
-	/**
-	 * Shows an English error-message if form should be submitted 
-	 * without specifying all required fields.
-	 */
-    $('input[type=text]').on('change invalid', function() {
-        var textfield = $(this).get(0);
-        textfield.setCustomValidity('');
-        if (!textfield.validity.valid) {
-          textfield.setCustomValidity('this field cannot be left blank');  
-        }
-    });
-	
     $('#registerLink').on('click', function() {
     	setCurrentOperation('REGISTER');
 		cleanModificationDialogs();
@@ -63,80 +51,17 @@ $(document).ready(function() {
 		modifyContainerHeight();
 	});
 	
-	function setCurrentOperation(operation) {
-		$('#stepAction').addClass('hide');
-		$('#workflowOps').html(operation);
-	}
-	
-	function cleanModificationDialogs() {
-		modifyDialog('register');
-		modifyDialog('load');
-		modifyDialog('store');
-		modifyDialog('filter');
-		modifyDialog('join');
-		modifyDialog('script');
-		$('#inputError').hide();
-		$('#showWfBtn').popover('hide').removeClass('pop');
-	}
-	
-	function modifyDialog(operation) {
-		var obj = '#' + operation + 'Dialog';
-		resetStandardBehavior(operation);
-		$(obj).children('input[type=text]').val('');
-	}
-	
 	/**
-	 * Cancellation-Handling of input forms.
+	 * Shows an English error-message if form should be submitted 
+	 * without specifying all required fields.
 	 */
-	$("button[type='reset']").on('click', function() {
-		if($(this).hasClass('delete')) {
-			$('#inputError').hide();
-			workflow.splice(highlightedRowIndex,1);
-			if(workflow.length == 0) {
-				$('#tableContainer').html(stdContent);
-				$('#workflowName').html('Workflow');
-				$('#saveWorkflowName').val('');
-				$('#saveWorkflow').addClass('hide');
-				$('#downloadScript').addClass('hide');
-				$('#workflowDescription').addClass('hide');
-				$('#descriptionBtn').addClass('hide');
-				description = '';
-				$('#description').val(description);
-			} else {
-				showTable();
-			}
-		} else {
-			$(this).removeClass('modification');
-		}
-		
-		var buttonName = $(this).attr('id');
-		if(buttonName.indexOf('register') == 0) {
-			resetStandardBehavior('register');
-		} else if(buttonName.indexOf('load') == 0) {
-			resetStandardBehavior('load');
-			$('#loadFiletypeSeparator.btn-group').css('display','none');
-			$('#loadVcf').addClass('active');
-			$('#loadTxt').removeClass('active');
-		} else if (buttonName.indexOf('store') == 0) {
-			resetStandardBehavior('store');
-		} else if (buttonName.indexOf('filter') == 0) {
-			resetStandardBehavior('filter');
-		} else if (buttonName.indexOf('join') == 0) {
-			resetStandardBehavior('join');
-		} else if (buttonName.indexOf('script') == 0) {
-			$('#scriptDialog').addClass('hide');
-			resetStandardBehavior('script');
-		}
-		$('#comments').val('');
-		$('#stepAction').removeClass('hide');
-		$('#workflowOps').html('OPERATIONS');
-		$('#inputError').hide();
-	});
-	
-	function showInputErrorMsg(errText) {
-		$('#inputErrMsg').html(errText);
-		$('#inputError').show('slow');
-	}
+    $('input[type=text]').on('change invalid', function() {
+        var textfield = $(this).get(0);
+        textfield.setCustomValidity('');
+        if (!textfield.validity.valid) {
+          textfield.setCustomValidity('this field cannot be left blank');  
+        }
+    });
 	
 	$('#registerDialog').on('submit', function() {
 		downloadPossible = false;
@@ -290,6 +215,7 @@ $(document).ready(function() {
 	});
 	
 	$('#scriptDialog').on('submit', function() {
+		downloadPossible = false;
 		var script = $('#scriptTextarea').val();
 		var oper = 'SCRIPT';
 		var comm = $('#comments').val();
@@ -304,91 +230,249 @@ $(document).ready(function() {
 		}
 		finalizeSubmit(this);
 		$('#scriptDialog').addClass('hide');
+		$('#scriptTextarea').val('');
 		modifyContainerHeight();
 		return false;
 	});
-	
-	/**
-	 * Removes the highlighting from the selected table row and changes the visibility of the
-	 * "standard" submit and the "modification" submit buttons. Also hides all input dialogs.
-	 */
-	function resetStandardBehavior(operation) {
-		if(~highlightedRowIndex) {
-			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').removeClass('warning');
-		}
-		
-		var submitBtn = '#' + operation + 'Submit';
-		var submitChangeBtn = '#' + operation + 'SubmitChange';
-		var deleteBtn = '#' + operation + 'Delete';
-		var dialog = '#' + operation + 'Dialog';
-		
-		$(submitBtn).removeClass('hide');
-		$(submitChangeBtn).removeClass('modification');
-		$(submitChangeBtn).addClass('hide');
-		$(deleteBtn).addClass('hide');
-		$(dialog).addClass('hide');
-		hideInputDialogs('all');
-		$('#lineDetails').addClass('hide');
-		modifyContainerHeight();
-	}
-	
-	/**
-	 * Returns a relation-name if the user has not specified one.
-	 */
-	function getArtificialName() {
-		return 'R' + nameCounter++;
-	}
-	
-	/**
-	 * Checks if the input is longer than 1 character.
-	 */
-	function inputLongEnough(input) {
-		if(input.length < 2) {
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * Method is called to perform a cleanup after the submit action has taken place.
-	 * Hides the input error dialog and the input form, reloads the workflow table and 
-	 * clears the input fields. Displays the save form.
-	 */
-	function finalizeSubmit(obj) {
-		$('#inputError').hide();
-		showTable();
-		$('#descriptionBtn').removeClass('hide');
-		$('#downloadScript').removeClass('hide');
-		$('#saveWorkflow').removeClass('hide');
-		$('#stepAction').removeClass('hide');
-		$('#workflowOps').html('OPERATIONS');
-		$(obj).hide('slow');
-		$(obj).children('input[type=text]').val('');
-		$('#comments').val('');
-	}
-	
-	/**
-	 * Calls a helper function to convert the workflow-object into a html table and displays the result.
-	 */
-	function showTable() {
-		var tab = convertJsonToTable(workflow, 'operationTable', 'table table-striped table-hover');
-		$('#tableContainer').html(tab);
-	}
-	
-	function convertFilenamesToLinks(data) {
-		var toRemove = '.yaml';
-		var content = '';
-		for(var i=0; i<data.length; i++) {
-			var name = data[i].replace(toRemove,'');
-			content += '<a class="fileNames">'+name+'</a><br>'
-		}
-		return content;
-	}
 	
 	$('#tableContainer').on('click', function(e) {
 		var target = $(e.target);
 		if(target != null && target.context != null && target.context.tagName != null && target.context.tagName == 'DIV') {
 			$('#registerClear').trigger('click');
+		}
+	});
+	
+	$('#saveWorkflow').on('submit',function() {
+		var filename = $('#saveWorkflowName').val();
+		if(!inputLongEnough(filename)) {
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			return false;
+		}
+		
+		var data = '{"filename":"' + filename + '"}';
+		$.ajax({
+    		type: 'POST',
+    	    url: 'http://localhost:8080/ex',
+    	    data: data,
+    	    dataType: 'json',
+    	    success: function(response) {
+    	    	if(response.success) {
+					if(response.data) {
+						showSecurityAlert(filename);
+					} else {
+						saveWorkflow(filename);
+					}
+    	    	} else {
+    	    		$('#errmsg').html(response.message);
+    	    		$('#errorModal').modal('show');
+    	    	}
+    	    },
+    	    error: function (xhr, ajaxOptions, thrownError) {
+    	    	$('#errmsg').html(xhr.responseText);
+	    		$('#errorModal').modal('show');
+    	   }
+    	});
+		return false;
+	});
+	
+	$('#processElements').on('click', 'a.fileNames', function() {
+		var fileName = $(this).html();
+		loadWorkflow(fileName);
+		$('#saveWorkflowName').val(fileName);
+		$('#showWfBtn').popover('hide').removeClass('pop');
+		$('#description').val(description);
+		$('#comments').val('');
+		$('#lineDetails').addClass('hide');
+		$('#tableContainer.well').css('min-height','288px');
+	});
+	
+	function loadWorkflow(filename) {
+		var data = '{"filename":"' + filename + '"}';
+		
+		$.ajax({
+    		type: 'POST',
+    	    url: 'http://localhost:8080/ld',
+    	    data: data,
+    	    dataType:'json',
+    	    success: function(response) {
+    	    	if(response.success) {
+    	    		initializeLoadedWorkflow(response.data);
+    	    		$('#workflowName').html(filename);
+    	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
+    	    		$('#msg').html('Your workflow was loaded successfully!');
+					$('#successModal').modal('show');
+					downloadPossible = true;
+    	    	} else {
+    	    		$('#errmsg').html(response.message);
+    	    		$('#errorModal').modal('show');
+    	    	}
+    	    },
+    	    error: function (xhr, ajaxOptions, thrownError) {
+    	    	$('#errmsg').html(xhr.responseText);
+	    		$('#errorModal').modal('show');
+    	   }
+    	});
+
+		$('#downloadScript').removeClass('hide');
+		$('#saveWorkflow').removeClass('hide');
+		return false;
+	}
+	
+	function saveWorkflow(filename) {
+		//last two elements just needed for the ajax request, remove afterwards
+		workflow.push(description);
+		workflow.push(filename); 
+		var data = JSON.stringify(workflow);
+		workflow.splice(-2,2);
+		
+		$('#inputError').hide('slow');
+		$('#comments').val('');
+		
+		$.ajax({
+    		type: 'POST',
+    	    url: 'http://localhost:8080/ser',
+    	    data: data,
+    	    dataType: 'json',
+    	    success: function(response) {
+    	    	if(response.success) {
+    	    		resetStandardBehavior($('#workflowOps').html().toLowerCase());
+    	    		$('#stepAction').removeClass('hide');
+    	    		$('#workflowOps').html('workflow operations');
+    	    		$('#workflowName').html(filename);
+    	    		$('#modalHeaderContent').html('<h3>Saving...</h3>');
+    	    		$('#msg').html('Your workflow was saved successfully!');
+					$('#successModal').modal('show');
+					downloadPossible = true;
+    	    	} else {
+    	    		$('#errmsg').html(response.message);
+    	    		$('#errorModal').modal('show');
+    	    	}
+    	    },
+    	    error: function (xhr, ajaxOptions, thrownError) {
+    	    	$('#errmsg').html(xhr.responseText);
+	    		$('#errorModal').modal('show');
+    	   }
+    	});
+		return false;
+	}
+	
+	/**
+	 * Cancellation-Handling of input forms.
+	 */
+	$("button[type='reset']").on('click', function() {
+		if($(this).hasClass('delete')) {
+			$('#inputError').hide();
+			workflow.splice(highlightedRowIndex,1);
+			if(workflow.length == 0) {
+				$('#tableContainer').html(stdContent);
+				$('#workflowName').html('Workflow');
+				$('#saveWorkflowName').val('');
+				$('#saveWorkflow').addClass('hide');
+				$('#downloadScript').addClass('hide');
+				$('#workflowDescription').addClass('hide');
+				$('#descriptionBtn').addClass('hide');
+				description = '';
+				$('#description').val(description);
+			} else {
+				showTable();
+			}
+		} else {
+			$(this).removeClass('modification');
+		}
+		
+		var buttonName = $(this).attr('id');
+		if(buttonName.indexOf('register') == 0) {
+			resetStandardBehavior('register');
+		} else if(buttonName.indexOf('load') == 0) {
+			resetStandardBehavior('load');
+			$('#loadFiletypeSeparator.btn-group').css('display','none');
+			$('#loadVcf').addClass('active');
+			$('#loadTxt').removeClass('active');
+		} else if (buttonName.indexOf('store') == 0) {
+			resetStandardBehavior('store');
+		} else if (buttonName.indexOf('filter') == 0) {
+			resetStandardBehavior('filter');
+		} else if (buttonName.indexOf('join') == 0) {
+			resetStandardBehavior('join');
+		} else if (buttonName.indexOf('script') == 0) {
+			$('#scriptDialog').addClass('hide');
+			resetStandardBehavior('script');
+		}
+		$('#comments').val('');
+		$('#stepAction').removeClass('hide');
+		$('#workflowOps').html('OPERATIONS');
+		$('#inputError').hide();
+	});
+	
+	/**
+	 * Method handles a user request for already existing workflow definitions. Ajax request returns all
+	 * existing workflow names. These names get converted into links and are shown in a popover. The user
+	 * can select one of the links to avoid typing it manually.
+	 */
+	$('#showWfBtn').popover({ trigger: 'manual', html: true, placement: 'bottom', }).click(function() {
+		if($(this).hasClass('pop')) {
+			$(this).popover('hide').removeClass('pop');
+		} else {
+			$.ajax({
+	    		type: 'POST',
+	    	    url: 'http://localhost:8080/wf',
+	    	    data: null,
+	    	    dataType:'json',
+	    	    success: function(response) {
+	    	    	if(response.success) {
+	    	    		var popContent = convertFilenamesToLinks(response.data);
+	    	    		$('#showWfBtn').attr('data-content', popContent).popover('show').addClass('pop');
+	    	    	} else {
+	    	    		$('#errmsg').html(response.message);
+	    	    		$('#errorModal').modal('show');
+	    	    	}
+	    	    },
+	    	    error: function (xhr, ajaxOptions, thrownError) {
+	    	    	$('#errmsg').html(xhr.responseText);
+		    		$('#errorModal').modal('show');
+	    	   }
+	    	});
+		}
+	});
+	
+	$('#descriptionBtn').on('click', function() {
+		if($('#workflowDescription').hasClass('hide')) {
+			$('#workflowDescription').removeClass('hide');
+			$('#description').val(description);
+			modifyContainerHeight();
+		} else {
+			$('#workflowDescrClear').trigger('click');
+		}
+	});
+	
+	$('#workflowDescrSubmit').on('click', function() {
+		description = $('#description').val();
+		downloadPossible = false;
+		descriptionButtonsHandling();
+	});
+
+	$('#workflowDescrClear').on('click', function() {
+		$('#description').val(description);
+		descriptionButtonsHandling();
+	});
+	
+	$('#lineCommentSubmit').on('click', function() {
+		blinkEffectComments();
+		var newValue = $('#comments').val();
+		if(newValue == '') {
+			workflow[highlightedRowIndex].comment = '-';
+		} else {
+			workflow[highlightedRowIndex].comment = newValue;
+		}
+		downloadPossible = false;
+	});
+	
+	$('#lineCommentClear').on('click', function() {
+		var oldComment = workflow[highlightedRowIndex].comment;
+		if(oldComment == '-') {
+			$('#comments').val('');
+		} else {
+			$('#comments').val(oldComment);
 		}
 	});
 	
@@ -437,58 +521,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	function removeTableRowLabeling(label) {
-		$('#tableContainer tr').each(function(){
-			$(this).removeClass(label);
-		});
-	}
-	
-	function hideLargeContainers() {
-		$('#scriptDialog').addClass('hide');
-	}
-	
-	function setModificationBehavior(operation) {
-		var submitBtn = '#' + operation + 'Submit';
-		var submitChangeBtn = '#' + operation + 'SubmitChange';
-		var deleteBtn = '#' + operation + 'Delete';
-		var dialog = '#' + operation + 'Dialog';
-		
-		$(submitBtn).addClass('hide');
-		$(submitChangeBtn).addClass('modification');
-		$(submitChangeBtn).removeClass('hide');
-		$(deleteBtn).removeClass('hide');
-		$(dialog).show('slow');
-		$(dialog).removeClass('hide');
-		hideInputDialogs(operation);
-		setCurrentOperation(operation.toUpperCase());
-		$('#lineDetails').removeClass('hide');
-		modifyContainerHeight();
-	}
-	
-	/**
-	 * Hides all input-dialog-forms except the form given to the function.
-	 */
-	function hideInputDialogs(elem) {
-		if(elem != 'register') {
-			$('#registerDialog').hide('slow');
-		}
-		if(elem != 'load') {
-			$('#loadDialog').hide('slow');
-		}
-		if(elem != 'store') {
-			$('#storeDialog').hide('slow');
-		}
-		if(elem != 'filter') {
-			$('#filterDialog').hide('slow');
-		}
-		if(elem != 'join') {
-			$('#joinDialog').hide('slow');
-		}
-		if(elem != 'script') {
-			$('#scriptDialog').hide('slow');
-		}
-	}
-	
 	$('#orderUp').hover(function() {
 		$('#up').toggleClass('icon-white');
 	});
@@ -523,252 +555,6 @@ $(document).ready(function() {
 		
 	});
 	
-	$('#saveWorkflow').on('submit',function() {
-		var filename = $('#saveWorkflowName').val();
-		if(!inputLongEnough(filename)) {
-			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
-			return false;
-		}
-		
-		var data = '{"filename":"' + filename + '"}';
-		$.ajax({
-    		type: 'POST',
-    	    url: 'http://localhost:8080/ex',
-    	    data: data,
-    	    dataType: 'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-					if(response.data) {
-						showSecurityAlert(filename);
-					} else {
-						saveWorkflow(filename);
-					}
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-		return false;
-	});
-	
-	function showSecurityAlert(filename) {
-		$('#saveCheckModal').modal('show');
-		$('#overrideBtn').on('click', function() {
-			$('#saveCheckModal').modal('hide');
-			saveWorkflow(filename);
-		});
-	}
-	
-	function saveWorkflow(filename) {
-		//last two elements just needed for the ajax request, remove afterwards
-		workflow.push(description);
-		workflow.push(filename); 
-		var data = JSON.stringify(workflow);
-		workflow.splice(-2,2);
-		
-		$('#inputError').hide('slow');
-		$('#comments').val('');
-		
-		$.ajax({
-    		type: 'POST',
-    	    url: 'http://localhost:8080/ser',
-    	    data: data,
-    	    dataType: 'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-    	    		resetStandardBehavior($('#workflowOps').html().toLowerCase());
-    	    		$('#stepAction').removeClass('hide');
-    	    		$('#workflowOps').html('workflow operations');
-    	    		$('#workflowName').html(filename);
-    	    		$('#modalHeaderContent').html('<h3>Saving...</h3>');
-    	    		$('#msg').html('Your workflow was saved successfully!');
-					$('#successModal').modal('show');
-					downloadPossible = true;
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-		return false;
-	}
-	
-	/**
-	 * Method handles a user request for already existing workflow definitions. Ajax request returns all
-	 * existing workflow names. These names get converted into links and are shown in a popover. The user
-	 * can select one of the links to avoid typing it manually.
-	 */
-	$('#showWfBtn').popover({ trigger: 'manual', html: true, placement: 'bottom', }).click(function() {
-		if($(this).hasClass('pop')) {
-			$(this).popover('hide').removeClass('pop');
-		} else {
-			$.ajax({
-	    		type: 'POST',
-	    	    url: 'http://localhost:8080/wf',
-	    	    data: null,
-	    	    dataType:'json',
-	    	    success: function(response) {
-	    	    	if(response.success) {
-	    	    		var popContent = convertFilenamesToLinks(response.data);
-	    	    		$('#showWfBtn').attr('data-content', popContent).popover('show').addClass('pop');
-	    	    	} else {
-	    	    		$('#errmsg').html(response.message);
-	    	    		$('#errorModal').modal('show');
-	    	    	}
-	    	    },
-	    	    error: function (xhr, ajaxOptions, thrownError) {
-	    	    	$('#errmsg').html(xhr.responseText);
-		    		$('#errorModal').modal('show');
-	    	   }
-	    	});
-		}
-	});
-	
-	$('#descriptionBtn').on('click', function() {
-		if($('#workflowDescription').hasClass('hide')) {
-			$('#workflowDescription').removeClass('hide');
-			$('#description').val(description);
-			modifyContainerHeight();
-		} else {
-			$('#workflowDescrClear').trigger('click');
-		}
-	});
-	
-	$('#workflowDescrClear').on('click', function() {
-		$('#description').val(description);
-		descriptionButtonsHandling();
-	});
-	
-	$('#workflowDescrSubmit').on('click', function() {
-		description = $('#description').val();
-		downloadPossible = false;
-		descriptionButtonsHandling();
-	});
-	
-	function descriptionButtonsHandling() {
-		$('#workflowDescription').addClass('hide');
-		modifyContainerHeight();
-	}
-	
-	$('#lineCommentClear').on('click', function() {
-		var oldComment = workflow[highlightedRowIndex].comment;
-		if(oldComment == '-') {
-			$('#comments').val('');
-		} else {
-			$('#comments').val(oldComment);
-		}
-	});
-	
-	$('#lineCommentSubmit').on('click', function() {
-		blinkEffectComments();
-		var newValue = $('#comments').val();
-		if(newValue == '') {
-			workflow[highlightedRowIndex].comment = '-';
-		} else {
-			workflow[highlightedRowIndex].comment = newValue;
-		}
-		downloadPossible = false;
-	});
-	
-	function blinkEffectComments() {
-		setTimeout(function() {
-			$('#comments').focus();
-		}, 100);
-		setTimeout(function() {
-			$('#comments').blur();
-		}, 350);
-	}
-
-	function modifyContainerHeight() {
-		if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
-			//smallest possible illustration
-			$('#tableContainer.well').css('min-height','288px');
-			$('#formContainer.well').css('height','175px');
-		} else if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide')) {
-			//larger because of script dialog window
-			$('#tableContainer.well').css('min-height','396px');
-			$('#formContainer.well').css('height','284px');
-		} else if($('#workflowDescription').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
-			//table container higher because of the lineDetails window
-			$('#tableContainer.well').css('min-height','495px');
-			$('#formContainer.well').css('height','175px');
-		} else if($('#workflowDescription').hasClass('hide')) {
-			//table container even higher - lineDetails and script dialog window
-			$('#tableContainer.well').css('min-height','604px');
-			$('#formContainer.well').css('height','284px');
-		} else if($('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
-			//table container higher because of the workflowDescription window
-			$('#tableContainer.well').css('min-height','466px');
-			$('#formContainer.well').css('height','175px');
-		} else if($('#lineDetails').hasClass('hide')) {
-			//table container even higher - workflowDescription and script dialog window
-			$('#tableContainer.well').css('min-height','575px');
-			$('#formContainer.well').css('height','284px');
-		} else {
-			//highest - every window open
-			$('#tableContainer.well').css('min-height','673px');
-		}
-	}
-	
-	$('#processElements').on('click', 'a.fileNames', function() {
-		var fileName = $(this).html();
-		loadWorkflow(fileName);
-		$('#saveWorkflowName').val(fileName);
-		$('#showWfBtn').popover('hide').removeClass('pop');
-		$('#description').val(description);
-		$('#comments').val('');
-		$('#lineDetails').addClass('hide');
-		$('#tableContainer.well').css('min-height','288px');
-	});
-	
-	function loadWorkflow(filename) {
-		var data = '{"filename":"' + filename + '"}';
-		
-		$.ajax({
-    		type: 'POST',
-    	    url: 'http://localhost:8080/ld',
-    	    data: data,
-    	    dataType:'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-    	    		initializeLoadedWorkflow(response.data);
-    	    		$('#workflowName').html(filename);
-    	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
-    	    		$('#msg').html('Your workflow was loaded successfully!');
-					$('#successModal').modal('show');
-					downloadPossible = true;
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-
-		$('#downloadScript').removeClass('hide');
-		$('#saveWorkflow').removeClass('hide');
-		return false;
-	}
-	
-	function initializeLoadedWorkflow(data) {
-		description = data.description;
-		workflow = data.workflow;
-		nameCounter = workflow.length;
-		showTable();
-	}
-	
 	$('#downloadScript').on('click', function() {
 		if(downloadPossible) {
 			var filename = $('#workflowName').html();
@@ -779,5 +565,224 @@ $(document).ready(function() {
 			return false;
 		}
 	});
+	
+	
+	
+	/**
+	 * UTIL functions
+	 */
+
+	function initializeLoadedWorkflow(data) {
+		description = data.description;
+		workflow = data.workflow;
+		nameCounter = workflow.length;
+		showTable();
+	}
+
+	function modifyContainerHeight() {
+		if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','288px');
+			$('#formContainer.well').css('height','175px');
+		} else if($('#workflowDescription').hasClass('hide') && $('#lineDetails').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','396px');
+			$('#formContainer.well').css('height','284px');
+		} else if($('#workflowDescription').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','495px');
+			$('#formContainer.well').css('height','175px');
+		} else if($('#workflowDescription').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','604px');
+			$('#formContainer.well').css('height','284px');
+		} else if($('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','466px');
+			$('#formContainer.well').css('height','175px');
+		} else if($('#lineDetails').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','575px');
+			$('#formContainer.well').css('height','284px');
+		} else if($('#scriptDialog').hasClass('hide')) {
+			$('#tableContainer.well').css('min-height','673px');
+			$('#formContainer.well').css('height','175px');
+		} else {
+			$('#tableContainer.well').css('min-height','783px');
+			$('#formContainer.well').css('height','284px');
+		}
+	}
+
+	function cleanModificationDialogs() {
+		modifyDialog('register');
+		modifyDialog('load');
+		modifyDialog('store');
+		modifyDialog('filter');
+		modifyDialog('join');
+		modifyDialog('script');
+		$('#inputError').hide();
+		$('#showWfBtn').popover('hide').removeClass('pop');
+	}
+
+	function setCurrentOperation(operation) {
+		$('#stepAction').addClass('hide');
+		$('#workflowOps').html(operation);
+	}
+
+	function descriptionButtonsHandling() {
+		$('#workflowDescription').addClass('hide');
+		modifyContainerHeight();
+	}
+
+	function removeTableRowLabeling(label) {
+		$('#tableContainer tr').each(function(){
+			$(this).removeClass(label);
+		});
+	}
+
+	function hideLargeContainers() {
+		$('#scriptDialog').addClass('hide');
+	}
+
+	/**
+	 * Hides all input-dialog-forms except the form given to the function.
+	 */
+	function hideInputDialogs(elem) {
+		if(elem != 'register') {
+			$('#registerDialog').hide('slow');
+		}
+		if(elem != 'load') {
+			$('#loadDialog').hide('slow');
+		}
+		if(elem != 'store') {
+			$('#storeDialog').hide('slow');
+		}
+		if(elem != 'filter') {
+			$('#filterDialog').hide('slow');
+		}
+		if(elem != 'join') {
+			$('#joinDialog').hide('slow');
+		}
+		if(elem != 'script') {
+			$('#scriptDialog').hide('slow');
+		}
+	}
+
+	function blinkEffectComments() {
+		setTimeout(function() {
+			$('#comments').focus();
+		}, 150);
+		setTimeout(function() {
+			$('#comments').blur();
+		}, 350);
+	}
+
+	function modifyDialog(operation) {
+		var obj = '#' + operation + 'Dialog';
+		resetStandardBehavior(operation);
+		$(obj).children('input[type=text]').val('');
+	}
+
+	function setModificationBehavior(operation) {
+		var submitBtn = '#' + operation + 'Submit';
+		var submitChangeBtn = '#' + operation + 'SubmitChange';
+		var deleteBtn = '#' + operation + 'Delete';
+		var dialog = '#' + operation + 'Dialog';
+		
+		$(submitBtn).addClass('hide');
+		$(submitChangeBtn).addClass('modification');
+		$(submitChangeBtn).removeClass('hide');
+		$(deleteBtn).removeClass('hide');
+		$(dialog).show('slow');
+		$(dialog).removeClass('hide');
+		hideInputDialogs(operation);
+		setCurrentOperation(operation.toUpperCase());
+		$('#lineDetails').removeClass('hide');
+		modifyContainerHeight();
+	}
+
+	/**
+	 * Removes the highlighting from the selected table row and changes the visibility of the
+	 * "standard" submit and the "modification" submit buttons. Also hides all input dialogs.
+	 */
+	function resetStandardBehavior(operation) {
+		if(~highlightedRowIndex) {
+			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').removeClass('warning');
+		}
+		
+		var submitBtn = '#' + operation + 'Submit';
+		var submitChangeBtn = '#' + operation + 'SubmitChange';
+		var deleteBtn = '#' + operation + 'Delete';
+		var dialog = '#' + operation + 'Dialog';
+		
+		$(submitBtn).removeClass('hide');
+		$(submitChangeBtn).removeClass('modification');
+		$(submitChangeBtn).addClass('hide');
+		$(deleteBtn).addClass('hide');
+		$(dialog).addClass('hide');
+		hideInputDialogs('all');
+		$('#lineDetails').addClass('hide');
+		modifyContainerHeight();
+	}
+
+	/**
+	 * Returns a relation-name if the user has not specified one.
+	 */
+	function getArtificialName() {
+		return 'R' + nameCounter++;
+	}
+
+	/**
+	 * Checks if the input is longer than 1 character.
+	 */
+	function inputLongEnough(input) {
+		if(input.length < 2) {
+			return false;
+		}
+		return true;
+	}
+
+	function showInputErrorMsg(errText) {
+		$('#inputErrMsg').html(errText);
+		$('#inputError').show('slow');
+	}
+
+	function showSecurityAlert(filename) {
+		$('#saveCheckModal').modal('show');
+		$('#overrideBtn').on('click', function() {
+			$('#saveCheckModal').modal('hide');
+			saveWorkflow(filename);
+		});
+	}
+
+	function convertFilenamesToLinks(data) {
+		var toRemove = '.yaml';
+		var content = '';
+		for(var i=0; i<data.length; i++) {
+			var name = data[i].replace(toRemove,'');
+			content += '<a class="fileNames">'+name+'</a><br>'
+		}
+		return content;
+	}
+
+	/**
+	 * Calls a helper function to convert the workflow-object into a html table and displays the result.
+	 */
+	function showTable() {
+		var tab = convertJsonToTable(workflow, 'operationTable', 'table table-striped table-hover');
+		$('#tableContainer').html(tab);
+	}
+
+	/**
+	 * Method is called to perform a cleanup after the submit action has taken place.
+	 * Hides the input error dialog and the input form, reloads the workflow table and 
+	 * clears the input fields. Displays the save form.
+	 */
+	function finalizeSubmit(obj) {
+		$('#inputError').hide();
+		showTable();
+		$('#descriptionBtn').removeClass('hide');
+		$('#downloadScript').removeClass('hide');
+		$('#saveWorkflow').removeClass('hide');
+		$('#stepAction').removeClass('hide');
+		$('#workflowOps').html('OPERATIONS');
+		$(obj).hide('slow');
+		$(obj).children('input[type=text]').val('');
+		$('#comments').val('');
+	}
     
 });

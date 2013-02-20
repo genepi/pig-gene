@@ -7,7 +7,6 @@ import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
-import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 public class ScriptProvider extends ServerResource {
@@ -16,16 +15,15 @@ public class ScriptProvider extends ServerResource {
 
 	@Override
 	@Get
-	public Representation get() throws ResourceException {
+	public Representation get() {
 		final String name = getRequest().getAttributes().get("filename").toString();
 		final String path = DIRECTORY.concat(name.concat(EXTENSION));
 
-		if (new File(path).isFile()) {
-			return new FileRepresentation(path, MediaType.TEXT_PLAIN);
+		if (path == null || !new File(path).isFile()) {
+			return new StringRepresentation("Error: Server was not able to load the content of the script.", MediaType.TEXT_PLAIN);
 		}
 
-		// TODO: change response
-		return new StringRepresentation("damn", MediaType.TEXT_PLAIN);
+		return new FileRepresentation(path, MediaType.TEXT_PLAIN);
 	}
 
 }

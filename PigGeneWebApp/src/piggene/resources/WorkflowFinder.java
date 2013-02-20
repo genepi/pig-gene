@@ -21,10 +21,10 @@ public class WorkflowFinder extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		JsonRepresentation representant;
 		String filename = "";
+
 		try {
-			representant = new JsonRepresentation(entity);
+			final JsonRepresentation representant = new JsonRepresentation(entity);
 			filename = representant.getJsonObject().getString("filename");
 		} catch (final IOException e) {
 			obj.setSuccess(false);

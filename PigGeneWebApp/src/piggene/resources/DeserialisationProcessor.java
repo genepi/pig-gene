@@ -22,6 +22,7 @@ public class DeserialisationProcessor extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
+
 		try {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
 			final String filename = representant.getJsonObject().getString("filename");

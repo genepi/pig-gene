@@ -8,8 +8,8 @@ public class WorkflowFiles {
 	private static final String EXTENSION = ".yaml";
 
 	public static boolean doesFileExist(final String filename) {
-		final File f = new File(PATH + filename + EXTENSION);
-		if (f.exists()) {
+		final File file = new File(PATH.concat(filename.concat(EXTENSION)));
+		if (file.exists()) {
 			return true;
 		}
 		return false;
