@@ -4,7 +4,8 @@ $(document).ready(function() {
 	
 	var nameCounter = 1;
 	var highlightedRowIndex = -1;
-	var downloadPossible = false;
+//	var downloadPossible = false;
+	var forceDownload = false;
 	var stdContent = $('#tableContainer').html();
 	
     $('#registerLink').on('click', function() {
@@ -64,7 +65,7 @@ $(document).ready(function() {
     });
 	
 	$('#registerDialog').on('submit', function() {
-		downloadPossible = false;
+//		downloadPossible = false;
 		var values = $('#registerDialog').serializeArray();
 		var oper = 'REGISTER';
 		var rel = values[0].value;
@@ -96,7 +97,7 @@ $(document).ready(function() {
 	});
 	
 	$('#loadDialog').on('submit', function() {
-		downloadPossible = false;
+//		downloadPossible = false;
 		var values = $('#loadDialog').serializeArray();
 		var oper = 'LOAD';
 		var name = values[0].value;
@@ -130,7 +131,7 @@ $(document).ready(function() {
 	});
 	
 	$('#storeDialog').on('submit', function() {
-		downloadPossible = false;
+//		downloadPossible = false;
 		var values = $('#storeDialog').serializeArray();
 		var oper = 'STORE';
 		var name = values[0].value;
@@ -155,7 +156,7 @@ $(document).ready(function() {
 	});
 	
 	$('#filterDialog').on('submit', function() {
-		downloadPossible = false;
+//		downloadPossible = false;
 		var values = $('#filterDialog').serializeArray();
 		var oper = 'FILTER';
 		var name = values[0].value;
@@ -184,7 +185,7 @@ $(document).ready(function() {
 	});
 	
 	$('#joinDialog').on('submit', function() {
-		downloadPossible = false;
+//		downloadPossible = false;
 		var values = $('#joinDialog').serializeArray();
 		var oper = 'JOIN';
 		var name = values[0].value;
@@ -215,7 +216,7 @@ $(document).ready(function() {
 	});
 	
 	$('#scriptDialog').on('submit', function() {
-		downloadPossible = false;
+//		downloadPossible = false;
 		var script = $('#scriptTextarea').val();
 		var oper = 'SCRIPT';
 		var comm = $('#comments').val();
@@ -235,10 +236,20 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$('#saveWorkflow').on('submit',function() {
-		var filename = $('#saveWorkflowName').val();
+	$('#saveWfBtn').on('click', function() {
+		var workflowName = $('#workflowName').html().trim();
+		$('#saveDialogInput').val('');
+		if('unnamed' != workflowName) {
+			$('#saveDialogInput').val(workflowName);
+		}
+		$('#saveNameModal').modal('show');
+	});
+	
+	$('#saveWorkflow').on('submit', function() {
+		var filename = $('#saveDialogInput').val();
+		$('#saveNameModal').modal('hide');
 		if(!inputLongEnough(filename)) {
-			showInputErrorMsg('Inputs have to be at least 2 characters long. Please change short input and press the add button again.');
+			showInputErrorMsg('Inputs have to be at least 2 characters long. Please click the save button again and type <br>a longer name.');
 			return false;
 		}
 		
@@ -268,24 +279,33 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$('#newWfBtn').on('click', function(){
-		initializeButtons();
+	$('#newWfBtn').on('click', function() {
+		$('#workflowName').addClass('new');
+		prepareContainers();
 	});
 	
-	$('#processElements').on('click', 'a.fileNames', function() {
+	$('#actionBtns').on('click', 'a.fileNames', function() {
 		var fileName = $(this).html();
-		loadWorkflow(fileName);
-		$('#saveWorkflowName').val(fileName);
-		$('#showWfBtn').popover('hide').removeClass('pop');
-		$('#description').val(description);
 		$('#comments').val('');
 		$('#lineDetails').addClass('hide');
-//		$('#tableContainer.well').css('min-height','288px');
+		if($('#showWfBtn').hasClass('showWfBtnPopover')) {
+			loadWorkflow(fileName);
+			$('#showWfBtn').popover('hide').removeClass('pop').removeClass('showWfBtnPopover');
+			$('#description').val(description);
+		} else {
+			deleteWorkflow(fileName);
+			$('#deleteWfBtn').popover('hide').removeClass('pop').removeClass('deleteWfBtnPopover');
+			if(fileName == $('#workflowName').html().trim()) {
+				resetInitialState();
+				resetStandardBehaviorForAll();
+//				downloadPossible = false;
+				workflow = [];
+			}
+		}
 	});
 	
 	function loadWorkflow(filename) {
 		var data = '{"filename":"' + filename + '"}';
-		
 		$.ajax({
     		type: 'POST',
     	    url: 'http://localhost:8080/ld',
@@ -297,8 +317,10 @@ $(document).ready(function() {
     	    		$('#workflowName').html(filename);
     	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
     	    		$('#msg').html('Your workflow was loaded successfully!');
-					$('#successModal').modal('show');
-					downloadPossible = true;
+    	    		setStandardBehaviorSuccessModal();
+//					downloadPossible = true;
+					$('#saveState').addClass('saved');
+					toggleSaveStateVisualisation();
     	    	} else {
     	    		$('#errmsg').html(response.message);
     	    		$('#errorModal').modal('show');
@@ -309,19 +331,65 @@ $(document).ready(function() {
 	    		$('#errorModal').modal('show');
     	   }
     	});
-
+		prepareContainers();
 		initializeButtons();
 		return false;
+	}
+	
+	function setStandardBehaviorSuccessModal() {
+		$('#closeSuccModal').removeAttr('download').removeAttr('href');
+		$('#successModal').modal('show');
+	}
+	
+	function setModificationBehaviorSuccessModal(filename) {
+		$('#closeSuccModal').attr('download', filename + '.pig');
+		$('#closeSuccModal').attr('href', 'http://localhost:8080/dwld/' + filename);
+		$('#successModal').modal('show');
+	}
+	
+	$('#closeSuccModal').on('click', function() {
+		$('#successModal').modal('hide');
+	});
+	
+	function deleteWorkflow(filename) {
+		var data = '{"filename":"' + filename + '"}';
+		$.ajax({
+    		type: 'POST',
+    	    url: 'http://localhost:8080/del',
+    	    data: data,
+    	    dataType:'json',
+    	    success: function(response) {
+    	    	if(response.success) {
+    	    		$('#modalHeaderContent').html('<h3>Deletion complete</h3>');
+    	    		$('#msg').html('Selected workflow was deleted successfully!');
+					setStandardBehaviorSuccessModal();
+    	    	} else {
+    	    		$('#errmsg').html(response.message);
+    	    		$('#errorModal').modal('show');
+    	    	}
+    	    },
+    	    error: function (xhr, ajaxOptions, thrownError) {
+    	    	$('#errmsg').html(xhr.responseText);
+	    		$('#errorModal').modal('show');
+    	   }
+    	});
+		return false;
+	}
+	
+	function prepareContainers() {
+		$('#workflowContainer').removeClass('span12').addClass('span10');
+		$('#formContainer').removeClass('hide');
+		$('#stepAction').removeClass('hide');
+		$('#workflowOps').html('OPERATIONS');
+		resetStandardBehaviorForAll();
+		$('#saveState').addClass('saved');
+		toggleSaveStateVisualisation();
 	}
 	
 	function initializeButtons() {
 		$('#downloadScript').removeClass('hide');
 		$('#saveWfBtn').removeClass('hide');
 		$('#descriptionBtn').removeClass('hide');
-		$('#workflowContainer').removeClass('span12').addClass('span10');
-		$('#formContainer').removeClass('hide');
-		$('#saveState').addClass('saved');
-		toggleSaveStateVisualisation();
 	}
 	
 	function saveWorkflow(filename) {
@@ -341,16 +409,21 @@ $(document).ready(function() {
     	    dataType: 'json',
     	    success: function(response) {
     	    	if(response.success) {
+    	    		$('#modalHeaderContent').html('<h3>saving done</h3>');
+    	    		$('#msg').html('Your workflow was saved successfully!');
+    	    		if(forceDownload) {
+    	    			forceDownload = false;
+    	    			setModificationBehaviorSuccessModal(filename);
+    	    		} else {
+    	    			setStandardBehaviorSuccessModal();
+    	    		}
     	    		resetStandardBehavior($('#workflowOps').html().toLowerCase());
     	    		$('#stepAction').removeClass('hide');
     	    		$('#workflowOps').html('OPERATIONS');
     	    		$('#workflowName').html(filename);
-    	    		$('#modalHeaderContent').html('<h3>Saving...</h3>');
-    	    		$('#msg').html('Your workflow was saved successfully!');
-					$('#successModal').modal('show');
 					$('#saveState').addClass('saved');
 					toggleSaveStateVisualisation();
-					downloadPossible = true;
+//					downloadPossible = true;
     	    	} else {
     	    		$('#errmsg').html(response.message);
     	    		$('#errorModal').modal('show');
@@ -364,27 +437,21 @@ $(document).ready(function() {
 		return false;
 	}
 	
+//	$('#closeSuccModal').on('click', function() {
+//		
+//	});
+	
 	/**
 	 * Cancellation-Handling of input forms.
 	 */
 	$("button[type='reset']").on('click', function() {
 		if($(this).hasClass('delete')) {
 			$('#inputError').hide();
-			$('#saveState').removeClass('saved');
-			toggleSaveStateVisualisation();
+//			$('#saveState').removeClass('saved');
+//			toggleSaveStateVisualisation();
 			workflow.splice(highlightedRowIndex,1);
 			if(workflow.length == 0) {
-				$('#tableContainer').html(stdContent);
-				$('#workflowName').html('Workflow');
-				$('#saveWorkflowName').val('');
-				$('#saveWorkflow').addClass('hide');
-				$('#downloadScript').addClass('hide');
-				$('#workflowDescription').addClass('hide');
-				$('#descriptionBtn').addClass('hide');
-				$('#workflowContainer').removeClass('span10').addClass('span12');
-				$('#formContainer').addClass('hide');
-				description = '';
-				$('#description').val(description);
+				resetInitialState();
 			} else {
 				showTable();
 			}
@@ -397,9 +464,6 @@ $(document).ready(function() {
 			resetStandardBehavior('register');
 		} else if(buttonName.indexOf('load') == 0) {
 			resetStandardBehavior('load');
-			$('#loadFiletypeSeparator.btn-group').css('display','none');
-			$('#loadVcf').addClass('active');
-			$('#loadTxt').removeClass('active');
 		} else if (buttonName.indexOf('store') == 0) {
 			resetStandardBehavior('store');
 		} else if (buttonName.indexOf('filter') == 0) {
@@ -407,23 +471,47 @@ $(document).ready(function() {
 		} else if (buttonName.indexOf('join') == 0) {
 			resetStandardBehavior('join');
 		} else if (buttonName.indexOf('script') == 0) {
-			$('#scriptDialog').addClass('hide');
 			resetStandardBehavior('script');
 		}
 		$('#comments').val('');
 		$('#stepAction').removeClass('hide');
 		$('#workflowOps').html('OPERATIONS');
 		$('#inputError').hide();
+		modifyContainerHeight();
 	});
+	
+	function resetInitialState() {
+		$('#tableContainer').html(stdContent);
+		$('#workflowName').html('workflow');
+		$('#saveState').removeClass('saved');
+		$('#saveState').html('');
+		$('#saveWfBtn').addClass('hide');
+		$('#downloadScript').addClass('hide');
+		$('#descriptionBtn').addClass('hide');
+		$('#workflowDescription').addClass('hide');
+		$('#workflowContainer').removeClass('span10').addClass('span12');
+		$('#formContainer').addClass('hide');
+		description = '';
+		$('#description').val(description);
+	}
 	
 	/**
 	 * Method handles a user request for already existing workflow definitions. Ajax request returns all
 	 * existing workflow names. These names get converted into links and are shown in a popover. The user
 	 * can select one of the links to avoid typing it manually.
 	 */
-	$('#showWfBtn').popover({ trigger: 'manual', html: true, placement: 'bottom', }).click(function() {
-		if($(this).hasClass('pop')) {
-			$(this).popover('hide').removeClass('pop');
+	$('#showWfBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
+		handleWorkflowRequest('#showWfBtn');
+	});
+	
+	$('#deleteWfBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
+		handleWorkflowRequest('#deleteWfBtn');
+	});
+	
+	function handleWorkflowRequest(buttonName) {
+		var id = buttonName.substring(1,buttonName.length) + 'Popover';
+		if($(buttonName).hasClass('pop')) {
+			$(buttonName).popover('hide').removeClass('pop').removeClass(id);
 		} else {
 			$.ajax({
 	    		type: 'POST',
@@ -433,7 +521,7 @@ $(document).ready(function() {
 	    	    success: function(response) {
 	    	    	if(response.success) {
 	    	    		var popContent = convertFilenamesToLinks(response.data);
-	    	    		$('#showWfBtn').attr('data-content', popContent).popover('show').addClass('pop');
+	    	    		$(buttonName).attr('data-content', popContent).popover('show').addClass('pop').addClass(id);
 	    	    	} else {
 	    	    		$('#errmsg').html(response.message);
 	    	    		$('#errorModal').modal('show');
@@ -445,7 +533,7 @@ $(document).ready(function() {
 	    	   }
 	    	});
 		}
-	});
+	}
 	
 	$('#descriptionBtn').on('click', function() {
 		if($('#workflowDescription').hasClass('hide')) {
@@ -459,7 +547,9 @@ $(document).ready(function() {
 	
 	$('#workflowDescrSubmit').on('click', function() {
 		description = $('#description').val();
-		downloadPossible = false;
+//		downloadPossible = false;
+		$('#saveState').removeClass('saved');
+		toggleSaveStateVisualisation();
 		descriptionButtonsHandling();
 	});
 
@@ -476,7 +566,9 @@ $(document).ready(function() {
 		} else {
 			workflow[highlightedRowIndex].comment = newValue;
 		}
-		downloadPossible = false;
+//		downloadPossible = false;
+		$('#saveState').removeClass('saved');
+		toggleSaveStateVisualisation();
 	});
 	
 	$('#lineCommentClear').on('click', function() {
@@ -547,13 +639,15 @@ $(document).ready(function() {
 	
 	$('#orderUp').on('click', function() {
 		if(~highlightedRowIndex && highlightedRowIndex!=0 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').hasClass('warning')) {
-			downloadPossible = false;
+//			downloadPossible = false;
 			var tmp = workflow[highlightedRowIndex-1];
 			workflow[highlightedRowIndex-1] = workflow[highlightedRowIndex];
 			workflow[highlightedRowIndex] = tmp;
 			showTable();
 			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex)+')').addClass('warning');
 			highlightedRowIndex--;
+			$('#saveState').removeClass('saved');
+			toggleSaveStateVisualisation();
 		}
 	});
 	
@@ -564,28 +658,29 @@ $(document).ready(function() {
 	$('#orderDown').on('click', function(){
 		var rowCount = $('#operationTable tr').length;
 		if (~highlightedRowIndex && highlightedRowIndex!=rowCount-2 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')')) {
-			downloadPossible = false;
+//			downloadPossible = false;
 			var tmp = workflow[highlightedRowIndex+1];
 			workflow[highlightedRowIndex+1] = workflow[highlightedRowIndex];
 			workflow[highlightedRowIndex] = tmp;
 			showTable();
 			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex+2)+')').addClass('warning');
 			highlightedRowIndex++;
+			$('#saveState').removeClass('saved');
+			toggleSaveStateVisualisation();
 		}
-		
 	});
 	
 	$('#downloadScript').on('click', function() {
-		if(downloadPossible) {
+		if($('#saveState').hasClass('saved')) {
 			var filename = $('#workflowName').html();
-			$(this).attr('download', filename + '.pig');
-			$(this).attr('href', 'http://localhost:8080/dwld/' + filename);
+			$('#downloadScript').attr('download', filename + '.pig');
+			$('#downloadScript').attr('href', 'http://localhost:8080/dwld/' + filename).click();
 		} else {
-			showInputErrorMsg('You have to save your workflow first.');
-			return false;
+			$('#downloadScript').removeAttr('download').removeAttr('href');
+			forceDownload = true;
+			$('#saveWfBtn').trigger('click');
 		}
 	});
-	
 	
 	
 	/**
@@ -671,7 +766,7 @@ $(document).ready(function() {
 		}, 150);
 		setTimeout(function() {
 			$('#comments').blur();
-		}, 350);
+		}, 500);
 	}
 
 	function modifyDialog(operation) {
@@ -698,6 +793,15 @@ $(document).ready(function() {
 		modifyContainerHeight();
 	}
 	
+	function resetStandardBehaviorForAll() {
+		resetStandardBehavior('register');
+		resetStandardBehavior('load');
+		resetStandardBehavior('store');
+		resetStandardBehavior('filter');
+		resetStandardBehavior('join');
+		resetStandardBehavior('script');
+	}
+	
 	/**
 	 * Removes the highlighting from the selected table row and changes the visibility of the
 	 * "standard" submit and the "modification" submit buttons. Also hides all input dialogs.
@@ -719,7 +823,14 @@ $(document).ready(function() {
 		$(dialog).addClass('hide');
 		hideInputDialogs('all');
 		$('#lineDetails').addClass('hide');
-		modifyContainerHeight();
+		if(operation == 'load') {
+			$('#loadFiletypeSeparator.btn-group').css('display','none');
+			$('#loadVcf').addClass('active');
+			$('#loadTxt').removeClass('active');
+		}
+		if(operation == 'script') {
+			$('#scriptDialog').addClass('hide');
+		}
 	}
 	
 	function setCurrentOperation(operation) {
@@ -791,8 +902,9 @@ $(document).ready(function() {
 	function finalizeSubmit(obj) {
 		$('#inputError').hide();
 		showTable();
-		$('#descriptionBtn').removeClass('hide');
+		$('#saveWfBtn').removeClass('hide');
 		$('#downloadScript').removeClass('hide');
+		$('#descriptionBtn').removeClass('hide');
 		$('#saveWorkflow').removeClass('hide');
 		$('#stepAction').removeClass('hide');
 		$('#workflowOps').html('OPERATIONS');
@@ -801,6 +913,10 @@ $(document).ready(function() {
 		$('#saveState').removeClass('saved');
 		toggleSaveStateVisualisation();
 		$('#comments').val('');
+		if($('#workflowName').hasClass('new')) {
+			$('#workflowName').removeClass('new');
+			$('#workflowName').html(' unnamed');
+		}
 	}
     
 });

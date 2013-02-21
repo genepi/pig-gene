@@ -19,27 +19,19 @@
 			<a id="showWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="already existing workflows"><i class="icon-edit icon-white"></i> load</a>
 			<a id="saveWfBtn" class="btn btn-inverse hide" title="save workflow"><i class="icon-folder-open icon-white"></i> save</a>
 			<a id="deleteWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="delete existing workflow"><i class="icon-ban-circle icon-white"></i> delete</a>
-			<a href="" id="downloadScript" class="btn btn-inverse hide" download="" title="download pig script"><i class="icon-download icon-white"></i> download</a>
+			<a id="downloadScript" class="btn btn-inverse hide" title="download pig script"><i class="icon-download icon-white"></i> download</a>
 		</div>
 		
 		<div class="well" id="logoContainer">
 			<img id="pigIcon" src="img/pigIcon.png" width="40" height="20" alt="pig icon">
 			<h3 id="projectName"> gene project</h3>
 		</div>
-
-		<!--
-		<form class="input-append hide" id="saveWorkflow">
-			<input id="saveWorkflowName" name="filename" type="text" placeholder="type file name" title="file name" value="" required>
-			<button class="btn btn-primary" id="saveBtn" type="submit" title="click to save your worflow"><i class="icon-folder-open icon-white"></i> save workflow</button>
-		</form>
-		!-->
-		
 	</div>
 	
 	<div class="span12 well" id="workflowContainer">
 		<div id="title">
 			<a id="descriptionBtn" class="btn btn-link hide" title="add workflow description"><i class="icon-plus-sign" id="descriptionIcon"></i></a>
-			<h3 id="workflowName"> workflow</h3>
+			<h3 id="workflowName""> workflow</h3>
 			<h3 class="saved" id="saveState"></h3>
 			<div class="well hide" id="workflowDescription">
 				<h4 id="descrText">DESCRIPTION</h4>
@@ -49,10 +41,10 @@
 			</div>
 		</div>
 		<div id="tableContainer">
-			<b>There is no workflow specified at the moment.</b>
+			<p id="stdExplanation"><b>There is no workflow specified at the moment.</b>
 			You can create a new workflow by clicking on the "new workflow" button in the menu bar above.
 			After clicking that button the operations menu appears on the right side where you can select
-			the operations you would like to specify.
+			the operations you would like to specify.</p>
 			<table id="operationTable"></table>
 		</div>
 	</div>
@@ -176,7 +168,7 @@
     <p id="msg"></p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" data-dismiss="modal" aria-hidden="true">close</a>
+    <a type="button" class="btn btn-success" id="closeSuccModal">close</a>
   </div>
 </div>
 
@@ -191,6 +183,22 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">close</a>
   </div>
+</div>
+
+<div class="modal hide fade" id="saveNameModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>saving workflow</h3>
+  </div>
+  <div class="modal-body">
+    Please type a workflow name:
+    <form id="saveWorkflow">
+    	<input class="span5" id="saveDialogInput" name="name" type="text" placeholder="workflow name" title="workflow name" value="" required><br>
+	    <button type="reset" class="btn" data-dismiss="modal" aria-hidden="true">cancel</a>
+	    <button type="submit" class="btn btn-success" id="saveWorkflowFormBtn">save</a>
+    </form>
+  </div>
+  <div class="modal-footer"></div>
 </div>
 
 <div class="modal hide fade" id="saveCheckModal">

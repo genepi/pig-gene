@@ -2,12 +2,12 @@ body.well {
 	border: 0px;
 }
 
-.well {
-	min-height: 17px;
-}
-
 form input[type=text] {
 	margin-bottom: 5px;
+}
+
+.well {
+	min-height: 17px;
 }
 
 .affix {
@@ -21,6 +21,7 @@ form input[type=text] {
 .span10 {
 	width: 840px;
 }
+
 
 .span5 {
 	width: 340px;
@@ -83,6 +84,10 @@ form input[type=text] {
 	margin-bottom: 20px;
 }
 
+#stdExplanation {
+	padding-bottom: 5px;
+}
+
 #processElements {
 	height: 68px;
 	margin-bottom: 20px;
@@ -115,6 +120,10 @@ form input[type=text] {
 
 #downloadScript {
 	width: 85px;
+}
+
+#saveWorkflowFormBtn {
+	margin-left: 4px;
 }
 
 #saveWorkflowName {
@@ -154,6 +163,7 @@ form input[type=text] {
 
 #workflowDescription {
 	height: 119px;
+	width: 760px;
 }
 
 #lineDetails {
@@ -189,15 +199,19 @@ form input[type=text] {
 	margin-bottom: 11px;
 }
 
+#saveDialogInput {
+	margin-top: 4px;
+}
+
 #description, #comments, #scriptTextarea {
 	resize: none;
 	height: 42px;
-	width: 282px;
+	width: 286px;
 	margin-bottom: 5px;
 }
 
 #description {
-	width: 747px;
+	width: 745px;
 }
 
 #scriptTextarea {

@@ -9,6 +9,7 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
+import piggene.resources.DeletionService;
 import piggene.resources.DeserialisationProcessor;
 import piggene.resources.ScriptProvider;
 import piggene.resources.SerialisationProcessor;
@@ -33,6 +34,7 @@ public class WebApp extends Application {
 		// routes
 		router.attach("/ser", SerialisationProcessor.class);
 		router.attach("/ld", DeserialisationProcessor.class);
+		router.attach("/del", DeletionService.class);
 		router.attach("/wf", WorkflowPresenter.class);
 		router.attach("/ex", WorkflowFinder.class);
 		router.attach("/dwld/{filename}", ScriptProvider.class);
