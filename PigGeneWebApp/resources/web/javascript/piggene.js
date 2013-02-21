@@ -580,7 +580,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('#tableContainer').on('click', function(e) {
+	$('#workflowContainer').on('click', function(e) {
 		var target = $(e.target);
 		if(target != null && target.context != null && target.context.tagName != null && target.context.tagName == 'DIV') {
 			$('#registerClear').trigger('click');
@@ -674,7 +674,7 @@ $(document).ready(function() {
 		if($('#saveState').hasClass('saved')) {
 			var filename = $('#workflowName').html();
 			$('#downloadScript').attr('download', filename + '.pig');
-			$('#downloadScript').attr('href', 'http://localhost:8080/dwld/' + filename).click();
+			$('#downloadScript').attr('href', 'http://localhost:8080/dwld/' + filename);
 		} else {
 			$('#downloadScript').removeAttr('download').removeAttr('href');
 			forceDownload = true;
