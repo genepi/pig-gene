@@ -1,14 +1,22 @@
 $(document).ready(function() {
-	var workflow = [];
-	var description = "";
 	
-	var nameCounter = 1;
-	var highlightedRowIndex = -1;
-//	var downloadPossible = false;
-	var forceDownload = false;
-	var stdContent = $('#tableContainer').html();
+	$(window).load(function(){
+		stdContent = $('#tableContainer').html();
+	});
 	
-    $('#registerLink').on('click', function() {
+	/**
+	 * Shows an English error-message if form should be submitted 
+	 * without specifying all required fields.
+	 */
+    $('input[type=text]').on('change invalid', function() {
+        var textfield = $(this).get(0);
+        textfield.setCustomValidity('');
+        if (!textfield.validity.valid) {
+          textfield.setCustomValidity('this field cannot be left blank');  
+        }
+    });
+	
+	$('#registerLink').on('click', function() {
     	setCurrentOperation('REGISTER');
 		cleanModificationDialogs();
 		$('#registerDialog').show('slow');
@@ -52,20 +60,7 @@ $(document).ready(function() {
 		modifyContainerHeight();
 	});
 	
-	/**
-	 * Shows an English error-message if form should be submitted 
-	 * without specifying all required fields.
-	 */
-    $('input[type=text]').on('change invalid', function() {
-        var textfield = $(this).get(0);
-        textfield.setCustomValidity('');
-        if (!textfield.validity.valid) {
-          textfield.setCustomValidity('this field cannot be left blank');  
-        }
-    });
-	
 	$('#registerDialog').on('submit', function() {
-//		downloadPossible = false;
 		var values = $('#registerDialog').serializeArray();
 		var oper = 'REGISTER';
 		var rel = values[0].value;
@@ -304,143 +299,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	function loadWorkflow(filename) {
-		var data = '{"filename":"' + filename + '"}';
-		$.ajax({
-    		type: 'POST',
-    	    url: 'http://localhost:8080/ld',
-    	    data: data,
-    	    dataType:'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-    	    		initializeLoadedWorkflow(response.data);
-    	    		$('#workflowName').html(filename);
-    	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
-    	    		$('#msg').html('Your workflow was loaded successfully!');
-    	    		setStandardBehaviorSuccessModal();
-//					downloadPossible = true;
-					$('#saveState').addClass('saved');
-					toggleSaveStateVisualisation();
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-		prepareContainers();
-		initializeButtons();
-		return false;
-	}
-	
-	function setStandardBehaviorSuccessModal() {
-		$('#closeSuccModal').removeAttr('download').removeAttr('href');
-		$('#successModal').modal('show');
-	}
-	
-	function setModificationBehaviorSuccessModal(filename) {
-		$('#closeSuccModal').attr('download', filename + '.pig');
-		$('#closeSuccModal').attr('href', 'http://localhost:8080/dwld/' + filename);
-		$('#successModal').modal('show');
-	}
-	
-	$('#closeSuccModal').on('click', function() {
-		$('#successModal').modal('hide');
-	});
-	
-	function deleteWorkflow(filename) {
-		var data = '{"filename":"' + filename + '"}';
-		$.ajax({
-    		type: 'POST',
-    	    url: 'http://localhost:8080/del',
-    	    data: data,
-    	    dataType:'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-    	    		$('#modalHeaderContent').html('<h3>Deletion complete</h3>');
-    	    		$('#msg').html('Selected workflow was deleted successfully!');
-					setStandardBehaviorSuccessModal();
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-		return false;
-	}
-	
-	function prepareContainers() {
-		$('#workflowContainer').removeClass('span12').addClass('span10');
-		$('#formContainer').removeClass('hide');
-		$('#stepAction').removeClass('hide');
-		$('#workflowOps').html('OPERATIONS');
-		resetStandardBehaviorForAll();
-		$('#saveState').addClass('saved');
-		toggleSaveStateVisualisation();
-	}
-	
-	function initializeButtons() {
-		$('#downloadScript').removeClass('hide');
-		$('#saveWfBtn').removeClass('hide');
-		$('#descriptionBtn').removeClass('hide');
-	}
-	
-	function saveWorkflow(filename) {
-		//last two elements just needed for the ajax request, remove afterwards
-		workflow.push(description);
-		workflow.push(filename); 
-		var data = JSON.stringify(workflow);
-		workflow.splice(-2,2);
-		
-		$('#inputError').hide('slow');
-		$('#comments').val('');
-		
-		$.ajax({
-    		type: 'POST',
-    	    url: 'http://localhost:8080/ser',
-    	    data: data,
-    	    dataType: 'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-    	    		$('#modalHeaderContent').html('<h3>saving done</h3>');
-    	    		$('#msg').html('Your workflow was saved successfully!');
-    	    		if(forceDownload) {
-    	    			forceDownload = false;
-    	    			setModificationBehaviorSuccessModal(filename);
-    	    		} else {
-    	    			setStandardBehaviorSuccessModal();
-    	    		}
-    	    		resetStandardBehavior($('#workflowOps').html().toLowerCase());
-    	    		$('#stepAction').removeClass('hide');
-    	    		$('#workflowOps').html('OPERATIONS');
-    	    		$('#workflowName').html(filename);
-					$('#saveState').addClass('saved');
-					toggleSaveStateVisualisation();
-//					downloadPossible = true;
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-		return false;
-	}
-	
-//	$('#closeSuccModal').on('click', function() {
-//		
-//	});
-	
 	/**
 	 * Cancellation-Handling of input forms.
 	 */
@@ -480,21 +338,6 @@ $(document).ready(function() {
 		modifyContainerHeight();
 	});
 	
-	function resetInitialState() {
-		$('#tableContainer').html(stdContent);
-		$('#workflowName').html('workflow');
-		$('#saveState').removeClass('saved');
-		$('#saveState').html('');
-		$('#saveWfBtn').addClass('hide');
-		$('#downloadScript').addClass('hide');
-		$('#descriptionBtn').addClass('hide');
-		$('#workflowDescription').addClass('hide');
-		$('#workflowContainer').removeClass('span10').addClass('span12');
-		$('#formContainer').addClass('hide');
-		description = '';
-		$('#description').val(description);
-	}
-	
 	/**
 	 * Method handles a user request for already existing workflow definitions. Ajax request returns all
 	 * existing workflow names. These names get converted into links and are shown in a popover. The user
@@ -507,33 +350,6 @@ $(document).ready(function() {
 	$('#deleteWfBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
 		handleWorkflowRequest('#deleteWfBtn');
 	});
-	
-	function handleWorkflowRequest(buttonName) {
-		var id = buttonName.substring(1,buttonName.length) + 'Popover';
-		if($(buttonName).hasClass('pop')) {
-			$(buttonName).popover('hide').removeClass('pop').removeClass(id);
-		} else {
-			$.ajax({
-	    		type: 'POST',
-	    	    url: 'http://localhost:8080/wf',
-	    	    data: null,
-	    	    dataType:'json',
-	    	    success: function(response) {
-	    	    	if(response.success) {
-	    	    		var popContent = convertFilenamesToLinks(response.data);
-	    	    		$(buttonName).attr('data-content', popContent).popover('show').addClass('pop').addClass(id);
-	    	    	} else {
-	    	    		$('#errmsg').html(response.message);
-	    	    		$('#errorModal').modal('show');
-	    	    	}
-	    	    },
-	    	    error: function (xhr, ajaxOptions, thrownError) {
-	    	    	$('#errmsg').html(xhr.responseText);
-		    		$('#errorModal').modal('show');
-	    	   }
-	    	});
-		}
-	}
 	
 	$('#descriptionBtn').on('click', function() {
 		if($('#workflowDescription').hasClass('hide')) {
@@ -682,241 +498,8 @@ $(document).ready(function() {
 		}
 	});
 	
+	$('#closeSuccModal').on('click', function() {
+		$('#successModal').modal('hide');
+	});
 	
-	/**
-	 * UTIL functions
-	 */
-
-	function initializeLoadedWorkflow(data) {
-		description = data.description;
-		workflow = data.workflow;
-		nameCounter = workflow.length;
-		showTable();
-	}
-
-	function modifyContainerHeight() {
-		if($('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
-			$('#workflowContainer.well').css('min-height','193px');
-			$('#formContainer.well').css('height','175px');
-		} else if($('#scriptDialog').hasClass('hide')) {
-			$('#workflowContainer.well').css('min-height','401px');
-			$('#formContainer.well').css('height','175px');
-		} else if($('#lineDetails').hasClass('hide')) {
-			$('#workflowContainer.well').css('min-height','302px');
-			$('#formContainer.well').css('height','284px');
-		} else {
-			$('#workflowContainer.well').css('min-height','510px');
-			$('#formContainer.well').css('height','284px');
-		}
-	}
-
-	function cleanModificationDialogs() {
-		modifyDialog('register');
-		modifyDialog('load');
-		modifyDialog('store');
-		modifyDialog('filter');
-		modifyDialog('join');
-		modifyDialog('script');
-		$('#inputError').hide();
-		$('#showWfBtn').popover('hide').removeClass('pop');
-	}
-
-	function descriptionButtonsHandling() {
-		$('#workflowDescription').addClass('hide');
-		$('#descriptionIcon').removeClass('icon-minus-sign').addClass('icon-plus-sign');
-	}
-
-	function removeTableRowLabeling(label) {
-		$('#tableContainer tr').each(function(){
-			$(this).removeClass(label);
-		});
-	}
-
-	function hideLargeContainers() {
-		$('#scriptDialog').addClass('hide');
-	}
-
-	/**
-	 * Hides all input-dialog-forms except the form given to the function.
-	 */
-	function hideInputDialogs(elem) {
-		if(elem != 'register') {
-			$('#registerDialog').hide('slow');
-		}
-		if(elem != 'load') {
-			$('#loadDialog').hide('slow');
-		}
-		if(elem != 'store') {
-			$('#storeDialog').hide('slow');
-		}
-		if(elem != 'filter') {
-			$('#filterDialog').hide('slow');
-		}
-		if(elem != 'join') {
-			$('#joinDialog').hide('slow');
-		}
-		if(elem != 'script') {
-			$('#scriptDialog').hide('slow');
-		}
-	}
-
-	function blinkEffectComments() {
-		setTimeout(function() {
-			$('#comments').focus();
-		}, 150);
-		setTimeout(function() {
-			$('#comments').blur();
-		}, 500);
-	}
-
-	function modifyDialog(operation) {
-		var obj = '#' + operation + 'Dialog';
-		resetStandardBehavior(operation);
-		$(obj).children('input[type=text]').val('');
-	}
-
-	function setModificationBehavior(operation) {
-		var submitBtn = '#' + operation + 'Submit';
-		var submitChangeBtn = '#' + operation + 'SubmitChange';
-		var deleteBtn = '#' + operation + 'Delete';
-		var dialog = '#' + operation + 'Dialog';
-		
-		$(submitBtn).addClass('hide');
-		$(submitChangeBtn).addClass('modification');
-		$(submitChangeBtn).removeClass('hide');
-		$(deleteBtn).removeClass('hide');
-		$(dialog).show('slow');
-		$(dialog).removeClass('hide');
-		hideInputDialogs(operation);
-		setCurrentOperation(operation.toUpperCase());
-		$('#lineDetails').removeClass('hide');
-		modifyContainerHeight();
-	}
-	
-	function resetStandardBehaviorForAll() {
-		resetStandardBehavior('register');
-		resetStandardBehavior('load');
-		resetStandardBehavior('store');
-		resetStandardBehavior('filter');
-		resetStandardBehavior('join');
-		resetStandardBehavior('script');
-	}
-	
-	/**
-	 * Removes the highlighting from the selected table row and changes the visibility of the
-	 * "standard" submit and the "modification" submit buttons. Also hides all input dialogs.
-	 */
-	function resetStandardBehavior(operation) {
-		if(~highlightedRowIndex) {
-			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').removeClass('warning');
-		}
-		
-		var submitBtn = '#' + operation + 'Submit';
-		var submitChangeBtn = '#' + operation + 'SubmitChange';
-		var deleteBtn = '#' + operation + 'Delete';
-		var dialog = '#' + operation + 'Dialog';
-		
-		$(submitBtn).removeClass('hide');
-		$(submitChangeBtn).removeClass('modification');
-		$(submitChangeBtn).addClass('hide');
-		$(deleteBtn).addClass('hide');
-		$(dialog).addClass('hide');
-		hideInputDialogs('all');
-		$('#lineDetails').addClass('hide');
-		if(operation == 'load') {
-			$('#loadFiletypeSeparator.btn-group').css('display','none');
-			$('#loadVcf').addClass('active');
-			$('#loadTxt').removeClass('active');
-		}
-		if(operation == 'script') {
-			$('#scriptDialog').addClass('hide');
-		}
-	}
-	
-	function setCurrentOperation(operation) {
-		$('#stepAction').addClass('hide');
-		$('#workflowOps').html(operation);
-	}
-	
-	function toggleSaveStateVisualisation() {
-		if($('#saveState').hasClass('saved')) {
-			$('#saveState').html('');
-		} else {
-			$('#saveState').html(' *');
-		}
-	}
-
-	/**
-	 * Returns a relation-name if the user has not specified one.
-	 */
-	function getArtificialName() {
-		return 'R' + nameCounter++;
-	}
-
-	/**
-	 * Checks if the input is longer than 1 character.
-	 */
-	function inputLongEnough(input) {
-		if(input.length < 2) {
-			return false;
-		}
-		return true;
-	}
-
-	function showInputErrorMsg(errText) {
-		$('#inputErrMsg').html(errText);
-		$('#inputError').show('slow');
-	}
-
-	function showSecurityAlert(filename) {
-		$('#saveCheckModal').modal('show');
-		$('#overrideBtn').on('click', function() {
-			$('#saveCheckModal').modal('hide');
-			saveWorkflow(filename);
-		});
-	}
-
-	function convertFilenamesToLinks(data) {
-		var toRemove = '.yaml';
-		var content = '';
-		for(var i=0; i<data.length; i++) {
-			var name = data[i].replace(toRemove,'');
-			content += '<a class="fileNames">'+name+'</a><br>'
-		}
-		return content;
-	}
-
-	/**
-	 * Calls a helper function to convert the workflow-object into a html table and displays the result.
-	 */
-	function showTable() {
-		var tab = convertJsonToTable(workflow, 'operationTable', 'table table-striped table-hover');
-		$('#tableContainer').html(tab);
-	}
-
-	/**
-	 * Method is called to perform a cleanup after the submit action has taken place.
-	 * Hides the input error dialog and the input form, reloads the workflow table and 
-	 * clears the input fields. Displays the save form.
-	 */
-	function finalizeSubmit(obj) {
-		$('#inputError').hide();
-		showTable();
-		$('#saveWfBtn').removeClass('hide');
-		$('#downloadScript').removeClass('hide');
-		$('#descriptionBtn').removeClass('hide');
-		$('#saveWorkflow').removeClass('hide');
-		$('#stepAction').removeClass('hide');
-		$('#workflowOps').html('OPERATIONS');
-		$(obj).hide('slow');
-		$(obj).children('input[type=text]').val('');
-		$('#saveState').removeClass('saved');
-		toggleSaveStateVisualisation();
-		$('#comments').val('');
-		if($('#workflowName').hasClass('new')) {
-			$('#workflowName').removeClass('new');
-			$('#workflowName').html(' unnamed');
-		}
-	}
-    
 });
