@@ -21,17 +21,29 @@ function prepareContainers() {
 	toggleSaveStateVisualisation();
 }
 
-function resetInitialState() {
-	$('#tableContainer').html(stdContent);
-	$('#workflowName').html('workflow');
-	$('#saveState').removeClass('saved');
-	$('#saveState').html('');
+function initializeNewWorkflow() {
+	$('#workflowName').addClass('new');
+	prepareContainers();
+	resetFormContainer();
+	resetWorkflow();
+}
+
+function resetWorkflow() {
+	workflow = [];
 	$('#saveWfBtn').addClass('hide');
 	$('#downloadScript').addClass('hide');
-	$('#descriptionBtn').addClass('hide');
 	$('#workflowDescription').addClass('hide');
-	$('#workflowContainer').removeClass('span10').addClass('span12');
-	$('#formContainer').addClass('hide');
-	description = '';
-	$('#description').val(description);
+	$('#descriptionBtn').addClass('hide');
+	$('#description').val('');
+	$('#workflowName').html('workflow');
+	$('#tableContainer').html(stdContent);
+	$('#saveState').removeClass('saved');
+	$('#saveState').html('');
+	resetStandardBehaviorForAll();
+	$('#workflowContainer.well').css('min-height','193px');
+}
+
+function resetFormContainer() {
+	$('#stepAction').removeClass('hide');
+	$('#workflowOps').html('OPERATIONS');
 }

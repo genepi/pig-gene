@@ -12,7 +12,7 @@ workflow:
    relation2: '-'
 - !piggene.serialisation.WorkflowComponent
    name: R1
-   comment: '-'
+   comment: dfysdfh
    operation: LOAD
    options: vcf
    options2: '-'

@@ -1,6 +1,8 @@
 //this is a dummy workflow that is used for testing purpose while developing the application1
 REGISTER pigGene.jar;
 REGISTER dataFu.jar;
+
+//dfysdfh
 R1 = LOAD '$input.vcf' USING pigGene.PigGeneStorage();
 
 //filter

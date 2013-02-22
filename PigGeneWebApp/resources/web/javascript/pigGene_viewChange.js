@@ -9,7 +9,7 @@ function descriptionButtonsHandling() {
 		});
 	}
 
-	function hideLargeContainers() {
+	function hideScriptContainer() {
 		$('#scriptDialog').addClass('hide');
 	}
 
@@ -143,6 +143,7 @@ function descriptionButtonsHandling() {
 		modifyDialog('script');
 		$('#inputError').hide();
 		$('#showWfBtn').popover('hide').removeClass('pop');
+		$('#deleteWfBtn').popover('hide').removeClass('pop');
 	}
 	
 	function showInputErrorMsg(errText) {
@@ -156,6 +157,56 @@ function descriptionButtonsHandling() {
 			$('#saveCheckModal').modal('hide');
 			saveWorkflow(filename);
 		});
+	}
+	
+	
+	function showSecurityAlertRemove(obj) {
+		$('#removeCheckModal').modal('show');
+		$('#removeRowBtn').on('click', function() {
+			$('#removeCheckModal').modal('hide');
+			deleteTableRow();
+			finishReset(obj);
+		});
+	}
+	
+	function showDiscardChangesAlert() {
+		$('#discardChangesCheckModal').modal('show');
+		$('#discardWfChangesBtn').on('click', function() {
+			$('#discardChangesCheckModal').modal('hide');
+			initializeNewWorkflow();
+		});
+	}
+	
+	function deleteTableRow() {
+		$('#inputError').hide();
+		workflow.splice(highlightedRowIndex,1);
+		if(workflow.length == 0) {
+			resetInitialState();
+		} else {
+			showTable();
+		}
+	}
+	
+	
+	function finishReset(obj) {
+		var buttonName = $(obj).attr('id');
+		if(buttonName.indexOf('register') == 0) {
+			resetStandardBehavior('register');
+		} else if(buttonName.indexOf('load') == 0) {
+			resetStandardBehavior('load');
+		} else if (buttonName.indexOf('store') == 0) {
+			resetStandardBehavior('store');
+		} else if (buttonName.indexOf('filter') == 0) {
+			resetStandardBehavior('filter');
+		} else if (buttonName.indexOf('join') == 0) {
+			resetStandardBehavior('join');
+		} else if (buttonName.indexOf('script') == 0) {
+			resetStandardBehavior('script');
+		}
+		$('#comments').val('');
+		resetFormContainer();
+		$('#inputError').hide();
+		modifyContainerHeight();
 	}
 	
 	/**

@@ -92,7 +92,6 @@ $(document).ready(function() {
 	});
 	
 	$('#loadDialog').on('submit', function() {
-//		downloadPossible = false;
 		var values = $('#loadDialog').serializeArray();
 		var oper = 'LOAD';
 		var name = values[0].value;
@@ -126,7 +125,6 @@ $(document).ready(function() {
 	});
 	
 	$('#storeDialog').on('submit', function() {
-//		downloadPossible = false;
 		var values = $('#storeDialog').serializeArray();
 		var oper = 'STORE';
 		var name = values[0].value;
@@ -151,7 +149,6 @@ $(document).ready(function() {
 	});
 	
 	$('#filterDialog').on('submit', function() {
-//		downloadPossible = false;
 		var values = $('#filterDialog').serializeArray();
 		var oper = 'FILTER';
 		var name = values[0].value;
@@ -180,7 +177,6 @@ $(document).ready(function() {
 	});
 	
 	$('#joinDialog').on('submit', function() {
-//		downloadPossible = false;
 		var values = $('#joinDialog').serializeArray();
 		var oper = 'JOIN';
 		var name = values[0].value;
@@ -211,7 +207,6 @@ $(document).ready(function() {
 	});
 	
 	$('#scriptDialog').on('submit', function() {
-//		downloadPossible = false;
 		var script = $('#scriptTextarea').val();
 		var oper = 'SCRIPT';
 		var comm = $('#comments').val();
@@ -275,8 +270,11 @@ $(document).ready(function() {
 	});
 	
 	$('#newWfBtn').on('click', function() {
-		$('#workflowName').addClass('new');
-		prepareContainers();
+		if(!$('#saveState').hasClass('saved')) {
+			showDiscardChangesAlert();
+			return;
+		}
+		initializeNewWorkflow();
 	});
 	
 	$('#actionBtns').on('click', 'a.fileNames', function() {
@@ -291,52 +289,62 @@ $(document).ready(function() {
 			deleteWorkflow(fileName);
 			$('#deleteWfBtn').popover('hide').removeClass('pop').removeClass('deleteWfBtnPopover');
 			if(fileName == $('#workflowName').html().trim()) {
-				resetInitialState();
-				resetStandardBehaviorForAll();
-//				downloadPossible = false;
-				workflow = [];
+				resetWorkflow();
 			}
 		}
 	});
+	
+//	/**
+//	 * Cancellation-Handling of input forms.
+//	 */
+//	$("button[type='reset']").on('click', function() {
+//		if($(this).hasClass('delete')) {
+//			$('#inputError').hide();
+//			workflow.splice(highlightedRowIndex,1);
+//			if(workflow.length == 0) {
+//				resetInitialState();
+//			} else {
+//				showTable();
+//			}
+//		} else {
+//			$(this).removeClass('modification');
+//		}
+//		
+//		var buttonName = $(this).attr('id');
+//		if(buttonName.indexOf('register') == 0) {
+//			resetStandardBehavior('register');
+//		} else if(buttonName.indexOf('load') == 0) {
+//			resetStandardBehavior('load');
+//		} else if (buttonName.indexOf('store') == 0) {
+//			resetStandardBehavior('store');
+//		} else if (buttonName.indexOf('filter') == 0) {
+//			resetStandardBehavior('filter');
+//		} else if (buttonName.indexOf('join') == 0) {
+//			resetStandardBehavior('join');
+//		} else if (buttonName.indexOf('script') == 0) {
+//			resetStandardBehavior('script');
+//		}
+//		$('#comments').val('');
+//		resetFormContainer();
+//		$('#inputError').hide();
+//		modifyContainerHeight();
+//	});
+	
 	
 	/**
 	 * Cancellation-Handling of input forms.
 	 */
 	$("button[type='reset']").on('click', function() {
 		if($(this).hasClass('delete')) {
-			$('#inputError').hide();
-//			$('#saveState').removeClass('saved');
-//			toggleSaveStateVisualisation();
-			workflow.splice(highlightedRowIndex,1);
-			if(workflow.length == 0) {
-				resetInitialState();
-			} else {
-				showTable();
-			}
-		} else {
-			$(this).removeClass('modification');
+			showSecurityAlertRemove($(this));
+			return
 		}
 		
-		var buttonName = $(this).attr('id');
-		if(buttonName.indexOf('register') == 0) {
-			resetStandardBehavior('register');
-		} else if(buttonName.indexOf('load') == 0) {
-			resetStandardBehavior('load');
-		} else if (buttonName.indexOf('store') == 0) {
-			resetStandardBehavior('store');
-		} else if (buttonName.indexOf('filter') == 0) {
-			resetStandardBehavior('filter');
-		} else if (buttonName.indexOf('join') == 0) {
-			resetStandardBehavior('join');
-		} else if (buttonName.indexOf('script') == 0) {
-			resetStandardBehavior('script');
-		}
-		$('#comments').val('');
-		$('#stepAction').removeClass('hide');
-		$('#workflowOps').html('OPERATIONS');
-		$('#inputError').hide();
-		modifyContainerHeight();
+		$(this).removeClass('modification');
+		finishReset($(this));
 	});
+	
+	
 	
 	/**
 	 * Method handles a user request for already existing workflow definitions. Ajax request returns all
@@ -363,7 +371,6 @@ $(document).ready(function() {
 	
 	$('#workflowDescrSubmit').on('click', function() {
 		description = $('#description').val();
-//		downloadPossible = false;
 		$('#saveState').removeClass('saved');
 		toggleSaveStateVisualisation();
 		descriptionButtonsHandling();
@@ -382,7 +389,6 @@ $(document).ready(function() {
 		} else {
 			workflow[highlightedRowIndex].comment = newValue;
 		}
-//		downloadPossible = false;
 		$('#saveState').removeClass('saved');
 		toggleSaveStateVisualisation();
 	});
@@ -396,6 +402,38 @@ $(document).ready(function() {
 		}
 	});
 	
+	
+	$('html').keydown(function(e) {
+		var selector = 'tr:nth-child(' + (highlightedRowIndex+1) + ')';
+		if(!(e.target.nodeName.toLowerCase() == 'input' || e.target.nodeName.toLowerCase() == 'textarea')) {
+			switch(e.which) {
+				case 38: highlightUpperRow(); break;
+				case 40: highlightLowerRow(); break;
+				case 46: showSecurityAlertRemove(); break;
+				default: break;
+			}
+		}
+	});
+	
+	function highlightUpperRow() {
+		if(~highlightedRowIndex && highlightedRowIndex!=0 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').hasClass('warning')) {
+			removeTableRowLabeling('warning');
+			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex)+')').addClass('warning');
+			highlightedRowIndex--;
+			displayCorrespondingContainerInfo(highlightedRowIndex);
+		}
+	}
+	
+	function highlightLowerRow() {
+		var rowCount = $('#operationTable tr').length;
+		if (~highlightedRowIndex && highlightedRowIndex!=rowCount-2 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')')) {
+			removeTableRowLabeling('warning');
+			$('#operationTable tbody tr:nth-child('+(highlightedRowIndex+2)+')').addClass('warning');
+			highlightedRowIndex++;
+			displayCorrespondingContainerInfo(highlightedRowIndex);
+		}
+	}
+	
 	$('#workflowContainer').on('click', function(e) {
 		var target = $(e.target);
 		if(target != null && target.context != null && target.context.tagName != null && target.context.tagName == 'DIV') {
@@ -408,9 +446,12 @@ $(document).ready(function() {
 	 */
 	$('#tableContainer').on('click', 'tr', function() {
 		removeTableRowLabeling('warning');
-		hideLargeContainers();
 		$(this).addClass('warning');
 		highlightedRowIndex = $(this).index();
+		displayCorrespondingContainerInfo(highlightedRowIndex);
+	});
+	
+	function displayCorrespondingContainerInfo(highlightedRowIndex) {
 		var data = workflow[highlightedRowIndex];
 		var comment = data.comment;
 		if(comment == '-') {
@@ -421,19 +462,23 @@ $(document).ready(function() {
 	
 		if(data.operation=='REGISTER') {
 			$('#regFileName').val(data.relation);
+			hideScriptContainer();
 			setModificationBehavior('register');
 		} else if(data.operation=='LOAD') {
 			$('#loadName').val(data.name);
 			$('#fileName').val(data.relation);
+			hideScriptContainer();
 			setModificationBehavior('load');
 		} else if(data.operation=='STORE'){
 			$('#storeName').val(data.name);
 			$('#relToStore').val(data.relation);
+			hideScriptContainer();
 			setModificationBehavior('store');
 		} else if(data.operation=='FILTER') {
 			$('#filtName').val(data.name);
 			$('#filtRel').val(data.relation);
 			$('#filtOpt').val(data.options);
+			hideScriptContainer();
 			setModificationBehavior('filter');
 		} else if(data.operation=='JOIN') {
 			$('#joinName').val(data.name);
@@ -441,21 +486,34 @@ $(document).ready(function() {
 			$('#joinOpt').val(data.options);
 			$('#joinRel2').val(data.relation2);
 			$('#joinOpt2').val(data.options2);
+			hideScriptContainer();
 			setModificationBehavior('join');
 		} else if(data.operation=='SCRIPT') {
 			$('#scriptTextarea').val(data.options);
 			setModificationBehavior('script');
 			setCurrentOperation('USER DEFINED SCRIPT');
 		}
-	});
+	}
 	
 	$('#orderUp').hover(function() {
 		$('#up').toggleClass('icon-white');
 	});
 	
 	$('#orderUp').on('click', function() {
+		orderUpHandling();
+	});
+	
+	
+	$('#orderDown').hover(function() {
+		$('#down').toggleClass('icon-white');
+	});
+	
+	$('#orderDown').on('click', function(){
+		orderDownHandling();
+	});
+	
+	function orderUpHandling() {
 		if(~highlightedRowIndex && highlightedRowIndex!=0 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').hasClass('warning')) {
-//			downloadPossible = false;
 			var tmp = workflow[highlightedRowIndex-1];
 			workflow[highlightedRowIndex-1] = workflow[highlightedRowIndex];
 			workflow[highlightedRowIndex] = tmp;
@@ -465,16 +523,11 @@ $(document).ready(function() {
 			$('#saveState').removeClass('saved');
 			toggleSaveStateVisualisation();
 		}
-	});
+	}
 	
-	$('#orderDown').hover(function() {
-		$('#down').toggleClass('icon-white');
-	});
-	
-	$('#orderDown').on('click', function(){
+	function orderDownHandling() {
 		var rowCount = $('#operationTable tr').length;
 		if (~highlightedRowIndex && highlightedRowIndex!=rowCount-2 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')')) {
-//			downloadPossible = false;
 			var tmp = workflow[highlightedRowIndex+1];
 			workflow[highlightedRowIndex+1] = workflow[highlightedRowIndex];
 			workflow[highlightedRowIndex] = tmp;
@@ -484,7 +537,7 @@ $(document).ready(function() {
 			$('#saveState').removeClass('saved');
 			toggleSaveStateVisualisation();
 		}
-	});
+	}
 	
 	$('#downloadScript').on('click', function() {
 		if($('#saveState').hasClass('saved')) {
