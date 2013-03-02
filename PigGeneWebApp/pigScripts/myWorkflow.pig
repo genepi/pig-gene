@@ -1,4 +1,4 @@
-//this is a dummy workflow that is used for testing purpose while developing the application1
+//this is a dummy workflow that is used for testing purpose while developing the application
 REGISTER pigGene.jar;
 REGISTER dataFu.jar;
 

@@ -1,3 +1,9 @@
+/**
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
+
 function loadWorkflow(filename) {
 		var data = '{"filename":"' + filename + '"}';
 		$.ajax({
@@ -12,7 +18,6 @@ function loadWorkflow(filename) {
     	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
     	    		$('#msg').html('Your workflow was loaded successfully!');
     	    		setStandardBehaviorSuccessModal();
-//					downloadPossible = true;
 					$('#saveState').addClass('saved');
 					toggleSaveStateVisualisation();
     	    	} else {
@@ -55,13 +60,11 @@ function saveWorkflow(filename) {
 	    		} else {
 	    			setStandardBehaviorSuccessModal();
 	    		}
-	    		resetStandardBehavior($('#workflowOps').html().toLowerCase());
-	    		$('#stepAction').removeClass('hide');
-	    		$('#workflowOps').html('OPERATIONS');
+	    		resetOperationDialog($('#workflowOps').html().toLowerCase());
+	    		resetFormContainerOperation();
 	    		$('#workflowName').html(filename);
 				$('#saveState').addClass('saved');
 				toggleSaveStateVisualisation();
-//				downloadPossible = true;
 	    	} else {
 	    		$('#errmsg').html(response.message);
 	    		$('#errorModal').modal('show');
@@ -140,7 +143,7 @@ function handleWorkflowRequest(buttonName) {
  */
 function finalizeSubmit(obj) {
 	$('#inputError').hide();
-	showTable();
+	displayTable();
 	$('#saveWfBtn').removeClass('hide');
 	$('#downloadScript').removeClass('hide');
 	$('#descriptionBtn').removeClass('hide');
@@ -156,4 +159,15 @@ function finalizeSubmit(obj) {
 		$('#workflowName').removeClass('new');
 		$('#workflowName').html(' unnamed');
 	}
+}
+
+function save() {
+	var filename = $('#saveDialogInput').val();
+	$('#saveNameModal').modal('hide');
+	if(!inputLongEnough(filename)) {
+		showErrorMessageShortInput();
+		return false;
+	}
+	ajaxRequestSaveWorkflow(filename);
+	return false;
 }

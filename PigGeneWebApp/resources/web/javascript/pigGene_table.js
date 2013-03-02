@@ -1,4 +1,11 @@
 /**
+ * Functions to convert JSON to HTML table.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
+
+/**
  * Convert a Javascript Object array or String array to an HTML table.
  * JSON parsing has to be made before function call; that allows use 
  * of other JSON parsing methods like jQuery.parseJSON.

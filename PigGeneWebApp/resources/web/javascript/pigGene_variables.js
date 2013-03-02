@@ -1,3 +1,10 @@
+/**
+ * Globally used variables.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
+
 var stdContent = '';
 
 var workflow = [];

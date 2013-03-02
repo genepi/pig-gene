@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>PigGene Project</title>
+<title>PigGene project</title>
 <link type="text/css" rel="stylesheet" media="screen" href="css/bootstrap.css" />
 <link type="text/css" rel="stylesheet" media="screen" href="css/pigGene.css" />
 
@@ -162,6 +162,9 @@
 			        <p id="inputErrMsg"></p>
 		        </div>
 		        <!-- ...Alert -->
+		        
+		        <!-- new information div (tooltip) -->
+		        
 			</div>
 		</div>
 	</div>
@@ -189,7 +192,7 @@
 	    <p id="errmsg"></p>
 	  </div>
 	  <div class="modal-footer">
-	    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">close</a>
+	    <a type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">close</a>
 	  </div>
 	</div>
 	
@@ -202,8 +205,8 @@
 	    Please type a workflow name:
 	    <form id="saveWorkflow">
 	    	<input class="span5" id="saveDialogInput" name="name" type="text" placeholder="workflow name" title="workflow name" value="" required><br>
-		    <button type="reset" class="btn" data-dismiss="modal" aria-hidden="true">cancel</a>
-		    <button type="submit" class="btn btn-success" id="saveWorkflowFormBtn">save</a>
+		    <button type="reset" class="btn" data-dismiss="modal" aria-hidden="true">cancel</button>
+		    <button type="submit" class="btn btn-success" id="saveWorkflowFormBtn">save</button>
 	    </form>
 	  </div>
 	  <div class="modal-footer"></div>
@@ -219,8 +222,8 @@
 	    Do you really want to override it?</p>
 	  </div>
 	  <div class="modal-footer">
-	    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
-	    <button type="button" class="btn btn-success" id="overrideBtn">yes</a>
+	    <a type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
+	    <a type="button" class="btn btn-success" id="overrideBtn">yes</a>
 	  </div>
 	</div>
 	
@@ -233,8 +236,8 @@
 	    <p id="saveMsg">Do you really want to delete the highlighted row?</p>
 	  </div>
 	  <div class="modal-footer">
-	    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
-	    <button type="button" class="btn btn-success" id="removeRowBtn">yes</a>
+	    <a type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
+	    <a type="button" class="btn btn-success" id="removeRowBtn">yes</a>
 	  </div>
 	</div>
 	
@@ -248,8 +251,8 @@
 	    and reopen a new workflow?</p>
 	  </div>
 	  <div class="modal-footer">
-	    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
-	    <button type="button" class="btn btn-success" id="discardWfChangesBtn">yes</a>
+	    <a type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
+	    <a type="button" class="btn btn-success" id="discardWfChangesBtn">yes</a>
 	  </div>
 	</div>
 	<!-- ... modal Dialogs -->

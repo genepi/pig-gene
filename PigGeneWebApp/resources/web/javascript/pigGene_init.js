@@ -1,9 +1,27 @@
+/**
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
+
+function preSaveStdContent() {
+	stdContent = $('#tableContainer').html();
+}
+
+function setMissingFormValueText(textfield) {
+    textfield.setCustomValidity('');
+    if (!textfield.validity.valid) {
+      textfield.setCustomValidity('this field cannot be left blank');  
+    }
+}
+
 function initializeLoadedWorkflow(data) {
 	description = data.description;
 	workflow = data.workflow;
 	nameCounter = workflow.length;
-	showTable();
+	displayTable();
 }
+
 
 function initializeButtons() {
 	$('#downloadScript').removeClass('hide');
@@ -17,15 +35,23 @@ function prepareContainers() {
 	$('#stepAction').removeClass('hide');
 	$('#workflowOps').html('OPERATIONS');
 	resetStandardBehaviorForAll();
-	$('#saveState').addClass('saved');
-	toggleSaveStateVisualisation();
+	setSaveStateSavedAndDisplayStatus();
 }
 
 function initializeNewWorkflow() {
 	$('#workflowName').addClass('new');
 	prepareContainers();
-	resetFormContainer();
+	resetFormContainerOperation();
 	resetWorkflow();
+}
+
+function processSaveWfRequest() {
+	var workflowName = $('#workflowName').html().trim();
+	$('#saveDialogInput').val('');
+	if('unnamed' != workflowName) {
+		$('#saveDialogInput').val(workflowName);
+	}
+	showSaveNameModal();
 }
 
 function resetWorkflow() {
@@ -34,16 +60,12 @@ function resetWorkflow() {
 	$('#downloadScript').addClass('hide');
 	$('#workflowDescription').addClass('hide');
 	$('#descriptionBtn').addClass('hide');
+	description = '';
 	$('#description').val('');
 	$('#workflowName').html('workflow');
 	$('#tableContainer').html(stdContent);
-	$('#saveState').removeClass('saved');
-	$('#saveState').html('');
+	setSaveStateSavedAndDisplayStatus();
 	resetStandardBehaviorForAll();
+	resetFormContainerOperation();
 	$('#workflowContainer.well').css('min-height','193px');
-}
-
-function resetFormContainer() {
-	$('#stepAction').removeClass('hide');
-	$('#workflowOps').html('OPERATIONS');
 }
