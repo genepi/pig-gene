@@ -4,9 +4,32 @@
  * @date April 2013
  */
 
+
+/**
+ * Function is used to "save" the explanation, 
+ * that is stored in the table container div initially.
+ */
 function preSaveStdContent() {
 	stdContent = $('#tableContainer').html();
 }
+
+
+/**
+ * Function is used to reset the workflow to the behavior it had in the beginning. 
+ * The workflow variable is cleared and all the operation dialogs get set to their
+ * initial behavior.
+ */
+function resetWorkflow() {
+	workflow = [];
+	resetWorkflowButtonsAndTableContent();
+	setSaveStateSavedAndDisplayStatus();
+	resetStandardBehaviorForAll();
+	resetFormContainerOperation();
+	resetFormContainerSize();
+}
+
+
+
 
 function setMissingFormValueText(textfield) {
     textfield.setCustomValidity('');
@@ -56,18 +79,3 @@ function processSaveWfRequest() {
 	showSaveNameModal();
 }
 
-function resetWorkflow() {
-	workflow = [];
-	$('#saveWfBtn').addClass('hide');
-	$('#downloadScript').addClass('hide');
-	$('#workflowDescription').addClass('hide');
-	$('#descriptionBtn').addClass('hide');
-	description = '';
-	$('#description').val('');
-	$('#workflowName').html('workflow');
-	$('#tableContainer').html(stdContent);
-	setSaveStateSavedAndDisplayStatus();
-	resetStandardBehaviorForAll();
-	resetFormContainerOperation();
-	$('#workflowContainer.well').css('min-height','193px');
-}

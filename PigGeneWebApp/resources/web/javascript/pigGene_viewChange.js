@@ -158,6 +158,96 @@ function clearCommentTextbox() {
 }
 
 
+/**
+ * Function is used to delete a table row, reset the dialogs and 
+ * removes the highlighting of that particular table row.
+ */
+function deleteRowAndDisplayTable() {
+	$('#removeCheckModal').modal('hide');
+	closePopovers();
+	hideInputErrors();
+	workflow.splice(highlightedRowIndex,1);
+	if(workflow.length == 0) {
+		resetDialogsAndHighlightings();
+		resetWorkflow();
+	} else {
+		resetDialogsAndHighlightings();
+		displayTable();
+	}
+}
+
+
+/**
+ * Function is used to reset the workflow buttons to their initial state.
+ * The description of the workflow gets cleared and the table container gets
+ * filled with the initial content.
+ */
+function resetWorkflowButtonsAndTableContent() {
+	$('#saveWfBtn').addClass('hide');
+	$('#downloadScript').addClass('hide');
+	$('#workflowDescription').addClass('hide');
+	$('#descriptionBtn').addClass('hide');
+	description = '';
+	$('#description').val('');
+	setWorkflowName('workflow');
+	$('#tableContainer').html(stdContent);
+}
+
+
+/**
+ * Function is used to set the given name as the new workflow name, 
+ * displayed in the container above the workflow table.
+ * @param workflow name to set
+ */
+function setWorkflowName(name) {
+	$('#workflowName').html(name);
+}
+
+
+/**
+ * Function resets the heigth of the form container to the initial value.
+ */
+function resetFormContainerSize() {
+	$('#workflowContainer.well').css('min-height','193px');
+}
+
+
+/**
+ * Function is used to show/hide the *-symbol after the workflow name. 
+ * The symbol is an indication of the state of the workflow - i.e.: saved or not.
+ */
+function toggleSaveStateVisualisation() {
+	if($('#saveState').hasClass('saved')) {
+		$('#saveState').html('');
+	} else {
+		$('#saveState').html(' *');
+	}
+}
+
+
+/**
+ * Function is used to hide the description of the workflow and to display the plus
+ * icon instead of the minus icon to indicate that the description is collapsed.
+ */
+function descriptionButtonHandling() {
+	$('#workflowDescription').addClass('hide');
+	$('#descriptionIcon').removeClass('icon-minus-sign').addClass('icon-plus-sign');
+}
+
+
+/**
+ * Function is used to give a visual hint that the comment was saved.
+ */
+function blinkEffectComments() {
+	setTimeout(function() {
+		$('#comments').focus();
+	}, 150);
+	setTimeout(function() {
+		$('#comments').blur();
+	}, 500);
+}
+
+
 
 function removeTableRowHighlighting(index) {
 	$('#operationTable tbody tr:nth-child('+ index +')').removeClass('warning');
@@ -244,10 +334,7 @@ function closePopovers() {
 
 
 
-function descriptionButtonHandling() {
-	$('#workflowDescription').addClass('hide');
-	$('#descriptionIcon').removeClass('icon-minus-sign').addClass('icon-plus-sign');
-}
+
 
 	function removeTableRowLabeling(label) {
 		$('#tableContainer tr').each(function(){
@@ -260,14 +347,7 @@ function descriptionButtonHandling() {
 
 
 
-	function blinkEffectComments() {
-		setTimeout(function() {
-			$('#comments').focus();
-		}, 150);
-		setTimeout(function() {
-			$('#comments').blur();
-		}, 500);
-	}
+	
 	
 	function setStandardBehaviorSuccessModal() {
 		$('#closeSuccModal').removeAttr('download').removeAttr('href');
@@ -349,13 +429,7 @@ function descriptionButtonHandling() {
 	}
 
 	
-	function toggleSaveStateVisualisation() {
-		if($('#saveState').hasClass('saved')) {
-			$('#saveState').html('');
-		} else {
-			$('#saveState').html(' *');
-		}
-	}
+	
 	
 
 	
@@ -379,19 +453,7 @@ function descriptionButtonHandling() {
 		$('#discardChangesCheckModal').modal('show');
 	}
 	
-	function deleteRowAndDisplayTable() {
-		$('#removeCheckModal').modal('hide');
-		hideInputErrors();
-		closePopovers();
-		workflow.splice(highlightedRowIndex,1);
-		if(workflow.length == 0) {
-			resetDialogsAndHighlightings();
-			resetWorkflow();
-		} else {
-			resetDialogsAndHighlightings();
-			displayTable();
-		}
-	}
+	
 
 	function hoverOverArrowAction(element) {
 		$(element).toggleClass('icon-white');

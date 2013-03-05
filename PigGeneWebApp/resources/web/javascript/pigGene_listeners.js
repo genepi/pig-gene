@@ -1,5 +1,5 @@
 /**
- * Listener functions.
+ * Listener functions
  * 
  * @author Clemens Banas
  * @date April 2013
@@ -88,33 +88,57 @@ $(document).ready(function() {
 	});
 	
 	
-	
-	
-	
+	/**
+	 * Function to process clicks that confirm the deletion of a table row.
+	 */
 	$('#removeRowBtn').on('click', function() {
 		deleteRowAndDisplayTable();
 	});
 	
+	
+	/**
+	 * Function saves the workflow description in the global description variable,
+	 * displays the "unsaved"-save state and collapses the description.
+	 */	
 	$('#workflowDescrSubmit').on('click', function() {
 		description = $('#description').val();
 		setSavedStateUnsavedAndDisplayStatus();
 		descriptionButtonHandling();
 	});
 
+	
+	/**
+	 * Function resets the workflow description from the global
+	 * description variable and collapses the description.
+	 */
 	$('#workflowDescrClear').on('click', function() {
 		resetDescription();
 		descriptionButtonHandling();
 	});
 	
+	
+	/**
+	 * Function saves the user-given comment and displays a blink
+	 * effect to visualize the saving. Finally modifies the save state.
+	 */
 	$('#lineCommentSubmit').on('click', function() {
 		saveCommentInWorkflow($('#comments').val());
 		blinkEffectComments();
 		setSavedStateUnsavedAndDisplayStatus();
 	});
 	
+	
+	/**
+	 * Function resets the line comment.
+	 */
 	$('#lineCommentClear').on('click', function() {
-		resetSavedWorkflowComment();
+		resetSavedLineComment();
 	});
+	
+	
+	
+	
+	
 	
 	$('html').keydown(function(e) {
 		handleKeydownEvent(e);

@@ -211,6 +211,61 @@ function processInputFormCancellation(button) {
 }
 
 
+/**
+ * Function is used to set the save state to "saved" and 
+ * to hide the *-symbol behind the workflow name.
+ */
+function setSaveStateSavedAndDisplayStatus() {
+	$('#saveState').addClass('saved');
+	toggleSaveStateVisualisation();
+}
+
+
+/**
+ * Function is used to set the save state to "unsaved" and 
+ * to show the *-symbol behind the workflow name.
+ */
+function setSavedStateUnsavedAndDisplayStatus() {
+	$('#saveState').removeClass('saved');
+	toggleSaveStateVisualisation();
+}
+
+
+/**
+ * Function is used to reset the description to the value 
+ * saved in the global description variable.
+ */
+function resetDescription() {
+	$('#description').val(description);
+}
+
+
+/**
+ * Function is used to save the given comment in the global workflow variable.
+ */
+function saveCommentInWorkflow(comment) {
+	if(comment == '' || comment == '-') {
+		workflow[highlightedRowIndex].comment = '-';
+	} else {
+		workflow[highlightedRowIndex].comment = comment;
+	}
+}
+
+
+/**
+ * Function is used to reset the previous line comment that 
+ * is saved in the global workflow variable
+ */
+function resetSavedLineComment() {
+	var oldComment = workflow[highlightedRowIndex].comment;
+	if(oldComment == '-') {
+		$('#comments').val('');
+	} else {
+		$('#comments').val(oldComment);
+	}
+}
+
+
 function showErrorMessageShortInput() {
 	showInputErrorMsg('Inputs have to be at least 2 characters long. Please click the save button again and type <br>a longer name.');
 }
@@ -320,9 +375,7 @@ function processDescriptionBtnClick() {
 	}
 }
 
-function resetDescription() {
-	$('#description').val(description);
-}
+
 
 function orderDownHandling() {
 	var rowCount = $('#operationTable tr').length;
@@ -338,23 +391,11 @@ function orderDownHandling() {
 }
 
 
-function setSaveStateSavedAndDisplayStatus() {
-	$('#saveState').addClass('saved');
-	toggleSaveStateVisualisation();
-}
 
-function setSavedStateUnsavedAndDisplayStatus() {
-	$('#saveState').removeClass('saved');
-	toggleSaveStateVisualisation();
-}
 
-function saveCommentInWorkflow(comment) {
-	if(comment == '' || comment == '-') {
-		workflow[highlightedRowIndex].comment = '-';
-	} else {
-		workflow[highlightedRowIndex].comment = comment;
-	}
-}
+
+
+
 
 function isInputFormElement(e) {
 	var elementName = e.target.nodeName.toLowerCase();
@@ -379,14 +420,7 @@ function checkAndResetRowHighlighting(target) {
 	}
 }
 
-function resetSavedWorkflowComment() {
-	var oldComment = workflow[highlightedRowIndex].comment;
-	if(oldComment == '-') {
-		$('#comments').val('');
-	} else {
-		$('#comments').val(oldComment);
-	}
-}
+
 
 
 
