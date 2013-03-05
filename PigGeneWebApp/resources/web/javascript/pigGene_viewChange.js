@@ -4,37 +4,43 @@
  * @date April 2013
  */
 
-
-function removeTableRowHighlighting(index) {
-	$('#operationTable tbody tr:nth-child('+ index +')').removeClass('warning');
-}
-
-function addTableRowHighlighting(index) {
-	$('#operationTable tbody tr:nth-child('+ index +')').addClass('warning');
-}
-
-
+/**
+ * Function is responsible to hide the operations selection 
+ * dialog and to display the currently operation name.
+ */
 function setFormContainerOperation(operation) {
 	$('#stepAction').addClass('hide');
 	$('#workflowOps').html(operation.toUpperCase());
 }
 
+
+/**
+ * Function is responsible to show the operations selection 
+ * dialog and to display the standard text "operations".
+ */
 function resetFormContainerOperation() {
 	$('#stepAction').removeClass('hide');
 	$('#workflowOps').html('OPERATIONS');
 }
 
+
+/**
+ * Function resets all the operation-dialogs to their standard 
+ * behavior and removes the yellow highlighting of the selected 
+ * table row.
+ */
 function resetDialogsAndHighlightings() {
 	resetAllOperationDialogs();
-	$('#lineDetails').addClass('hide');
-	hideNotSpecifiedInputDialogs('');
-	hideInputErrors();
-	closePopovers();
-	if(~highlightedRowIndex) {
-		removeTableRowHighlighting(highlightedRowIndex+1);
-	}
+	resetFormContainerOperation();
+	removeTableRowHighlighting(highlightedRowIndex+1);
+	hideLineDetailDialog();
 }
 
+
+/**
+ * Function calls helper function to reset all the different 
+ * operation dialogs to their standard behavior.
+ */
 function resetAllOperationDialogs() {
 	resetOperationDialog('register');
 	resetOperationDialog('load');
@@ -45,10 +51,12 @@ function resetAllOperationDialogs() {
 }
 
 
-///**
-// * Removes the highlighting from the selected table row and changes the visibility of the
-// * "standard" submit and the "modification" submit buttons. Also hides all input dialogs.
-// */
+/**
+ * Function is used to reset a operation dialog and all its containing 
+ * elements; like buttons and input fields. 
+ * Special handling of the load and the user script operation dialog.
+ * @param operation
+ */
 function resetOperationDialog(operation) {
 	var submitBtn = '#' + operation + 'Submit';
 	var submitChangeBtn = '#' + operation + 'SubmitChange';
@@ -73,14 +81,102 @@ function resetOperationDialog(operation) {
 	}
 }
 
+/**
+ * Function displays the given input dialog.
+ * @param dialog
+ */
+function showInputDialogSlow(dialog) {
+	$(dialog).show('slow');
+}
+
+
+/**
+ * Function displays the script dialog.
+ */
+function showScriptDialogSlow() {
+	$('#scriptDialog').show('slow');
+	$('#scriptDialog').removeClass('hide');
+}
+
+
+/**
+ * Function hides the script dialog.
+ */
+function hideScriptDialogSlow() {
+	$('#scriptDialog').hide('slow');
+	$('#scriptDialog').addClass('hide');
+}
+
+
+/**
+ * Function displays a security alert to warn the user 
+ * that he is going to delete a line of the workflow.
+ */
+function showSecurityAlertRemove() {
+	$('#removeCheckModal').modal('show');
+}
+
+
+/**
+ * Function checks which button was clicked and resets the corresponding 
+ * operation dialog depending on that information. It hides all errors  
+ * and additional information dialogs and basically resets the operation 
+ * dialog to its default behavior.
+ * @param clicked button
+ */
+function finishReset(button) {
+	button.removeClass('modification');
+	var buttonName = $(button).attr('id');
+	
+	if(buttonName.indexOf('register') == 0) {
+		resetOperationDialog('register');
+	} else if(buttonName.indexOf('load') == 0) {
+		resetOperationDialog('load');
+	} else if (buttonName.indexOf('store') == 0) {
+		resetOperationDialog('store');
+	} else if (buttonName.indexOf('filter') == 0) {
+		resetOperationDialog('filter');
+	} else if (buttonName.indexOf('join') == 0) {
+		resetOperationDialog('join');
+	} else if (buttonName.indexOf('script') == 0) {
+		resetOperationDialog('script');
+	}
+	clearCommentTextbox();
+	resetFormContainerOperation();
+	removeTableRowLabeling('warning');
+	hideLineDetailDialog();
+	hideInputErrors();
+	modifyContainerHeight();
+}
+
+
+/**
+ * Function is used to clear the comment textarea.
+ */
+function clearCommentTextbox() {
+	$('#comments').val('');
+}
+
+
+
+function removeTableRowHighlighting(index) {
+	$('#operationTable tbody tr:nth-child('+ index +')').removeClass('warning');
+}
+
+function addTableRowHighlighting(index) {
+	$('#operationTable tbody tr:nth-child('+ index +')').addClass('warning');
+}
+
+
+
+
+
 function hideScriptDialog() {
 	$('#scriptDialog').hide('slow');
 	$('#scriptDialog').addClass('hide');
 }
 
-function showInputDialogSlow(dialog) {
-	$(dialog).show('slow');
-}
+
 
 function hideTxtSeparatorOptions() {
 	$('#loadFiletypeSeparator.btn-group').css('display','none');
@@ -159,13 +255,8 @@ function descriptionButtonHandling() {
 		});
 	}
 
-	function hideScriptDialog() {
-		$('#scriptDialog').addClass('hide');
-	}
+
 	
-	function showScriptDialog() {
-		$('#scriptDialog').removeClass('hide');
-	}
 
 
 
@@ -282,9 +373,7 @@ function descriptionButtonHandling() {
 	}
 	
 	
-	function showSecurityAlertRemove(obj) {
-		$('#removeCheckModal').modal('show');
-	}
+
 	
 	function showDiscardChangesAlert() {
 		$('#discardChangesCheckModal').modal('show');
@@ -292,7 +381,8 @@ function descriptionButtonHandling() {
 	
 	function deleteRowAndDisplayTable() {
 		$('#removeCheckModal').modal('hide');
-		$('#inputError').hide();
+		hideInputErrors();
+		closePopovers();
 		workflow.splice(highlightedRowIndex,1);
 		if(workflow.length == 0) {
 			resetDialogsAndHighlightings();
@@ -323,32 +413,9 @@ function descriptionButtonHandling() {
 		$('#descriptionIcon').removeClass('icon-plus-sign').addClass('icon-minus-sign');
 	}
 	
-	function finishReset(obj) {
-		var buttonName = $(obj).attr('id');
-		if(buttonName.indexOf('register') == 0) {
-			resetOperationDialog('register');
-		} else if(buttonName.indexOf('load') == 0) {
-			resetOperationDialog('load');
-		} else if (buttonName.indexOf('store') == 0) {
-			resetOperationDialog('store');
-		} else if (buttonName.indexOf('filter') == 0) {
-			resetOperationDialog('filter');
-		} else if (buttonName.indexOf('join') == 0) {
-			resetOperationDialog('join');
-		} else if (buttonName.indexOf('script') == 0) {
-			resetOperationDialog('script');
-		}
-		clearCommentTextbox();
-		hideLineDetailDialog();
-		hideInputErrors();
-		removeTableRowLabeling('warning');
-		resetFormContainerOperation();
-		modifyContainerHeight();
-	}
+
 	
-	function clearCommentTextbox() {
-		$('#comments').val('');
-	}
+
 	
 	/**
 	 * Calls a helper function to convert the workflow-object into a html table and displays the result.

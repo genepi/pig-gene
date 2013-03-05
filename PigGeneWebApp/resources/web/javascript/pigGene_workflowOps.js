@@ -4,6 +4,33 @@
  * @date April 2013
  */
 
+/**
+ * Function is called to perform a cleanup after the submit action has taken place.
+ * Hides the input error dialog and the input form, reloads the workflow table and 
+ * clears the input fields. Displays the save form.
+ */
+function finalizeSubmit(obj) {
+	hideInputErrors();
+	displayTable();
+	$('#saveWfBtn').removeClass('hide');
+	$('#downloadScript').removeClass('hide');
+	$('#descriptionBtn').removeClass('hide');
+	$('#saveWorkflow').removeClass('hide');
+	resetFormContainerOperation();
+	$(obj).hide('slow');
+	$(obj).children('input[type=text]').val('');
+	$('#saveState').removeClass('saved');
+	toggleSaveStateVisualisation();
+	clearCommentTextbox();
+	hideLineDetailDialog();
+	if($('#workflowName').hasClass('new')) {
+		$('#workflowName').removeClass('new');
+		$('#workflowName').html(' unnamed');
+	}
+}
+
+
+
 function loadWorkflow(filename) {
 		var data = '{"filename":"' + filename + '"}';
 		$.ajax({
@@ -136,30 +163,7 @@ function handleWorkflowRequest(buttonName) {
 }
 
 
-/**
- * Method is called to perform a cleanup after the submit action has taken place.
- * Hides the input error dialog and the input form, reloads the workflow table and 
- * clears the input fields. Displays the save form.
- */
-function finalizeSubmit(obj) {
-	$('#inputError').hide();
-	displayTable();
-	$('#saveWfBtn').removeClass('hide');
-	$('#downloadScript').removeClass('hide');
-	$('#descriptionBtn').removeClass('hide');
-	$('#saveWorkflow').removeClass('hide');
-	$('#stepAction').removeClass('hide');
-	$('#workflowOps').html('OPERATIONS');
-	$(obj).hide('slow');
-	$(obj).children('input[type=text]').val('');
-	$('#saveState').removeClass('saved');
-	toggleSaveStateVisualisation();
-	$('#comments').val('');
-	if($('#workflowName').hasClass('new')) {
-		$('#workflowName').removeClass('new');
-		$('#workflowName').html(' unnamed');
-	}
-}
+
 
 function save() {
 	var filename = $('#saveDialogInput').val();

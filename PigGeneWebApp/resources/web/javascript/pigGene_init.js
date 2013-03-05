@@ -43,6 +43,8 @@ function initializeNewWorkflow() {
 	prepareContainers();
 	resetFormContainerOperation();
 	resetWorkflow();
+	clearCommentTextbox();
+	hideLineDetailDialog();
 }
 
 function processSaveWfRequest() {

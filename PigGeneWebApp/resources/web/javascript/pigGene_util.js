@@ -4,6 +4,21 @@
  * @date April 2013
  */
 
+/**
+ * Function displays the operation dialog that was selected by calling some helper functions.
+ */
+function processOperationLinkRequest(operation) {
+	var operationDialog = '#'+operation+'Dialog';
+//	resetDialogsAndHighlightings();
+	setFormContainerOperation(operation);
+	showInputDialogSlow(operationDialog);
+}
+
+
+/**
+ * Function is used to check which containers currently get displayed 
+ * and modifies their height depending on that information.
+ */
 function modifyContainerHeight() {
 	if($('#lineDetails').hasClass('hide') && $('#scriptDialog').hasClass('hide')) {
 		$('#workflowContainer.well').css('min-height','193px');
@@ -20,10 +35,11 @@ function modifyContainerHeight() {
 	}
 }
 
-function getFormData(dialog) {
-	return $(dialog).serializeArray();
-}
 
+/**
+ * Functions are used to check the input length and to put the input values into the global workflow variable. 
+ * Finally the operation dialog gets reset to its standard behavior.
+ */
 function processRegisterOperation() {
 	var values = getFormData('#registerDialog');
 	var oper = 'REGISTER';
@@ -42,9 +58,8 @@ function processRegisterOperation() {
 	} else {
 		workflow.push({name:'-', relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm});
 	}
-	finalizeSubmit(this);
+	finalizeSubmit('#registerDialog');
 }
-
 function processLoadOperation() {
 	var values = getFormData('#loadDialog');
 	var oper = 'LOAD';
@@ -74,9 +89,8 @@ function processLoadOperation() {
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2, comment:comm});
 	}
-	finalizeSubmit(this);
+	finalizeSubmit('#loadDialog');
 }
-
 function processStoreOperation() {
 	var values = getFormData('#storeDialog');
 	var oper = 'STORE';
@@ -97,9 +111,8 @@ function processStoreOperation() {
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm});
 	}
-	finalizeSubmit(this);
+	finalizeSubmit('#storeDialog');
 }
-
 function processFilterOperation() {
 	var values = getFormData('#filterDialog');
 	var oper = 'FILTER';
@@ -124,9 +137,8 @@ function processFilterOperation() {
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-', comment:comm});
 	}
-	finalizeSubmit(this);
+	finalizeSubmit('#filterDialog');
 }
-
 function processJoinOperation() {
 	var values = getFormData('#joinDialog');
 	var oper = 'JOIN';
@@ -153,11 +165,10 @@ function processJoinOperation() {
 	} else {
 		workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2, comment:comm});
 	}
-	finalizeSubmit(this);
+	finalizeSubmit('#joinDialog');
 }
-
 function processScriptOperation() {
-	var values = getFormData('#scriptTextarea');
+	var script = $('#scriptTextarea').val();
 	var oper = 'SCRIPT';
 	var comm = $('#comments').val();
 	if(comm == null || comm == ''){
@@ -169,19 +180,36 @@ function processScriptOperation() {
 	} else {
 		workflow.push({name:'script', relation:'-', operation:oper, relation2:'-', options:script, options2:'-', comment:comm});
 	}
-	finalizeSubmit(this);
+	finalizeSubmit('#scriptDialog');
 	$('#scriptDialog').addClass('hide');
 	$('#scriptTextarea').val('');
 	modifyContainerHeight();
 }
 
-function processOperationLinkRequest(operation) {
-	var operationDialog = '#'+operation+'Dialog';
-	setFormContainerOperation(operation);
-	resetDialogsAndHighlightings();
-	showInputDialogSlow(operationDialog);
-	hideNotSpecifiedInputDialogs(operation);
+
+/**
+ * Helper function to retrieve the input values of the given input form.
+ * @returns form values as an array
+ */
+function getFormData(dialog) {
+	return $(dialog).serializeArray();
 }
+
+
+/**
+ * Method checks if the clicked button was a delete button or if it was 
+ * a cancellation of the input. It eigther shows a security alert or resets 
+ * the operation dialog by calling a helper function.
+ * @param clicked button
+ */
+function processInputFormCancellation(button) {
+	if(button.hasClass('delete')) {
+		showSecurityAlertRemove();
+		return;
+	}
+	finishReset(button);
+}
+
 
 function showErrorMessageShortInput() {
 	showInputErrorMsg('Inputs have to be at least 2 characters long. Please click the save button again and type <br>a longer name.');
@@ -360,14 +388,7 @@ function resetSavedWorkflowComment() {
 	}
 }
 
-function processInputFormCancellation(button) {
-	if(button.hasClass('delete')) {
-		showSecurityAlertRemove(button);
-		return;
-	}
-	button.removeClass('modification');
-	finishReset(button);
-}
+
 
 /**
  * Returns a relation-name if the user has not specified one.

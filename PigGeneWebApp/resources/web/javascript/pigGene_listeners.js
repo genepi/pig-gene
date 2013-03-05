@@ -7,46 +7,57 @@
 
 $(document).ready(function() {
 	
+	/**
+	 * Function is used to save the standard explanation in a global variable. 
+	 * This value is used again if the user deletes the currently used workflow.
+	 */
 	$(window).load(function(){
 		preSaveStdContent();
 	});
 	
+	
+	/**
+	 * Function to set an English error message if the user does 
+	 * not specify a value in a form field that must not be blank.
+	 */
     $('input[type=text]').on('change invalid', function() {
     	setMissingFormValueText($(this).get(0));
     });
     
+    
+    /**
+     * Functions to process clicks that select the different 
+     * operations in the menu on the right side.
+     */
 	$('#registerLink').on('click', function() {
 		processOperationLinkRequest('register');
 	});
-	
     $('#loadLink').on('click', function() {
     	processOperationLinkRequest('load');
 	});
-    
 	$('#storeLink').on('click', function() {
 		processOperationLinkRequest('store');
 	});
-	
 	$('#filterLink').on('click', function() {
 		processOperationLinkRequest('filter');
 	});
-	
 	$('#joinLink').on('click', function() {
 		processOperationLinkRequest('join');
 	});
-	
 	$('#userScriptLink').on('click', function() {
-		processOperationLinkRequest('script');
 		setFormContainerOperation('user defined script');
-		showScriptDialog();
+		showScriptDialogSlow();
 		modifyContainerHeight();
 	});
 	
+	
+	/**
+	 * Functions to process clicks that submit the operation forms. No page reload!
+	 */
 	$('#registerDialog').on('submit', function() {
 		processRegisterOperation();
 		return false;
 	});
-	
 	$('#loadDialog').on('submit', function() {
 		processLoadOperation();
 		return false;
@@ -55,12 +66,10 @@ $(document).ready(function() {
 		processStoreOperation();
 		return false;
 	});
-	
 	$('#filterDialog').on('submit', function() {
 		processFilterOperation();
 		return false;
 	});
-	
 	$('#joinDialog').on('submit', function() {
 		processJoinOperation();
 		return false;
@@ -70,9 +79,17 @@ $(document).ready(function() {
 		return false;
 	});
 
+	
+	/**
+	 * Function to process clicks that cancel inputs of operation forms.
+	 */
 	$("button[type='reset']").on('click', function() {
 		processInputFormCancellation($(this));
 	});
+	
+	
+	
+	
 	
 	$('#removeRowBtn').on('click', function() {
 		deleteRowAndDisplayTable();
