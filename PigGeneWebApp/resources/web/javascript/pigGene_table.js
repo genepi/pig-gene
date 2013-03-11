@@ -1,5 +1,5 @@
 /**
- * Functions to convert JSON to HTML table.
+ * JSON to HTML table conversion.
  * 
  * @author Clemens Banas
  * @date April 2013
@@ -40,7 +40,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
     var tbCon = '';
     var trCon = '';
     
-    //guarantee fixed column order
+    //guarantees fixed column order
     var headers = new Array();
     headers.push('name');
     headers.push('relation');

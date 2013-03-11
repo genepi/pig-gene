@@ -1,4 +1,5 @@
 /**
+ * Util functions.
  * 
  * @author Clemens Banas
  * @date April 2013
@@ -9,7 +10,6 @@
  */
 function processOperationLinkRequest(operation) {
 	var operationDialog = '#'+operation+'Dialog';
-//	resetDialogsAndHighlightings();
 	setFormContainerOperation(operation);
 	showInputDialogSlow(operationDialog);
 }
@@ -225,7 +225,7 @@ function setSaveStateSavedAndDisplayStatus() {
  * Function is used to set the save state to "unsaved" and 
  * to show the *-symbol behind the workflow name.
  */
-function setSavedStateUnsavedAndDisplayStatus() {
+function setSaveStateUnsavedAndDisplayStatus() {
 	$('#saveState').removeClass('saved');
 	toggleSaveStateVisualisation();
 }
@@ -266,36 +266,155 @@ function resetSavedLineComment() {
 }
 
 
+/**
+ * Function is used to find out which key was pressed by
+ * the user and to handle the further processing by calling
+ * the proper helper function.
+ * @param pressed key
+ */
+function handleKeydownEvent(e) {
+	if(!isInputFormElement(e)) {
+		switch(e.which) {
+			case 38: highlightUpperRow(); break;
+			case 40: highlightLowerRow(); break;
+			case 46: showSecurityAlertRemove(); break;
+			default: break;
+		}
+	}
+}
+
+
+/**
+ * Function checks if the given argument is an input or a textarea form element.
+ * @param pressed key
+ */
+function isInputFormElement(e) {
+	var elementName = e.target.nodeName.toLowerCase();
+	if(elementName == 'input') {
+		return true;
+	} else if(elementName == 'textarea') {
+		return true;
+	}
+	return false;
+}
+
+
+/**
+ * Function is used to reset the highlighting of the table row by finding out which operation
+ * is currently highlighted and by triggering the corresponding cancel button.
+ * @param target
+ */
+function checkAndResetRowHighlighting(target) {
+	if(target != null && target.context != null && target.context.tagName != null && target.context.tagName == 'DIV') {
+		var selector;
+		var operation = $('#workflowOps').html().toLowerCase()
+		if(operation == 'user defined script') {
+			selector = '#scriptClear';
+		} else {
+			selector = '#' + operation + 'Clear';
+		}
+		$(selector).trigger('click');
+	}
+}
+
+
+/**
+ * Function is used to remove the table row highlightings of all rows except the one that
+ * was given to the function and to display the corresponding operation information by
+ * calling a helper function.
+ * @param tableRow
+ */
+function processTableRowClick(tableRow) {
+	removeTableRowLabeling('warning');
+	$(tableRow).addClass('warning');
+	highlightedRowIndex = $(tableRow).index();
+	displayCorrespondingContainerInfo();
+}
+
+
+/**
+ * Function is used to check if the workflow has been saved bevore. If not an alert 
+ * message is shown. Otherwise the new workflow gets initialized by calling a helper
+ * function.
+ */
+function processNewWfRequest() {
+	if(!$('#saveState').hasClass('saved')) {
+		showDiscardChangesAlert();
+		return;
+	}
+	initializeNewWorkflow();
+}
+
+
+/**
+ * Function is used to show an error message to indicate that the input was too short.
+ */
 function showErrorMessageShortInput() {
 	showInputErrorMsg('Inputs have to be at least 2 characters long. Please click the save button again and type <br>a longer name.');
 }
 
-function ajaxRequestSaveWorkflow(filename) {
-	var data = '{"filename":"' + filename + '"}';
-	$.ajax({
-		type: 'POST',
-	    url: 'http://localhost:8080/ex',
-	    data: data,
-	    dataType: 'json',
-	    success: function(response) {
-	    	if(response.success) {
-				if(response.data) {
-					showSecurityAlert(filename);
-				} else {
-					saveWorkflow(filename);
-				}
-	    	} else {
-	    		$('#errmsg').html(response.message);
-	    		$('#errorModal').modal('show');
-	    	}
-	    },
-	    error: function (xhr, ajaxOptions, thrownError) {
-	    	$('#errmsg').html(xhr.responseText);
-    		$('#errorModal').modal('show');
-	   }
-	});
+
+/**
+ * Function is used to process a click on the description button.
+ * If the description is hidden the description dialog gets displayed,
+ * the previous saved description gets set into the textfield and the
+ * icon of the button gets changed to indicate the expanded state.
+ * Otherwise the cancel button gets triggered to close the dialog.
+ */
+function processDescriptionBtnClick() {
+	if($('#workflowDescription').hasClass('hide')) {
+		$('#workflowDescription').removeClass('hide');
+		resetDescription();
+		showExpandedDescriptionIcon();
+	} else {
+		$('#workflowDescrClear').trigger('click');
+	}
 }
 
+
+/**
+ * Function is used to reorder two table lines. The currently highlighted an the line above.
+ * These changes are made directly to the global workflow variable. The previously highlighted
+ * line stays highlighted, the save state changes to "unsaved" and the changed table gets displayed.
+ */
+function orderUpHandling() {
+	if(~highlightedRowIndex && highlightedRowIndex!=0 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').hasClass('warning')) {
+		var tmp = workflow[highlightedRowIndex-1];
+		workflow[highlightedRowIndex-1] = workflow[highlightedRowIndex];
+		workflow[highlightedRowIndex] = tmp;
+		displayTable();
+		addTableRowHighlighting(highlightedRowIndex);
+		highlightedRowIndex--;
+		setSavedStateUnsavedAndDisplayStatus();
+	}
+}
+
+
+/**
+ * Function is used to reorder two table lines. The currently highlighted an the line below.
+ * These changes are made directly to the global workflow variable. The previously highlighted
+ * line stays highlighted, the save state changes to "unsaved" and the changed table gets displayed.
+ */
+function orderDownHandling() {
+	var rowCount = $('#operationTable tr').length;
+	if (~highlightedRowIndex && highlightedRowIndex!=rowCount-2 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')')) {
+		var tmp = workflow[highlightedRowIndex+1];
+		workflow[highlightedRowIndex+1] = workflow[highlightedRowIndex];
+		workflow[highlightedRowIndex] = tmp;
+		displayTable();
+		addTableRowHighlighting(highlightedRowIndex+2);
+		highlightedRowIndex++;
+		setSaveStateUnsavedAndDisplayStatus();
+	}
+}
+
+
+/**
+ * Function is used to check if the current workflow was saved. If it was saved then
+ * the function places a link into the clicked downloadScript-button that enables
+ * the user to directly download the requested workflow as a pigscript generated by
+ * the server.
+ */
 function processDownloadRequest() {
 	if($('#saveState').hasClass('saved')) {
 		var filename = $('#workflowName').html();
@@ -309,20 +428,11 @@ function processDownloadRequest() {
 }
 
 
-
-function orderUpHandling() {
-	if(~highlightedRowIndex && highlightedRowIndex!=0 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').hasClass('warning')) {
-		var tmp = workflow[highlightedRowIndex-1];
-		workflow[highlightedRowIndex-1] = workflow[highlightedRowIndex];
-		workflow[highlightedRowIndex] = tmp;
-		displayTable();
-		$('#operationTable tbody tr:nth-child('+(highlightedRowIndex)+')').addClass('warning');
-		highlightedRowIndex--;
-		$('#saveState').removeClass('saved');
-		toggleSaveStateVisualisation();
-	}
-}
-
+/**
+ * Function is used to trigger a load or a delete 
+ * request depending on the shown popover.
+ * @param fileName
+ */
 function processLoadDeleteWfRequest(fileName) {
 	hideLineDetailDialog();
 	if($('#showWfBtn').hasClass('showWfBtnPopover')) {
@@ -338,90 +448,20 @@ function processLoadDeleteWfRequest(fileName) {
 	}
 }
 
-function handleKeydownEvent(e) {
-	var selector = 'tr:nth-child(' + (highlightedRowIndex+1) + ')';
-	if(!isInputFormElement(e)) {
-		switch(e.which) {
-			case 38: highlightUpperRow(); break;
-			case 40: highlightLowerRow(); break;
-			case 46: showSecurityAlertRemove(); break;
-			default: break;
-		}
+
+/**
+ * Function is used to convert the given filenames into html-links.
+ * @param data
+ */
+function convertFilenamesToLinks(data) {
+	var toRemove = '.yaml';
+	var content = '';
+	for(var i=0; i<data.length; i++) {
+		var name = data[i].replace(toRemove,'');
+		content += '<a class="fileNames">'+name+'</a><br>'
 	}
+	return content;
 }
-
-function processTableRowClick(tableRow) {
-	removeTableRowLabeling('warning');
-	$(tableRow).addClass('warning');
-	highlightedRowIndex = $(tableRow).index();
-	displayCorrespondingContainerInfo();
-}
-
-function processNewWfRequest() {
-	if(!$('#saveState').hasClass('saved')) {
-		showDiscardChangesAlert();
-		return;
-	}
-	initializeNewWorkflow();
-}
-
-function processDescriptionBtnClick() {
-	if($('#workflowDescription').hasClass('hide')) {
-		$('#workflowDescription').removeClass('hide');
-		resetDescription();
-		showExpandedDescriptionIcon();
-	} else {
-		$('#workflowDescrClear').trigger('click');
-	}
-}
-
-
-
-function orderDownHandling() {
-	var rowCount = $('#operationTable tr').length;
-	if (~highlightedRowIndex && highlightedRowIndex!=rowCount-2 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')')) {
-		var tmp = workflow[highlightedRowIndex+1];
-		workflow[highlightedRowIndex+1] = workflow[highlightedRowIndex];
-		workflow[highlightedRowIndex] = tmp;
-		displayTable();
-		$('#operationTable tbody tr:nth-child('+(highlightedRowIndex+2)+')').addClass('warning');
-		highlightedRowIndex++;
-		setSavedStateUnsavedAndDisplayStatus();
-	}
-}
-
-
-
-
-
-
-
-
-function isInputFormElement(e) {
-	var elementName = e.target.nodeName.toLowerCase();
-	if(elementName == 'input') {
-		return true;
-	} else if(elementName == 'textarea') {
-		return true;
-	}
-	return false;
-}
-
-function checkAndResetRowHighlighting(target) {
-	if(target != null && target.context != null && target.context.tagName != null && target.context.tagName == 'DIV') {
-		var selector;
-		var operation = $('#workflowOps').html().toLowerCase()
-		if(operation == 'user defined script') {
-			selector = '#scriptClear';
-		} else {
-			selector = '#' + operation + 'Clear';
-		}
-		$(selector).trigger('click');
-	}
-}
-
-
-
 
 
 /**
@@ -431,6 +471,7 @@ function getArtificialName() {
 	return 'R' + nameCounter++;
 }
 
+
 /**
  * Checks if the input is longer than 1 character.
  */
@@ -439,14 +480,4 @@ function inputLongEnough(input) {
 		return false;
 	}
 	return true;
-}
-
-function convertFilenamesToLinks(data) {
-	var toRemove = '.yaml';
-	var content = '';
-	for(var i=0; i<data.length; i++) {
-		var name = data[i].replace(toRemove,'');
-		content += '<a class="fileNames">'+name+'</a><br>'
-	}
-	return content;
 }

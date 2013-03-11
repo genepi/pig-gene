@@ -1,5 +1,5 @@
 /**
- * Listener functions
+ * Listener functions - handle user events.
  * 
  * @author Clemens Banas
  * @date April 2013
@@ -102,7 +102,7 @@ $(document).ready(function() {
 	 */	
 	$('#workflowDescrSubmit').on('click', function() {
 		description = $('#description').val();
-		setSavedStateUnsavedAndDisplayStatus();
+		setSaveStateUnsavedAndDisplayStatus();
 		descriptionButtonHandling();
 	});
 
@@ -124,7 +124,7 @@ $(document).ready(function() {
 	$('#lineCommentSubmit').on('click', function() {
 		saveCommentInWorkflow($('#comments').val());
 		blinkEffectComments();
-		setSavedStateUnsavedAndDisplayStatus();
+		setSaveStateUnsavedAndDisplayStatus();
 	});
 	
 	
@@ -136,60 +136,117 @@ $(document).ready(function() {
 	});
 	
 	
-	
-	
-	
-	
+	/**
+	 * Function reacts when user presses a key on the keyboard.
+	 */
 	$('html').keydown(function(e) {
 		handleKeydownEvent(e);
 	});
 	
+	
+	/**
+	 * Function reacts on a user click within the workflow container.
+	 * Resets the table row highlighting and the display of the 
+	 * operation dialog by calling a helper method.
+	 */
 	$('#workflowContainer').on('click', function(e) {
 		checkAndResetRowHighlighting($(e.target));
 	});
 	
+	
+	/**
+	 * Function is used to react on a user click within a table row.
+	 * The row gets highlighted and the corresponding information
+	 * gets displayed in the operation dialog by calling a helper function.
+	 */
 	$('#tableContainer').on('click', 'tr', function() {
 		processTableRowClick($(this));
 	});
 	
+	
+	/**
+	 * Function shows the new workflow view dependent of the save state
+	 * of the current workflow - not saved: modal dialog to ensure that
+	 * the user wants to discard the changes.
+	 */
 	$('#newWfBtn').on('click', function() {
 		processNewWfRequest();
 	});
 	
+	
+	/**
+	 * Function is used to show a new workflow if the user clicks
+	 * the discard changes button (old workflow not saved).
+	 */
 	$('#discardWfChangesBtn').on('click', function() {
 		$('#discardChangesCheckModal').modal('hide');
 		initializeNewWorkflow();
 	});
 	
+	
+	/**
+	 * Function shows the save dialog.
+	 */
 	$('#saveWfBtn').on('click', function() {
 		processSaveWfRequest();
 	});
 	
+	
+	/**
+	 * Function processes the save instruction by calling a
+	 * helper function.
+	 */
 	$('#saveWorkflow').on('submit', function() {
 		save();
 		return false;
 	});
 	
+	
+	/**
+	 * Function is used to save the workflow after the user clicked
+	 * the button to ensure that he wants to override the workflow.
+	 */
+	$('#overrideBtn').on('click', function() {
+		$('#saveCheckModal').modal('hide');
+		saveWorkflow(filename);
+	});
+	
+	
+	/**
+	 * Function handles a users download request by clicking the download button.
+	 */
 	$('#downloadScript').on('click', function() {
 		processDownloadRequest();
 	});
 	
+	
+	/**
+	 * Functions are used to handle hovers over the line "reordering" icons.
+	 */
 	$('#orderUp').hover(function() {
 		hoverOverArrowAction('#up');
 	});
-	
 	$('#orderDown').hover(function() {
 		hoverOverArrowAction('#down');
 	});
 	
+	
+	/**
+	 * Functions are used to rearrange two table lines if the 
+	 * user clicks on the up or down links in the line dialog.
+	 */
 	$('#orderUp').on('click', function() {
 		orderUpHandling();
 	});
-	
 	$('#orderDown').on('click', function(){
 		orderDownHandling();
 	});
 	
+	
+	/**
+	 * Functions are used to toggle the display of additional text separator options
+	 * in the operations dialog when a load operation is selected.
+	 */
 	$('#loadVcf').on('click', function() {
 		hideTxtSeparatorOptions();
 	});
@@ -197,10 +254,20 @@ $(document).ready(function() {
 		showTxtSeparatorOptions();
 	});
 	
+	
+	/**
+	 * Function is used to process a users load workflow 
+	 * and delete workflow request.
+	 */
 	$('#actionBtns').on('click', 'a.fileNames', function() {
 		processLoadDeleteWfRequest($(this).html());
 	});
 	
+	
+	/**
+	 * Functions are used to display/hide the popovers that show the existing workflows.
+	 * If a popover gets displayed - the existing workflows are fetched from the server.
+	 */
 	$('#showWfBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
 		handleWorkflowRequest('#showWfBtn');
 	});
@@ -208,10 +275,19 @@ $(document).ready(function() {
 		handleWorkflowRequest('#deleteWfBtn');
 	});
 	
+	
+	/**
+	 * Function handles a click on the description 
+	 * button by calling a helper function.
+	 */
 	$('#descriptionBtn').on('click', function() {
 		processDescriptionBtnClick();
 	});
 
+	
+	/**
+	 * Function closes the success indication modal dialog.
+	 */
 	$('#closeSuccModal').on('click', function() {
 		$('#successModal').modal('hide');
 	});

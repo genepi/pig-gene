@@ -1,4 +1,5 @@
 /**
+ * Workflow operation functions - load, save, delete.
  * 
  * @author Clemens Banas
  * @date April 2013
@@ -25,43 +26,66 @@ function finalizeSubmit(obj) {
 	hideLineDetailDialog();
 	if($('#workflowName').hasClass('new')) {
 		$('#workflowName').removeClass('new');
-		$('#workflowName').html(' unnamed');
+		setWorkflowName(' unnamed')
 	}
 }
 
 
-
-function loadWorkflow(filename) {
-		var data = '{"filename":"' + filename + '"}';
-		$.ajax({
-    		type: 'POST',
-    	    url: 'http://localhost:8080/ld',
-    	    data: data,
-    	    dataType:'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-    	    		initializeLoadedWorkflow(response.data);
-    	    		$('#workflowName').html(filename);
-    	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
-    	    		$('#msg').html('Your workflow was loaded successfully!');
-    	    		setStandardBehaviorSuccessModal();
-					$('#saveState').addClass('saved');
-					toggleSaveStateVisualisation();
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-		prepareContainers();
-		initializeButtons();
+/**
+ * Function is used to check if the given workflow-name is long enough.
+ * If it is too short an error message gets displayed otherwise an ajax
+ * request function is called to save the workflow on server side.
+ */
+function save() {
+	var filename = $('#saveDialogInput').val();
+	$('#saveNameModal').modal('hide');
+	if(!inputLongEnough(filename)) {
+		showErrorMessageShortInput();
 		return false;
+	}
+	ajaxRequestSaveWorkflow(filename);
+	return false;
 }
 
+
+/**
+ * Function is used to transfer the filename to the server. If the server returns true to indicate that the name
+ * is already in use then an alert is shown to double check if the user really wants to override the old workflow.
+ * Otherwise the workflow gets saved by calling a assynchronic helper function.
+ * @param filename
+ */
+function ajaxRequestSaveWorkflow(filename) {
+	var data = '{"filename":"' + filename + '"}';
+	$.ajax({
+		type: 'POST',
+	    url: 'http://localhost:8080/ex',
+	    data: data,
+	    dataType: 'json',
+	    success: function(response) {
+	    	if(response.success) {
+				if(response.data) {
+					showSecurityAlert(filename);
+				} else {
+					saveWorkflow(filename);
+				}
+	    	} else {
+	    		$('#errmsg').html(response.message);
+	    		$('#errorModal').modal('show');
+	    	}
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+	    	$('#errmsg').html(xhr.responseText);
+    		$('#errorModal').modal('show');
+	   }
+	});
+}
+
+
+/**
+ * Function is used to send the workflow data to the server with an ajax request.
+ * The server processes the data and saves the user defined workflow.
+ * @param filename
+ */
 function saveWorkflow(filename) {
 	//last two elements just needed for the ajax request, remove afterwards
 	workflow.push(description);
@@ -89,9 +113,8 @@ function saveWorkflow(filename) {
 	    		}
 	    		resetOperationDialog($('#workflowOps').html().toLowerCase());
 	    		resetFormContainerOperation();
-	    		$('#workflowName').html(filename);
-				$('#saveState').addClass('saved');
-				toggleSaveStateVisualisation();
+	    		setWorkflowName(filename);
+	    		setSaveStateSavedAndDisplayStatus();
 	    	} else {
 	    		$('#errmsg').html(response.message);
 	    		$('#errorModal').modal('show');
@@ -105,8 +128,52 @@ function saveWorkflow(filename) {
 	return false;
 }
 
-function deleteWorkflow(filename) {
-	var data = '{"filename":"' + filename + '"}';
+
+/**
+ * Function is used to load the workflow that matches the given file name.
+ * After successfully loading the workflow it gets initialized and displayed
+ * by calling several helper functions. Also surrounding information like
+ * additional operation buttons get displayed. 
+ * @param fileName
+ */
+function loadWorkflow(fileName) {
+		var data = '{"filename":"' + fileName + '"}';
+		$.ajax({
+    		type: 'POST',
+    	    url: 'http://localhost:8080/ld',
+    	    data: data,
+    	    dataType:'json',
+    	    success: function(response) {
+    	    	if(response.success) {
+    	    		initializeAndDisplayLoadedWorkflow(response.data);
+    	    		setWorkflowName(fileName);
+    	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
+    	    		$('#msg').html('Your workflow was loaded successfully!');
+    	    		setStandardBehaviorSuccessModal();
+					$('#saveState').addClass('saved');
+					toggleSaveStateVisualisation();
+    	    	} else {
+    	    		$('#errmsg').html(response.message);
+    	    		$('#errorModal').modal('show');
+    	    	}
+    	    },
+    	    error: function (xhr, ajaxOptions, thrownError) {
+    	    	$('#errmsg').html(xhr.responseText);
+	    		$('#errorModal').modal('show');
+    	   }
+    	});
+		prepareContainers();
+		initializeButtons();
+		return false;
+}
+
+
+/**
+ * Function is used to delete the workflow that matches the given file name.
+ * @param fileName
+ */
+function deleteWorkflow(fileName) {
+	var data = '{"filename":"' + fileName + '"}';
 	$.ajax({
 		type: 'POST',
 	    url: 'http://localhost:8080/del',
@@ -131,10 +198,12 @@ function deleteWorkflow(filename) {
 }
 
 
-
-
-
-
+/**
+ * Function is used to load all existing workflow names from the server if no popup is present.
+ * These names are displayed as links in a popup that shows up on the button the user clicked.
+ * Otherwise the existing popup gets closed.
+ * @param buttonName
+ */
 function handleWorkflowRequest(buttonName) {
 	var id = buttonName.substring(1,buttonName.length) + 'Popover';
 	if($(buttonName).hasClass('pop')) {
@@ -160,18 +229,4 @@ function handleWorkflowRequest(buttonName) {
     	   }
     	});
 	}
-}
-
-
-
-
-function save() {
-	var filename = $('#saveDialogInput').val();
-	$('#saveNameModal').modal('hide');
-	if(!inputLongEnough(filename)) {
-		showErrorMessageShortInput();
-		return false;
-	}
-	ajaxRequestSaveWorkflow(filename);
-	return false;
 }
