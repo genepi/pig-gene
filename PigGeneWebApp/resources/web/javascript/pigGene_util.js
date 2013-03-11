@@ -212,7 +212,7 @@ function processInputFormCancellation(button) {
 
 
 /**
- * Function is used to set the save state to "saved" and 
+ * Function is used to set the save state to 'saved' and 
  * to hide the *-symbol behind the workflow name.
  */
 function setSaveStateSavedAndDisplayStatus() {
@@ -222,7 +222,7 @@ function setSaveStateSavedAndDisplayStatus() {
 
 
 /**
- * Function is used to set the save state to "unsaved" and 
+ * Function is used to set the save state to 'unsaved' and 
  * to show the *-symbol behind the workflow name.
  */
 function setSaveStateUnsavedAndDisplayStatus() {
@@ -339,6 +339,7 @@ function processTableRowClick(tableRow) {
  */
 function processNewWfRequest() {
 	if(!$('#saveState').hasClass('saved')) {
+		$('#discardFilename').html($('#workflowName').html());
 		showDiscardChangesAlert();
 		return;
 	}
@@ -375,7 +376,7 @@ function processDescriptionBtnClick() {
 /**
  * Function is used to reorder two table lines. The currently highlighted an the line above.
  * These changes are made directly to the global workflow variable. The previously highlighted
- * line stays highlighted, the save state changes to "unsaved" and the changed table gets displayed.
+ * line stays highlighted, the save state changes to 'unsaved' and the changed table gets displayed.
  */
 function orderUpHandling() {
 	if(~highlightedRowIndex && highlightedRowIndex!=0 && $('#operationTable tbody tr:nth-child('+(highlightedRowIndex+1)+')').hasClass('warning')) {
@@ -385,7 +386,7 @@ function orderUpHandling() {
 		displayTable();
 		addTableRowHighlighting(highlightedRowIndex);
 		highlightedRowIndex--;
-		setSavedStateUnsavedAndDisplayStatus();
+		setSaveStateUnsavedAndDisplayStatus();
 	}
 }
 
@@ -393,7 +394,7 @@ function orderUpHandling() {
 /**
  * Function is used to reorder two table lines. The currently highlighted an the line below.
  * These changes are made directly to the global workflow variable. The previously highlighted
- * line stays highlighted, the save state changes to "unsaved" and the changed table gets displayed.
+ * line stays highlighted, the save state changes to 'unsaved' and the changed table gets displayed.
  */
 function orderDownHandling() {
 	var rowCount = $('#operationTable tr').length;
@@ -429,6 +430,22 @@ function processDownloadRequest() {
 
 
 /**
+ * Function checks if workflow was saved - if not it shows
+ * a modal dialog to avoid unwanted data loss.
+ * @param fileName
+ */
+function loadDeleteWfRequest(fileName) {
+	if(!$('#saveState').hasClass('saved')) {
+		$('#discardFilename').html($('#workflowName').html());
+		$('#discardFilename').addClass('load');
+		loadDeleteWorkflowName = fileName;
+		showDiscardChangesAlert();
+		return;
+	}
+	processLoadDeleteWfRequest(fileName);
+}
+
+/**
  * Function is used to trigger a load or a delete 
  * request depending on the shown popover.
  * @param fileName
@@ -445,6 +462,23 @@ function processLoadDeleteWfRequest(fileName) {
 		if(fileName == $('#workflowName').html().trim()) {
 			resetWorkflow();
 		}
+	}
+}
+
+
+/**
+ * Function is used to dinstinguish between the loading of a
+ * new workflow or the loading/deletion of an existing workflow.
+ * It calls the corresponding helper functions and hides the
+ * modal dialog.
+ */
+function processDiscardChanges() {
+	$('#discardChangesCheckModal').modal('hide');
+	if($('#discardFilename').hasClass('load')) {
+		$('#discardFilename').removeClass('load');
+		processLoadDeleteWfRequest(loadDeleteWorkflowName);
+	} else {
+		initializeNewWorkflow();
 	}
 }
 

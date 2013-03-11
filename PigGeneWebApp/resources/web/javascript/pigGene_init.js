@@ -7,7 +7,7 @@
 
 
 /**
- * Function is used to "save" the explanation, 
+ * Function is used to 'save' the explanation, 
  * that is stored in the table container div initially.
  */
 function preSaveStdContent() {

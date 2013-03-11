@@ -17,7 +17,7 @@ function setFormContainerOperation(operation) {
 
 /**
  * Function is responsible to show the operations selection 
- * dialog and to display the standard text "operations".
+ * dialog and to display the standard text 'operations'.
  */
 function resetFormContainerOperation() {
 	$('#stepAction').removeClass('hide');
@@ -35,6 +35,7 @@ function resetDialogsAndHighlightings() {
 	resetFormContainerOperation();
 	removeTableRowHighlighting(highlightedRowIndex+1);
 	hideLineDetailDialog();
+	modifyContainerHeight();
 }
 
 
@@ -413,10 +414,12 @@ function showDiscardChangesAlert() {
 /**
  * Function is used to show a security alert to check if the user
  * really wants to override a workflow with the given name.
- * @param filename
+ * @param fileName
  */
-function showSecurityAlert(filename) {
+function showSecurityAlert(fileName) {
+	$('#overrideFilename').html(fileName);
 	$('#saveCheckModal').modal('show');
+	
 }
 
 
@@ -434,7 +437,7 @@ function setModificationBehaviorSuccessModal(filename) {
 
 /**
  * Function is used to convert the okay-button into
- * a "normal" link without download functionality.
+ * a 'normal' link without download functionality.
  */
 function setStandardBehaviorSuccessModal() {
 	$('#closeSuccModal').removeAttr('download').removeAttr('href');
@@ -457,7 +460,7 @@ function showExpandedDescriptionIcon() {
  * @param element
  */
 function hoverOverArrowAction(element) {
-	$(element).toggleClass('icon-white');
+	$(element).toggleClass('icon-grey');
 }
 
 

@@ -22,7 +22,6 @@ form input[type=text] {
 	width: 840px;
 }
 
-
 .span5 {
 	width: 340px;
 }
@@ -35,12 +34,16 @@ form input[type=text] {
 	font-size: 11pt;
 }
 
+.icon-grey {
+  background-image: url("../img/glyphicons-halflings-grey.png");
+}
+
 #logoContainer.well {
 	margin-top: 10px;
 	margin-right: 10px;
 	padding: 3px 2px 3px 10px;
-	height: 40px;
 	width: 200px;
+	height: 40px;
 	float: right;
 }
 
@@ -90,8 +93,8 @@ form input[type=text] {
 
 #processElements {
 	height: 68px;
-	margin-bottom: 20px;
 	padding: 0px;
+	margin-bottom: 20px;
 }
 
 #newWfBtn, #showWfBtn, #saveWfBtn, #deleteWfBtn, #downloadScript {
@@ -106,8 +109,8 @@ form input[type=text] {
 
 #descriptionBtn {
 	padding: 0px 2px 0px 0px;
-	width: 10px;
 	margin-top: -7px;
+	width: 10px;
 }
 
 #projectName {
@@ -135,8 +138,8 @@ form input[type=text] {
 }
 
 #formContainer {
-	height: 175px;
 	padding: 5px 0px 19px 19px;
+	height: 175px;
 }
 
 #workflowOps {
@@ -148,8 +151,8 @@ form input[type=text] {
 }
 
 #action {
-	width: 99px;
 	padding-left: 9px;
+	width: 99px;
 }
 
 #loadFiletypeSeparator.btn-group {
@@ -162,13 +165,13 @@ form input[type=text] {
 }
 
 #workflowDescription {
-	height: 119px;
 	width: 760px;
+	height: 119px;
 }
 
 #lineDetails {
-	height: 152px;
 	padding: 13px 0px 20px 20px;
+	height: 152px;
 }
 
 #lineDetails p {
@@ -176,18 +179,18 @@ form input[type=text] {
 }
 
 #lineOrdering {
-	display: inline;
 	margin: 10px 0px 0px 0px; 
+	display: inline;
 }
 
 #orderUp {
-	width: 17px;
 	padding-left: 5px;
+	width: 17px;
 }
 
 #orderDown {
-	width: 17px;
 	padding-left: 0px;
+	width: 17px;
 }
 
 #up, #down {
@@ -204,10 +207,10 @@ form input[type=text] {
 }
 
 #description, #comments, #scriptTextarea {
-	resize: none;
-	height: 42px;
-	width: 286px;
 	margin-bottom: 5px;
+	width: 286px;
+	height: 42px;
+	resize: none;
 }
 
 #description {

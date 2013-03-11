@@ -98,7 +98,7 @@ $(document).ready(function() {
 	
 	/**
 	 * Function saves the workflow description in the global description variable,
-	 * displays the "unsaved"-save state and collapses the description.
+	 * displays the 'unsaved'-save state and collapses the description.
 	 */	
 	$('#workflowDescrSubmit').on('click', function() {
 		description = $('#description').val();
@@ -175,12 +175,10 @@ $(document).ready(function() {
 	
 	
 	/**
-	 * Function is used to show a new workflow if the user clicks
-	 * the discard changes button (old workflow not saved).
+	 * Function is used to process the discard changes approval.
 	 */
 	$('#discardWfChangesBtn').on('click', function() {
-		$('#discardChangesCheckModal').modal('hide');
-		initializeNewWorkflow();
+		processDiscardChanges();
 	});
 	
 	
@@ -208,7 +206,7 @@ $(document).ready(function() {
 	 */
 	$('#overrideBtn').on('click', function() {
 		$('#saveCheckModal').modal('hide');
-		saveWorkflow(filename);
+		saveWorkflow($('#overrideFilename').html());
 	});
 	
 	
@@ -221,7 +219,7 @@ $(document).ready(function() {
 	
 	
 	/**
-	 * Functions are used to handle hovers over the line "reordering" icons.
+	 * Functions are used to handle hovers over the line 'reordering' icons.
 	 */
 	$('#orderUp').hover(function() {
 		hoverOverArrowAction('#up');
@@ -260,7 +258,7 @@ $(document).ready(function() {
 	 * and delete workflow request.
 	 */
 	$('#actionBtns').on('click', 'a.fileNames', function() {
-		processLoadDeleteWfRequest($(this).html());
+		loadDeleteWfRequest($(this).html());
 	});
 	
 	

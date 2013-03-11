@@ -21,6 +21,7 @@
 
 <body class="well">
 	<div id="content">
+		<!-- workflow actions and title -->
 		<div class="span12 well" id="processElements">
 			<div class="span10" id="actionBtns">
 				<a id="newWfBtn" class="btn btn-inverse" title="create new workflow"><i class="icon-file icon-white"></i> new workflow</a>
@@ -36,10 +37,11 @@
 			</div>
 		</div>
 		
+		<!-- user defined workflow representation -->
 		<div class="span12 well" id="workflowContainer">
 			<div id="title">
 				<a id="descriptionBtn" class="btn btn-link hide" title="add workflow description"><i class="icon-plus-sign" id="descriptionIcon"></i></a>
-				<h3 id="workflowName""> workflow</h3>
+				<h3 id="workflowName"> workflow</h3>
 				<h3 class="saved" id="saveState"></h3>
 				<div class="well hide" id="workflowDescription">
 					<h4 id="descrText">DESCRIPTION</h4>
@@ -57,8 +59,11 @@
 			</div>
 		</div>
 	
+		<!-- workflow related operation dialogs -->
 		<div class="span5" id="affixContainer">
 			<div class="span5 affix-top" data-spy="affix" data-offset-top="105" id="operationPanels">
+				
+				<!-- workflow line details dialog -->
 				<div class="well hide" id="lineDetails">
 					<h4 id="lineOrdering">LINE</h4>
 					<button class="btn btn-link" id="orderUp"><i id="up" class="icon-arrow-up"></i></button>
@@ -69,6 +74,7 @@
 					<button class="btn btn-success" id="lineCommentSubmit">add comment</button>
 				</div>
 			
+				<!-- workflow operation selection dialogs -->
 				<div class="well hide" id="formContainer">
 					<h4 id="workflowOps">OPERATIONS</h4>
 					<div class="btn-group" id="stepAction" title="click to select an operation">
@@ -147,32 +153,27 @@
 					</form>
 					
 					<form class="form-search hide" id="scriptDialog">
-						<textarea id="scriptTextarea" placeholder="type your script" title="user script" value=""></textarea><br>
+						<textarea id="scriptTextarea" placeholder="type your script" title="user script"></textarea><br>
 						<button class="btn" id="scriptClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="scriptDelete" type="reset">delete</button>
 						<button class="btn btn-success hide" id="scriptSubmitChange" type="submit">save changes</button>
 						<button class="btn btn-success" id="scriptSubmit" type="submit">add script</button><br>
 					</form>
-					
 				</div>
 				
-				<!-- Alert... -->
+				<!-- input error dialog -->
 				<div class="alert alert-block alert-error fade in hide" id="inputError">
 			        <h4 class="alert-heading">Warning! Input error!</h4>
 			        <p id="inputErrMsg"></p>
 		        </div>
-		        <!-- ...Alert -->
-		        
-		        <!-- new information div (tooltip) -->
-		        
 			</div>
 		</div>
 	</div>
 
-	<!-- modal Dialogs ... -->
+	<!-- modal dialogs -->
 	<div class="modal hide fade" id="successModal">
 	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
 	    <p id="modalHeaderContent"></p>
 	  </div>
 	  <div class="modal-body">
@@ -185,7 +186,7 @@
 	
 	<div class="modal hide fade" id="errorModal">
 	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
 	    <h3> An error occured!</h3>
 	  </div>
 	  <div class="modal-body">
@@ -198,7 +199,7 @@
 	
 	<div class="modal hide fade" id="saveNameModal">
 	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
 	    <h3>saving workflow</h3>
 	  </div>
 	  <div class="modal-body">
@@ -214,11 +215,11 @@
 	
 	<div class="modal hide fade" id="saveCheckModal">
 	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
 	    <h3>override file?</h3>
 	  </div>
 	  <div class="modal-body">
-	    <p id="saveMsg">Your specified filename corresponds to an already existing file.<br>
+	    <p id="saveMsg"><b id="overrideFilename"></b> matches an already existing file name.<br>
 	    Do you really want to override it?</p>
 	  </div>
 	  <div class="modal-footer">
@@ -229,7 +230,7 @@
 	
 	<div class="modal hide fade" id="removeCheckModal">
 	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
 	    <h3>delete row?</h3>
 	  </div>
 	  <div class="modal-body">
@@ -243,19 +244,18 @@
 	
 	<div class="modal hide fade" id="discardChangesCheckModal">
 	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
 	    <h3>discard changes</h3>
 	  </div>
 	  <div class="modal-body">
-	    <p id="saveMsg">You have not saved your workspace. Do you really want to discard the changes
-	    and reopen a new workflow?</p>
+	    <p id="saveMsg">You have not saved your workspace. <br>Do you really want to discard the changes
+	    of workflow <b id="discardFilename"></b>?</p>
 	  </div>
 	  <div class="modal-footer">
 	    <a type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
 	    <a type="button" class="btn btn-success" id="discardWfChangesBtn">yes</a>
 	  </div>
 	</div>
-	<!-- ... modal Dialogs -->
 
 </body>
 </html>
