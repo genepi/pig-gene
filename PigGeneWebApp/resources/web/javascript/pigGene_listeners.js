@@ -281,6 +281,14 @@ $(document).ready(function() {
 	$('#descriptionBtn').on('click', function() {
 		processDescriptionBtnClick();
 	});
+	
+	
+	/**
+	 * Function handles the deletion of a workflow.
+	 */
+	$('#removeWfBtn').on('click', function() {
+		processWorkflowDeletion();
+	})
 
 	
 	/**

@@ -142,8 +142,8 @@ function hideScriptDialogSlow() {
  * Function displays a security alert to warn the user 
  * that he is going to delete a line of the workflow.
  */
-function showSecurityAlertRemove() {
-	$('#removeCheckModal').modal('show');
+function showSecurityAlertRemoveLine() {
+	$('#removeLineCheckModal').modal('show');
 }
 
 
@@ -193,7 +193,7 @@ function clearCommentTextbox() {
  * removes the highlighting of that particular table row.
  */
 function deleteRowAndDisplayTable() {
-	$('#removeCheckModal').modal('hide');
+	$('#removeLineCheckModal').modal('hide');
 	closePopovers();
 	hideInputErrors();
 	workflow.splice(highlightedRowIndex,1);
@@ -420,6 +420,15 @@ function showSecurityAlert(fileName) {
 	$('#overrideFilename').html(fileName);
 	$('#saveCheckModal').modal('show');
 	
+}
+
+
+/**
+ * Function displays a security alert to avoid unwanted data loss.
+ */
+function showSecurityAlertRemoveWorkflow(fileName) {
+	$('#deleteWfName').html(fileName);
+	$('#removeWorkflowCheckModal').modal('show');
 }
 
 

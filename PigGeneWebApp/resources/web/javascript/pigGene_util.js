@@ -204,7 +204,7 @@ function getFormData(dialog) {
  */
 function processInputFormCancellation(button) {
 	if(button.hasClass('delete')) {
-		showSecurityAlertRemove();
+		showSecurityAlertRemoveLine();
 		return;
 	}
 	finishReset(button);
@@ -277,7 +277,7 @@ function handleKeydownEvent(e) {
 		switch(e.which) {
 			case 38: highlightUpperRow(); break;
 			case 40: highlightLowerRow(); break;
-			case 46: showSecurityAlertRemove(); break;
+			case 46: showSecurityAlertRemoveLine(); break;
 			default: break;
 		}
 	}
@@ -457,11 +457,21 @@ function processLoadDeleteWfRequest(fileName) {
 		hideShowWfBtnPopover();
 		resetDescription();
 	} else {
-		deleteWorkflow(fileName);
-		hideDeleteWfBtnPopover();
-		if(fileName == $('#workflowName').html().trim()) {
-			resetWorkflow();
-		}
+		showSecurityAlertRemoveWorkflow(fileName);
+	}
+}
+
+
+/**
+ * Function is used to delete a workflow.
+ */
+function processWorkflowDeletion() {
+	var fileName = $('#deleteWfName').html();
+	$('#removeWorkflowCheckModal').modal('hide');
+	deleteWorkflow(fileName);
+	hideDeleteWfBtnPopover();
+	if(fileName == $('#workflowName').html().trim()) {
+		resetWorkflow();
 	}
 }
 
