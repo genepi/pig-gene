@@ -157,26 +157,27 @@ function showSecurityAlertRemoveLine() {
 function finishReset(button) {
 	button.removeClass('modification');
 	var buttonName = $(button).attr('id');
-	
-	if(buttonName.indexOf('register') == 0) {
-		resetOperationDialog('register');
-	} else if(buttonName.indexOf('load') == 0) {
-		resetOperationDialog('load');
-	} else if (buttonName.indexOf('store') == 0) {
-		resetOperationDialog('store');
-	} else if (buttonName.indexOf('filter') == 0) {
-		resetOperationDialog('filter');
-	} else if (buttonName.indexOf('join') == 0) {
-		resetOperationDialog('join');
-	} else if (buttonName.indexOf('script') == 0) {
-		resetOperationDialog('script');
+	if(buttonName != undefined) {
+		if(buttonName.indexOf('register') == 0) {
+			resetOperationDialog('register');
+		} else if(buttonName.indexOf('load') == 0) {
+			resetOperationDialog('load');
+		} else if (buttonName.indexOf('store') == 0) {
+			resetOperationDialog('store');
+		} else if (buttonName.indexOf('filter') == 0) {
+			resetOperationDialog('filter');
+		} else if (buttonName.indexOf('join') == 0) {
+			resetOperationDialog('join');
+		} else if (buttonName.indexOf('script') == 0) {
+			resetOperationDialog('script');
+		}
+		clearCommentTextbox();
+		resetFormContainerOperation();
+		removeTableRowLabeling('warning');
+		hideLineDetailDialog();
+		hideInputErrors();
+		modifyContainerHeight();
 	}
-	clearCommentTextbox();
-	resetFormContainerOperation();
-	removeTableRowLabeling('warning');
-	hideLineDetailDialog();
-	hideInputErrors();
-	modifyContainerHeight();
 }
 
 
@@ -583,4 +584,18 @@ function displayTable() {
  */
 function showSaveNameModal() {
 	$('#saveNameModal').modal('show');
+}
+
+
+/**
+ * Function is used to close the other popup. To avoid
+ * disturbance because of overlapping popups.
+ * @param buttonName of the popup that keeps displayed
+ */
+function hideOtherPopups(buttonName) {
+	if(buttonName == '#showWfBtn') {
+		$('#deleteWfBtn').popover('hide').removeClass('pop').removeClass('deleteWfBtnPopover');
+	} else {
+		$('#showWfBtn').popover('hide').removeClass('pop').removeClass('showWfBtnPopover');
+	}
 }

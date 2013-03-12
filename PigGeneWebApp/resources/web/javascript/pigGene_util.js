@@ -351,7 +351,7 @@ function processNewWfRequest() {
  * Function is used to show an error message to indicate that the input was too short.
  */
 function showErrorMessageShortInput() {
-	showInputErrorMsg('Inputs have to be at least 2 characters long. Please click the save button again and type <br>a longer name.');
+	showInputErrorMsg('Inputs have to be at least 2 characters long. Modify your input and click save again.');
 }
 
 

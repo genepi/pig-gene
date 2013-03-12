@@ -103,7 +103,7 @@ function saveWorkflow(filename) {
 	    dataType: 'json',
 	    success: function(response) {
 	    	if(response.success) {
-	    		$('#modalHeaderContent').html('<h3>saving done</h3>');
+	    		$('#modalHeaderContent').html('<h3>Saving completed</h3>');
 	    		$('#msg').html('Your workflow was saved successfully!');
 	    		if(forceDownload) {
 	    			forceDownload = false;
@@ -147,7 +147,7 @@ function loadWorkflow(fileName) {
     	    	if(response.success) {
     	    		initializeAndDisplayLoadedWorkflow(response.data);
     	    		setWorkflowName(fileName);
-    	    		$('#modalHeaderContent').html('<h3>Loading...</h3>');
+    	    		$('#modalHeaderContent').html('<h3>Loading completed</h3>');
     	    		$('#msg').html('Your workflow was loaded successfully!');
     	    		setStandardBehaviorSuccessModal();
 					$('#saveState').addClass('saved');
@@ -181,7 +181,7 @@ function deleteWorkflow(fileName) {
 	    dataType:'json',
 	    success: function(response) {
 	    	if(response.success) {
-	    		$('#modalHeaderContent').html('<h3>Deletion complete</h3>');
+	    		$('#modalHeaderContent').html('<h3>Deletion completed</h3>');
 	    		$('#msg').html('Selected workflow was deleted successfully!');
 				setStandardBehaviorSuccessModal();
 	    	} else {
@@ -217,6 +217,7 @@ function handleWorkflowRequest(buttonName) {
     	    success: function(response) {
     	    	if(response.success) {
     	    		var popContent = convertFilenamesToLinks(response.data);
+    	    		hideOtherPopups(buttonName);
     	    		$(buttonName).attr('data-content', popContent).popover('show').addClass('pop').addClass(id);
     	    	} else {
     	    		$('#errmsg').html(response.message);
