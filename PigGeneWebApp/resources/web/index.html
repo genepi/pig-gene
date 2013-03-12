@@ -125,7 +125,7 @@
 					
 					<form class="form-search hide" id="storeDialog">
 						<input class="span2" id="storeName" name="name" type="text" placeholder="type file name" title="file name" value="" required>
-						<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" title="relation to store" value="" required><p>
+						<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" title="relation to store" value="" data-provide="typeahead" autocomplete="off" required><p>
 						<button class="btn" id="storeClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="storeDelete" type="reset">delete</button>
 						<button class="btn btn-success hide" id="storeSubmitChange" type="submit">save changes</button>
@@ -134,7 +134,7 @@
 					
 					<form class="form-search hide" id="filterDialog">
 						<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" title="new relation name" value=""><br/>
-						<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" title="relation to filter" value="" required>
+						<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" title="relation to filter" value="" data-provide="typeahead" autocomplete="off" required>
 						<input class="span2" id="filtOpt" name="options" type="text" placeholder="filter option(s)" title="filter option(s)" value="" required><p>
 						<button class="btn" id="filterClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="filterDelete" type="reset">delete</button>
@@ -144,9 +144,9 @@
 			
 					<form class="form-search hide" id="joinDialog">
 						<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" title="new relation name" value=""><br/>
-						<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" title="relation to join" value="" required>
+						<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" title="relation to join" value="" data-provide="typeahead" autocomplete="off" required>
 						<input class="span2" id="joinOpt" name="options" type="text" placeholder="join option(s) rel1" title="join option(s) rel1" value="" required><br/>
-						<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" title="relation to join with" value="" required>
+						<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" title="relation to join with" value="" data-provide="typeahead" autocomplete="off" required>
 						<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join option(s) rel2" title="join option(s) rel2" value="" required><p>
 						<button class="btn" id="joinClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="joinDelete" type="reset">delete</button>
@@ -207,7 +207,7 @@
 	  <div class="modal-body">
 	    Please type a workflow name:
 	    <form id="saveWorkflow">
-	    	<input class="span5" id="saveDialogInput" name="name" type="text" placeholder="workflow name" title="workflow name" value="" required><br>
+	    	<input class="span5" id="saveDialogInput" name="name" type="text" placeholder="workflow name" title="workflow name" value="" data-provide="typeahead" autocomplete="off" required><br>
 		    <button type="reset" class="btn" data-dismiss="modal" aria-hidden="true">cancel</button>
 		    <button type="submit" class="btn btn-success" id="saveWorkflowFormBtn">save</button>
 	    </form>

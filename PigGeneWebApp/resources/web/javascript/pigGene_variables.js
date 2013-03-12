@@ -8,11 +8,11 @@
 //saves the information-content of the table container
 var stdContent = '';
 
-//saves the name of the workflow that should be loaded/deleted
-var loadDeleteWorkflowName = '';
-
 //saves the complete workflow definition
 var workflow = [];
+
+//saves the names of the relations used by the typeahead feature
+var typeaheadRelations = [];
 
 //saves the workflow definition
 var description = '';
@@ -26,3 +26,6 @@ var highlightedRowIndex = -1;
 
 //indicates that unsaved workflow should be downloaded
 var forceDownload = false;
+
+//saves the name of the workflow that should be loaded/deleted
+var loadDeleteWorkflowName = '';

@@ -115,6 +115,7 @@ function saveWorkflow(filename) {
 	    		resetFormContainerOperation();
 	    		setWorkflowName(filename);
 	    		setSaveStateSavedAndDisplayStatus();
+	    		updateTypeaheadSaved();
 	    	} else {
 	    		$('#errmsg').html(response.message);
 	    		$('#errorModal').modal('show');
@@ -152,6 +153,7 @@ function loadWorkflow(fileName) {
     	    		setStandardBehaviorSuccessModal();
 					$('#saveState').addClass('saved');
 					toggleSaveStateVisualisation();
+					initializeTypeaheadRelations();
     	    	} else {
     	    		$('#errmsg').html(response.message);
     	    		$('#errorModal').modal('show');
@@ -184,6 +186,7 @@ function deleteWorkflow(fileName) {
 	    		$('#modalHeaderContent').html('<h3>Deletion completed</h3>');
 	    		$('#msg').html('Selected workflow was deleted successfully!');
 				setStandardBehaviorSuccessModal();
+				updateTypeaheadSaved();
 	    	} else {
 	    		$('#errmsg').html(response.message);
 	    		$('#errorModal').modal('show');

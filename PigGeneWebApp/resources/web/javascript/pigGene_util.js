@@ -89,6 +89,7 @@ function processLoadOperation() {
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2, comment:comm});
 	}
+	updateTypeaheadRelations(name);
 	finalizeSubmit('#loadDialog');
 }
 function processStoreOperation() {
@@ -137,6 +138,7 @@ function processFilterOperation() {
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-', comment:comm});
 	}
+	updateTypeaheadRelations(name);
 	finalizeSubmit('#filterDialog');
 }
 function processJoinOperation() {
@@ -165,6 +167,7 @@ function processJoinOperation() {
 	} else {
 		workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2, comment:comm});
 	}
+	updateTypeaheadRelations(name);
 	finalizeSubmit('#joinDialog');
 }
 function processScriptOperation() {
@@ -524,4 +527,85 @@ function inputLongEnough(input) {
 		return false;
 	}
 	return true;
+}
+
+
+/**
+ * Function is used to update the typeahead feature of the 
+ * save dialog by sending an ajax request to the server.
+ */
+function updateTypeaheadSaved() {
+	$.ajax({
+		type: 'POST',
+	    url: 'http://localhost:8080/wf',
+	    data: null,
+	    dataType:'json',
+	    success: function(response) {
+	    	if(response.success) {
+	    		var savedNames = [];
+	    		var toRemove = '.yaml';
+	    		for(var i=0; i<response.data.length; i++) {
+	    			savedNames.push(response.data[i].replace(toRemove,''));
+	    		}
+	    		$('#saveDialogInput').typeahead({source: savedNames, items: 2});
+	    	} else {
+	    		$('#errmsg').html(response.message);
+	    		$('#errorModal').modal('show');
+	    	}
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+	    	$('#errmsg').html(xhr.responseText);
+    		$('#errorModal').modal('show');
+	   }
+	});
+}
+
+
+/**
+ * Function is used to initialize the typeahead values. Therefor
+ * it loads the needed data from the global workflow array.
+ */
+function initializeTypeaheadRelations() {
+	typeaheadRelations = [];
+	var name;
+	for(var i=0; i<workflow.length; i++) {
+		name = workflow[i].name;
+		if(name != '-' && name != 'script') {
+			typeaheadRelations.push(workflow[i].name);
+		}
+	}
+	performTypeaheadButtonUpdate();
+}
+
+
+/**
+ * Function is used to reset and delete all globally 
+ * saved typeahead values.
+ */
+function resetTypeaheadRelations() {
+	typeaheadRelations = [];
+	performTypeaheadButtonUpdate();
+}
+
+
+/**
+ * Function is used to add a new value to the globally 
+ * saved typeahead values.
+ * @param relation name
+ */
+function updateTypeaheadRelations(relation) {
+	typeaheadRelations.push(relation);
+	performTypeaheadButtonUpdate();
+}
+
+
+/**
+ * Function is used to update all the buttons, that rely
+ * on the globally saved typeahead values.
+ */
+function performTypeaheadButtonUpdate() {
+	$('#filtRel').typeahead({source: typeaheadRelations});
+	$('#joinRel').typeahead({source: typeaheadRelations});
+	$('#joinRel2').typeahead({source: typeaheadRelations});
+	$('#relToStore').typeahead({source: typeaheadRelations});
 }

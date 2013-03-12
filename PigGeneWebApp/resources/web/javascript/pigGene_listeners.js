@@ -10,9 +10,11 @@ $(document).ready(function() {
 	/**
 	 * Function is used to save the standard explanation in a global variable. 
 	 * This value is used again if the user deletes the currently used workflow.
+	 * Also the typeahead values (saved workflow names) are set.
 	 */
 	$(window).load(function(){
 		preSaveStdContent();
+		updateTypeaheadSaved();
 	});
 	
 	

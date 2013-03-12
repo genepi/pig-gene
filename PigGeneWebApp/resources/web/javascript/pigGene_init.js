@@ -35,6 +35,7 @@ function setMissingFormValueText(textfield) {
 function resetWorkflow() {
 	workflow = [];
 	nameCounter = 1;
+	resetTypeaheadRelations();
 	resetWorkflowButtonsAndTableContent();
 	setSaveStateSavedAndDisplayStatus();
 	resetAllOperationDialogs();
