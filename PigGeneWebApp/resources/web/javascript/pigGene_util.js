@@ -547,6 +547,7 @@ function updateTypeaheadSaved() {
 	    		for(var i=0; i<response.data.length; i++) {
 	    			savedNames.push(response.data[i].replace(toRemove,''));
 	    		}
+	    		savedNames.sort();
 	    		$('#saveDialogInput').typeahead({source: savedNames, items: 2});
 	    	} else {
 	    		$('#errmsg').html(response.message);
@@ -574,6 +575,7 @@ function initializeTypeaheadRelations() {
 			typeaheadRelations.push(workflow[i].name);
 		}
 	}
+	sortTypeaheadRelationElements();
 	performTypeaheadButtonUpdate();
 }
 
@@ -595,7 +597,24 @@ function resetTypeaheadRelations() {
  */
 function updateTypeaheadRelations(relation) {
 	typeaheadRelations.push(relation);
+	sortTypeaheadRelationElements();
 	performTypeaheadButtonUpdate();
+}
+
+
+/**
+ * Function is used to remove the given element from the typeahead
+ * relations array because a line was deleted in the workflow.
+ * @param element to remove from array
+ */
+function removeTypeaheadRelationElement(elementName) {
+	typeaheadRelations.splice($.inArray(elementName, typeaheadRelations), 1);
+	sortTypeaheadRelationElements();
+	performTypeaheadButtonUpdate();
+}
+
+function sortTypeaheadRelationElements() {
+	typeaheadRelations.sort();
 }
 
 
