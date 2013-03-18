@@ -300,4 +300,12 @@ $(document).ready(function() {
 		$('#successModal').modal('hide');
 	});
 	
+	
+	/**
+	 * TODO add documentation
+	 */
+	$('#helpBtn').on('click', function() {
+		toggleHelpBtn();
+	})
+	
 });

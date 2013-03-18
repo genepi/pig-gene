@@ -92,6 +92,7 @@
 							<li class="divider"></li>
 							<li id="storeItem"><a id="storeLink" title="click to select the store task">STORE</a></li>
 						</ul>
+					<button class="btn" id="helpBtn" title="toggle to display/hide explanations"><i class="icon-info-sign" id="helpBtnIcon"></i></button>
 					</div>
 			
 					<form class="form-search hide" id="registerDialog">
@@ -167,6 +168,12 @@
 				<div class="alert alert-block alert-error fade in hide" id="inputError">
 			        <h4 class="alert-heading">Warning! Input error!</h4><br>
 			        <p id="inputErrMsg"></p>
+		        </div>
+		        
+		        <!-- explanation dialog -->
+				<div class="alert alert-block alert-info fade in hide" id="explanationDialog">
+			        <h4 class="alert-heading" id="explanationHeader"></h4><br>
+			        <p id="explanationMsg"></p>
 		        </div>
 			</div>
 		</div>

@@ -600,3 +600,19 @@ function hideOtherPopups(buttonName) {
 		$('#showWfBtn').popover('hide').removeClass('pop').removeClass('showWfBtnPopover');
 	}
 }
+
+/**
+ * Function is used to implement a toggle functionality
+ * for the help button in the formContainer.
+ */
+function toggleHelpBtn() {
+	if($('#helpBtn').hasClass('btn-info')) {
+		$('#helpBtn').removeClass('btn-info');
+		$('#helpBtnIcon').removeClass('icon-white');
+		$('#explanationDialog').hide('slow');
+	} else {
+		$('#helpBtn').addClass('btn-info');
+		$('#helpBtnIcon').addClass('icon-white');
+		$('#explanationDialog').show('slow');
+	}
+}
