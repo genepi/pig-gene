@@ -91,15 +91,13 @@ function processSaveWfRequest() {
 
 
 /**
- * Function is used to initialize the data loaded from the server and to
- * display the workflow in form of a table by calling a helper function.
+ * Function is used to initialize the data loaded from the server.
  * @param data
  */
-function initializeAndDisplayLoadedWorkflow(data) {
+function initializeLoadedWorkflow(data) {
 	description = data.description;
 	workflow = data.workflow;
 	nameCounter = workflow.length;
-	displayTable();
 }
 
 

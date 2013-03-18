@@ -14,6 +14,10 @@ var workflow = [];
 //saves the names of the relations used by the typeahead feature
 var typeaheadRelations = [];
 
+//saves the names of the "used" relation names - to find indicate
+//that "unused" Statements are useless for the user
+var usedRelations = [];
+
 //saves the workflow definition
 var description = '';
 

@@ -84,12 +84,14 @@ function processLoadOperation() {
 	}
 
 	if($('#loadSubmitChange').hasClass('modification')) {
+		removeUsedRelationElement(workflow[highlightedRowIndex].relation);
 		workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2, comment:comm};
 		resetOperationDialog('load');
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2, comment:comm});
 	}
 	updateTypeaheadRelations(name);
+	updateUsedRelations(rel);
 	finalizeSubmit('#loadDialog');
 }
 function processStoreOperation() {
@@ -102,7 +104,7 @@ function processStoreOperation() {
 		showErrorMessageShortInput();
 		return false;
 	}
-	if(comm == null || comm == ''){
+	if(comm == null || comm == '') {
 		comm = '-';
 	}
 	
@@ -112,6 +114,8 @@ function processStoreOperation() {
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm});
 	}
+	updateUsedRelations(name);
+	updateUsedRelations(rel);
 	finalizeSubmit('#storeDialog');
 }
 function processFilterOperation() {
@@ -139,6 +143,7 @@ function processFilterOperation() {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-', comment:comm});
 	}
 	updateTypeaheadRelations(name);
+	updateUsedRelations(rel);
 	finalizeSubmit('#filterDialog');
 }
 function processJoinOperation() {
@@ -168,6 +173,8 @@ function processJoinOperation() {
 		workflow.push({name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2, comment:comm});
 	}
 	updateTypeaheadRelations(name);
+	updateUsedRelations(rel1);
+	updateUsedRelations(rel2);
 	finalizeSubmit('#joinDialog');
 }
 function processScriptOperation() {
@@ -605,10 +612,10 @@ function updateTypeaheadRelations(relation) {
 /**
  * Function is used to remove the given element from the typeahead
  * relations array because a line was deleted in the workflow.
- * @param element to remove from array
+ * @param element name to remove from array
  */
-function removeTypeaheadRelationElement(elementName) {
-	typeaheadRelations.splice($.inArray(elementName, typeaheadRelations), 1);
+function removeTypeaheadRelationElement(name) {
+	typeaheadRelations.splice($.inArray(name, typeaheadRelations), 1);
 	sortTypeaheadRelationElements();
 	performTypeaheadButtonUpdate();
 }
@@ -627,4 +634,59 @@ function performTypeaheadButtonUpdate() {
 	$('#joinRel').typeahead({source: typeaheadRelations});
 	$('#joinRel2').typeahead({source: typeaheadRelations});
 	$('#relToStore').typeahead({source: typeaheadRelations});
+}
+
+
+/**
+ * Function is used to initialize the used relations 
+ * when a workflow was loaded by the user.
+ */
+function initializeUsedRelations() {
+	usedRelations = [];
+	var operation;
+	for(var i=0; i<workflow.length; i++) {
+		operation = workflow[i].operation;
+		if(operation == 'LOAD' || operation == 'FILTER') {
+			updateUsedRelations(workflow[i].relation);
+		} else if(operation == 'JOIN') {
+			updateUsedRelations(workflow[i].relation);
+			updateUsedRelations(workflow[i].relation2);
+		} else if(operation == 'STORE') {
+			updateUsedRelations(workflow[i].relation);
+			updateUsedRelations(workflow[i].name);
+		}
+	}
+}
+
+
+/**
+ * Function is used to add the given name to the
+ * list of used relations.
+ * @param name
+ */
+function updateUsedRelations(name) {
+	usedRelations.push(name);
+}
+
+
+/**
+ * Function is used to remove the given name
+ * from the list of used relations.
+ * @param name
+ */
+function removeUsedRelationElement(name) {
+	usedRelations.splice($.inArray(name, usedRelations), 1);
+}
+
+
+/**
+ * Function is used to check if the given name is 
+ * contained in the global "usedRelations" array.
+ * @param relation name
+ */
+function relationIsUsed(name) {
+	if($.inArray(name, usedRelations) > -1) {
+		return true;
+	}
+	return false;
 }

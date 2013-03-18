@@ -146,7 +146,7 @@ function loadWorkflow(fileName) {
     	    dataType:'json',
     	    success: function(response) {
     	    	if(response.success) {
-    	    		initializeAndDisplayLoadedWorkflow(response.data);
+    	    		initializeLoadedWorkflow(response.data);
     	    		setWorkflowName(fileName);
     	    		$('#modalHeaderContent').html('<h3>Loading completed</h3>');
     	    		$('#msg').html('Your workflow was loaded successfully!');
@@ -154,6 +154,8 @@ function loadWorkflow(fileName) {
 					$('#saveState').addClass('saved');
 					toggleSaveStateVisualisation();
 					initializeTypeaheadRelations();
+					initializeUsedRelations();
+					displayTable();
     	    	} else {
     	    		$('#errmsg').html(response.message);
     	    		$('#errorModal').modal('show');
