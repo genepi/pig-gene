@@ -26,7 +26,7 @@ function finalizeSubmit(obj) {
 	hideLineDetailDialog();
 	if($('#workflowName').hasClass('new')) {
 		$('#workflowName').removeClass('new');
-		setWorkflowName(' unnamed')
+		setWorkflowName(' unnamed');
 	}
 }
 

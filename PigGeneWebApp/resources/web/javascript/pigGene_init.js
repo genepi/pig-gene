@@ -48,7 +48,7 @@ function resetWorkflow() {
  * Function is used to initialize a new workflow. Therefore the
  * workflow container, the form container and the operation
  * dialog get modified. Also the comment box gets cleared and
- * the line dialog gets hidden.
+ * the line dialog gets hidden. Also the used relations get reseted.
  */
 function initializeNewWorkflow() {
 	$('#workflowName').addClass('new');
@@ -57,6 +57,7 @@ function initializeNewWorkflow() {
 	resetWorkflow();
 	clearCommentTextbox();
 	hideLineDetailDialog();
+	initializeUsedRelations();
 }
 
 

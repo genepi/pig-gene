@@ -197,7 +197,7 @@ function deleteRowAndDisplayTable() {
 	$('#removeLineCheckModal').modal('hide');
 	closePopovers();
 	hideInputErrors();
-	removeTypeaheadRelationElement(workflow[highlightedRowIndex].name);
+	deleteTypeaheadAndUsedRelationByOperation('');
 	workflow.splice(highlightedRowIndex,1);
 	if(workflow.length == 0) {
 		resetDialogsAndHighlightings();

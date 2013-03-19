@@ -84,7 +84,7 @@ function processLoadOperation() {
 	}
 
 	if($('#loadSubmitChange').hasClass('modification')) {
-		removeUsedRelationElement(workflow[highlightedRowIndex].relation);
+		deleteTypeaheadAndUsedRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:opt2, comment:comm};
 		resetOperationDialog('load');
 	} else {
@@ -109,11 +109,14 @@ function processStoreOperation() {
 	}
 	
 	if($('#storeSubmitChange').hasClass('modification')) {
+		deleteTypeaheadAndUsedRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm};
 		resetOperationDialog('store');
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm});
 	}
+	updateTypeaheadRelations(name);
+	updateTypeaheadRelations(rel);
 	updateUsedRelations(name);
 	updateUsedRelations(rel);
 	finalizeSubmit('#storeDialog');
@@ -137,6 +140,7 @@ function processFilterOperation() {
 	}
 	
 	if($('#filterSubmitChange').hasClass('modification')) {
+		deleteTypeaheadAndUsedRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {name:name, relation:rel, operation:oper, relation2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('filter');
 	} else {
@@ -167,6 +171,7 @@ function processJoinOperation() {
 	}
 	
 	if($('#joinSubmitChange').hasClass('modification')) {
+		deleteTypeaheadAndUsedRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {name:name, relation:rel1, operation:oper, relation2:rel2, options:opt1, options2:opt2, comment:comm};
 		resetOperationDialog('join');
 	} else {
@@ -445,7 +450,7 @@ function processDownloadRequest() {
  * @param fileName
  */
 function loadDeleteWfRequest(fileName) {
-	if(!$('#saveState').hasClass('saved')) {
+	if(!$('#saveState').hasClass('saved') && $('#showWfBtn').hasClass('showWfBtnPopover')) {
 		$('#discardFilename').html($('#workflowName').html());
 		$('#discardFilename').addClass('load');
 		loadDeleteWorkflowName = fileName;
@@ -463,6 +468,7 @@ function loadDeleteWfRequest(fileName) {
 function processLoadDeleteWfRequest(fileName) {
 	hideLineDetailDialog();
 	if($('#showWfBtn').hasClass('showWfBtnPopover')) {
+		$('#workflowName').removeClass('new');
 		loadWorkflow(fileName);
 		hideShowWfBtnPopover();
 		resetDescription();
@@ -603,9 +609,11 @@ function resetTypeaheadRelations() {
  * @param relation name
  */
 function updateTypeaheadRelations(relation) {
-	typeaheadRelations.push(relation);
-	sortTypeaheadRelationElements();
-	performTypeaheadButtonUpdate();
+	if($.inArray(relation, typeaheadRelations) == -1) {
+		typeaheadRelations.push(relation);
+		sortTypeaheadRelationElements();
+		performTypeaheadButtonUpdate();
+	}
 }
 
 
@@ -615,9 +623,11 @@ function updateTypeaheadRelations(relation) {
  * @param element name to remove from array
  */
 function removeTypeaheadRelationElement(name) {
-	typeaheadRelations.splice($.inArray(name, typeaheadRelations), 1);
-	sortTypeaheadRelationElements();
-	performTypeaheadButtonUpdate();
+	if($.inArray(name, typeaheadRelations) > -1) {
+		typeaheadRelations.splice($.inArray(name, typeaheadRelations), 1);
+		sortTypeaheadRelationElements();
+		performTypeaheadButtonUpdate();
+	}
 }
 
 function sortTypeaheadRelationElements() {
@@ -630,10 +640,10 @@ function sortTypeaheadRelationElements() {
  * on the globally saved typeahead values.
  */
 function performTypeaheadButtonUpdate() {
-	$('#filtRel').typeahead({source: typeaheadRelations});
-	$('#joinRel').typeahead({source: typeaheadRelations});
-	$('#joinRel2').typeahead({source: typeaheadRelations});
-	$('#relToStore').typeahead({source: typeaheadRelations});
+	$('#filtRel').typeahead().data('typeahead').source = typeaheadRelations;
+	$('#joinRel').typeahead().data('typeahead').source = typeaheadRelations;
+	$('#joinRel2').typeahead().data('typeahead').source = typeaheadRelations;
+	$('#relToStore').typeahead().data('typeahead').source = typeaheadRelations;
 }
 
 
@@ -689,4 +699,26 @@ function relationIsUsed(name) {
 		return true;
 	}
 	return false;
+}
+
+
+/**
+ * Function is used to update the typeahead and used relations
+ * in case of a modification or deletion of a workflow line.
+ * @param operation
+ */
+function deleteTypeaheadAndUsedRelationByOperation(op) {
+	removeTypeaheadRelationElement(workflow[highlightedRowIndex].name);
+	removeUsedRelationElement(workflow[highlightedRowIndex].relation);
+
+	var operation = op;
+	if(op == '') {
+		operation = $('#workflowOps').html();
+	}
+	if(operation.indexOf('STORE') == 0) {
+		removeTypeaheadRelationElement(workflow[highlightedRowIndex].relation);
+		removeUsedRelationElement(workflow[highlightedRowIndex].name);
+	} else if(operation.indexOf('JOIN') == 0) {
+		removeUsedRelationElement(workflow[highlightedRowIndex].relation2);
+	}
 }
