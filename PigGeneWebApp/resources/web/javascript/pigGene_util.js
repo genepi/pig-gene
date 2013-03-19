@@ -9,6 +9,9 @@
  * Function displays the operation dialog that was selected by calling some helper functions.
  */
 function processOperationLinkRequest(operation) {
+	if($('#helpBtn').hasClass('btn-info')) {
+		setOperationRelatedHelpContent(operation);
+	}
 	var operationDialog = '#'+operation+'Dialog';
 	setFormContainerOperation(operation);
 	showInputDialogSlow(operationDialog);
@@ -115,7 +118,7 @@ function processStoreOperation() {
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm});
 	}
-	updateTypeaheadRelations(name);
+//	updateTypeaheadRelations(name);
 	updateTypeaheadRelations(rel);
 	updateUsedRelations(name);
 	updateUsedRelations(rel);
@@ -584,7 +587,8 @@ function initializeTypeaheadRelations() {
 	var name;
 	for(var i=0; i<workflow.length; i++) {
 		name = workflow[i].name;
-		if(name != '-' && name != 'script') {
+		operation = workflow[i].operation;
+		if(name != '-' && name != 'script' && operation != 'STORE') {
 			typeaheadRelations.push(workflow[i].name);
 		}
 	}

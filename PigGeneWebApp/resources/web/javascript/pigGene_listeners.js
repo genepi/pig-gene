@@ -48,6 +48,7 @@ $(document).ready(function() {
 	});
 	$('#userScriptLink').on('click', function() {
 		setFormContainerOperation('user defined script');
+		setOperationRelatedHelpContent('user defined script');
 		showScriptDialogSlow();
 		modifyContainerHeight();
 	});
@@ -302,7 +303,8 @@ $(document).ready(function() {
 	
 	
 	/**
-	 * TODO add documentation
+	 * Function is used to toggle the display of an
+	 * optional user-help functionality.
 	 */
 	$('#helpBtn').on('click', function() {
 		toggleHelpBtn();

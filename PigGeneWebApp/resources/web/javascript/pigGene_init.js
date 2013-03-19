@@ -41,38 +41,33 @@ function resetWorkflow() {
 	resetAllOperationDialogs();
 	resetFormContainerOperation();
 	resetFormContainerSize();
+	modifyContainerHeight();
 }
 
 
 /**
  * Function is used to initialize a new workflow. Therefore the
- * workflow container, the form container and the operation
- * dialog get modified. Also the comment box gets cleared and
- * the line dialog gets hidden. Also the used relations get reseted.
+ * workflow container and the operation dialog get modified. Also 
+ * the comment box gets cleared and the line dialog gets hidden. 
+ * Also the used relations get reseted.
  */
 function initializeNewWorkflow() {
 	$('#workflowName').addClass('new');
-	prepareContainers();
-	resetFormContainerOperation();
-	resetWorkflow();
 	clearCommentTextbox();
 	hideLineDetailDialog();
+	prepareContainers();
+	resetWorkflow();
 	initializeUsedRelations();
 }
 
 
 /**
- * Function is used to modify the size of the workflow container.
- * The form container gets displayed and the operations dialog
- * gets modified. The new save state gets set and displayed.
+ * Function is used to modify the size of the workflow container
+ * and the form container gets displayed.
  */
 function prepareContainers() {
 	$('#workflowContainer').removeClass('span12').addClass('span10');
 	$('#formContainer').removeClass('hide');
-	$('#stepAction').removeClass('hide');
-	$('#workflowOps').html('OPERATIONS');
-	resetAllOperationDialogs();
-	setSaveStateSavedAndDisplayStatus();
 }
 
 

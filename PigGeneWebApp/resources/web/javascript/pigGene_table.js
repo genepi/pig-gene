@@ -63,9 +63,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
             	}
             	j = headers.length;
             } else {
-            	//nur wenn das die erste Spalte darstellt...
             	if(j==0) {
-            		//ueberpruefung ob value verwendet oder nicht und ob nicht name gleich "-" ist...
             		if(value != '-' && !relationIsUsed(value)) {
             			tbCon += tdRow.format('<b class="unused">' + value + '</b>');
             		} else {

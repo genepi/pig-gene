@@ -601,6 +601,7 @@ function hideOtherPopups(buttonName) {
 	}
 }
 
+
 /**
  * Function is used to implement a toggle functionality
  * for the help button in the formContainer.
@@ -611,8 +612,51 @@ function toggleHelpBtn() {
 		$('#helpBtnIcon').removeClass('icon-white');
 		$('#explanationDialog').hide('slow');
 	} else {
+		setHelpDialogContent('std-headline', 'std-content');
 		$('#helpBtn').addClass('btn-info');
 		$('#helpBtnIcon').addClass('icon-white');
 		$('#explanationDialog').show('slow');
 	}
+}
+
+
+/**
+ * Function is used to set the operation dependend helper text.
+ * @param operation name
+ */
+function setOperationRelatedHelpContent(operation) {
+	var header = '';
+	var body = '';
+	if(operation == 'register') {
+		header = 'register...';
+		body = 'abc';
+	} else if(operation == 'load') {
+		header = 'load...';
+		body = 'abc';
+	} else if(operation == 'filter') {
+		header = 'filter...';
+		body = 'abc';
+	} else if(operation == 'join') {
+		header = 'join...';
+		body = 'abc';
+	} else if(operation == 'user defined script') {
+		header = 'user defined script...';
+		body = 'abc';
+	} else if(operation == 'store') {
+		header = 'store...';
+		body = 'abc';
+	}
+	setHelpDialogContent(header, body);
+}
+
+
+/**
+ * Function is used to set the header and body text content
+ * of the help dialog, that shows up on user request.
+ * @param header text
+ * @param body text
+ */
+function setHelpDialogContent(header, body) {
+	$('#explanationHeader').html(header);
+	$('#explanationMsg').html(body);
 }

@@ -167,6 +167,9 @@ function loadWorkflow(fileName) {
     	   }
     	});
 		prepareContainers();
+		resetAllOperationDialogs();
+		setSaveStateSavedAndDisplayStatus();
+		resetFormContainerOperation();
 		initializeButtons();
 		return false;
 }
