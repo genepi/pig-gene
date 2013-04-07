@@ -100,8 +100,8 @@ function processLoadOperation() {
 function processStoreOperation() {
 	var values = getFormData('#storeDialog');
 	var oper = 'STORE';
-	var name = values[0].value;
-	var rel = values[1].value;
+	var rel = values[0].value;
+	var name = values[1].value;
 	var comm = $('#comments').val();
 	if(!inputLongEnough(name) || !inputLongEnough(rel)) {
 		showErrorMessageShortInput();
@@ -118,7 +118,6 @@ function processStoreOperation() {
 	} else {
 		workflow.push({name:name, relation:rel, operation:oper, relation2:'-', options:'-', options2:'-', comment:comm});
 	}
-//	updateTypeaheadRelations(name);
 	updateTypeaheadRelations(rel);
 	updateUsedRelations(name);
 	updateUsedRelations(rel);

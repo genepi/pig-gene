@@ -18,14 +18,13 @@
 <script type="text/javascript" src="javascript/pigGene_workflowOps.js"></script>
 </head>
 
-
 <body class="well">
 	<div id="content">
 		<!-- workflow actions and title -->
 		<div class="span12 well" id="processElements">
 			<div class="span10" id="actionBtns">
-				<a id="newWfBtn" class="btn btn-inverse" title="create new workflow"><i class="icon-file icon-white"></i> new workflow</a>
-				<a id="showWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="already existing workflows"><i class="icon-edit icon-white"></i> load</a>
+				<a id="newWfBtn" class="btn btn-inverse" title="create new workflow"><i class="icon-file icon-white"></i> new</a>
+				<a id="showWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="open existing workflow"><i class="icon-edit icon-white"></i> open</a>
 				<a id="saveWfBtn" class="btn btn-inverse hide" title="save workflow"><i class="icon-folder-open icon-white"></i> save</a>
 				<a id="deleteWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="delete existing workflow"><i class="icon-ban-circle icon-white"></i> delete</a>
 				<a id="downloadScript" class="btn btn-inverse hide" title="download pig script"><i class="icon-download icon-white"></i> download</a>
@@ -41,7 +40,7 @@
 		<div class="span12 well" id="workflowContainer">
 			<div id="title">
 				<a id="descriptionBtn" class="btn btn-link hide" title="add workflow description"><i class="icon-plus-sign" id="descriptionIcon"></i></a>
-				<h3 id="workflowName"> workflow</h3>
+				<h3 id="workflowName">PigGene - graphical pig script generator</h3>
 				<h3 class="saved" id="saveState"></h3>
 				<div class="well hide" id="workflowDescription">
 					<h4 id="descrText">DESCRIPTION</h4>
@@ -52,9 +51,10 @@
 			</div>
 			<div id="tableContainer">
 				<p id="stdExplanation"><b>There is no workflow specified at the moment.</b>
-				You can create a new workflow by clicking on the "new workflow" button in the menu bar above.
-				After clicking that button the operations menu appears on the right side where you can select
-				the operations you would like to specify.</p>
+				Please click the "new" button to create a workflow. 
+				<br> Afterwards you can choose the operations you would like to apply to your data in the appearing panel
+				<br> on the right side. 
+				Alternatively you can click "open" to load an already existing workflow definition.</p>
 				<table id="operationTable"></table>
 			</div>
 		</div>
@@ -96,7 +96,7 @@
 					</div>
 			
 					<form class="form-search hide" id="registerDialog">
-						<input class="span2" id="regFileName" name="relation" type="text" placeholder="type jar file name" title="jar file name" autocomplete="off" value="" required><p>
+						<input class="span2" id="regFileName" name="relation" type="text" placeholder="jar file name" title="jar file name" autocomplete="off" value="" required><p>
 						<button class="btn" id="registerClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="registerDelete" type="reset">delete</button>
 						<button class="btn btn-success hide" id="registerSubmitChange" type="submit">save changes</button>
@@ -117,7 +117,7 @@
 							<br>
 						</div>
 						<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="">
-						<input class="span2" id="fileName" name="relation" type="text" placeholder="type file name" title="file name" autocomplete="off" value="" required><p>
+						<input class="span2" id="fileName" name="relation" type="text" placeholder="file name" title="file name" autocomplete="off" value="" required><p>
 						<button class="btn" id="loadClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="loadDelete" type="reset">delete</button>
 						<button class="btn btn-success hide" id="loadSubmitChange" type="submit">save changes</button>
@@ -125,8 +125,8 @@
 					</form>
 					
 					<form class="form-search hide" id="storeDialog">
-						<input class="span2" id="storeName" name="name" type="text" placeholder="type file name" title="file name" autocomplete="off" value="" required>
-						<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" title="relation to store" value="" data-provide="typeahead" autocomplete="off" required><p>
+						<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" title="relation to store" value="" data-provide="typeahead" autocomplete="off" required>
+						<input class="span2" id="storeName" name="name" type="text" placeholder="file name" title="file name" autocomplete="off" value="" required><p>
 						<button class="btn" id="storeClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="storeDelete" type="reset">delete</button>
 						<button class="btn btn-success hide" id="storeSubmitChange" type="submit">save changes</button>
@@ -146,9 +146,9 @@
 					<form class="form-search hide" id="joinDialog">
 						<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value=""><br/>
 						<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" title="relation to join" value="" data-provide="typeahead" autocomplete="off" required>
-						<input class="span2" id="joinOpt" name="options" type="text" placeholder="join option(s) rel1" title="join option(s) rel1" autocomplete="off" value="" required><br/>
+						<input class="span2" id="joinOpt" name="options" type="text" placeholder="join column(s) rel1" title="join column(s) rel1" autocomplete="off" value="" required><br/>
 						<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" title="relation to join with" value="" data-provide="typeahead" autocomplete="off" required>
-						<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join option(s) rel2" title="join option(s) rel2" autocomplete="off" value="" required><p>
+						<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join column(s) rel2" title="join column(s) rel2" autocomplete="off" value="" required><p>
 						<button class="btn" id="joinClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="joinDelete" type="reset">delete</button>
 						<button class="btn btn-success hide" id="joinSubmitChange" type="submit">save changes</button>
@@ -172,7 +172,6 @@
 		        
 		        <!-- help dialog -->
 				<div class="alert alert-block alert-info fade in hide" id="explanationDialog">
-			        <h4 class="alert-heading" id="explanationHeader"></h4><br>
 			        <p id="explanationMsg"></p>
 		        </div>
 			</div>

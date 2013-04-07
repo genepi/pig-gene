@@ -58,6 +58,7 @@ function initializeNewWorkflow() {
 	prepareContainers();
 	resetWorkflow();
 	initializeUsedRelations();
+	showHelp();
 }
 
 

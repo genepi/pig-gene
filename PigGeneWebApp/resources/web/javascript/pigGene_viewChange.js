@@ -222,7 +222,7 @@ function resetWorkflowButtonsAndTableContent() {
 	$('#descriptionBtn').addClass('hide');
 	description = '';
 	$('#description').val('');
-	setWorkflowName('workflow');
+	setWorkflowName('PigGene - graphical pig script generator');
 	$('#tableContainer').html(stdContent);
 }
 
@@ -612,11 +612,20 @@ function toggleHelpBtn() {
 		$('#helpBtnIcon').removeClass('icon-white');
 		$('#explanationDialog').hide('slow');
 	} else {
-		setHelpDialogContent('std-headline', 'std-content');
-		$('#helpBtn').addClass('btn-info');
-		$('#helpBtnIcon').addClass('icon-white');
-		$('#explanationDialog').show('slow');
+		showHelp();
 	}
+}
+
+
+/**
+ * Function is used to display the explanation when 
+ * the help button is activated.
+ */
+function showHelp() {
+	setHelpDialogContent('A standard pig script consists of different operations representing a data flow. Please have a look at the existing exemplary workflows by pressing the "open" button.');
+	$('#helpBtn').addClass('btn-info');
+	$('#helpBtnIcon').addClass('icon-white');
+	$('#explanationDialog').show('slow');
 }
 
 
@@ -625,38 +634,29 @@ function toggleHelpBtn() {
  * @param operation name
  */
 function setOperationRelatedHelpContent(operation) {
-	var header = '';
 	var body = '';
 	if(operation == 'register') {
-		header = 'register...';
-		body = 'abc';
+		body = 'Apache Pig loads all necessary operations from existing jar files. The register field is an optional field that is only needed when you want to use non-standard operations.';
 	} else if(operation == 'load') {
-		header = 'load...';
-		body = 'abc';
+		body = 'This is the main entry point for Apache Pig scripts. Specify a name to reference the operation within the workflow and the folder or file name to analyze.';
 	} else if(operation == 'filter') {
-		header = 'filter...';
-		body = 'abc';
+		body = 'Different filters can be applied to loaded data. Specify a name to reference the operation within the workflow, the relation to filter and the desired filter options. All possible Pig filter options are allowed.';
 	} else if(operation == 'join') {
-		header = 'join...';
-		body = 'abc';
+		body = 'A join is an operation to combine two relations. Specify a name to reference the operation within the workflow and the relations and columns you want to match. Multiple columns per relation are separated by comma.';
 	} else if(operation == 'user defined script') {
-		header = 'user defined script...';
-		body = 'abc';
+		body = 'User Defined Scripts allow it to implement advanced operations, which are defined in optional files. All operations (REGISTER, LOAD, STORE, FILTER, JOIN) can be used.';
 	} else if(operation == 'store') {
-		header = 'store...';
-		body = 'abc';
+		body = 'Relations containing the results of a workflow can be saved to a specified file.';
 	}
-	setHelpDialogContent(header, body);
+	setHelpDialogContent(body);
 }
 
 
 /**
- * Function is used to set the header and body text content
+ * Function is used to set the body text content
  * of the help dialog, that shows up on user request.
- * @param header text
  * @param body text
  */
-function setHelpDialogContent(header, body) {
-	$('#explanationHeader').html(header);
+function setHelpDialogContent(body) {
 	$('#explanationMsg').html(body);
 }
