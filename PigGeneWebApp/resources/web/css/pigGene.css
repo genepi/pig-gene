@@ -45,6 +45,7 @@ form input[type=text] {
 	width: 200px;
 	height: 40px;
 	float: right;
+	cursor: pointer;
 }
 
 #pigIcon {

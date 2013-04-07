@@ -168,6 +168,14 @@ $(document).ready(function() {
 	
 	
 	/**
+	 * Function is used to show/hide the site notice of the web page.
+	 */
+	$('#logoContainer').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
+		toggleSiteNoticePopover();
+	});
+	
+	
+	/**
 	 * Function shows the new workflow view dependent of the save state
 	 * of the current workflow - not saved: modal dialog to ensure that
 	 * the user wants to discard the changes.
@@ -219,6 +227,18 @@ $(document).ready(function() {
 	$('#downloadScript').on('click', function() {
 		processDownloadRequest();
 	});
+	
+	
+	/**
+	 * Function opens up the save dialog when download script was clicked,
+	 * but the workflow was not saved yet and the user selects the option
+	 * to open up the save dialog.
+	 */
+	$('#openSaveDialogBtn').on('click', function() {
+		closeDownloadUnsavedModal();
+		forceDownload = true;
+		$('#saveWfBtn').trigger('click');
+	})
 	
 	
 	/**

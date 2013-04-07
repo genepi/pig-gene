@@ -572,6 +572,25 @@ function showInputErrorMsg(errText) {
 
 
 /**
+ * Function is used to open up a dialog, when
+ * the user clicks on the download script button
+ * but the workflow definition was not saved yet.
+ */
+function openDownloadUnsavedModal() {
+	$('#downloadUnsavedModal').modal('show');
+}
+
+
+/**
+ * Function is used to close the 
+ * download unsaved modal dialog.
+ */
+function closeDownloadUnsavedModal() {
+	$('#downloadUnsavedModal').modal('hide');
+}
+
+
+/**
  * Calls a helper function to convert the workflow-object into a html table and displays the result.
  */
 function displayTable() {
@@ -659,4 +678,18 @@ function setOperationRelatedHelpContent(operation) {
  */
 function setHelpDialogContent(body) {
 	$('#explanationMsg').html(body);
+}
+
+
+/**
+ * Function is used to toggle the display 
+ * of the site notice popover.
+ */
+function toggleSiteNoticePopover() {
+	if($('#logoContainer').hasClass('pop')) {
+		$('#logoContainer').popover('hide').removeClass('pop');
+	} else {
+		var popContent = 'author: Clemens Banas<br><a href="mailto:clemens.banas@student.uibk.ac.at">clemens.banas@student.uibk.ac.at</a>'
+		$('#logoContainer').attr('data-content', popContent).popover('show').addClass('pop');
+	}
 }

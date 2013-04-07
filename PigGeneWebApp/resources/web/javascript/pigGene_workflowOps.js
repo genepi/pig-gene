@@ -37,7 +37,7 @@ function finalizeSubmit(obj) {
  * request function is called to save the workflow on server side.
  */
 function save() {
-	var filename = $('#saveDialogInput').val();
+	var filename = $('#saveDialogInput').val().replace(/\s/g,'');
 	$('#saveNameModal').modal('hide');
 	if(!inputLongEnough(filename)) {
 		showErrorMessageShortInput();
@@ -111,8 +111,7 @@ function saveWorkflow(filename) {
 	    		} else {
 	    			setStandardBehaviorSuccessModal();
 	    		}
-	    		resetOperationDialog($('#workflowOps').html().toLowerCase());
-	    		resetFormContainerOperation();
+	    		resetDialogsAndHighlightings();
 	    		setWorkflowName(filename);
 	    		setSaveStateSavedAndDisplayStatus();
 	    		updateTypeaheadSaved();

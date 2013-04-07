@@ -438,10 +438,10 @@ function processDownloadRequest() {
 		var filename = $('#workflowName').html();
 		$('#downloadScript').attr('download', filename + '.pig');
 		$('#downloadScript').attr('href', 'http://localhost:8080/dwld/' + filename);
+		resetDialogsAndHighlightings();
 	} else {
 		$('#downloadScript').removeAttr('download').removeAttr('href');
-		forceDownload = true;
-		$('#saveWfBtn').trigger('click');
+		openDownloadUnsavedModal();
 	}
 }
 

@@ -30,7 +30,7 @@
 				<a id="downloadScript" class="btn btn-inverse hide" title="download pig script"><i class="icon-download icon-white"></i> download</a>
 			</div>
 			
-			<div class="well" id="logoContainer">
+			<div class="well" id="logoContainer" rel="popover" data-content="" data-original-title="site notice">
 				<img id="pigIcon" src="img/pigIcon.png" width="40" height="20" alt="pig icon">
 				<h3 id="projectName"> gene project</h3>
 			</div>
@@ -202,6 +202,21 @@
 	  </div>
 	  <div class="modal-footer">
 	    <a type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">close</a>
+	  </div>
+	</div>
+	
+	<div class="modal hide fade" id="downloadUnsavedModal">
+	  <div class="modal-header">
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+	    <h3>Downloading pig script...</h3>
+	  </div>
+	  <div class="modal-body">
+	    Your current workflow definition needs to be saved before you can <br>
+	    download the pig script. <b>Do you want to open the save dialog?</b>
+	  </div>
+	  <div class="modal-footer">
+	  	<a type="button" class="btn" data-dismiss="modal" aria-hidden="true">no</a>
+	  	<a type="button" class="btn btn-success" id="openSaveDialogBtn">yes</a>
 	  </div>
 	</div>
 	
