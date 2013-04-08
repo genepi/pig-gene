@@ -689,7 +689,7 @@ function toggleSiteNoticePopover() {
 	if($('#logoContainer').hasClass('pop')) {
 		$('#logoContainer').popover('hide').removeClass('pop');
 	} else {
-		var popContent = 'author: Clemens Banas<br><a href="mailto:clemens.banas@student.uibk.ac.at">clemens.banas@student.uibk.ac.at</a>'
+		var popContent = 'author: <a href="mailto:clemens.banas@student.uibk.ac.at?subject=pigGene%20project">Clemens Banas</a><br> created: April, 2013';
 		$('#logoContainer').attr('data-content', popContent).popover('show').addClass('pop');
 	}
 }
