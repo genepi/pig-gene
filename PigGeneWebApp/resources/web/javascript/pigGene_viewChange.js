@@ -331,30 +331,55 @@ function displayCorrespondingContainerInfo() {
 	setCommentField(data.comment);
 
 	if(data.operation=='REGISTER') {
-		$('#regFileName').val(data.relation);
+		$('#regFileName').val(data.input);
 		hideScriptDialogSlow();
 		setOperationDialog('register');
 	} else if(data.operation=='LOAD') {
-		$('#loadName').val(data.name);
-		$('#fileName').val(data.relation);
+		$('#loadName').val(data.relation);
+		$('#fileName').val(data.input);
+		if(data.options == 'vcf') {
+			$('#loadTxt').removeClass('active');
+			$('#loadVcf').addClass('active');
+			hideTxtSeparatorOptions();
+			$('#tabSeparator').removeClass('active');
+			$('#spaceSeparator').removeClass('active');
+			$('#commaSeparator').removeClass('active');
+		} else {
+			$('#loadVcf').removeClass('active');
+			$('#loadTxt').addClass('active');
+			if(data.options2 == 'tab') {
+				$('#tabSeparator').addClass('active');
+				$('#spaceSeparator').removeClass('active');
+				$('#commaSeparator').removeClass('active');
+			} else if(data.options2 == 'space') {
+				$('#spaceSeparator').addClass('active');
+				$('#tabSeparator').removeClass('active');
+				$('#commaSeparator').removeClass('active');
+			} else {
+				$('#commaSeparator').addClass('active');
+				$('#tabSeparator').removeClass('active');
+				$('#spaceSeparator').removeClass('active');
+			}
+			showTxtSeparatorOptions();
+		}
 		hideScriptDialogSlow();
 		setOperationDialog('load');
 	} else if(data.operation=='STORE'){
-		$('#storeName').val(data.name);
-		$('#relToStore').val(data.relation);
+		$('#storeName').val(data.relation);
+		$('#relToStore').val(data.input);
 		hideScriptDialogSlow();
 		setOperationDialog('store');
 	} else if(data.operation=='FILTER') {
-		$('#filtName').val(data.name);
-		$('#filtRel').val(data.relation);
+		$('#filtName').val(data.relation);
+		$('#filtRel').val(data.input);
 		$('#filtOpt').val(data.options);
 		hideScriptDialogSlow();
 		setOperationDialog('filter');
 	} else if(data.operation=='JOIN') {
-		$('#joinName').val(data.name);
-		$('#joinRel').val(data.relation);
+		$('#joinName').val(data.relation);
+		$('#joinRel').val(data.input);
 		$('#joinOpt').val(data.options);
-		$('#joinRel2').val(data.relation2);
+		$('#joinRel2').val(data.input2);
 		$('#joinOpt2').val(data.options2);
 		hideScriptDialogSlow();
 		setOperationDialog('join');
@@ -362,6 +387,14 @@ function displayCorrespondingContainerInfo() {
 		$('#scriptTextarea').val(data.options);
 		setOperationDialog('script');
 		setFormContainerOperation('user defined script');
+	}
+	
+	if($('#helpBtn').hasClass('btn-info')) {
+		if(data.operation != 'SCRIPT') {
+			setOperationRelatedHelpContent(data.operation.toLowerCase());
+		} else {
+			setOperationRelatedHelpContent('user defined script');
+		}
 	}
 }
 

@@ -1,21 +1,13 @@
 package piggene.serialisation;
 
 public class WorkflowComponent {
-	private String name;
 	private String relation;
+	private String input;
 	private String operation;
-	private String relation2;
+	private String input2;
 	private String options;
 	private String options2;
 	private String comment;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
-	}
 
 	public String getRelation() {
 		return relation;
@@ -23,6 +15,14 @@ public class WorkflowComponent {
 
 	public void setRelation(final String relation) {
 		this.relation = relation;
+	}
+
+	public String getInput() {
+		return input;
+	}
+
+	public void setInput(final String input) {
+		this.input = input;
 	}
 
 	public String getOperation() {
@@ -33,12 +33,12 @@ public class WorkflowComponent {
 		this.operation = operation;
 	}
 
-	public String getRelation2() {
-		return relation2;
+	public String getInput2() {
+		return input2;
 	}
 
-	public void setRelation2(final String relation2) {
-		this.relation2 = relation2;
+	public void setInput2(final String input2) {
+		this.input2 = input2;
 	}
 
 	public String getOptions() {
@@ -68,17 +68,17 @@ public class WorkflowComponent {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("name:");
-		sb.append(name);
-		sb.append(" ");
 		sb.append("relation:");
 		sb.append(relation);
+		sb.append(" ");
+		sb.append("input:");
+		sb.append(input);
 		sb.append(" ");
 		sb.append("operation:");
 		sb.append(operation);
 		sb.append(" ");
-		sb.append("relation2:");
-		sb.append(relation2);
+		sb.append("input2:");
+		sb.append(input2);
 		sb.append(" ");
 		sb.append("options:");
 		sb.append(options);

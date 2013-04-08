@@ -20,15 +20,15 @@ public class JoinSnippet extends PigSnippet {
 			sb.append(comment);
 			sb.append(System.getProperty("line.separator"));
 		}
-		sb.append(comp.getName());
+		sb.append(comp.getRelation());
 		sb.append(EQUAL_SYMBOL);
 		sb.append(comp.getOperation());
 		sb.append(" ");
-		sb.append(comp.getRelation());
+		sb.append(comp.getInput());
 		sb.append(" BY (");
 		sb.append(comp.getOptions());
 		sb.append("), ");
-		sb.append(comp.getRelation2());
+		sb.append(comp.getInput2());
 		sb.append(" BY (");
 		sb.append(comp.getOptions2());
 		sb.append(')');

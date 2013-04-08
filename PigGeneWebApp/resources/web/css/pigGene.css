@@ -38,6 +38,14 @@ form input[type=text] {
   background-image: url("../img/glyphicons-halflings-grey.png");
 }
 
+.unused {
+	color: #000000;
+}
+
+.unexisting {
+	color: #FF0000;
+}
+
 #logoContainer.well {
 	margin-top: 10px;
 	margin-right: 10px;

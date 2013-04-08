@@ -20,7 +20,7 @@ public class RegisterSnippet extends PigSnippet {
 		}
 		sb.append(comp.getOperation());
 		sb.append(" ");
-		sb.append(comp.getRelation());
+		sb.append(comp.getInput());
 		return sb.toString();
 	}
 

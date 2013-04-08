@@ -18,11 +18,11 @@ public class FilterSnippet extends PigSnippet {
 			sb.append(comment);
 			sb.append(System.getProperty("line.separator"));
 		}
-		sb.append(comp.getName());
+		sb.append(comp.getRelation());
 		sb.append(EQUAL_SYMBOL);
 		sb.append(comp.getOperation());
 		sb.append(" ");
-		sb.append(comp.getRelation());
+		sb.append(comp.getInput());
 		sb.append(" BY ");
 		sb.append(comp.getOptions());
 		return sb.toString();

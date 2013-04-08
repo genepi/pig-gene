@@ -20,9 +20,9 @@ public class StoreSnippet extends PigSnippet {
 		}
 		sb.append(comp.getOperation());
 		sb.append(" ");
-		sb.append(comp.getRelation());
+		sb.append(comp.getInput());
 		sb.append(" INTO '$");
-		sb.append(comp.getName());
+		sb.append(comp.getRelation());
 		sb.append("'");
 		return sb.toString();
 	}

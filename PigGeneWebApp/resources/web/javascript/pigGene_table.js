@@ -42,10 +42,10 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
     
     //guarantees fixed column order
     var headers = new Array();
-    headers.push('name');
     headers.push('relation');
+    headers.push('input');
     headers.push('operation');
-    headers.push('relation2');
+    headers.push('input2');
     headers.push('options');
     headers.push('options2');
 
@@ -66,6 +66,13 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
             	if(j==0) {
             		if(value != '-' && !relationIsUsed(value)) {
             			tbCon += tdRow.format('<b class="unused">' + value + '</b>');
+            		} else {
+            			tbCon += tdRow.format(value);
+            		}
+            	} else if (j==1 || j==3) { 
+            		var operation = parsedJson[i][headers[2]];
+            		if(operation != 'REGISTER' && operation != 'LOAD' && value != '-' && !relationExists(value)) {
+            			tbCon += tdRow.format('<b class="unexisting">' + value + '</b>');
             		} else {
             			tbCon += tdRow.format(value);
             		}
