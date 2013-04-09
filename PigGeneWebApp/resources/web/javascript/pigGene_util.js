@@ -633,6 +633,10 @@ function removeTypeaheadRelationElement(name) {
 	}
 }
 
+
+/**
+ * Function is used to sort the typeahead relation elements.
+ */
 function sortTypeaheadRelationElements() {
 	typeaheadRelations.sort();
 }
