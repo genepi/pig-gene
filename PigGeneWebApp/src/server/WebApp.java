@@ -16,10 +16,16 @@ import piggene.resources.SerialisationProcessor;
 import piggene.resources.WorkflowFinder;
 import piggene.resources.WorkflowPresenter;
 
+/**
+ * WebApp class.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class WebApp extends Application {
 
 	/**
-	 * Creates a root Restlet that will receive all incoming calls.
+	 * Creates a root restlet that will receive all incoming calls.
 	 */
 	@Override
 	public synchronized Restlet createRoot() {
@@ -45,7 +51,6 @@ public class WebApp extends Application {
 
 		route = router.attach("/", dir);
 		route.setMatchingMode(Template.MODE_STARTS_WITH);
-
 		return router;
 	}
 

@@ -2,6 +2,13 @@ package piggene.serialisation.scriptcreation;
 
 import piggene.serialisation.WorkflowComponent;
 
+/**
+ * ScriptSnippet class is used to return a USER SCRIPT based on the specified
+ * workflow component.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class ScriptSnippet extends PigSnippet {
 
 	public ScriptSnippet(final WorkflowComponent comp) {

@@ -7,6 +7,13 @@ import java.io.IOException;
 import piggene.serialisation.Workflow;
 import piggene.serialisation.WorkflowComponent;
 
+/**
+ * PigScript class is responsible for creating and writing the pig script to the
+ * file system.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class PigScript {
 	private static final String JAR_FILENAME = "pigGene.jar";
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -20,7 +27,6 @@ public class PigScript {
 			sb.append(workflow.getDescription());
 			sb.append(System.getProperty("line.separator"));
 		}
-
 		sb.append(insertHeader());
 		for (final WorkflowComponent comp : workflow.getWorkflow()) {
 			sb.append(PigSnippetFactory.getPigScriptSnippet(comp));
@@ -48,8 +54,7 @@ public class PigScript {
 			try {
 				out.close();
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// ignore
 			}
 		}
 	}

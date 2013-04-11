@@ -2,6 +2,13 @@ package piggene.serialisation.scriptcreation;
 
 import piggene.serialisation.WorkflowComponent;
 
+/**
+ * LoadSnippet class is used to return a "LOAD" statement based on the specified
+ * workflow component.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class LoadSnippet extends PigSnippet {
 	private static final String TXT_STORAGE = "PigStorage";
 	private static final String VCF_STORAGE = "pigGene.PigGeneStorage()";

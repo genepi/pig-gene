@@ -8,6 +8,12 @@ import org.json.JSONException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+/**
+ * JSONConverter class is used to convert a JsonArray into a workflow.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class JSONConverter {
 
 	public static ArrayList<WorkflowComponent> convertJsonArrayIntoWorkflow(final JSONArray array) throws JsonSyntaxException, JSONException {

@@ -2,6 +2,13 @@ package piggene.serialisation;
 
 import java.util.ArrayList;
 
+/**
+ * Workflow class is used to store a workflow definition, its name and an
+ * (optional) description.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class Workflow {
 	private String name;
 	private String description;

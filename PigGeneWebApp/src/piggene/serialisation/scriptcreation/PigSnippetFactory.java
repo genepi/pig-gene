@@ -1,8 +1,15 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.StoreSnippet;
 import piggene.serialisation.WorkflowComponent;
 
+/**
+ * PigSnippetFactory is used to return a snippet. Which snippet representation
+ * that is depends on the operation contained in the specified workflow
+ * component.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class PigSnippetFactory {
 
 	public static String getPigScriptSnippet(final WorkflowComponent comp) {
@@ -20,4 +27,5 @@ public class PigSnippetFactory {
 			return new ScriptSnippet(comp).toPigScript();
 		}
 	}
+
 }

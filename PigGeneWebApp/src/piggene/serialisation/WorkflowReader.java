@@ -5,6 +5,13 @@ import java.io.IOException;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 
+/**
+ * WorkflowReader class is used to read the content of a workflow definition
+ * file saved on the file system.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class WorkflowReader {
 	private final static String PATH = "yamlFiles/";
 

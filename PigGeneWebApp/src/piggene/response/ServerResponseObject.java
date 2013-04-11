@@ -1,5 +1,12 @@
 package piggene.response;
 
+/**
+ * ServerResponseObject class is used to hold the information transfered from
+ * the server to the client.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class ServerResponseObject {
 	private boolean success;
 	private String message;

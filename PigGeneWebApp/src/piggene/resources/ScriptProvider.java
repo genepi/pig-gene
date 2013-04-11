@@ -9,6 +9,13 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
+/**
+ * ScriptProvider class is used to provide the created pig script for
+ * downloading.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class ScriptProvider extends ServerResource {
 	private static final String DIRECTORY = "pigScripts/";
 	private static final String EXTENSION = ".pig";
@@ -22,7 +29,6 @@ public class ScriptProvider extends ServerResource {
 		if (path == null || !new File(path).isFile()) {
 			return new StringRepresentation("Error: Server was not able to load the content of the script.", MediaType.TEXT_PLAIN);
 		}
-
 		return new FileRepresentation(path, MediaType.TEXT_PLAIN);
 	}
 

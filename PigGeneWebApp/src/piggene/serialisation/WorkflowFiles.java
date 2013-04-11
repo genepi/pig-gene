@@ -3,6 +3,13 @@ package piggene.serialisation;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * WorkflowFiles class is used for operations on the workflow definition files
+ * saved on the file system.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class WorkflowFiles {
 	private static final String YAML_PATH = "yamlFiles/";
 	private static final String PIG_PATH = "pigScripts/";

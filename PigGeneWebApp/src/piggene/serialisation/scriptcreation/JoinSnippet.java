@@ -2,14 +2,19 @@ package piggene.serialisation.scriptcreation;
 
 import piggene.serialisation.WorkflowComponent;
 
+/**
+ * JoinSnippet class is used to return a "JOIN" statement based on the specified
+ * workflow component.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class JoinSnippet extends PigSnippet {
 
 	public JoinSnippet(final WorkflowComponent comp) {
 		super(comp);
 	}
 
-	// TODO functionality must be extended...
-	// TODO null-check and abort process?
 	@Override
 	public String toPigScript() {
 		final StringBuilder sb = new StringBuilder();

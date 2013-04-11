@@ -1,5 +1,12 @@
 package piggene.serialisation;
 
+/**
+ * WorkflowComponent class is used to store the information contained in a
+ * single workflow line (representing an operation).
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class WorkflowComponent {
 	private String relation;
 	private String input;

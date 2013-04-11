@@ -23,6 +23,13 @@ import piggene.serialisation.scriptcreation.PigScript;
 
 import com.google.gson.JsonSyntaxException;
 
+/**
+ * SerialisationProcessor class is used to serialize a workflow. The workflow
+ * definition is saved in a yaml-file. Additionally a pig script is created.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class SerialisationProcessor extends ServerResource {
 
 	@Override
@@ -34,11 +41,15 @@ public class SerialisationProcessor extends ServerResource {
 		try { // parse the input
 			final JSONArray array = getJsonArray(entity);
 			workflow = processClientData(array);
-		} catch (final JsonSyntaxException e2) {
+		} catch (final IOException e) {
+			obj.setSuccess(false);
+			obj.setMessage("An error ocurred while parsing the input data");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+		} catch (final JsonSyntaxException e) {
 			obj.setSuccess(false);
 			obj.setMessage("The workflow could not be parsed because of a syntax error.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
-		} catch (final JSONException e2) {
+		} catch (final JSONException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while processing the workflow.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
@@ -74,16 +85,10 @@ public class SerialisationProcessor extends ServerResource {
 		return new Workflow(filename, description, workflow);
 	}
 
-	// TODO: think about the exception handling of this method...
-	private JSONArray getJsonArray(final Representation entity) throws JSONException {
+	private JSONArray getJsonArray(final Representation entity) throws JSONException, IOException {
 		JsonRepresentation representant = null;
 		JSONArray data = null;
-		try {
-			representant = new JsonRepresentation(entity);
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		representant = new JsonRepresentation(entity);
 		data = representant.getJsonArray();
 		return data;
 	}

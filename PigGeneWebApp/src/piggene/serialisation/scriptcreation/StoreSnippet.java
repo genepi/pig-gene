@@ -1,7 +1,14 @@
-package piggene.serialisation;
+package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.scriptcreation.PigSnippet;
+import piggene.serialisation.WorkflowComponent;
 
+/**
+ * StoreSnippet class is used to return a "STORE" statement based on the
+ * specified workflow component.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class StoreSnippet extends PigSnippet {
 
 	public StoreSnippet(final WorkflowComponent comp) {

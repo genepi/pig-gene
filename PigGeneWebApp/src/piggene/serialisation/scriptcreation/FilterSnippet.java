@@ -2,6 +2,13 @@ package piggene.serialisation.scriptcreation;
 
 import piggene.serialisation.WorkflowComponent;
 
+/**
+ * FilterSnippet class is used to return a "FILTER" statement based on the
+ * specified workflow component.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class FilterSnippet extends PigSnippet {
 
 	public FilterSnippet(final WorkflowComponent comp) {

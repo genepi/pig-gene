@@ -16,6 +16,12 @@ import piggene.response.ServerResponseObject;
 import piggene.serialisation.Workflow;
 import piggene.serialisation.WorkflowReader;
 
+/**
+ * DeserialisationProcessor is used to deserialize a saved workflow definition.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class DeserialisationProcessor extends ServerResource {
 
 	@Override

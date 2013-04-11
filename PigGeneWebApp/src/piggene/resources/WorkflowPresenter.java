@@ -13,6 +13,13 @@ import org.restlet.resource.ServerResource;
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.WorkflowFiles;
 
+/**
+ * WorkflowPresenter class is used to collect the names of all saved workflow
+ * definitions.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class WorkflowPresenter extends ServerResource {
 
 	@Override

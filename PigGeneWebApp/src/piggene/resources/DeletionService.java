@@ -15,6 +15,12 @@ import org.restlet.resource.ServerResource;
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.WorkflowFiles;
 
+/**
+ * DeletionService class is used to delete a resource.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class DeletionService extends ServerResource {
 
 	@Override
@@ -44,7 +50,6 @@ public class DeletionService extends ServerResource {
 			obj.setMessage("An error occured while processing your request.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
-
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 

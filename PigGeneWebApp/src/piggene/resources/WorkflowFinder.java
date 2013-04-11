@@ -15,6 +15,12 @@ import org.restlet.resource.ServerResource;
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.WorkflowFiles;
 
+/**
+ * WorkflowFinder class is used to check if a specified workflow-file exists.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class WorkflowFinder extends ServerResource {
 
 	@Override

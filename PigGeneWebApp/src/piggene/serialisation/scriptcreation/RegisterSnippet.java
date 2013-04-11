@@ -2,6 +2,13 @@ package piggene.serialisation.scriptcreation;
 
 import piggene.serialisation.WorkflowComponent;
 
+/**
+ * RegisterSnippet class is used to return a "REGISTER" statement based on the
+ * specified workflow component.
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
 public class RegisterSnippet extends PigSnippet {
 
 	public RegisterSnippet(final WorkflowComponent comp) {
