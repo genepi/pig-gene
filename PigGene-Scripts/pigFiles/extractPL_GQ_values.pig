@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to filter the exome information 
  * and create columns for each of the PL-values 
  * and a column for the GQ-value. Stores the
@@ -10,6 +8,7 @@
  * pig -param input=GeneSamples/in/6exomes.vcf -param output=GeneSamples/output extractPL_GQ_values.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
  REGISTER pigGene.jar;

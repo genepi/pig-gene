@@ -10,7 +10,7 @@
  * @author: Clemens Banas
  */
 
-package pigGene;
+package pigGene.storage;
 
 import java.io.IOException;
 

@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script gets two parameters as input. These parameters define the 
  * range which lines (their corresponding number) should be stored into 
  * the output file.
@@ -9,6 +7,7 @@
  * pig -param input=GeneSamples/parameterInput.txt -param start=3 -param end=11 -param output=GeneSamples/out getComParameter.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
 REGISTER pigGene.jar;

@@ -1,13 +1,4 @@
-/**
- * PigGene - BACHELOR PROJECT
- * 
- * UDF to filter unwanted 
- * chromosome information.
- * 
- * @author: Clemens Banas
- */
-
-package pigGene;
+package pigGene.UDFs;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,9 +6,15 @@ import java.util.ArrayList;
 import org.apache.pig.FilterFunc;
 import org.apache.pig.data.Tuple;
 
+/**
+ * UDF to filter unwanted chromosome information.
+ * 
+ * @author: Clemens Banas
+ * @date: April 2013
+ */
 public class FilterChromosome extends FilterFunc {
 	private static ArrayList<String> unwantedChromosomes = new ArrayList<String>(3);
-	
+
 	static {
 		unwantedChromosomes.add("M");
 		unwantedChromosomes.add("X");
@@ -25,11 +22,11 @@ public class FilterChromosome extends FilterFunc {
 	}
 
 	@Override
-	public Boolean exec(Tuple input) throws IOException {
-		if(input == null || input.size() == 0) {
+	public Boolean exec(final Tuple input) throws IOException {
+		if (input == null || input.size() == 0) {
 			return false;
 		}
-		String chromosome = (String) input.get(0);
+		final String chromosome = (String) input.get(0);
 		return !unwantedChromosomes.contains(chromosome);
 	}
 

@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to test simple 
  * joins between two relations.
  * 
@@ -8,6 +6,7 @@
  * pig -param input1=GeneSamples/simpleJoinInput1.txt -param input2=GeneSamples/simpleJoinInput2.txt -param input3=GeneSamples/simpleJoinInput3.txt -param input4=GeneSamples/simpleJoinInput4.txt simpleJoin.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
 leftRel = LOAD '$input1' USING PigStorage('\t') AS (l1:chararray,l2:int,l3:int);

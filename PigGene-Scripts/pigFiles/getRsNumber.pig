@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to gain the rsNumber from the reference file and
  * write it into the corresponding  id-column of the sample file.
  * Finally store the new generated relation (including the rsNumber). 
@@ -9,6 +7,7 @@
  * pig -param sample=GeneSamples/unmerged/sample1.vcf -param ref=GeneRefFile/00-All.vcf -param output=GeneSamples/out getRsNumber.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
 
 REGISTER pigGene.jar;

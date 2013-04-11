@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to filter a specified range
  * of positions and to join the input file
  * with the refererce file to gain the
@@ -12,6 +10,7 @@
  * pig -param input=GeneSamples/in/6exomes.vcf -param output=GeneSamples/output -param ref=GeneRefFile/00-All.vcf -param chr=12 -param start=51373184 -param end=51422349 -param accuracy=0 retrieveGenotypeInformation.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
 REGISTER pigGene.jar;

@@ -1,4 +1,4 @@
-package pigGene;
+package pigGene.storage.unmerged;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +12,8 @@ import org.apache.pig.impl.logicalLayer.schema.Schema;
 import org.apache.pig.impl.logicalLayer.schema.Schema.FieldSchema;
 import org.apache.pig.impl.util.UDFContext;
 
-public class PigGeneStorage extends PigStorage {
+
+public class PigGeneStorageUnmerged extends PigStorage {
 	static ResourceSchema schema;
 
 	static {
@@ -27,14 +28,14 @@ public class PigGeneStorage extends PigStorage {
 		fieldSchemaList.add(new FieldSchema("info", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("format", org.apache.pig.data.DataType.CHARARRAY));
 		fieldSchemaList.add(new FieldSchema("genotype", org.apache.pig.data.DataType.CHARARRAY));
-		fieldSchemaList.add(new FieldSchema("persID", org.apache.pig.data.DataType.INTEGER));
+		fieldSchemaList.add(new FieldSchema("file", org.apache.pig.data.DataType.CHARARRAY));
 		schema = new ResourceSchema(new Schema(fieldSchemaList));
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public InputFormat getInputFormat() {
-		return new PigGeneInputFormat();
+		return new PigGeneInputFormatUnmerged();
 	}
 
 	@Override

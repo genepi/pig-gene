@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script calculates the median of 
  * the quality from the sample file.
  * 
@@ -8,6 +6,7 @@
  * pig -param sample=GeneSamples/unmerged/sample1.vcf medianDataFu.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
 
 REGISTER pigGene.jar;

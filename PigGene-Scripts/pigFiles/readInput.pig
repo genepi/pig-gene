@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to test my selfwritten
  * Loader Function. 
  * 
@@ -8,6 +6,7 @@
  * pig -param input=GeneSamples/input/readInput.txt readInput.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
 REGISTER pigGene.jar;

@@ -1,7 +1,6 @@
-package pigGene;
+package pigGene.storage.unmerged;
 
 import java.io.IOException;
-import java.util.LinkedList;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -17,32 +16,28 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.util.LineReader;
 
-public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
+public class PigGeneRecordReaderUnmerged extends RecordReader<LongWritable, Text> {
 	private static final int leadingInfoFields = 9;
 	private static final int infoColOffset = 7;
 	private static final String delimiter = "\t";
-	private final LinkedList<String> readLines = new LinkedList<String>();
 	private CompressionCodecFactory compressionCodecs = null;
 	private final byte[] recordDelimiterBytes;
 	private LongWritable key = null;
 	private Text value = null;
 	private LineReader in;
 
-	private long keyCounter = 0;
 	private long start;
 	private long pos;
 	private long end;
+	private Path file;
 	private int maxLineLength;
-
-	private final Text textLine = new Text();
-	private final String referenceValue = "0/0";
 	private final String indelValue = "INDEL";
 
-	public PigGeneRecordReader(final byte[] recordDelimiter) {
+	public PigGeneRecordReaderUnmerged(final byte[] recordDelimiter) {
 		recordDelimiterBytes = recordDelimiter;
 	}
 
-	public PigGeneRecordReader() {
+	public PigGeneRecordReaderUnmerged() {
 		this(null);
 	}
 
@@ -57,7 +52,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 
 		start = split.getStart();
 		end = start + split.getLength();
-		final Path file = split.getPath();
+		file = split.getPath();
 		compressionCodecs = new CompressionCodecFactory(job);
 		final CompressionCodec codec = compressionCodecs.getCodec(file);
 
@@ -93,81 +88,55 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 
 	@Override
 	public boolean nextKeyValue() throws IOException, InterruptedException {
-		// if LinkedList contains elements - consume them
-		if (!readLines.isEmpty()) {
-			return true;
-		}
-
-		if (value == null) {
-			value = new Text();
-		}
 		if (key == null) {
 			key = new LongWritable();
 		}
-		key.set(keyCounter++);
-
+		key.set(pos);
+		if (value == null) {
+			value = new Text();
+		}
 		int newSize = 0;
-		boolean headerLine = false;
-		boolean addedLine = false;
-		while (pos < end || headerLine) {
-			newSize = in.readLine(value, maxLineLength, Math.max((int) Math.min(Integer.MAX_VALUE, end - pos), maxLineLength));
-			if (newSize == 0) { // every line was read
-				break;
-			}
-			pos += newSize;
-			if (newSize < maxLineLength) { // line length okay?
-				if (value.charAt(0) == '#') { // ignore! -> header line
-					headerLine = true;
-				} else { // something new to read: split the new line and put it
-							// into queue if split is possible (not the whole
-							// line filtered) otherwise continue reading
-					addedLine = splitLine(key, value);
-					if (addedLine) {
-						return true;
-					}
+		if (pos < end) {
+			boolean skipped;
+			do {
+				newSize = in.readLine(value, maxLineLength, Math.max((int) Math.min(Integer.MAX_VALUE, end - pos), maxLineLength));
+				skipped = skipLine(value);
+				if (!skipped) {
+					byte[] buffer = (delimiter.concat(file.getName())).getBytes();
+					value.append(buffer, 0, buffer.length);
 				}
+				pos += newSize;
+			} while (skipped && pos < end);
+
+			if (!skipped && newSize != 0 && newSize < maxLineLength) {
+				return true;
 			}
 		}
 
-		// only return FALSE if LinkedList is empty and nothing more to read...
 		key = null;
 		value = null;
 		return false;
 	}
 
-	private boolean splitLine(final LongWritable key, final Text value) {
-		boolean addedLine = false;
-		final String inputLine = value.toString();
-		final String[] tmpSplits = inputLine.split(delimiter);
-
-		if (!infoMatchesINDEL(tmpSplits[infoColOffset])) {
-			// create leading info
-			final StringBuilder leadingInfoBuffer = new StringBuilder();
-			for (int i = 0; i < leadingInfoFields; i++) {
-				leadingInfoBuffer.append(tmpSplits[i]).append(delimiter);
-			}
-
-			// append person and id column
-			int idCounter = 0;
-			final String leadingInfo = leadingInfoBuffer.toString();
-			final int noOfTestPersons = tmpSplits.length - leadingInfoFields;
-			String genotype;
-			for (int i = 0; i < noOfTestPersons; i++) {
-				final StringBuilder text = new StringBuilder();
-				genotype = tmpSplits[leadingInfoFields + idCounter];
-
-				// ignore lines that equal the reference
-				if (!genotypeMatchesReference(genotype)) {
-					text.append(leadingInfo); // first fields
-					text.append(genotype).append(delimiter); // testPerson
-					text.append(Integer.toString(idCounter)); // testPersonId
-					readLines.add(text.toString());
-					addedLine = true;
-				}
-				idCounter++;
-			}
+	/**
+	 * This method returns true if the given Text value, representing an input
+	 * line, should be skipped.
+	 * 
+	 * @param value
+	 * @return true if the length of the given Text object is less than the
+	 *         number of fields specified in the leadingInfoFields variable.
+	 *         Also returns true if the infoMatchesINDEL method returns true.
+	 *         false otherwise.
+	 */
+	private boolean skipLine(final Text value) {
+		if (value.charAt(0) == '#') {
+			return true;
 		}
-		return addedLine;
+		final String[] tmpSplits = value.toString().split(delimiter);
+		if (tmpSplits.length <= leadingInfoFields) {
+			return true;
+		}
+		return infoMatchesINDEL(tmpSplits[infoColOffset]);
 	}
 
 	/**
@@ -186,31 +155,14 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 		return false;
 	}
 
-	/**
-	 * The genotypeMatchesReference method checks if the given String (genotype
-	 * parameter) matches the reference value (which is "0/0").
-	 * 
-	 * @param genotype
-	 * @return true if given String is not null, it's length is larger or equal
-	 *         than 5 and the first 3 characters match the reference value
-	 *         ("0/0"). false otherwise.
-	 */
-	private boolean genotypeMatchesReference(final String genotype) {
-		if (genotype != null && genotype.length() >= 3 && referenceValue.equals(genotype.substring(0, 3))) {
-			return true;
-		}
-		return false;
-	}
-
 	@Override
-	public LongWritable getCurrentKey() throws IOException, InterruptedException {
+	public LongWritable getCurrentKey() {
 		return key;
 	}
 
 	@Override
-	public Text getCurrentValue() throws IOException, InterruptedException {
-		textLine.set(readLines.poll());
-		return textLine;
+	public Text getCurrentValue() {
+		return value;
 	}
 
 	@Override

@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script imports multiple samplefiles,
  * filters chromosomes and sorts the output
  * relation by CHROM POS REF ALT SAMPLE. 
@@ -9,6 +7,7 @@
  * pig -param input=GeneSamples/unmerged -param outOrder=GeneSamples/outOrder -param output=GeneSamples/out multipleSamples.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
 REGISTER pigGene.jar;

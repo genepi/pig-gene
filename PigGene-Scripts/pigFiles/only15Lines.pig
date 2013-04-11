@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to filter just the first
  * 15 lines of the sample1 file and store
  * these 15 lines to a new file. 
@@ -9,6 +7,7 @@
  * pig -param sample=GeneSamples/unmerged/sample1.vcf -param output=GeneSamples/out only15Lines.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
 
 REGISTER pigGene.jar;

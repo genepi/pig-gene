@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to calculate the mean quality of
  * the information obtained by the sample file. 
  * 
@@ -8,6 +6,7 @@
  * pig -param sample=GeneSamples/unmerged/sample1.vcf meanQuality.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
 
 REGISTER pigGene.jar;

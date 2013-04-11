@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script loads multiple files from a given
  * directory and uses my UDF to add the corresponding
  * filenames as a new column to each line. Finally 
@@ -11,6 +9,7 @@
  * pig -param folder=GeneSamples/input -param thres=20 getFolderPath.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
 REGISTER pigGene.jar;

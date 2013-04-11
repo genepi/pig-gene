@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script loads a test file
  * and removes all lines containing 
  * an rs Number. Finally stores the
@@ -10,6 +8,7 @@
  * pig -param sample=GeneSamples/rsNoInput.txt -param output=GeneSamples/out removeRsNumber.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
 REGISTER pigGene.jar;

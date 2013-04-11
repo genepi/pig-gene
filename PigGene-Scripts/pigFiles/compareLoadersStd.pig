@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to load a file and filter 
  * a specified range of positions.
  * 
@@ -8,6 +6,7 @@
  * pig -param input=GeneSamples/in/6exomes.vcf -param output=GeneSamples/output -param chr=12 -param start=51373184 -param end=51422349 -param accuracy=0 compareLoadersStd.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
  REGISTER pigGene.jar;

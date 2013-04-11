@@ -1,10 +1,16 @@
-package pigGene;
+package pigGene.UDFs;
 
 import java.io.IOException;
 
 import org.apache.pig.EvalFunc;
 import org.apache.pig.data.Tuple;
 
+/**
+ * UDF to extract the geneinfo.
+ * 
+ * @author: Clemens Banas
+ * @date: April 2013
+ */
 public class ExtractGeneInfo extends EvalFunc<String> {
 	private final String geneinfo = "GENEINFO=";
 	private final int offset = geneinfo.length();
@@ -22,19 +28,16 @@ public class ExtractGeneInfo extends EvalFunc<String> {
 
 		final int startOffset = infoCol.indexOf(geneinfo) + offset;
 		if (startOffset < 0) {
-			return "GENEINFO= could was not found";
+			return "'GENEINFO=' was not found";
 		}
 
 		final int endOffset = infoCol.indexOf(";", startOffset);
-
 		if (endOffset < 0) {
 			return "index problem: end < 0";
 		}
-
 		if (startOffset > endOffset) {
 			return "index problem: start > end";
 		}
-
 		return infoCol.substring(startOffset, endOffset);
 	}
 

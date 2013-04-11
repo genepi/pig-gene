@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to extract the 
  * GENEINFO from the info column 
  * of the reference file.
@@ -9,6 +7,7 @@
  * pig -param input=GeneRefFile/00-All.vcf -param output=GeneSamples/output extractGeneInfoReference.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
 
  REGISTER pigGene.jar;

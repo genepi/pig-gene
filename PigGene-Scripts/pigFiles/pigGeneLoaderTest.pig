@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to test my own
  * Storage implementation.
  * 
@@ -8,6 +6,7 @@
  * pig -param input=GeneSamples/input/readInput.txt pigGeneLoaderTest.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
 
 

@@ -1,6 +1,4 @@
 /**
- * PigGene - BACHELOR PROJECT
- * 
  * Pig script to load multiple files and  
  * filter a specified range of positions.
  * 
@@ -8,6 +6,7 @@
  * pig -param input=GeneSamples/unmerged/sample1.vcf -param output=GeneSamples/output -param chr=12 -param start=51373184 -param end=51422349 -param accuracy=0 compareLoadersUnmerged.pig
  * 
  * @author: Clemens Banas
+ * @date: April 2013
  */
  
  REGISTER pigGene.jar;
