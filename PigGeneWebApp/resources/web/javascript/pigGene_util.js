@@ -513,14 +513,17 @@ function processDiscardChanges() {
 
 /**
  * Function is used to convert the given filenames into html-links.
+ * In case of a delete-action the content gets filtered.
  * @param data
  */
-function convertFilenamesToLinks(data) {
+function convertFilenamesToLinks(buttonName, data) {
 	var toRemove = '.yaml';
 	var content = '';
 	for(var i=0; i<data.length; i++) {
 		var name = data[i].replace(toRemove,'');
-		content += '<a class="fileNames">'+name+'</a><br>'
+		if(!(buttonName == '#deleteWfBtn' && $.inArray(name, undeletableWorkflows) > -1)) {
+			content += '<a class="fileNames">'+name+'</a><br>';
+		}
 	}
 	return content;
 }
@@ -560,7 +563,10 @@ function updateTypeaheadSaved() {
 	    		var savedNames = [];
 	    		var toRemove = '.yaml';
 	    		for(var i=0; i<response.data.length; i++) {
-	    			savedNames.push(response.data[i].replace(toRemove,''));
+	    			var fileName = response.data[i].replace(toRemove,'');
+	    			if($.inArray(fileName, undeletableWorkflows) < 0) {
+	    				savedNames.push(fileName);
+	    			}
 	    		}
 	    		savedNames.sort();
 	    		$('#saveDialogInput').typeahead({source: savedNames, items: 2});

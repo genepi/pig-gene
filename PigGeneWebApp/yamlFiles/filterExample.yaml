@@ -1,0 +1,28 @@
+!piggene.serialisation.Workflow
+name: filterExample
+description: example workflow
+workflow: 
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: input.txt
+   input2: '-'
+   operation: LOAD
+   options: txt
+   options2: tab
+   relation: R1
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: R1
+   input2: '-'
+   operation: FILTER
+   options: chrom == 12
+   options2: '-'
+   relation: R2
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: R2
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output.txt

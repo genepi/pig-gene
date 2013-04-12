@@ -12,7 +12,9 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import piggene.exceptions.UnpossibleWorkflowFileOperation;
 import piggene.response.ServerResponseObject;
+import piggene.serialisation.UntouchableFiles;
 import piggene.serialisation.WorkflowFiles;
 
 /**
@@ -33,6 +35,9 @@ public class DeletionService extends ServerResource {
 		try {
 			representant = new JsonRepresentation(entity);
 			filename = representant.getJsonObject().getString("filename");
+			if (UntouchableFiles.list.contains(filename)) {
+				throw new UnpossibleWorkflowFileOperation();
+			}
 			final boolean deleted = WorkflowFiles.deleteFile(filename);
 			if (deleted) {
 				obj.setSuccess(true);
@@ -41,6 +46,10 @@ public class DeletionService extends ServerResource {
 				obj.setSuccess(false);
 				obj.setMessage("Server was not able to delete the selected file.");
 			}
+		} catch (final UnpossibleWorkflowFileOperation e) {
+			obj.setSuccess(false);
+			obj.setMessage("It is impossible to delete an example workflow!");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while checking if the filename exists.");
@@ -52,5 +61,4 @@ public class DeletionService extends ServerResource {
 		}
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
-
 }

@@ -14,8 +14,10 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import piggene.exceptions.UnpossibleWorkflowFileOperation;
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.JSONConverter;
+import piggene.serialisation.UntouchableFiles;
 import piggene.serialisation.Workflow;
 import piggene.serialisation.WorkflowComponent;
 import piggene.serialisation.WorkflowWriter;
@@ -41,6 +43,13 @@ public class SerialisationProcessor extends ServerResource {
 		try { // parse the input
 			final JSONArray array = getJsonArray(entity);
 			workflow = processClientData(array);
+			if (UntouchableFiles.list.contains(workflow.getName())) {
+				throw new UnpossibleWorkflowFileOperation();
+			}
+		} catch (final UnpossibleWorkflowFileOperation e) {
+			obj.setSuccess(false);
+			obj.setMessage("It is impossible to override an example workflow!");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error ocurred while parsing the input data");

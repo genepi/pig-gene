@@ -223,7 +223,7 @@ function handleWorkflowRequest(buttonName) {
     	    dataType:'json',
     	    success: function(response) {
     	    	if(response.success) {
-    	    		var popContent = convertFilenamesToLinks(response.data);
+    	    		var popContent = convertFilenamesToLinks(buttonName, response.data);
     	    		hideOtherPopups(buttonName);
     	    		$(buttonName).attr('data-content', popContent).popover('show').addClass('pop').addClass(id);
     	    	} else {
