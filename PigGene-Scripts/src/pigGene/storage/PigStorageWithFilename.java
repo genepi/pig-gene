@@ -1,15 +1,3 @@
-/**
- * PigGene - BACHELOR PROJECT
- * 
- * UDF extension of the PigStorage functionality that
- * adds the filename as last parameter to the tuple. 
- * Needed to be able to find out to which file each
- * line in a relation corresponds when multiple files
- * are loaded from the same directory.
- * 
- * @author: Clemens Banas
- */
-
 package pigGene.storage;
 
 import java.io.IOException;
@@ -22,10 +10,19 @@ import org.apache.pig.data.BinSedesTuple;
 import org.apache.pig.data.DataType;
 import org.apache.pig.data.Tuple;
 
+/**
+ * Extension of the PigStorage functionality that adds the filename as last
+ * parameter to the tuple. Needed to be able to find out to which file each line
+ * in a relation corresponds when multiple files are loaded from the same
+ * directory.
+ * 
+ * @author: Clemens Banas
+ * @date: April 2013
+ */
 public class PigStorageWithFilename extends PigStorage {
 	private String filename = null;
 
-	public PigStorageWithFilename(String delimiter) {
+	public PigStorageWithFilename(final String delimiter) {
 		super(delimiter);
 	}
 
@@ -34,16 +31,16 @@ public class PigStorageWithFilename extends PigStorage {
 	}
 
 	@Override
-	public void prepareToRead(@SuppressWarnings("rawtypes") RecordReader reader, PigSplit split) {
+	public void prepareToRead(@SuppressWarnings("rawtypes") final RecordReader reader, final PigSplit split) {
 		super.prepareToRead(reader, split);
-		String path = ((FileSplit) split.getWrappedSplit()).getPath().toString();
-		int offset = path.lastIndexOf('/');
+		final String path = ((FileSplit) split.getWrappedSplit()).getPath().toString();
+		final int offset = path.lastIndexOf('/');
 		filename = path.substring(offset + 1, path.length());
 	}
 
 	@Override
 	public Tuple getNext() throws IOException {
-		BinSedesTuple myTuple = (BinSedesTuple) super.getNext();
+		final BinSedesTuple myTuple = (BinSedesTuple) super.getNext();
 		if (myTuple != null) {
 			System.out.println(myTuple.size());
 			myTuple.append(filename);

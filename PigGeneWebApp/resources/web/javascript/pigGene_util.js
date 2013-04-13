@@ -118,7 +118,6 @@ function processStoreOperation() {
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm});
 	}
-	updateTypeaheadRelations(rel);
 	updateUsedRelations(name);
 	updateUsedRelations(rel);
 	finalizeSubmit('#storeDialog');
@@ -742,7 +741,6 @@ function deleteTypeaheadAndUsedRelationByOperation(op) {
 		operation = $('#workflowOps').html();
 	}
 	if(operation.indexOf('STORE') == 0) {
-		removeTypeaheadRelationElement(workflow[highlightedRowIndex].input);
 		removeUsedRelationElement(workflow[highlightedRowIndex].relation);
 	} else if(operation.indexOf('JOIN') == 0) {
 		removeUsedRelationElement(workflow[highlightedRowIndex].input2);
