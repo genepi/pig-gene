@@ -1,0 +1,28 @@
+!piggene.serialisation.Workflow
+name: test
+description: 
+workflow: 
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: input
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: R1
+   input2: '-'
+   operation: FILTER
+   options: pos == 68922
+   options2: '-'
+   relation: R2
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: R2
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output
