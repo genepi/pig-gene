@@ -156,14 +156,14 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 				final StringBuilder text = new StringBuilder();
 				genotype = tmpSplits[leadingInfoFields + idCounter];
 
-				// ignore lines that equal the reference
-				if (!genotypeMatchesReference(genotype)) {
-					text.append(leadingInfo); // first fields
-					text.append(genotype).append(delimiter); // testPerson
-					text.append(Integer.toString(idCounter)); // testPersonId
-					readLines.add(text.toString());
-					addedLine = true;
-				}
+				// optional: ignore lines that equal the reference
+				// if (!genotypeMatchesReference(genotype)) {
+				text.append(leadingInfo); // leading fields
+				text.append(genotype).append(delimiter); // testPerson
+				text.append(Integer.toString(idCounter)); // testPersonId
+				readLines.add(text.toString());
+				addedLine = true;
+				// }
 				idCounter++;
 			}
 		}
@@ -195,6 +195,7 @@ public class PigGeneRecordReader extends RecordReader<LongWritable, Text> {
 	 *         than 5 and the first 3 characters match the reference value
 	 *         ("0/0"). false otherwise.
 	 */
+	@SuppressWarnings("unused")
 	private boolean genotypeMatchesReference(final String genotype) {
 		if (genotype != null && genotype.length() >= 3 && referenceValue.equals(genotype.substring(0, 3))) {
 			return true;
