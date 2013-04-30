@@ -697,7 +697,9 @@ function updateUsedRelations(name) {
  * @param name
  */
 function removeUsedRelationElement(name) {
-	usedRelations.splice($.inArray(name, usedRelations), 1);
+	if(relationIsUsed(name)) {
+		usedRelations.splice($.inArray(name, usedRelations), 1);
+	}
 }
 
 
