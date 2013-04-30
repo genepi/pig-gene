@@ -25,7 +25,7 @@ import piggene.resources.WorkflowPresenter;
 public class WebApp extends Application {
 
 	/**
-	 * Creates a root restlet that will receive all incoming calls.
+	 * Creates a root restlet that will receive and foreward all incoming calls.
 	 */
 	@Override
 	public synchronized Restlet createRoot() {
