@@ -3,7 +3,7 @@ REGISTER pigGene.jar;
 REGISTER dataFu.jar;
 
 //input file
-R1 = LOAD '$input.vcf' USING pigGene.PigGeneStorage();
+R1 = LOAD '$input.vcf' USING pigGene.storage.merged.PigGeneStorage();
 R2 = FILTER R1 BY chrom == 12;
 //here could be a script;
 R3 = LOAD '$input2.txt' USING PigStorage(' ');
