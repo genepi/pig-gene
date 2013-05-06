@@ -27,7 +27,7 @@ public class LoadSnippet extends PigSnippet {
 		final String comment = comp.getComment();
 		if (!comment.equals("-")) {
 			sb.append(System.getProperty("line.separator"));
-			sb.append("//");
+			sb.append("--");
 			sb.append(comment);
 			sb.append(System.getProperty("line.separator"));
 		}

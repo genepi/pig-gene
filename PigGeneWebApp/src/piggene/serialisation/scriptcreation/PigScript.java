@@ -23,7 +23,7 @@ public class PigScript {
 	public static void generateAndWrite(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		if (!workflow.getDescription().equals("")) {
-			sb.append("//");
+			sb.append("--");
 			sb.append(workflow.getDescription());
 			sb.append(System.getProperty("line.separator"));
 		}
@@ -53,7 +53,7 @@ public class PigScript {
 		} finally {
 			try {
 				out.close();
-			} catch (final IOException e) {
+			} catch (final IOException ignore) {
 				// ignore
 			}
 		}
