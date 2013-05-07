@@ -569,9 +569,6 @@ function updateTypeaheadSaved() {
 	    		}
 	    		savedNames.sort();
 	    		$('#saveDialogInput').typeahead({source: savedNames, items: 2});
-	    	} else {
-	    		$('#errmsg').html(response.message);
-	    		$('#errorModal').modal('show');
 	    	}
 	    },
 	    error: function (xhr, ajaxOptions, thrownError) {

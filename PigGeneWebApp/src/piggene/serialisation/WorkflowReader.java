@@ -13,7 +13,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
  * @date April 2013
  */
 public class WorkflowReader {
-	private final static String PATH = "yamlFiles/";
+	private final static String PATH = "apps/piggene/";
 
 	public static Workflow read(final String name) throws IOException {
 		final YamlReader reader = new YamlReader(new FileReader(PATH.concat(name.concat(".yaml"))));

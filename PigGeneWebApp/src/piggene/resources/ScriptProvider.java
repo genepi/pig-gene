@@ -17,14 +17,14 @@ import org.restlet.resource.ServerResource;
  * @date April 2013
  */
 public class ScriptProvider extends ServerResource {
-	private static final String DIRECTORY = "pigScripts/";
+	private static final String PATH = "apps/piggene/";
 	private static final String EXTENSION = ".pig";
 
 	@Override
 	@Get
 	public Representation get() {
 		final String name = getRequest().getAttributes().get("filename").toString();
-		final String path = DIRECTORY.concat(name.concat(EXTENSION));
+		final String path = PATH.concat(name.concat(EXTENSION));
 
 		if (path == null || !new File(path).isFile()) {
 			return new StringRepresentation("Error: Server was not able to load the content of the script.", MediaType.TEXT_PLAIN);

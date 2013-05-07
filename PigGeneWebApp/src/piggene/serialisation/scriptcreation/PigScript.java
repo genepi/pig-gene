@@ -18,7 +18,7 @@ public class PigScript {
 	private static final String JAR_FILENAME = "pigGene.jar";
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private static final char SEMICOLON = ';';
-	private static final String PATH = "pigScripts/";
+	private static final String PATH = "apps/piggene/";
 
 	public static void generateAndWrite(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();

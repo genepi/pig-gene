@@ -1,0 +1,12 @@
+!piggene.serialisation.Workflow
+name: test1
+description: 
+workflow: 
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: input
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
