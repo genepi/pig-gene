@@ -1,0 +1,44 @@
+!piggene.serialisation.Workflow
+name: test1
+description: 
+workflow: 
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: in1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: in2
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R2
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: asdf
+   input2: '-'
+   operation: FILTER
+   options: asdf
+   options2: '-'
+   relation: R3
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: sdf
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: out1
+- !piggene.serialisation.WorkflowComponent
+   comment: '-'
+   input: wet
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: out2

@@ -1,12 +1,33 @@
-!piggene.serialisation.Workflow
+!piggene.serialisation.yaml.App
 name: test1
+category: Piggene
 description: 
-workflow: 
-- !piggene.serialisation.WorkflowComponent
-   comment: '-'
-   input: input
-   input2: '-'
-   operation: LOAD
-   options: vcf
-   options2: '-'
-   relation: R1
+mapred: 
+   inputs: 
+   - !piggene.serialisation.yaml.InputParameter
+      id: in1
+      description: in1
+      type: hdfs-folder
+   - !piggene.serialisation.yaml.InputParameter
+      id: in2
+      description: in2
+      type: hdfs-folder
+   outputs: 
+   - !piggene.serialisation.yaml.OutputParameter
+      id: out1
+      description: out1
+      mergeOutput: false
+      type: hdfs-folder
+      zip: false
+   - !piggene.serialisation.yaml.OutputParameter
+      id: out2
+      description: out2
+      mergeOutput: false
+      type: hdfs-folder
+      zip: false
+   steps: 
+   - !piggene.serialisation.yaml.Step
+      name: PigScript
+      params: -param in1=$in1 -param in2=$in2 -param out1=$out1 -param out2=$out2
+      pig: test1
+version: 1.0.0
