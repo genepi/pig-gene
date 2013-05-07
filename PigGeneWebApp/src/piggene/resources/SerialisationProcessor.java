@@ -22,6 +22,7 @@ import piggene.serialisation.Workflow;
 import piggene.serialisation.WorkflowComponent;
 import piggene.serialisation.WorkflowWriter;
 import piggene.serialisation.scriptcreation.PigScript;
+import piggene.serialisation.yaml.CloudgeneYaml;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -72,8 +73,9 @@ public class SerialisationProcessor extends ServerResource {
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
-		try { // write yaml-file
+		try { // write yaml-file && cloudgene yaml-file
 			WorkflowWriter.write(workflow);
+			CloudgeneYaml.generateCloudgeneYamlFile(workflow);
 		} catch (final IOException e) {
 			e.printStackTrace();
 			obj.setSuccess(false);

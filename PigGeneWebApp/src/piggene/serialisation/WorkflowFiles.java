@@ -11,12 +11,14 @@ import java.util.ArrayList;
  * @date April 2013
  */
 public class WorkflowFiles {
-	private static final String PATH = "apps/piggene/";
+	private static final String YAML_PATH_WORKFLOW = "workflowDefs/";
+	private static final String YAML_PATH_CLOUDGENE = "apps/piggene/";
+	private static final String PIG_PATH = "apps/piggene/";
 	private static final String YAML_EXTENSION = ".yaml";
 	private static final String PIG_EXTENSION = ".pig";
 
 	public static boolean doesFileExist(final String filename) {
-		final File file = new File(PATH.concat(filename.concat(YAML_EXTENSION)));
+		final File file = new File(YAML_PATH_WORKFLOW.concat(filename.concat(YAML_EXTENSION)));
 		if (file.exists()) {
 			return true;
 		}
@@ -24,24 +26,23 @@ public class WorkflowFiles {
 	}
 
 	public static ArrayList<String> getAllFileNames() {
-		final File file = new File(PATH);
+		final File file = new File(YAML_PATH_WORKFLOW);
 		final File[] files = file.listFiles();
 		if (files.length == 0) {
 			return null;
 		}
 		final ArrayList<String> fileNames = new ArrayList<String>();
 		for (final File f : files) {
-			if (!f.getName().endsWith(".pig")) {
-				fileNames.add(f.getName());
-			}
+			fileNames.add(f.getName());
 		}
 		return fileNames;
 	}
 
 	public static boolean deleteFile(final String filename) {
-		final File pigFile = new File(PATH.concat(filename.concat(PIG_EXTENSION)));
-		final File yamlFile = new File(PATH.concat(filename.concat(YAML_EXTENSION)));
-		return pigFile.delete() && yamlFile.delete();
+		final File pigFile = new File(PIG_PATH.concat(filename.concat(PIG_EXTENSION)));
+		final File yamlFileWorkflow = new File(YAML_PATH_WORKFLOW.concat(filename.concat(YAML_EXTENSION)));
+		final File yamlFileCloudgene = new File(YAML_PATH_CLOUDGENE.concat(filename.concat(YAML_EXTENSION)));
+		return pigFile.delete() && yamlFileWorkflow.delete() && yamlFileCloudgene.delete();
 	}
 
 }

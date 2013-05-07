@@ -14,7 +14,7 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
  * @date April 2013
  */
 public class WorkflowWriter {
-	private final static String PATH = "apps/piggene/";
+	private final static String PATH = "workflowDefs/";
 
 	public static void write(final Workflow workflow) throws IOException {
 		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(PATH.concat(workflow.getName().concat(".yaml")))));
