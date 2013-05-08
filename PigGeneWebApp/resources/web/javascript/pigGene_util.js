@@ -14,6 +14,7 @@ function processOperationLinkRequest(operation) {
 	}
 	var operationDialog = '#'+operation+'Dialog';
 	setFormContainerOperation(operation);
+	setArtificialRelationName(operation);
 	showInputDialogSlow(operationDialog);
 }
 
@@ -69,12 +70,9 @@ function processLoadOperation() {
 	var name = values[0].value;
 	var rel = values[1].value;
 	var comm = $('#comments').val();
-	if(!inputLongEnough(rel)) {
+	if(!(inputLongEnough(rel) && inputLongEnough(name))) {
 		showErrorMessageShortInput();
 		return false;
-	}
-	if(name == null || name == '') {
-		name = getArtificialName();
 	}
 	if(comm == null || comm == ''){
 		comm = '-';
@@ -129,12 +127,9 @@ function processFilterOperation() {
 	var rel = values[1].value;
 	var opt = values[2].value;
 	var comm = $('#comments').val();
-	if(!inputLongEnough(rel) || !inputLongEnough(opt)) {
+	if(!(inputLongEnough(rel) && inputLongEnough(name) && inputLongEnough(opt))) {
 		showErrorMessageShortInput();
 		return false;
-	}
-	if(name == null || name == '') {
-		name = getArtificialName();
 	}
 	if(comm == null || comm == ''){
 		comm = '-';
@@ -160,12 +155,9 @@ function processJoinOperation() {
 	var rel2 = values[3].value;
 	var opt2 = values[4].value;
 	var comm = $('#comments').val();
-	if(!inputLongEnough(rel1) || !inputLongEnough(opt1) || !inputLongEnough(rel2) || !inputLongEnough(opt2)) {
+	if(!(inputLongEnough(rel1) && inputLongEnough(name) && inputLongEnough(opt1) && inputLongEnough(rel2) && inputLongEnough(opt2))) {
 		showErrorMessageShortInput();
 		return false;
-	}
-	if(name == null || name == '') {
-		name = getArtificialName();
 	}
 	if(comm == null || comm == ''){
 		comm = '-';
@@ -521,10 +513,33 @@ function convertFilenamesToLinks(buttonName, data) {
 
 
 /**
- * Returns a relation-name if the user has not specified one.
+ * Returns a default relation-name.
  */
 function getArtificialName() {
-	return 'R' + nameCounter++;
+	if(workflow.length == 0) {
+		return 'R' + 1;
+	}
+	var j = workflow.length-1;
+	while (j>=0 && (workflow[j].operation == 'REGISTER' || workflow[j].operation == 'SCRIPT' || workflow[j].operation == 'STORE')) {
+		j--;
+	}
+	var precedingNumber;
+	if(j<0) {
+		precedingNumber = 1;
+	} else {
+		precedingNumber = parseInt(workflow[j].relation.replace('R','')) + 1;
+		if(isNaN(precedingNumber)) { //case: user defined name not using schema R<number>
+			var otherOpsCounter = 0;
+			for(var i=0; i<workflow.length; i++) {
+				var workflowOper = workflow[i].operation;
+				if(workflowOper == 'REGISTER' || workflowOper == 'SCRIPT' || workflowOper == 'STORE') {
+					otherOpsCounter++;
+				}
+			}
+			precedingNumber = workflow.length+1-otherOpsCounter;
+		}
+	}
+	return 'R' + precedingNumber;
 }
 
 

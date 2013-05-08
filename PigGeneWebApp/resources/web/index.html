@@ -116,7 +116,7 @@
 							</div>
 							<br>
 						</div>
-						<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="">
+						<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required>
 						<input class="span2" id="fileName" name="relation" type="text" placeholder="file name" title="file name" autocomplete="off" value="" required><p>
 						<button class="btn" id="loadClear" type="reset">cancel</button>
 						<button class="btn btn-danger hide delete" id="loadDelete" type="reset">delete</button>
@@ -134,7 +134,7 @@
 					</form>
 					
 					<form class="form-search hide" id="filterDialog">
-						<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value=""><br/>
+						<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
 						<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" title="relation to filter" value="" data-provide="typeahead" autocomplete="off" required>
 						<input class="span2" id="filtOpt" name="options" type="text" placeholder="filter option(s)" title="filter option(s)" autocomplete="off" value="" required><p>
 						<button class="btn" id="filterClear" type="reset">cancel</button>
@@ -144,7 +144,7 @@
 					</form>
 			
 					<form class="form-search hide" id="joinDialog">
-						<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value=""><br/>
+						<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
 						<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" title="relation to join" value="" data-provide="typeahead" autocomplete="off" required>
 						<input class="span2" id="joinOpt" name="options" type="text" placeholder="join column(s) rel1" title="join column(s) rel1" autocomplete="off" value="" required><br/>
 						<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" title="relation to join with" value="" data-provide="typeahead" autocomplete="off" required>

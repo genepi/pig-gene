@@ -682,3 +682,20 @@ function toggleSiteNoticePopover() {
 		$('#logoContainer').attr('data-content', popContent).popover('show').addClass('pop');
 	}
 }
+
+
+/**
+ * Function is used to set an artificially constructed relation name 
+ * into the input field of the corresponding operation.
+ * @param operation
+ */
+function setArtificialRelationName(operation) {
+	if (operation == 'load') {
+		$('#loadName').val(getArtificialName());
+	} else if (operation == 'filter') {
+		$('#filtName').val(getArtificialName());
+	} else if (operation == 'join') {
+		$('#joinName').val(getArtificialName());
+	}
+	//else: ignore
+}

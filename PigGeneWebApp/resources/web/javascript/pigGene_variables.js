@@ -25,10 +25,6 @@ var undeletableWorkflows = ["filterExample","joinExample"];
 //saves the workflow definition
 var description = '';
 
-//number is used to 'automatically' name relations 
-//if the user does not provide a name
-var nameCounter = 1;
-
 //index of highlighted line in the workflow table
 var highlightedRowIndex = -1;
 

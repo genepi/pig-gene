@@ -34,7 +34,6 @@ function setMissingFormValueText(textfield) {
  */
 function resetWorkflow() {
 	workflow = [];
-	nameCounter = 1;
 	resetTypeaheadRelations();
 	resetWorkflowButtonsAndTableContent();
 	setSaveStateSavedAndDisplayStatus();
@@ -94,7 +93,6 @@ function processSaveWfRequest() {
 function initializeLoadedWorkflow(data) {
 	description = data.description;
 	workflow = data.workflow;
-	nameCounter = workflow.length;
 }
 
 
