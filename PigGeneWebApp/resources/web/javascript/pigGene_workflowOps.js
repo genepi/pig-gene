@@ -14,6 +14,7 @@ function finalizeSubmit(obj) {
 	hideInputErrors();
 	displayTable();
 	$('#saveWfBtn').removeClass('hide');
+	$('#deleteWfBtn').removeClass('hide');
 	$('#downloadScript').removeClass('hide');
 	$('#descriptionBtn').removeClass('hide');
 	$('#saveWorkflow').removeClass('hide');
@@ -80,6 +81,36 @@ function ajaxRequestSaveWorkflow(filename) {
 	});
 }
 
+/**
+ * Function is used to transfer the filename to the server. If the server returns true to indicate that the name
+ * is already in use then the delete request is sent. In any case the graphical user interface is resetted.
+ * @param filename
+ */
+function ajaxRequestDeleteWfAlreadyExists(filename) {
+	var data = '{"filename":"' + filename + '"}';
+	$.ajax({
+		type: 'POST',
+	    url: 'http://localhost:8080/ex',
+	    data: data,
+	    dataType: 'json',
+	    success: function(response) {
+	    	if(response.success) {
+				if(response.data) {
+					deleteWorkflow(filename);
+				}
+				resetWorkflow();
+	    	} else {
+	    		$('#errmsg').html(response.message);
+	    		$('#errorModal').modal('show');
+	    	}
+	    },
+	    error: function (xhr, ajaxOptions, thrownError) {
+	    	$('#errmsg').html(xhr.responseText);
+    		$('#errorModal').modal('show');
+	   }
+	});
+}
+
 
 /**
  * Function is used to send the workflow data to the server with an ajax request.
@@ -103,18 +134,14 @@ function saveWorkflow(filename) {
 	    dataType: 'json',
 	    success: function(response) {
 	    	if(response.success) {
-	    		$('#modalHeaderContent').html('<h3>Saving completed</h3>');
-	    		$('#msg').html('Your workflow was saved successfully!');
-	    		if(forceDownload) {
-	    			forceDownload = false;
-	    			setModificationBehaviorSuccessModal(filename);
-	    		} else {
-	    			setStandardBehaviorSuccessModal();
-	    		}
 	    		resetDialogsAndHighlightings();
 	    		setWorkflowName(filename);
 	    		setSaveStateSavedAndDisplayStatus();
 	    		updateTypeaheadSaved();
+	    		if(forceDownload) {
+	    			forceDownload = false;
+	    			$('#downloadScript')[0].click();
+	    		}
 	    	} else {
 	    		$('#errmsg').html(response.message);
 	    		$('#errorModal').modal('show');
@@ -147,9 +174,6 @@ function loadWorkflow(fileName) {
     	    	if(response.success) {
     	    		initializeLoadedWorkflow(response.data);
     	    		setWorkflowName(fileName);
-    	    		$('#modalHeaderContent').html('<h3>Loading completed</h3>');
-    	    		$('#msg').html('Your workflow was loaded successfully!');
-    	    		setStandardBehaviorSuccessModal();
 					$('#saveState').addClass('saved');
 					toggleSaveStateVisualisation();
 					initializeTypeaheadRelations();
@@ -187,9 +211,6 @@ function deleteWorkflow(fileName) {
 	    dataType:'json',
 	    success: function(response) {
 	    	if(response.success) {
-	    		$('#modalHeaderContent').html('<h3>Deletion completed</h3>');
-	    		$('#msg').html('Selected workflow was deleted successfully!');
-				setStandardBehaviorSuccessModal();
 				updateTypeaheadSaved();
 	    	} else {
 	    		$('#errmsg').html(response.message);
@@ -206,9 +227,9 @@ function deleteWorkflow(fileName) {
 
 
 /**
- * Function is used to load all existing workflow names from the server if no popup is present.
- * These names are displayed as links in a popup that shows up on the button the user clicked.
- * Otherwise the existing popup gets closed.
+ * Function is used to load all existing workflow names from the server if no PopUp is present.
+ * These names are displayed as links in a PopUp that shows up on the button the user clicked.
+ * Otherwise the existing PopUp gets closed.
  * @param buttonName
  */
 function handleWorkflowRequest(buttonName) {
@@ -224,7 +245,6 @@ function handleWorkflowRequest(buttonName) {
     	    success: function(response) {
     	    	if(response.success) {
     	    		var popContent = convertFilenamesToLinks(buttonName, response.data);
-    	    		hideOtherPopups(buttonName);
     	    		$(buttonName).attr('data-content', popContent).popover('show').addClass('pop').addClass(id);
     	    	} else {
     	    		$('#errmsg').html(response.message);

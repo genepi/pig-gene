@@ -483,13 +483,8 @@ function processLoadDeleteWfRequest(fileName) {
  * Function is used to delete a workflow.
  */
 function processWorkflowDeletion() {
-	var fileName = $('#deleteWfName').html();
 	$('#removeWorkflowCheckModal').modal('hide');
-	deleteWorkflow(fileName);
-	hideDeleteWfBtnPopover();
-	if(fileName == $('#workflowName').html().trim()) {
-		resetWorkflow();
-	}
+	ajaxRequestDeleteWfAlreadyExists($('#workflowName').html());
 }
 
 
@@ -512,7 +507,6 @@ function processDiscardChanges() {
 
 /**
  * Function is used to convert the given filenames into html-links.
- * In case of a delete-action the content gets filtered.
  * @param data
  */
 function convertFilenamesToLinks(buttonName, data) {
@@ -520,9 +514,7 @@ function convertFilenamesToLinks(buttonName, data) {
 	var content = '';
 	for(var i=0; i<data.length; i++) {
 		var name = data[i].replace(toRemove,'');
-		if(!(buttonName == '#deleteWfBtn' && $.inArray(name, undeletableWorkflows) > -1)) {
-			content += '<a class="fileNames">'+name+'</a><br>';
-		}
+		content += '<a class="fileNames">'+name+'</a><br>';
 	}
 	return content;
 }

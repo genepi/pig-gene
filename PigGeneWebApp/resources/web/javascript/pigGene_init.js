@@ -99,10 +99,11 @@ function initializeLoadedWorkflow(data) {
 
 
 /**
- * Function is used to display the save button, the download button
+ * Function is used to display the delete button, the save button, the download button
  * and the description button.
  */
 function initializeButtons() {
+	$('#deleteWfBtn').removeClass('hide');
 	$('#downloadScript').removeClass('hide');
 	$('#saveWfBtn').removeClass('hide');
 	$('#descriptionBtn').removeClass('hide');

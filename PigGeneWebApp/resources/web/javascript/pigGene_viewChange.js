@@ -217,6 +217,7 @@ function deleteRowAndDisplayTable() {
  */
 function resetWorkflowButtonsAndTableContent() {
 	$('#saveWfBtn').addClass('hide');
+	$('#deleteWfBtn').addClass('hide');
 	$('#downloadScript').addClass('hide');
 	$('#workflowDescription').addClass('hide');
 	$('#descriptionBtn').addClass('hide');
@@ -468,28 +469,6 @@ function showSecurityAlertRemoveWorkflow(fileName) {
 
 
 /**
- * Function is used to convert the okay-button in the success modal into a link
- * that directly downloads the server created pigscript when clicked by the user.
- * @param filename
- */
-function setModificationBehaviorSuccessModal(filename) {
-	$('#closeSuccModal').attr('download', filename + '.pig');
-	$('#closeSuccModal').attr('href', 'http://localhost:8080/dwld/' + filename);
-	$('#successModal').modal('show');
-}
-
-
-/**
- * Function is used to convert the okay-button into
- * a 'normal' link without download functionality.
- */
-function setStandardBehaviorSuccessModal() {
-	$('#closeSuccModal').removeAttr('download').removeAttr('href');
-	$('#successModal').modal('show');
-}
-
-
-/**
  * Function is used to change the description icon 
  * from plus to minus to indicate the expanded view.
  */
@@ -551,14 +530,6 @@ function hideShowWfBtnPopover() {
 
 
 /**
- * Function is used to hide the popover that displays the existing workflows (for deletion).
- */
-function hideDeleteWfBtnPopover() {
-	$('#deleteWfBtn').popover('hide').removeClass('pop').removeClass('deleteWfBtnPopover');
-}
-
-
-/**
  * Function is used to remove the table row highlighting in the workflow table
  * at the line of the given index.
  * @param index
@@ -590,7 +561,6 @@ function hideInputErrors() {
  */
 function closePopovers() {
 	$('#showWfBtn').popover('hide').removeClass('pop');
-	$('#deleteWfBtn').popover('hide').removeClass('pop');
 }
 
 
@@ -637,20 +607,6 @@ function displayTable() {
  */
 function showSaveNameModal() {
 	$('#saveNameModal').modal('show');
-}
-
-
-/**
- * Function is used to close the other popup. To avoid
- * disturbance because of overlapping popups.
- * @param buttonName of the popup that keeps displayed
- */
-function hideOtherPopups(buttonName) {
-	if(buttonName == '#showWfBtn') {
-		$('#deleteWfBtn').popover('hide').removeClass('pop').removeClass('deleteWfBtnPopover');
-	} else {
-		$('#showWfBtn').popover('hide').removeClass('pop').removeClass('showWfBtnPopover');
-	}
 }
 
 

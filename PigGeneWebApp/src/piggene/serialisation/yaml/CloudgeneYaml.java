@@ -50,6 +50,10 @@ public class CloudgeneYaml {
 		app.setMapred(mapred);
 
 		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(PATH.concat(workflow.getName().concat(".yaml")))));
+		writer.getConfig().setClassTag("App.class", App.class);
+		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "steps", Step.class);
+		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "inputs", InputParameter.class);
+		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "outputs", OutputParameter.class);
 		writer.write(app);
 		writer.close();
 	}

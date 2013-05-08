@@ -286,14 +286,18 @@ $(document).ready(function() {
 	
 	
 	/**
-	 * Functions are used to display/hide the popovers that show the existing workflows.
+	 * Function is used to display/hide the popovers that show the existing workflows.
 	 * If a popover gets displayed - the existing workflows are fetched from the server.
 	 */
 	$('#showWfBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
 		handleWorkflowRequest('#showWfBtn');
 	});
-	$('#deleteWfBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
-		handleWorkflowRequest('#deleteWfBtn');
+	
+	/**
+	 * Function is used to delete the opened workflow. (Showing a warning bevore deletion!)
+	 */
+	$('#deleteWfBtn').on('click', function() {
+		loadDeleteWfRequest($('#workflowName').html());
 	});
 	
 	
@@ -313,14 +317,6 @@ $(document).ready(function() {
 		processWorkflowDeletion();
 	})
 
-	
-	/**
-	 * Function closes the success indication modal dialog.
-	 */
-	$('#closeSuccModal').on('click', function() {
-		$('#successModal').modal('hide');
-	});
-	
 	
 	/**
 	 * Function is used to toggle the display of an
