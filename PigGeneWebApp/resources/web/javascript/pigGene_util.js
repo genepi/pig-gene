@@ -432,7 +432,32 @@ function processDownloadRequest() {
 		resetDialogsAndHighlightings();
 	} else {
 		$('#downloadScript').removeAttr('download').removeAttr('href');
-		openDownloadUnsavedModal();
+		$('#unsavedHeaderText').html('Downloading pig script...');
+		$('#unsavedBodyText').html('Your current workflow definition needs to be saved before you can <br>download the pig script.<b> Do you want to open the save dialog?</b>');
+		forceDownload = true;
+		forceRun = false;
+		openUnsavedModal();
+	}
+}
+
+
+/**
+ * Function is used to check if the current workflow was saved. If it was saved then
+ * the function opens up a new window in which it displays the cloudgene application.
+ */
+function processRunJobRequest(e) {
+	if($('#saveState').hasClass('saved')) {
+		var filename = $('#workflowName').html();
+		$('#runJob').attr('target', '_newTab');
+		$('#runJob').attr('href', 'http://138.232.66.81/start.html#piggene/' + filename);
+	} else {
+		$('#unsavedHeaderText').html('Running job...');
+		$('#unsavedBodyText').html('Your current workflow definition needs to be saved before you can <br>run the job.<b> Do you want to open the save dialog?</b>');
+		forceDownload = false;
+		forceRun = true;
+		openUnsavedModal();
+		e.preventDefault();
+		return false;
 	}
 }
 

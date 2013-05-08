@@ -31,5 +31,8 @@ var highlightedRowIndex = -1;
 //indicates that unsaved workflow should be downloaded
 var forceDownload = false;
 
+//indicates that unsafed workflow should be run on cloudgene
+var forceRun = false;
+
 //saves the name of the workflow that should be loaded/deleted
 var loadDeleteWorkflowName = '';

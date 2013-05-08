@@ -41,6 +41,8 @@ function resetWorkflow() {
 	resetFormContainerOperation();
 	resetFormContainerSize();
 	modifyContainerHeight();
+	forceDownload = false;
+	forceRun = false;
 }
 
 
@@ -58,6 +60,8 @@ function initializeNewWorkflow() {
 	resetWorkflow();
 	initializeUsedRelations();
 	showHelp();
+	forceDownload = false;
+	forceRun = false;
 }
 
 
@@ -103,6 +107,7 @@ function initializeLoadedWorkflow(data) {
 function initializeButtons() {
 	$('#deleteWfBtn').removeClass('hide');
 	$('#downloadScript').removeClass('hide');
+	$('#runJob').removeClass('hide');
 	$('#saveWfBtn').removeClass('hide');
 	$('#descriptionBtn').removeClass('hide');
 }

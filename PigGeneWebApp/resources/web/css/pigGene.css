@@ -113,7 +113,7 @@ form input[type=text] {
 	margin-bottom: 20px;
 }
 
-#newWfBtn, #showWfBtn, #saveWfBtn, #deleteWfBtn, #downloadScript {
+#newWfBtn, #showWfBtn, #saveWfBtn, #deleteWfBtn, #downloadScript, #runJob {
 	padding-left: 8px;
 	padding-right: 10px;
 	margin-left: 0px;
@@ -139,6 +139,12 @@ form input[type=text] {
 
 #downloadScript {
 	width: 85px;
+}
+
+#runJob {
+	padding-left: 5px;
+	padding-right: 11px;
+	width: 40px;
 }
 
 #saveWorkflowFormBtn {

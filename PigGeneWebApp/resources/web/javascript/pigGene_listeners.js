@@ -228,6 +228,13 @@ $(document).ready(function() {
 		processDownloadRequest();
 	});
 	
+	/**
+	 * Function to run the specified data processing on the cloudgene platform.
+	 */
+	$('#runJob').on('click', function(e) {
+		processRunJobRequest(e);
+	});
+	
 	
 	/**
 	 * Function opens up the save dialog when download script was clicked,
@@ -235,8 +242,7 @@ $(document).ready(function() {
 	 * to open up the save dialog.
 	 */
 	$('#openSaveDialogBtn').on('click', function() {
-		closeDownloadUnsavedModal();
-		forceDownload = true;
+		closeUnsavedModal();
 		$('#saveWfBtn').trigger('click');
 	})
 	

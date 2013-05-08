@@ -16,6 +16,7 @@ function finalizeSubmit(obj) {
 	$('#saveWfBtn').removeClass('hide');
 	$('#deleteWfBtn').removeClass('hide');
 	$('#downloadScript').removeClass('hide');
+	$('#runJob').removeClass('hide');
 	$('#descriptionBtn').removeClass('hide');
 	$('#saveWorkflow').removeClass('hide');
 	resetFormContainerOperation();
@@ -141,6 +142,10 @@ function saveWorkflow(filename) {
 	    		if(forceDownload) {
 	    			forceDownload = false;
 	    			$('#downloadScript')[0].click();
+	    		}
+	    		if(forceRun) {
+	    			forceRun = false;
+	    			$('#runJob')[0].click();
 	    		}
 	    	} else {
 	    		$('#errmsg').html(response.message);

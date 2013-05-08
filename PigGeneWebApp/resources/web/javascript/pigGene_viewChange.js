@@ -219,6 +219,7 @@ function resetWorkflowButtonsAndTableContent() {
 	$('#saveWfBtn').addClass('hide');
 	$('#deleteWfBtn').addClass('hide');
 	$('#downloadScript').addClass('hide');
+	$('#runJob').addClass('hide');
 	$('#workflowDescription').addClass('hide');
 	$('#descriptionBtn').addClass('hide');
 	description = '';
@@ -579,8 +580,8 @@ function showInputErrorMsg(errText) {
  * the user clicks on the download script button
  * but the workflow definition was not saved yet.
  */
-function openDownloadUnsavedModal() {
-	$('#downloadUnsavedModal').modal('show');
+function openUnsavedModal() {
+	$('#unsavedModal').modal('show');
 }
 
 
@@ -588,8 +589,8 @@ function openDownloadUnsavedModal() {
  * Function is used to close the 
  * download unsaved modal dialog.
  */
-function closeDownloadUnsavedModal() {
-	$('#downloadUnsavedModal').modal('hide');
+function closeUnsavedModal() {
+	$('#unsavedModal').modal('hide');
 }
 
 
