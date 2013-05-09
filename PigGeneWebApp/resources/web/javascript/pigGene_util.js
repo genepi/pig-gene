@@ -678,7 +678,7 @@ function updateTypeaheadRelations(relation) {
  * @param element name to remove from array
  */
 function removeTypeaheadRelationElement(name) {
-	if($.inArray(name, typeaheadRelations) > -1) {
+	if($.inArray(name, typeaheadRelations) > -1 && !relationNameAlreadyInUse(name,highlightedRowIndex)) {
 		typeaheadRelations.splice($.inArray(name, typeaheadRelations), 1);
 		sortTypeaheadRelationElements();
 		performTypeaheadButtonUpdate();
