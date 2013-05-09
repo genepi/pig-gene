@@ -23,6 +23,8 @@
  * @return String - converted JSON to HTML table
  */
 function convertJsonToTable(parsedJson, tableId, tableClassName) {
+	workflowProblem = false;
+	
     //pattern for table                          
 	var idMarkup = tableId ? ' id="' + tableId + '"' : '';
     var classMarkup = tableClassName ? ' class="' + tableClassName + '"' : '';
@@ -73,6 +75,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
             		var operation = parsedJson[i][headers[2]];
             		if(operation != 'REGISTER' && operation != 'LOAD' && value != '-' && !relationExists(value)) {
             			tbCon += tdRow.format('<b class="unexisting">' + value + '</b>');
+            			workflowProblem = true;
             		} else {
             			tbCon += tdRow.format(value);
             		}

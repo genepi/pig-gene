@@ -700,3 +700,13 @@ function setArtificialRelationName(operation) {
 	}
 	//else: ignore
 }
+
+
+/**
+ * Funktion is used to show the problem modal.
+ */
+function showWorkflowProblemModal() {
+	$('#wfProblemHeader').html('Problems in the workflow definition!');
+	$('#wfProblemBody').html('Your workflow definition contains problems regarding the use of relation names. Those are higlighted red.<b> Do you really want to ignore the problems?</b>');
+	$('#workflowProblemsModal').modal('show');
+}

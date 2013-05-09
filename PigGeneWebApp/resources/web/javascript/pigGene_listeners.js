@@ -224,8 +224,8 @@ $(document).ready(function() {
 	/**
 	 * Function handles a users download request by clicking the download button.
 	 */
-	$('#downloadScript').on('click', function() {
-		processDownloadRequest();
+	$('#downloadScript').on('click', function(e) {
+		processDownloadRequest(e);
 	});
 	
 	/**
@@ -235,6 +235,10 @@ $(document).ready(function() {
 		processRunJobRequest(e);
 	});
 	
+	
+	$('#wfProblemIgnoreBtn').on('click', function() {
+		handleProblemIgnore();
+	});
 	
 	/**
 	 * Function opens up the save dialog when download script was clicked,

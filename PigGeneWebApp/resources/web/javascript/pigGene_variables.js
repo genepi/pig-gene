@@ -20,7 +20,11 @@ var usedRelations = [];
 
 //saves the names of the pre installed workflows - they do not
 //show up in the "delete" section, therefore they cannot be deleted
-var undeletableWorkflows = ["filterExample","joinExample"];
+var sampleWorkflows = ["filterExample","joinExample"];
+
+//is used to indicate that the workflow is defined and
+//contains problems regarding use/naming of the relations
+var workflowProblem = false;
 
 //saves the workflow definition
 var description = '';
