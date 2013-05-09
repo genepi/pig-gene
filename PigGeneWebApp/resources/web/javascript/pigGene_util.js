@@ -812,3 +812,19 @@ function handleProblemIgnore() {
 	}
 	workflowProblem = true;
 }
+
+
+/**
+ * Function checks the workflow if the given 
+ * relation name is already used in the workflow.
+ * @param value
+ * @param index
+ */
+function relationNameAlreadyInUse(value, index) {
+	for(var i=0; i<index; i++) {
+		if(workflow[i].relation == value) {
+			return true;
+		}
+	}
+	return false;
+}
