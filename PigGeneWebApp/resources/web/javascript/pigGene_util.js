@@ -68,9 +68,9 @@ function processLoadOperation() {
 	var values = getFormData('#loadDialog');
 	var oper = 'LOAD';
 	var name = values[0].value;
-	var rel = values[1].value;
+	var rel = inputPrefix + ++inputCounter;
 	var comm = $('#comments').val();
-	if(!(inputLongEnough(rel) && inputLongEnough(name))) {
+	if(!inputLongEnough(name)) {
 		showErrorMessageShortInput();
 		return false;
 	}
@@ -99,9 +99,9 @@ function processStoreOperation() {
 	var values = getFormData('#storeDialog');
 	var oper = 'STORE';
 	var rel = values[0].value;
-	var name = values[1].value;
+	var name = outputPrefix + ++outputCounter;
 	var comm = $('#comments').val();
-	if(!inputLongEnough(name) || !inputLongEnough(rel)) {
+	if(!inputLongEnough(rel)) {
 		showErrorMessageShortInput();
 		return false;
 	}
@@ -827,4 +827,38 @@ function relationNameAlreadyInUse(value, index) {
 		}
 	}
 	return false;
+}
+
+
+/**
+ * Function is used to count the number of load operations.
+ * @returns {Number}
+ */
+function countNumberOfLoadOperations() {
+	var counter = 0;
+	if(workflow != null || workflow == []) {
+		for(var i=0; i<workflow.length; i++) {
+			if(workflow[i].operation == 'LOAD') {
+				counter++;
+			}
+		}
+	}
+	return counter;
+}
+
+
+/**
+ * Function is used to count the number of store operations.
+ * @returns {Number}
+ */
+function countNumberOfStoreOperations() {
+	var counter = 0;
+	if(workflow != null || workflow == []) {
+		for(var i=0; i<workflow.length; i++) {
+			if(workflow[i].operation == 'STORE') {
+				counter++;
+			}
+		}
+	}
+	return counter;
 }

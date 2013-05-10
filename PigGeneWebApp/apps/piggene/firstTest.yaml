@@ -1,0 +1,23 @@
+!cloudgene.mapred.apps.App
+name: firstTest
+category: Piggene
+description: 
+mapred: 
+   inputs: 
+   -  id: input1
+      description: input1
+      type: hdfs-file
+   -  id: input2
+      description: input2
+      type: hdfs-file
+   outputs: 
+   -  id: out
+      description: out
+      mergeOutput: false
+      type: hdfs-folder
+      zip: false
+   steps: 
+   -  name: PigScript
+      params: -param input1=$input1 -param input2=$input2 -param out=$out
+      pig: firstTest
+version: 1.0.0

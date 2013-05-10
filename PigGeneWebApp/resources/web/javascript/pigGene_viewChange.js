@@ -338,7 +338,6 @@ function displayCorrespondingContainerInfo() {
 		setOperationDialog('register');
 	} else if(data.operation=='LOAD') {
 		$('#loadName').val(data.relation);
-		$('#fileName').val(data.input);
 		if(data.options == 'vcf') {
 			$('#loadTxt').removeClass('active');
 			$('#loadVcf').addClass('active');
@@ -367,7 +366,6 @@ function displayCorrespondingContainerInfo() {
 		hideScriptDialogSlow();
 		setOperationDialog('load');
 	} else if(data.operation=='STORE'){
-		$('#storeName').val(data.relation);
 		$('#relToStore').val(data.input);
 		hideScriptDialogSlow();
 		setOperationDialog('store');
