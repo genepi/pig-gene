@@ -19,5 +19,5 @@ mapred:
    steps: 
    -  name: PigScript
       params: -param input1=$input1 -param input2=$input2 -param out=$out
-      pig: firstTest
+      pig: firstTest.pig
 version: 1.0.0

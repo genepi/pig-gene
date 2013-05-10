@@ -197,7 +197,13 @@ function deleteRowAndDisplayTable() {
 	$('#removeLineCheckModal').modal('hide');
 	closePopovers();
 	hideInputErrors();
-	deleteTypeaheadAndUsedRelationByOperation(workflow[highlightedRowIndex].operation);
+	var operation = workflow[highlightedRowIndex].operation;
+	deleteTypeaheadAndUsedRelationByOperation(operation);
+	if(operation == 'LOAD') {
+		inputCounter--;
+	} else if(operation == 'STORE') {
+		outputCounter--;
+	}
 	workflow.splice(highlightedRowIndex,1);
 	if(workflow.length == 0) {
 		resetDialogsAndHighlightings();

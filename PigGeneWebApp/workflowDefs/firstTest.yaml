@@ -31,7 +31,7 @@ workflow:
    input: R3
    input2: '-'
    operation: FILTER
-   options: $0 == d1
+   options: $0 == 'd1'
    options2: '-'
    relation: R4
 - !piggene.serialisation.WorkflowComponent

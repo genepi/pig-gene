@@ -32,7 +32,7 @@ public class CloudgeneYaml {
 
 		final Step step = new Step();
 		step.setName("PigScript");
-		step.setPig(workflow.getName());
+		step.setPig(workflow.getName().concat(".pig"));
 		step.setParams(parameters.toString().trim());
 
 		final ArrayList<Step> steps = new ArrayList<Step>();

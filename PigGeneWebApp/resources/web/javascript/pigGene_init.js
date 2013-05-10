@@ -98,6 +98,7 @@ function processSaveWfRequest() {
  */
 function initializeLoadedWorkflow(data) {
 	description = data.description;
+	resetDescription();
 	workflow = data.workflow;
 }
 
