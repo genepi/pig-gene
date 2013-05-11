@@ -102,9 +102,7 @@ function resetOperationDialog(operation) {
 	$(dialog).addClass('hide');
 	
 	if(operation == 'load') {
-		$('#loadFiletypeSeparator.btn-group').css('display','none');
-		$('#loadVcf').addClass('active');
-		$('#loadTxt').removeClass('active');
+		resetLoadSpecifier();
 	}
 	if(operation == 'script') {
 		hideScriptDialogSlow();
@@ -348,14 +346,23 @@ function displayCorrespondingContainerInfo() {
 	} else if(data.operation=='LOAD') {
 		$('#loadName').val(data.relation);
 		if(data.options == 'vcf') {
-			$('#loadTxt').removeClass('active');
 			$('#loadVcf').addClass('active');
+			$('#loadTxt').removeClass('active');
+			if(data.options2 == 'ref') {
+				$('#refFileBtn').addClass('active');
+				$('#stdFileBtn').removeClass('active');
+			} else {
+				$('#refFileBtn').removeClass('active');
+				$('#stdFileBtn').addClass('active');
+			}
 			hideTxtSeparatorOptions();
-			$('#tabSeparator').removeClass('active');
+			$('#tabSeparator').addClass('active');
 			$('#spaceSeparator').removeClass('active');
 			$('#commaSeparator').removeClass('active');
 		} else {
 			$('#loadVcf').removeClass('active');
+			$('#refFileBtn').removeClass('active');
+			$('#stdFileBtn').addClass('active');
 			$('#loadTxt').addClass('active');
 			if(data.options2 == 'tab') {
 				$('#tabSeparator').addClass('active');
@@ -507,18 +514,22 @@ function hoverOverArrowAction(element) {
 /**
  * Function is used to hide the additional text separator options
  * in the operations dialog when a load operation is selected.
+ * Additionally the option to select a reference file gets shown.
  */
 function hideTxtSeparatorOptions() {
 	$('#loadFiletypeSeparator.btn-group').css('display','none');
+	$('#referenceFileOption.btn-group').css('display','inline-block');
 }
 
 
 /**
  * Function is used to show the additional text separator options
  * in the operations dialog when a load operation is selected.
+ * Additionally the option to select a reference file gets hidden.
  */
 function showTxtSeparatorOptions() {
 	$('#loadFiletypeSeparator.btn-group').css('display','inline-block');
+	$('#referenceFileOption.btn-group').css('display','none');
 }
 
 
@@ -729,4 +740,20 @@ function showWorkflowProblemModal() {
 	$('#wfProblemHeader').html('Problems in the workflow definition!');
 	$('#wfProblemBody').html('Your workflow definition contains problems regarding the use of relation names. Those are higlighted red.<b> Do you really want to ignore the problems?</b>');
 	$('#workflowProblemsModal').modal('show');
+}
+
+
+/**
+ * Resets the standard options after each load operation.  
+ */
+function resetLoadSpecifier() {
+	$('#loadFiletypeSeparator.btn-group').css('display','none');
+	$('#referenceFileOption.btn-group').css('display','inline-block');
+	$('#loadVcf').addClass('active');
+	$('#loadTxt').removeClass('active');
+	$('#tabSeparator').addClass('active');
+	$('#spaceSeparator').removeClass('active');
+	$('#commaSeparator').removeClass('active');
+	$('#stdFileBtn').addClass('active');
+	$('#refFileBtn').removeClass('active');
 }

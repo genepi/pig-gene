@@ -291,7 +291,7 @@ $(document).ready(function() {
 	$('#loadTxt').on('click', function() {
 		showTxtSeparatorOptions();
 	});
-	
+
 	
 	/**
 	 * Function is used to process a users load workflow 

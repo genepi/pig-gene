@@ -82,6 +82,8 @@ function processLoadOperation() {
 	var opt2 = '-';
 	if($('#loadTxt').hasClass('active')) {
 		opt2 = $('#loadFiletypeSeparator.btn-group > button.btn.active').html();
+	} else if($('#refFileBtn').hasClass('active')) {
+		opt2 = 'ref';
 	}
 
 	if($('#loadSubmitChange').hasClass('modification')) {
@@ -91,6 +93,7 @@ function processLoadOperation() {
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:opt2, comment:comm});
 	}
+	resetLoadSpecifier();
 	updateTypeaheadRelations(name);
 	updateUsedRelations(rel);
 	finalizeSubmit('#loadDialog');

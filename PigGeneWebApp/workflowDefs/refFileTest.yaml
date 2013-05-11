@@ -1,0 +1,32 @@
+!piggene.serialisation.Workflow
+name: refFileTest
+description: 
+workflow: 
+-  comment: '-'
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+-  comment: '-'
+   input: input2
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: ref
+   relation: R2
+-  comment: '-'
+   input: R1
+   input2: R2
+   operation: JOIN
+   options: chrom,pos
+   options2: chrom,pos
+   relation: R3
+-  comment: '-'
+   input: R3
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output1

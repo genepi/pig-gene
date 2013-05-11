@@ -26,8 +26,9 @@
     </target>
 	
 	<target name="copy_jar_file" depends="create_jar">
-		<echo>Copy jar file...</echo>
+		<echo>copy jar file...</echo>
 		<scp file="../PigGene-Scripts/dist/${app.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<echo>copy yaml- and pig-files...</echo>
 		<scp todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"><fileset dir="${local.pig}"></fileset></scp>
 	</target>
 
