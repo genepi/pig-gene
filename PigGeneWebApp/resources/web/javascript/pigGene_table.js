@@ -68,7 +68,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
             	if(j==0) {
             		if(value != '-' && relationNameAlreadyInUse(value,i)) {
             			tbCon += tdRow.format('<b class="unexisting">' + value + '</b>');
-            		} else if(value != '-' && !relationIsUsed(value)) {
+            		} else if(value != '-' && !relationIsUsed(value,i) && parsedJson[i][headers[2]] != 'STORE') {
             			tbCon += tdRow.format('<b class="unused">' + value + '</b>');
             		} else {
             			tbCon += tdRow.format(value);

@@ -60,7 +60,6 @@ function initializeNewWorkflow() {
 	hideLineDetailDialog();
 	prepareContainers();
 	resetWorkflow();
-	initializeUsedRelations();
 	showHelp();
 	forceDownload = false;
 	forceRun = false;

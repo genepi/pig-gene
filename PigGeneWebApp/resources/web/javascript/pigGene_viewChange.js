@@ -199,7 +199,7 @@ function deleteRowAndDisplayTable() {
 	closePopovers();
 	hideInputErrors();
 	var operation = workflow[highlightedRowIndex].operation;
-	deleteTypeaheadAndUsedRelationByOperation(operation);
+	deleteTypeaheadRelationByOperation(operation);
 	if(operation == 'LOAD') {
 		inputCounter--;
 	} else if(operation == 'STORE') {

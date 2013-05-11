@@ -87,7 +87,7 @@ function processLoadOperation() {
 	}
 
 	if($('#loadSubmitChange').hasClass('modification')) {
-		deleteTypeaheadAndUsedRelationByOperation(oper);
+		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:opt2, comment:comm};
 		resetOperationDialog('load');
 	} else {
@@ -95,7 +95,6 @@ function processLoadOperation() {
 	}
 	resetLoadSpecifier();
 	updateTypeaheadRelations(name);
-	updateUsedRelations(rel);
 	finalizeSubmit('#loadDialog');
 }
 function processStoreOperation() {
@@ -113,14 +112,12 @@ function processStoreOperation() {
 	}
 	
 	if($('#storeSubmitChange').hasClass('modification')) {
-		deleteTypeaheadAndUsedRelationByOperation(oper);
+		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm};
 		resetOperationDialog('store');
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm});
 	}
-	updateUsedRelations(name);
-	updateUsedRelations(rel);
 	finalizeSubmit('#storeDialog');
 }
 function processFilterOperation() {
@@ -139,14 +136,13 @@ function processFilterOperation() {
 	}
 	
 	if($('#filterSubmitChange').hasClass('modification')) {
-		deleteTypeaheadAndUsedRelationByOperation(oper);
+		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('filter');
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
 	}
 	updateTypeaheadRelations(name);
-	updateUsedRelations(rel);
 	finalizeSubmit('#filterDialog');
 }
 function processJoinOperation() {
@@ -167,15 +163,13 @@ function processJoinOperation() {
 	}
 	
 	if($('#joinSubmitChange').hasClass('modification')) {
-		deleteTypeaheadAndUsedRelationByOperation(oper);
+		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel1, operation:oper, input2:rel2, options:opt1, options2:opt2, comment:comm};
 		resetOperationDialog('join');
 	} else {
 		workflow.push({relation:name, input:rel1, operation:oper, input2:rel2, options:opt1, options2:opt2, comment:comm});
 	}
 	updateTypeaheadRelations(name);
-	updateUsedRelations(rel1);
-	updateUsedRelations(rel2);
 	finalizeSubmit('#joinDialog');
 }
 function processProjectionOperation() {
@@ -194,14 +188,13 @@ function processProjectionOperation() {
 	}
 	
 	if($('#projectionSubmitChange').hasClass('modification')) {
-		deleteTypeaheadAndUsedRelationByOperation(oper);
+		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('projection');
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
 	}
 	updateTypeaheadRelations(name);
-	updateUsedRelations(rel);
 	finalizeSubmit('#projectionDialog');
 }
 function processScriptOperation() {
@@ -737,57 +730,19 @@ function performTypeaheadButtonUpdate() {
 
 
 /**
- * Function is used to initialize the used relations 
- * when a workflow was loaded by the user.
- */
-function initializeUsedRelations() {
-	usedRelations = [];
-	var operation;
-	for(var i=0; i<workflow.length; i++) {
-		operation = workflow[i].operation;
-		if(operation == 'LOAD' || operation == 'FILTER') {
-			updateUsedRelations(workflow[i].input);
-		} else if(operation == 'JOIN') {
-			updateUsedRelations(workflow[i].input);
-			updateUsedRelations(workflow[i].input2);
-		} else if(operation == 'STORE') {
-			updateUsedRelations(workflow[i].input);
-			updateUsedRelations(workflow[i].relation);
-		}
-	}
-}
-
-
-/**
- * Function is used to add the given name to the
- * list of used relations.
- * @param name
- */
-function updateUsedRelations(name) {
-	usedRelations.push(name);
-}
-
-
-/**
- * Function is used to remove the given name
- * from the list of used relations.
- * @param name
- */
-function removeUsedRelationElement(name) {
-	if(relationIsUsed(name)) {
-		usedRelations.splice($.inArray(name, usedRelations), 1);
-	}
-}
-
-
-/**
  * Function is used to check if the given name is 
- * contained in the global "usedRelations" array.
- * @param relation name
+ * contained in the global "workflow" array.
+ * @param value
  */
-function relationIsUsed(name) {
-	if($.inArray(name, usedRelations) > -1) {
-		return true;
+function relationIsUsed(value, index) {
+	if(workflow != null || workflow == []) {
+		for(var i=index; i<workflow.length; i++) {
+			var input1 = workflow[i].input;
+			var input2 = workflow[i].input2;
+			if(input1 == value || input2 == value) {
+				return true;
+			}
+		}
 	}
 	return false;
 }
@@ -798,18 +753,11 @@ function relationIsUsed(name) {
  * in case of a modification or deletion of a workflow line.
  * @param operation
  */
-function deleteTypeaheadAndUsedRelationByOperation(op) {
+function deleteTypeaheadRelationByOperation(op) {
 	removeTypeaheadRelationElement(workflow[highlightedRowIndex].relation);
-	removeUsedRelationElement(workflow[highlightedRowIndex].input);
-
 	var operation = op;
 	if(op == '') {
 		operation = $('#workflowOps').html();
-	}
-	if(operation.indexOf('STORE') == 0) {
-		removeUsedRelationElement(workflow[highlightedRowIndex].relation);
-	} else if(operation.indexOf('JOIN') == 0) {
-		removeUsedRelationElement(workflow[highlightedRowIndex].input2);
 	}
 }
 

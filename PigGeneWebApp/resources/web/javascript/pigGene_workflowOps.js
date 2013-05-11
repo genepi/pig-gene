@@ -184,7 +184,6 @@ function loadWorkflow(fileName) {
 					$('#saveState').addClass('saved');
 					toggleSaveStateVisualisation();
 					initializeTypeaheadRelations();
-					initializeUsedRelations();
 					displayTable();
     	    	} else {
     	    		$('#errmsg').html(response.message);

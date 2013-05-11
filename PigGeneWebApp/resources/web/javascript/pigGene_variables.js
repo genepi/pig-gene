@@ -14,10 +14,6 @@ var workflow = [];
 //saves the names of the relations used by the typeahead feature
 var typeaheadRelations = [];
 
-//saves the names of the "used" relation names - to find indicate
-//that "unused" Statements are useless for the user
-var usedRelations = [];
-
 //saves the names of the pre installed workflows - they do not
 //show up in the "delete" section, therefore they cannot be deleted
 var sampleWorkflows = ["filterExample","joinExample"];
