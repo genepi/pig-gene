@@ -89,6 +89,7 @@
 							<li class="divider"></li>
 							<li id="filterItem"><a id="filterLink" title="click to select the filter task">FILTER</a></li>
 							<li id="joinItem"><a id="joinLink" title="click to select the join task">JOIN</a></li>
+							<li id="projectItem"><a id="projectLink" title="click to select the projection task">PROJECTION</a></li>
 							<li id="userScriptItem"><a id="userScriptLink" title="click to specify a user script">USER SCRIPT</a></li>
 							<li class="divider"></li>
 							<li id="storeItem"><a id="storeLink" title="click to select the store task">STORE</a></li>
@@ -152,6 +153,16 @@
 						<button class="btn btn-danger hide delete" id="joinDelete" type="reset">delete</button>
 						<button class="btn btn-success hide" id="joinSubmitChange" type="submit">save changes</button>
 						<button class="btn btn-success" id="joinSubmit" type="submit">add operation</button><br>
+					</form>
+					
+					<form class="form-search hide" id="projectionDialog">
+						<input class="span2" id="projectionName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
+						<input class="span2" id="projectionRel" name="relation" type="text" placeholder="relation to project" title="relation to project" value="" data-provide="typeahead" autocomplete="off" required>
+						<input class="span2" id="projectionOpt" name="options" type="text" placeholder="column(s)" title="projection column(s)" autocomplete="off" value="" required><p>
+						<button class="btn" id="projectionClear" type="reset">cancel</button>
+						<button class="btn btn-danger hide delete" id="projectionDelete" type="reset">delete</button>
+						<button class="btn btn-success hide" id="projectionSubmitChange" type="submit">save changes</button>
+						<button class="btn btn-success" id="projectionSubmit" type="submit">add operation</button><br>
 					</form>
 					
 					<form class="form-search hide" id="scriptDialog">

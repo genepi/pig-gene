@@ -46,6 +46,9 @@ $(document).ready(function() {
 	$('#joinLink').on('click', function() {
 		processOperationLinkRequest('join');
 	});
+	$('#projectLink').on('click', function() {
+		processOperationLinkRequest('projection');
+	});
 	$('#userScriptLink').on('click', function() {
 		setFormContainerOperation('user defined script');
 		setOperationRelatedHelpContent('user defined script');
@@ -75,6 +78,10 @@ $(document).ready(function() {
 	});
 	$('#joinDialog').on('submit', function() {
 		processJoinOperation();
+		return false;
+	});
+	$('#projectionDialog').on('submit', function() {
+		processProjectionOperation();
 		return false;
 	});
 	$('#scriptDialog').on('submit', function() {

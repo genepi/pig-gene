@@ -1,0 +1,24 @@
+!cloudgene.mapred.apps.App
+name: sample_rangeQuery
+category: Piggene
+description: 'This workflow performs a range query for 20:1-10000 (chrom 20 : pos 1-10000) and saves the
+   result'
+mapred: 
+   inputs: 
+   -  id: input1
+      description: input1
+      type: hdfs-file
+   -  id: input2
+      description: input2
+      type: hdfs-file
+   outputs: 
+   -  id: output1
+      description: output1
+      mergeOutput: false
+      type: hdfs-folder
+      zip: false
+   steps: 
+   -  name: PigScript
+      params: -param input1=$input1 -param input2=$input2 -param output1=$output1
+      pig: sample_rangeQuery.pig
+version: 1.0.0

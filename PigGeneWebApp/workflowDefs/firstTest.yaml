@@ -2,40 +2,35 @@
 name: firstTest
 description: 
 workflow: 
-- !piggene.serialisation.WorkflowComponent
-   comment: '-'
+-  comment: '-'
    input: input1
    input2: '-'
    operation: LOAD
    options: txt
    options2: tab
    relation: R1
-- !piggene.serialisation.WorkflowComponent
-   comment: '-'
+-  comment: '-'
    input: input2
    input2: '-'
    operation: LOAD
    options: txt
    options2: tab
    relation: R2
-- !piggene.serialisation.WorkflowComponent
-   comment: '-'
+-  comment: '-'
    input: R1
    input2: R2
    operation: JOIN
    options: $0
    options2: $0
    relation: R3
-- !piggene.serialisation.WorkflowComponent
-   comment: '-'
+-  comment: '-'
    input: R3
    input2: '-'
    operation: FILTER
    options: $0 == 'd1'
    options2: '-'
    relation: R4
-- !piggene.serialisation.WorkflowComponent
-   comment: '-'
+-  comment: '-'
    input: R4
    input2: '-'
    operation: STORE
