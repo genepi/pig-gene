@@ -75,7 +75,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
             		}
             	} else if (j==1 || j==3) { 
             		var operation = parsedJson[i][headers[2]];
-            		if(operation != 'REGISTER' && operation != 'LOAD' && value != '-' && !relationExists(value)) {
+            		if(operation != 'REGISTER' && operation != 'LOAD' && value != '-' && !relationNameAlreadyInUse(value,i)) {
             			tbCon += tdRow.format('<b class="unexisting">' + value + '</b>');
             			workflowProblem = true;
             		} else {

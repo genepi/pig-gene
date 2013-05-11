@@ -794,19 +794,6 @@ function relationIsUsed(name) {
 
 
 /**
- * Function is used to check if the given name is
- * contained in the global "typeaheadRelations" array.
- * @param relation name
- */
-function relationExists(name) {
-	if($.inArray(name, typeaheadRelations) > -1) {
-		return true;
-	}
-	return false;
-}
-
-
-/**
  * Function is used to update the typeahead and used relations
  * in case of a modification or deletion of a workflow line.
  * @param operation
