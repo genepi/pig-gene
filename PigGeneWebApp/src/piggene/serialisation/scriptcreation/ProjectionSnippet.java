@@ -9,9 +9,9 @@ import piggene.serialisation.WorkflowComponent;
  * @author Clemens Banas
  * @date April 2013
  */
-public class ProjectSnippet extends PigSnippet {
+public class ProjectionSnippet extends PigSnippet {
 
-	public ProjectSnippet(final WorkflowComponent comp) {
+	public ProjectionSnippet(final WorkflowComponent comp) {
 		super(comp);
 	}
 
