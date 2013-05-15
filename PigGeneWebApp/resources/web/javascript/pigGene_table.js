@@ -23,6 +23,7 @@
  * @return String - converted JSON to HTML table
  */
 function convertJsonToTable(parsedJson, tableId, tableClassName) {
+	var scriptPreceeding = false;
 	workflowProblem = false;
 	
     //pattern for table                          
@@ -59,6 +60,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
         for (j = 0; j < headers.length; j++) {
             var value = parsedJson[i][headers[j]];
             if(value == 'script') {
+            	scriptPreceeding = true;
             	tbCon += tdRow.format('script' + counter++);
             	for(k = j; k < headers.length-1; k++) {
             		tbCon += tdRow.format('');
@@ -66,7 +68,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
             	j = headers.length;
             } else {
             	if(j==0) {
-            		if(value != '-' && relationNameAlreadyInUse(value,i)) {
+            		if(!scriptPreceeding && value != '-' && relationNameAlreadyInUse(value,i)) {
             			tbCon += tdRow.format('<b class="unexisting">' + value + '</b>');
             		} else if(value != '-' && !relationIsUsed(value,i) && parsedJson[i][headers[2]] != 'STORE') {
             			tbCon += tdRow.format('<b class="unused">' + value + '</b>');
@@ -75,7 +77,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
             		}
             	} else if (j==1 || j==3) { 
             		var operation = parsedJson[i][headers[2]];
-            		if(operation != 'REGISTER' && operation != 'LOAD' && value != '-' && !relationNameAlreadyInUse(value,i)) {
+            		if(!scriptPreceeding && operation != 'REGISTER' && operation != 'LOAD' && value != '-' && !relationNameAlreadyInUse(value,i)) {
             			tbCon += tdRow.format('<b class="unexisting">' + value + '</b>');
             			workflowProblem = true;
             		} else {
