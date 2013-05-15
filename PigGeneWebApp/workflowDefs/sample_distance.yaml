@@ -1,0 +1,54 @@
+!piggene.serialisation.Workflow
+name: sample_distance
+description: calculates the distance between two given locations using the haversine formula
+workflow: 
+-  comment: '-'
+   input: datafu-0.0.9.jar
+   input2: '-'
+   operation: REGISTER
+   options: '-'
+   options2: '-'
+   relation: '-'
+-  comment: '-'
+   input: input1
+   input2: (id:int, city:chararray, place:chararray, lat:double, lon:double)
+   operation: LOAD
+   options: txt
+   options2: tab
+   relation: R1
+-  comment: '-'
+   input: input2
+   input2: (id:int, city:chararray, place:chararray, lat:double, lon:double)
+   operation: LOAD
+   options: txt
+   options2: tab
+   relation: R2
+-  comment: '-'
+   input: R1
+   input2: R2
+   operation: JOIN
+   options: id
+   options2: id
+   relation: R3
+-  comment: '-'
+   input: R3
+   input2: '-'
+   operation: FILTER
+   options: R1::city != R2::city
+   options2: '-'
+   relation: R4
+-  comment: '-'
+   input: R4
+   input2: '-'
+   operation: PROJECTION
+   options: R1::id .. R1::lon, R2::city .. R2::lon, datafu.pig.geo.HaversineDistInMiles(R1::lat, R1::lon,
+      R2::lat, R2::lon) as distance
+   options2: '-'
+   relation: R5
+-  comment: '-'
+   input: R5
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output1
