@@ -48,8 +48,12 @@ public class LoadSnippet extends PigSnippet {
 			} else {
 				sb.append(TXT_STORAGE_COMMA_SEPARATOR);
 			}
+			if (!comp.getInput2().equals("-")) {
+				sb.append(" AS ");
+				sb.append(comp.getInput2());
+			}
 		} else {
-			if(comp.getOptions2().equals("ref")) {
+			if (comp.getOptions2().equals("ref")) {
 				sb.append(VCF_STORAGE_REF);
 			} else {
 				sb.append(VCF_STORAGE);
