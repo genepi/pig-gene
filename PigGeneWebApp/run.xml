@@ -7,6 +7,7 @@
 	<property name="local.pig" value="apps/piggene" />
 	<property name="hadoop.bin" value="/home/hadoop/hadoop-0.20.2-cdh3u5/bin/hadoop" />
 	<property name="app.jar" value="pigGene.jar" />
+	<property name="datafu.jar" value="datafu-0.0.9.jar" />
 	
 	<target name="compile">
     	<javac srcdir="src" destdir="bin" classpath="" target="1.6">
@@ -26,8 +27,10 @@
     </target>
 	
 	<target name="copy_jar_file" depends="create_jar">
-		<echo>copy jar file...</echo>
+		<echo>copy pig-gene jar file...</echo>
 		<scp file="../PigGene-Scripts/dist/${app.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<echo>copy data-fu jar file...</echo>
+		<scp file="lib/${datafu.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
 		<echo>copy yaml- and pig-files...</echo>
 		<scp todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"><fileset dir="${local.pig}"></fileset></scp>
 	</target>

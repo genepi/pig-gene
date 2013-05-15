@@ -26,7 +26,7 @@ R7 = FILTER R6 BY pos >= 1 AND pos <= 1000000;
 R8 = JOIN R5 BY (chrom,pos), R7 BY (chrom,pos);
 
 --eliminates not specified columns
-R9 = FOREACH R8 GENERATE R7::id, R7::pos, R5::genotype, R5::persID;
+R9 = FOREACH R8 GENERATE R7::id, R7::pos, pigGene.UDFs.ExtractQuality(R5::genotype), R5::genotype, R5::persID;
 
 --stores the result on the hard disk
 STORE R9 INTO '$output1';

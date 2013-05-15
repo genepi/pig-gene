@@ -68,7 +68,6 @@ function processLoadOperation() {
 	var values = getFormData('#loadDialog');
 	var oper = 'LOAD';
 	var name = values[0].value;
-	var rel = generateInputName();
 	var comm = $('#comments').val();
 	if(!inputLongEnough(name)) {
 		showErrorMessageShortInput();
@@ -80,18 +79,22 @@ function processLoadOperation() {
 	
 	var opt = $('#loadFiletype.btn-group > button.btn.active').html();
 	var opt2 = '-';
+	var input2 = '-';
 	if($('#loadTxt').hasClass('active')) {
 		opt2 = $('#loadFiletypeSeparator.btn-group > button.btn.active').html();
+		input2 = values[1].value;
 	} else if($('#refFileBtn').hasClass('active')) {
 		opt2 = 'ref';
 	}
 
 	if($('#loadSubmitChange').hasClass('modification')) {
+		var rel = generateInputName('mod');
 		deleteTypeaheadRelationByOperation(oper);
-		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:opt2, comment:comm};
+		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:input2, options:opt, options2:opt2, comment:comm};
 		resetOperationDialog('load');
 	} else {
-		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:opt2, comment:comm});
+		var rel = generateInputName('-');
+		workflow.push({relation:name, input:rel, operation:oper, input2:input2, options:opt, options2:opt2, comment:comm});
 	}
 	resetLoadSpecifier();
 	updateTypeaheadRelations(name);
@@ -101,7 +104,6 @@ function processStoreOperation() {
 	var values = getFormData('#storeDialog');
 	var oper = 'STORE';
 	var rel = values[0].value;
-	var name = generateOutputName();
 	var comm = $('#comments').val();
 	if(!inputLongEnough(rel)) {
 		showErrorMessageShortInput();
@@ -112,10 +114,12 @@ function processStoreOperation() {
 	}
 	
 	if($('#storeSubmitChange').hasClass('modification')) {
+		var name = generateOutputName('mod');
 		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm};
 		resetOperationDialog('store');
 	} else {
+		var name = generateOutputName('-');
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm});
 	}
 	finalizeSubmit('#storeDialog');
@@ -611,9 +615,12 @@ function getArtificialName() {
 /**
  * Function dynamically generates an input name (used for LOAD operations).
  */
-function generateInputName() {
+function generateInputName(opt) {
 	var inputPrefix = 'input';
-	var number = countNumberOfLoadOperations() + 1;
+	var number = countNumberOfLoadOperations();
+	if(opt != 'mod') {
+		number++;
+	}
 	return inputPrefix + number;
 }
 
@@ -621,9 +628,12 @@ function generateInputName() {
 /**
  * Function dynamically generates an output name (used for STORE operations).
  */
-function generateOutputName() {
+function generateOutputName(opt) {
 	var outputPrefix = 'output';
-	var number = countNumberOfStoreOperations() + 1;
+	var number = countNumberOfStoreOperations();
+	if(opt != 'mod') {
+		number++;
+	}
 	return outputPrefix + number;
 }
 

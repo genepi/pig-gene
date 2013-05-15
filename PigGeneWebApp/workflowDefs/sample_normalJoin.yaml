@@ -27,8 +27,7 @@ workflow:
    input: R3
    input2: '-'
    operation: PROJECTION
-   options: R1::chrom, R1::pos, R2::id, R1::ref, R1::alt, R1::qual, R1::filt, R1::info, R1::format, R1::genotype,
-      R1::persID
+   options: R1::chrom, R1::pos, R2::id, R1::ref .. R1::persID
    options2: '-'
    relation: R4
 -  comment: '-'

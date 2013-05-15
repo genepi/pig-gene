@@ -9,13 +9,13 @@ mapred:
       description: input1
       type: hdfs-file
    outputs: 
-   -  id: output3
-      description: output3
+   -  id: output1
+      description: output1
       mergeOutput: false
       type: hdfs-folder
       zip: false
    steps: 
    -  name: PigScript
-      params: -param input1=$input1 -param output3=$output3
+      params: -param input1=$input1 -param output1=$output1
       pig: sample_filterGT.pig
 version: 1.0.0

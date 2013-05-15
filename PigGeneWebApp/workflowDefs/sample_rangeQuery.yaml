@@ -63,7 +63,7 @@ workflow:
    input: R8
    input2: '-'
    operation: PROJECTION
-   options: R7::id, R7::pos, R5::genotype, R5::persID
+   options: R7::id, R7::pos, pigGene.UDFs.ExtractQuality(R5::genotype), R5::genotype, R5::persID
    options2: '-'
    relation: R9
 -  comment: stores the result on the hard disk

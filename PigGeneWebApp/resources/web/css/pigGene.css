@@ -192,7 +192,7 @@ form input[type=text] {
 	margin-left: 0px;
 }
 
-#loadName {
+#loadName, #loadSchema {
 	margin-top: 4px;
 }
 

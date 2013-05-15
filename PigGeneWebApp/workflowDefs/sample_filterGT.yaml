@@ -21,7 +21,7 @@ workflow:
    input: '-'
    input2: '-'
    operation: SCRIPT
-   options: R3 = FILTER R2 BY (SUBSTRING(genotype,0,3) == '0/1');
+   options: R3 = FILTER R2 BY (SUBSTRING(genotype,0,3) == '0/1') OR (SUBSTRING(genotype,0,3) == '1/0');
    options2: '-'
    relation: script
 -  comment: '-'
@@ -30,4 +30,4 @@ workflow:
    operation: STORE
    options: '-'
    options2: '-'
-   relation: output3
+   relation: output1

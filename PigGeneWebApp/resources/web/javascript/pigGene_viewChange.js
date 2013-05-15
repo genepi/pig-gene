@@ -201,11 +201,8 @@ function deleteRowAndDisplayTable() {
 	var operation = workflow[highlightedRowIndex].operation;
 	deleteTypeaheadRelationByOperation(operation);
 	workflow.splice(highlightedRowIndex,1);
-	if(operation == 'LOAD') {
-		modifyInputNames();
-	} else if(operation == 'STORE') {
-		modifyOutputNames();
-	}
+	modifyInputNames();
+	modifyOutputNames();
 	if(workflow.length == 0) {
 		resetDialogsAndHighlightings();
 		resetWorkflow();
@@ -360,6 +357,7 @@ function displayCorrespondingContainerInfo() {
 			$('#spaceSeparator').removeClass('active');
 			$('#commaSeparator').removeClass('active');
 		} else {
+			$('#loadSchema').val(data.input2);
 			$('#loadVcf').removeClass('active');
 			$('#refFileBtn').removeClass('active');
 			$('#stdFileBtn').addClass('active');
@@ -518,6 +516,7 @@ function hoverOverArrowAction(element) {
  */
 function hideTxtSeparatorOptions() {
 	$('#loadFiletypeSeparator.btn-group').css('display','none');
+	$('#loadSchema').css('display','none');
 	$('#referenceFileOption.btn-group').css('display','inline-block');
 }
 
@@ -529,6 +528,7 @@ function hideTxtSeparatorOptions() {
  */
 function showTxtSeparatorOptions() {
 	$('#loadFiletypeSeparator.btn-group').css('display','inline-block');
+	$('#loadSchema').css('display','inline-block');
 	$('#referenceFileOption.btn-group').css('display','none');
 }
 
@@ -748,6 +748,7 @@ function showWorkflowProblemModal() {
  */
 function resetLoadSpecifier() {
 	$('#loadFiletypeSeparator.btn-group').css('display','none');
+	$('#loadSchema').css('display','none');
 	$('#referenceFileOption.btn-group').css('display','inline-block');
 	$('#loadVcf').addClass('active');
 	$('#loadTxt').removeClass('active');
