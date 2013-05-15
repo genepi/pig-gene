@@ -40,7 +40,7 @@ workflow:
 -  comment: '-'
    input: R4
    input2: '-'
-   operation: PROJECTION
+   operation: SELECT
    options: R1::id .. R1::lon, R2::city .. R2::lon, datafu.pig.geo.HaversineDistInMiles(R1::lat, R1::lon,
       R2::lat, R2::lon) as distance
    options2: '-'

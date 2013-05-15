@@ -3,15 +3,15 @@ package piggene.serialisation.scriptcreation;
 import piggene.serialisation.WorkflowComponent;
 
 /**
- * ProjectSnippet class is used to return a "FOREACH - GENERATE" statement based
+ * SelectSnippet class is used to return a "FOREACH - GENERATE" statement based
  * on the specified workflow component.
  * 
  * @author Clemens Banas
  * @date April 2013
  */
-public class ProjectionSnippet extends PigSnippet {
+public class SelectSnippet extends PigSnippet {
 
-	public ProjectionSnippet(final WorkflowComponent comp) {
+	public SelectSnippet(final WorkflowComponent comp) {
 		super(comp);
 	}
 

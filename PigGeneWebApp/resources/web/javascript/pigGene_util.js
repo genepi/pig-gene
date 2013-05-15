@@ -176,9 +176,9 @@ function processJoinOperation() {
 	updateTypeaheadRelations(name);
 	finalizeSubmit('#joinDialog');
 }
-function processProjectionOperation() {
-	var values = getFormData('#projectionDialog');
-	var oper = 'PROJECTION';
+function processSelectOperation() {
+	var values = getFormData('#selectDialog');
+	var oper = 'SELECT';
 	var name = values[0].value;
 	var rel = values[1].value;
 	var opt = values[2].value;
@@ -191,15 +191,15 @@ function processProjectionOperation() {
 		comm = '-';
 	}
 	
-	if($('#projectionSubmitChange').hasClass('modification')) {
+	if($('#selectSubmitChange').hasClass('modification')) {
 		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
-		resetOperationDialog('projection');
+		resetOperationDialog('select');
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
 	}
 	updateTypeaheadRelations(name);
-	finalizeSubmit('#projectionDialog');
+	finalizeSubmit('#selectDialog');
 }
 function processScriptOperation() {
 	var script = $('#scriptTextarea').val();
@@ -819,7 +819,7 @@ function performTypeaheadButtonUpdate() {
 	$('#filtRel').typeahead().data('typeahead').source = typeaheadRelations;
 	$('#joinRel').typeahead().data('typeahead').source = typeaheadRelations;
 	$('#joinRel2').typeahead().data('typeahead').source = typeaheadRelations;
-	$('#projectionRel').typeahead().data('typeahead').source = typeaheadRelations;
+	$('#selectRel').typeahead().data('typeahead').source = typeaheadRelations;
 	$('#relToStore').typeahead().data('typeahead').source = typeaheadRelations;
 }
 

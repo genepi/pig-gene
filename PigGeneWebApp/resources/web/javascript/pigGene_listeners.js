@@ -46,8 +46,8 @@ $(document).ready(function() {
 	$('#joinLink').on('click', function() {
 		processOperationLinkRequest('join');
 	});
-	$('#projectLink').on('click', function() {
-		processOperationLinkRequest('projection');
+	$('#selectLink').on('click', function() {
+		processOperationLinkRequest('select');
 	});
 	$('#userScriptLink').on('click', function() {
 		setFormContainerOperation('user defined script');
@@ -80,8 +80,8 @@ $(document).ready(function() {
 		processJoinOperation();
 		return false;
 	});
-	$('#projectionDialog').on('submit', function() {
-		processProjectionOperation();
+	$('#selectDialog').on('submit', function() {
+		processSelectOperation();
 		return false;
 	});
 	$('#scriptDialog').on('submit', function() {

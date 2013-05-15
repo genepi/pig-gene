@@ -26,7 +26,7 @@ workflow:
 -  comment: '-'
    input: R3
    input2: '-'
-   operation: PROJECTION
+   operation: SELECT
    options: R1::chrom .. R1::persID, R2::id
    options2: '-'
    relation: R4
@@ -40,7 +40,7 @@ workflow:
 -  comment: '-'
    input: R5
    input2: '-'
-   operation: PROJECTION
+   operation: SELECT
    options: R1::chrom .. R1::persID
    options2: '-'
    relation: R6

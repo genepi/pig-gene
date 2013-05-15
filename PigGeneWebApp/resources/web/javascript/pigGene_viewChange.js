@@ -49,7 +49,7 @@ function resetAllOperationDialogs() {
 	resetOperationDialog('store');
 	resetOperationDialog('filter');
 	resetOperationDialog('join');
-	resetOperationDialog('projection');
+	resetOperationDialog('select');
 	resetOperationDialog('script');
 }
 
@@ -167,8 +167,8 @@ function finishReset(button) {
 			resetOperationDialog('filter');
 		} else if (buttonName.indexOf('join') == 0) {
 			resetOperationDialog('join');
-		} else if (buttonName.indexOf('projection') == 0) {
-			resetOperationDialog('projection');
+		} else if (buttonName.indexOf('select') == 0) {
+			resetOperationDialog('select');
 		} else if (buttonName.indexOf('script') == 0) {
 			resetOperationDialog('script');
 		}
@@ -397,12 +397,12 @@ function displayCorrespondingContainerInfo() {
 		$('#joinOpt2').val(data.options2);
 		hideScriptDialogSlow();
 		setOperationDialog('join');
-	} else if(data.operation =='PROJECTION') {
-		$('#projectionName').val(data.relation);
-		$('#projectionRel').val(data.input);
-		$('#projectionOpt').val(data.options);
+	} else if(data.operation =='SELECT') {
+		$('#selectName').val(data.relation);
+		$('#selectRel').val(data.input);
+		$('#selectOpt').val(data.options);
 		hideScriptDialogSlow();
-		setOperationDialog('projection');
+		setOperationDialog('select');
 	} else if(data.operation=='SCRIPT') {
 		$('#scriptTextarea').val(data.options);
 		setOperationDialog('script');
@@ -452,8 +452,8 @@ function hideNotSpecifiedInputDialogs(dialog) {
 	if(dialog != 'join') {
 		$('#joinDialog').hide('slow');
 	}
-	if(dialog != 'projection') {
-		$('#projectionDialog').hide('slow');
+	if(dialog != 'select') {
+		$('#selectDialog').hide('slow');
 	}
 	if(dialog != 'script') {
 		$('#scriptDialog').hide('slow');
@@ -679,7 +679,7 @@ function setOperationRelatedHelpContent(operation) {
 		body = 'Different filters can be applied to loaded data. Specify a name to reference the operation within the workflow, the relation to filter and the desired filter options. All possible Pig filter options are allowed.';
 	} else if(operation == 'join') {
 		body = 'A join is an operation to combine two relations. Specify a name to reference the operation within the workflow and the relations and columns you want to match. Multiple columns per relation are separated by comma.';
-	} else if(operation == 'projection') {
+	} else if(operation == 'select') {
 		body = 'This operation helps to remove not needed columns from a relation. Specify the names of the columns you want to remove and seperate multiple names by comma. If you don\'t know the name of the columns you can use "$number" (number starting from zero) to select the column you want to remove.';
 	} else if(operation == 'user defined script') {
 		body = 'User Defined Scripts allow it to implement advanced operations, which are defined in optional files. All operations (REGISTER, LOAD, STORE, FILTER, JOIN) can be used.';
@@ -726,8 +726,8 @@ function setArtificialRelationName(operation) {
 		$('#filtName').val(getArtificialName());
 	} else if (operation == 'join') {
 		$('#joinName').val(getArtificialName());
-	} else if (operation == 'projection') {
-		$('#projectionName').val(getArtificialName());
+	} else if (operation == 'select') {
+		$('#selectName').val(getArtificialName());
 	}
 	//else: ignore
 }
