@@ -28,12 +28,6 @@ var description = '';
 //index of highlighted line in the workflow table
 var highlightedRowIndex = -1;
 
-var inputPrefix = 'input';
-var outputPrefix = 'output';
-
-var inputCounter = 0;
-var outputCounter = 0;
-
 //indicates that unsaved workflow should be downloaded
 var forceDownload = false;
 

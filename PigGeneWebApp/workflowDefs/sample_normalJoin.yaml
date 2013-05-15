@@ -1,0 +1,40 @@
+!piggene.serialisation.Workflow
+name: sample_normalJoin
+description: join vcf file with reference file
+workflow: 
+-  comment: '-'
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+-  comment: '-'
+   input: input2
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: ref
+   relation: R2
+-  comment: '-'
+   input: R1
+   input2: R2
+   operation: JOIN
+   options: chrom,pos
+   options2: chrom,pos
+   relation: R3
+-  comment: '-'
+   input: R3
+   input2: '-'
+   operation: PROJECTION
+   options: R1::chrom, R1::pos, R2::id, R1::ref, R1::alt, R1::qual, R1::filt, R1::info, R1::format, R1::genotype,
+      R1::persID
+   options2: '-'
+   relation: R4
+-  comment: '-'
+   input: R4
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output1

@@ -1,0 +1,33 @@
+!piggene.serialisation.Workflow
+name: sample_filterGT
+description: remove chromosomes that match 'M', 'X' or 'Y' and remove entries where GT is not '0/1' or
+   '1/0'
+workflow: 
+-  comment: '-'
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+-  comment: '-'
+   input: R1
+   input2: '-'
+   operation: FILTER
+   options: chrom != 'M' AND chrom != 'X' AND chrom != 'Y'
+   options2: '-'
+   relation: R2
+-  comment: '-'
+   input: '-'
+   input2: '-'
+   operation: SCRIPT
+   options: R3 = FILTER R2 BY (SUBSTRING(genotype,0,3) == '0/1');
+   options2: '-'
+   relation: script
+-  comment: '-'
+   input: R3
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output3

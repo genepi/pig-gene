@@ -200,12 +200,12 @@ function deleteRowAndDisplayTable() {
 	hideInputErrors();
 	var operation = workflow[highlightedRowIndex].operation;
 	deleteTypeaheadRelationByOperation(operation);
-	if(operation == 'LOAD') {
-		inputCounter--;
-	} else if(operation == 'STORE') {
-		outputCounter--;
-	}
 	workflow.splice(highlightedRowIndex,1);
+	if(operation == 'LOAD') {
+		modifyInputNames();
+	} else if(operation == 'STORE') {
+		modifyOutputNames();
+	}
 	if(workflow.length == 0) {
 		resetDialogsAndHighlightings();
 		resetWorkflow();

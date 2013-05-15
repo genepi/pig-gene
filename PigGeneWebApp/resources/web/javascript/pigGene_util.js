@@ -68,7 +68,7 @@ function processLoadOperation() {
 	var values = getFormData('#loadDialog');
 	var oper = 'LOAD';
 	var name = values[0].value;
-	var rel = inputPrefix + ++inputCounter;
+	var rel = generateInputName();
 	var comm = $('#comments').val();
 	if(!inputLongEnough(name)) {
 		showErrorMessageShortInput();
@@ -101,7 +101,7 @@ function processStoreOperation() {
 	var values = getFormData('#storeDialog');
 	var oper = 'STORE';
 	var rel = values[0].value;
-	var name = outputPrefix + ++outputCounter;
+	var name = generateOutputName();
 	var comm = $('#comments').val();
 	if(!inputLongEnough(rel)) {
 		showErrorMessageShortInput();
@@ -609,6 +609,91 @@ function getArtificialName() {
 
 
 /**
+ * Function dynamically generates an input name (used for LOAD operations).
+ */
+function generateInputName() {
+	var inputPrefix = 'input';
+	var number = countNumberOfLoadOperations() + 1;
+	return inputPrefix + number;
+}
+
+
+/**
+ * Function dynamically generates an output name (used for STORE operations).
+ */
+function generateOutputName() {
+	var outputPrefix = 'output';
+	var number = countNumberOfStoreOperations() + 1;
+	return outputPrefix + number;
+}
+
+/**
+ * Function is used to count the number of load operations.
+ * @returns {Number}
+ */
+function countNumberOfLoadOperations() {
+	var counter = 0;
+	if(workflow != null && workflow != []) {
+		for(var i=0; i<workflow.length; i++) {
+			if(workflow[i].operation == 'LOAD') {
+				counter++;
+			}
+		}
+	}
+	return counter;
+}
+
+
+/**
+ * Function is used to count the number of store operations.
+ * @returns {Number}
+ */
+function countNumberOfStoreOperations() {
+	var counter = 0;
+	if(workflow != null && workflow != []) {
+		for(var i=0; i<workflow.length; i++) {
+			if(workflow[i].operation == 'STORE') {
+				counter++;
+			}
+		}
+	}
+	return counter;
+}
+
+
+/**
+ * Function is used to modify the automatically generated input names in case of the deletion of an LOAD operation.
+ */
+function modifyInputNames() {
+	var inputPrefix = 'input';
+	var counter = 0;
+	if(workflow != null && workflow != []) {
+		for(var i=0; i<workflow.length; i++) {
+			if(workflow[i].operation == 'LOAD') {
+				workflow[i].input = inputPrefix + ++counter;
+			}
+		}
+	}
+}
+
+
+/**
+ * Function is used to modify the automatically generated output names in case of the deletion of an STORE operation.
+ */
+function modifyOutputNames() {
+	var outputPrefix = 'output';
+	var counter = 0;
+	if(workflow != null && workflow != []) {
+		for(var i=0; i<workflow.length; i++) {
+			if(workflow[i].operation == 'STORE') {
+				workflow[i].relation = outputPrefix + ++counter;
+			}
+		}
+	}
+}
+
+
+/**
  * Checks if the input is longer than 1 character.
  */
 function inputLongEnough(input) {
@@ -735,7 +820,7 @@ function performTypeaheadButtonUpdate() {
  * @param value
  */
 function relationIsUsed(value, index) {
-	if(workflow != null || workflow == []) {
+	if(workflow != null && workflow != []) {
 		for(var i=index; i<workflow.length; i++) {
 			var input1 = workflow[i].input;
 			var input2 = workflow[i].input2;
@@ -792,38 +877,4 @@ function relationNameAlreadyInUse(value, index) {
 		}
 	}
 	return false;
-}
-
-
-/**
- * Function is used to count the number of load operations.
- * @returns {Number}
- */
-function countNumberOfLoadOperations() {
-	var counter = 0;
-	if(workflow != null || workflow == []) {
-		for(var i=0; i<workflow.length; i++) {
-			if(workflow[i].operation == 'LOAD') {
-				counter++;
-			}
-		}
-	}
-	return counter;
-}
-
-
-/**
- * Function is used to count the number of store operations.
- * @returns {Number}
- */
-function countNumberOfStoreOperations() {
-	var counter = 0;
-	if(workflow != null || workflow == []) {
-		for(var i=0; i<workflow.length; i++) {
-			if(workflow[i].operation == 'STORE') {
-				counter++;
-			}
-		}
-	}
-	return counter;
 }

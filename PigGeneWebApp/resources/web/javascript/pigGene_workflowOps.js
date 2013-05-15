@@ -179,8 +179,6 @@ function loadWorkflow(fileName) {
     	    	if(response.success) {
     	    		initializeLoadedWorkflow(response.data);
     	    		setWorkflowName(fileName);
-    	    		inputCounter = countNumberOfLoadOperations();
-    	    		outputCounter = countNumberOfStoreOperations();
 					$('#saveState').addClass('saved');
 					toggleSaveStateVisualisation();
 					initializeTypeaheadRelations();
