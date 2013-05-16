@@ -617,8 +617,17 @@ function getArtificialName() {
  */
 function generateInputName(opt) {
 	var inputPrefix = 'input';
-	var number = countNumberOfLoadOperations();
+	var number = 0;
 	if(opt != 'mod') {
+		number = countNumberOfLoadOperations() + 1;
+	} else {
+		if(workflow != null && workflow != []) {
+			for(var i=0; i<highlightedRowIndex; i++) {
+				if(workflow[i].operation == 'LOAD') {
+					number++;
+				}
+			}
+		}
 		number++;
 	}
 	return inputPrefix + number;
@@ -630,8 +639,17 @@ function generateInputName(opt) {
  */
 function generateOutputName(opt) {
 	var outputPrefix = 'output';
-	var number = countNumberOfStoreOperations();
+	var number = 0;
 	if(opt != 'mod') {
+		number = countNumberOfStoreOperations() + 1;
+	} else {
+		if(workflow != null && workflow != []) {
+			for(var i=0; i<highlightedRowIndex; i++) {
+				if(workflow[i].operation == 'STORE') {
+					number++;
+				}
+			}
+		}
 		number++;
 	}
 	return outputPrefix + number;

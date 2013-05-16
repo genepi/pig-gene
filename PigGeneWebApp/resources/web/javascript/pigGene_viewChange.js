@@ -672,9 +672,9 @@ function showHelp() {
 function setOperationRelatedHelpContent(operation) {
 	var body = '';
 	if(operation == 'register') {
-		body = 'Apache Pig loads all necessary operations from existing jar files. The register field is an optional field that is only needed when you want to use non-standard operations.';
+		body = 'Apache Pig loads all necessary operations from existing jar files. The register operation is optional and is only needed when you want to use non-standard operations.';
 	} else if(operation == 'load') {
-		body = 'This is the main entry point for Apache Pig scripts. Specify a name to reference the operation within the workflow and the folder or file name to analyze.';
+		body = 'This is the main entry point for Apache Pig scripts. Specify the folder or file name to analyze. For txt-files you can additionally specify the input scheme.';
 	} else if(operation == 'filter') {
 		body = 'Different filters can be applied to loaded data. Specify a name to reference the operation within the workflow, the relation to filter and the desired filter options. All possible Pig filter options are allowed.';
 	} else if(operation == 'join') {

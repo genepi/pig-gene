@@ -23,8 +23,18 @@
  * @return String - converted JSON to HTML table
  */
 function convertJsonToTable(parsedJson, tableId, tableClassName) {
+	var scriptContained = false;
 	var scriptPreceeding = false;
 	workflowProblem = false;
+	
+	if(parsedJson != null && parsedJson != []) {
+		for(var i=0; i<parsedJson.length; i++) {
+			if(parsedJson[i].operation == 'SCRIPT') {
+				scriptContained = true;
+				break;
+			}
+		}
+	}
 	
     //pattern for table                          
 	var idMarkup = tableId ? ' id="' + tableId + '"' : '';
@@ -70,7 +80,7 @@ function convertJsonToTable(parsedJson, tableId, tableClassName) {
             	if(j==0) {
             		if(!scriptPreceeding && value != '-' && relationNameAlreadyInUse(value,i)) {
             			tbCon += tdRow.format('<b class="unexisting">' + value + '</b>');
-            		} else if(value != '-' && !relationIsUsed(value,i) && parsedJson[i][headers[2]] != 'STORE') {
+            		} else if(!scriptContained && value != '-' && !relationIsUsed(value,i) && parsedJson[i][headers[2]] != 'STORE') {
             			tbCon += tdRow.format('<b class="unused">' + value + '</b>');
             		} else {
             			tbCon += tdRow.format(value);
