@@ -132,6 +132,7 @@ function showScriptDialogSlow() {
  * Function hides the script dialog.
  */
 function hideScriptDialogSlow() {
+	$('#scriptTextarea').val('');
 	$('#scriptDialog').hide('slow');
 	$('#scriptDialog').addClass('hide');
 }

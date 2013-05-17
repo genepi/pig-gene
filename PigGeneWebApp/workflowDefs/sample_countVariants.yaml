@@ -1,0 +1,53 @@
+!piggene.serialisation.Workflow
+name: sample_countVariants
+description: Counts the number of samples for chrom 20 and pos 138004 that don't match the reference (0/0).
+workflow: 
+-  comment: '-'
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+-  comment: '-'
+   input: R1
+   input2: '-'
+   operation: FILTER
+   options: chrom == '20'
+   options2: '-'
+   relation: R2
+-  comment: '-'
+   input: R2
+   input2: '-'
+   operation: FILTER
+   options: pos == 138004
+   options2: '-'
+   relation: R3
+-  comment: '-'
+   input: R3
+   input2: '-'
+   operation: FILTER
+   options: SUBSTRING(genotype,0,3) != '0/0'
+   options2: '-'
+   relation: R4
+-  comment: '-'
+   input: '-'
+   input2: '-'
+   operation: SCRIPT
+   options: R5 = GROUP R4 BY (chrom,pos);
+   options2: '-'
+   relation: script
+-  comment: '-'
+   input: R5
+   input2: '-'
+   operation: SELECT
+   options: FLATTEN(group), COUNT(R4) as count
+   options2: '-'
+   relation: R6
+-  comment: '-'
+   input: R6
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output1
