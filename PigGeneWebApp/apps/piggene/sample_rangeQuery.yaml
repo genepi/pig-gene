@@ -1,7 +1,8 @@
 !cloudgene.mapred.apps.App
 name: sample_rangeQuery
 category: Piggene
-description: 'Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and saves the result.'
+description: 'Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and extracts the quality
+   of the genotype.'
 mapred: 
    inputs: 
    -  id: input1

@@ -1,6 +1,7 @@
 !piggene.serialisation.Workflow
 name: sample_rangeQuery
-description: 'Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and saves the result.'
+description: 'Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and extracts the quality
+   of the genotype.'
 workflow: 
 -  comment: Loads the vcf-input file.
    input: input1
@@ -59,7 +60,7 @@ workflow:
    options: chrom,pos
    options2: chrom,pos
    relation: R8
--  comment: Selects needed columns.
+-  comment: Selects the needed columns and extracts the quality of the genotype.
    input: R8
    input2: '-'
    operation: SELECT

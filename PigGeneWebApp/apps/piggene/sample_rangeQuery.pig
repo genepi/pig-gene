@@ -1,4 +1,4 @@
---Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and saves the result.
+--Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and extracts the quality of the genotype.
 REGISTER pigGene.jar;
 
 --Loads the vcf-input file.
@@ -25,7 +25,7 @@ R7 = FILTER R6 BY pos >= 1 AND pos <= 1000000;
 --Joins the filtered relations. The join columns are chrom and pos.
 R8 = JOIN R5 BY (chrom,pos), R7 BY (chrom,pos);
 
---Selects needed columns.
+--Selects the needed columns and extracts the quality of the genotype.
 R9 = FOREACH R8 GENERATE R7::id, R7::pos, pigGene.UDFs.ExtractQuality(R5::genotype), R5::genotype, R5::persID;
 
 --Stores the output.
