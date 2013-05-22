@@ -12,7 +12,9 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
+import piggene.exceptions.UnpossibleWorkflowFileOperation;
 import piggene.response.ServerResponseObject;
+import piggene.serialisation.UntouchableFiles;
 import piggene.serialisation.WorkflowFiles;
 
 /**
@@ -32,6 +34,13 @@ public class WorkflowFinder extends ServerResource {
 		try {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
 			filename = representant.getJsonObject().getString("filename");
+			if (UntouchableFiles.list.contains(filename)) {
+				throw new UnpossibleWorkflowFileOperation();
+			}
+		} catch (final UnpossibleWorkflowFileOperation e) {
+			obj.setSuccess(false);
+			obj.setMessage("It is impossible to override an example workflow!");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while checking if the filename is already used.");
@@ -51,5 +60,4 @@ public class WorkflowFinder extends ServerResource {
 		}
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
-
 }
