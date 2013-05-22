@@ -93,6 +93,10 @@ form input[type=text] {
 	background-color: #FFFFFF;
 }
 
+#operationArea {
+	width: 1250px;
+}
+
 #workflowContainer.well {
 	padding: 5px 0px 0px 0px;
 	min-height: 193px;

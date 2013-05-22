@@ -37,159 +37,163 @@
 			</div>
 		</div>
 		
-		<!-- user defined workflow representation -->
-		<div class="span12 well" id="workflowContainer">
-			<div id="title">
-				<a id="descriptionBtn" class="btn btn-link hide" title="add workflow description"><i class="icon-plus-sign" id="descriptionIcon"></i></a>
-				<h3 id="workflowName">PigGene - graphical pig script generator</h3>
-				<h3 class="saved" id="saveState"></h3>
-				<div class="well hide" id="workflowDescription">
-					<h4 id="descrText">DESCRIPTION</h4>
-					<textarea id="description" placeholder="type your workflow description" title="workflow description"></textarea>
-					<button class="btn" id="workflowDescrClear">cancel</button>
-					<button class="btn btn-success" id="workflowDescrSubmit">add description</button>
-				</div>
-			</div>
-			<div id="tableContainer">
-				<p id="stdExplanation"><b>There is no workflow specified at the moment.</b>
-				Please click the "new" button to create a workflow. 
-				<br> Afterwards you can choose the operations you would like to apply to your data in the appearing panel
-				<br> on the right side. 
-				Alternatively you can click "open" to load an already existing workflow definition.</p>
-				<table id="operationTable"></table>
-			</div>
-		</div>
-	
-		<!-- workflow related operation dialogs -->
-		<div class="span5" id="affixContainer">
-			<div class="span5 affix-top" data-spy="affix" data-offset-top="105" id="operationPanels">
-				
-				<!-- workflow line details dialog -->
-				<div class="well hide" id="lineDetails">
-					<h4 id="lineOrdering">LINE</h4>
-					<button class="btn btn-link" id="orderUp" title="move operation up"><i id="up" class="icon-arrow-up"></i></button>
-					<button class="btn btn-link" id="orderDown" title="move operation down"><i id="down" class="icon-arrow-down"></i></button><p>
-					<h4 id="comText">COMMENT</h4>
-					<textarea id="comments" placeholder="type your comment for the selected line" title="comments"></textarea>
-					<button class="btn" id="lineCommentClear">cancel</button>
-					<button class="btn btn-success" id="lineCommentSubmit">add comment</button>
-				</div>
-			
-				<!-- workflow operation selection dialogs -->
-				<div class="well hide" id="formContainer">
-					<h4 id="workflowOps">OPERATIONS</h4>
-					<div class="btn-group" id="stepAction" title="click to select an operation">
-						<a class="btn dropdown-toggle" data-toggle="dropdown" id="action">
-							add operation 
-							<span class="caret"></span>
-						</a>	
-						<ul class="dropdown-menu">
-							<li id="registerItem"><a id="registerLink" title="click to select the register task">REGISTER</a></li>
-							<li id="loadItem"><a id="loadLink" title="click to select the load task">LOAD</a></li>
-							<li class="divider"></li>
-							<li id="filterItem"><a id="filterLink" title="click to select the filter task">FILTER</a></li>
-							<li id="joinItem"><a id="joinLink" title="click to select the join task">JOIN</a></li>
-							<li id="selectItem"><a id="selectLink" title="click to select the select task">SELECT</a></li>
-							<li id="userScriptItem"><a id="userScriptLink" title="click to specify a user script">USER SCRIPT</a></li>
-							<li class="divider"></li>
-							<li id="storeItem"><a id="storeLink" title="click to select the store task">STORE</a></li>
-						</ul>
-					<button class="btn" id="helpBtn" title="toggle to display/hide explanations"><i class="icon-info-sign" id="helpBtnIcon"></i></button>
+		<div id="operationArea">
+			<!-- user defined workflow representation -->
+			<div class="span12 well" id="workflowContainer">
+				<div id="title">
+					<a id="descriptionBtn" class="btn btn-link hide" title="add workflow description"><i class="icon-plus-sign" id="descriptionIcon"></i></a>
+					<h3 id="workflowName">PigGene - graphical pig script generator</h3>
+					<h3 class="saved" id="saveState"></h3>
+					<div class="well hide" id="workflowDescription">
+						<h4 id="descrText">DESCRIPTION</h4>
+						<textarea id="description" placeholder="type your workflow description" title="workflow description"></textarea>
+						<button class="btn" id="workflowDescrClear">cancel</button>
+						<button class="btn btn-success" id="workflowDescrSubmit">add description</button>
 					</div>
-			
-					<form class="form-search hide" id="registerDialog">
-						<input class="span2" id="regFileName" name="relation" type="text" placeholder="jar file name" title="jar file name" autocomplete="off" value="" required><p>
-						<button class="btn" id="registerClear" type="reset">cancel</button>
-						<button class="btn btn-danger hide delete" id="registerDelete" type="reset">delete</button>
-						<button class="btn btn-success hide" id="registerSubmitChange" type="submit">save changes</button>
-						<button class="btn btn-success" id="registerSubmit" type="submit">add operation</button><br>
-					</form>
-			
-					<form class="form-search hide" id="loadDialog">
-						<div id="loaderSpecification">
-							<div class="btn-group" id="loadFiletype" data-toggle="buttons-radio" title="file format">
-								<button class="btn btn-mini active" id="loadVcf" type="button">vcf</button>
-								<button class="btn btn-mini" id="loadTxt" type="button">txt</button>
-							</div>
-							<div class="btn-group" id="loadFiletypeSeparator" data-toggle="buttons-radio" title="separator symbol">
-								<button class="btn btn-mini active" id="tabSeparator" type="button">tab</button>
-								<button class="btn btn-mini" id="spaceSeparator" type="button">space</button>
-								<button class="btn btn-mini" id="commaSeparator" type="button">comma</button>
-							</div>
-							<div class="btn-group" id="referenceFileOption" data-toggle="buttons-radio" title="separator symbol">
-								<button class="btn btn-mini active" id="stdFileBtn" type="button">ordinary</button>
-								<button class="btn btn-mini" id="refFileBtn" type="button">reference</button>
-							</div>
-							<br>
-						</div>
-						<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required>
-						<input class="span2 hide" id="loadSchema" name="schema" type="text" placeholder="input scheme" title="input scheme" autocomplete="off" value=""><br>
-						<button class="btn" id="loadClear" type="reset">cancel</button>
-						<button class="btn btn-danger hide delete" id="loadDelete" type="reset">delete</button>
-						<button class="btn btn-success hide" id="loadSubmitChange" type="submit">save changes</button>
-						<button class="btn btn-success" id="loadSubmit" type="submit">add operation</button><br>
-					</form>
-					
-					<form class="form-search hide" id="storeDialog">
-						<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" title="relation to store" value="" data-provide="typeahead" autocomplete="off" required><br>
-						<button class="btn" id="storeClear" type="reset">cancel</button>
-						<button class="btn btn-danger hide delete" id="storeDelete" type="reset">delete</button>
-						<button class="btn btn-success hide" id="storeSubmitChange" type="submit">save changes</button>
-						<button class="btn btn-success" id="storeSubmit" type="submit">add operation</button><br>
-					</form>
-					
-					<form class="form-search hide" id="filterDialog">
-						<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
-						<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" title="relation to filter" value="" data-provide="typeahead" autocomplete="off" required>
-						<input class="span2" id="filtOpt" name="options" type="text" placeholder="filter option(s)" title="filter option(s)" autocomplete="off" value="" required><p>
-						<button class="btn" id="filterClear" type="reset">cancel</button>
-						<button class="btn btn-danger hide delete" id="filterDelete" type="reset">delete</button>
-						<button class="btn btn-success hide" id="filterSubmitChange" type="submit">save changes</button>
-						<button class="btn btn-success" id="filterSubmit" type="submit">add operation</button><br>
-					</form>
-			
-					<form class="form-search hide" id="joinDialog">
-						<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
-						<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" title="relation to join" value="" data-provide="typeahead" autocomplete="off" required>
-						<input class="span2" id="joinOpt" name="options" type="text" placeholder="join column(s) rel1" title="join column(s) rel1" autocomplete="off" value="" required><br/>
-						<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" title="relation to join with" value="" data-provide="typeahead" autocomplete="off" required>
-						<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join column(s) rel2" title="join column(s) rel2" autocomplete="off" value="" required><p>
-						<button class="btn" id="joinClear" type="reset">cancel</button>
-						<button class="btn btn-danger hide delete" id="joinDelete" type="reset">delete</button>
-						<button class="btn btn-success hide" id="joinSubmitChange" type="submit">save changes</button>
-						<button class="btn btn-success" id="joinSubmit" type="submit">add operation</button><br>
-					</form>
-					
-					<form class="form-search hide" id="selectDialog">
-						<input class="span2" id="selectName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
-						<input class="span2" id="selectRel" name="relation" type="text" placeholder="relation to select" title="relation to select" value="" data-provide="typeahead" autocomplete="off" required>
-						<input class="span2" id="selectOpt" name="options" type="text" placeholder="column(s)" title="selection column(s)" autocomplete="off" value="" required><p>
-						<button class="btn" id="selectClear" type="reset">cancel</button>
-						<button class="btn btn-danger hide delete" id="selectDelete" type="reset">delete</button>
-						<button class="btn btn-success hide" id="selectSubmitChange" type="submit">save changes</button>
-						<button class="btn btn-success" id="selectSubmit" type="submit">add operation</button><br>
-					</form>
-					
-					<form class="form-search hide" id="scriptDialog">
-						<textarea id="scriptTextarea" placeholder="type your script" title="user script"></textarea><br>
-						<button class="btn" id="scriptClear" type="reset">cancel</button>
-						<button class="btn btn-danger hide delete" id="scriptDelete" type="reset">delete</button>
-						<button class="btn btn-success hide" id="scriptSubmitChange" type="submit">save changes</button>
-						<button class="btn btn-success" id="scriptSubmit" type="submit">add script</button><br>
-					</form>
 				</div>
-				
-				<!-- input error dialog -->
-				<div class="alert alert-block alert-error fade in hide" id="inputError">
-			        <h4 class="alert-heading">Warning! Input error!</h4><br>
-			        <p id="inputErrMsg"></p>
-		        </div>
-		        
-		        <!-- help dialog -->
-				<div class="alert alert-block alert-info fade in hide" id="explanationDialog">
-			        <p id="explanationMsg"></p>
-		        </div>
+				<div id="tableContainer">
+					<p id="stdExplanation"><b>There is no workflow specified at the moment.</b>
+					Please click the "new" button to create a workflow. 
+					<br> Afterwards you can choose the operations you would like to apply to your data in the appearing panel
+					<br> on the right side. 
+					Alternatively you can click "open" to load an already existing workflow definition.</p>
+					<table id="operationTable"></table>
+				</div>
 			</div>
+	
+			<!-- workflow related operation dialogs -->
+			<div class="span5" id="affixContainer">
+				<div class="span5 affix-top" data-spy="affix" data-offset-top="105" id="operationPanels">
+					
+					<!-- workflow line details dialog -->
+					<div class="well hide" id="lineDetails">
+						<h4 id="lineOrdering">LINE</h4>
+						<button class="btn btn-link" id="orderUp" title="move operation up"><i id="up" class="icon-arrow-up"></i></button>
+						<button class="btn btn-link" id="orderDown" title="move operation down"><i id="down" class="icon-arrow-down"></i></button><p>
+						<h4 id="comText">COMMENT</h4>
+						<textarea id="comments" placeholder="type your comment for the selected line" title="comments"></textarea>
+						<button class="btn" id="lineCommentClear">cancel</button>
+						<button class="btn btn-success" id="lineCommentSubmit">add comment</button>
+					</div>
+				
+					<!-- workflow operation selection dialogs -->
+					<div class="well hide" id="formContainer">
+						<h4 id="workflowOps">OPERATIONS</h4>
+						<div class="btn-group" id="stepAction" title="click to select an operation">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" id="action">
+								add operation 
+								<span class="caret"></span>
+							</a>	
+							<ul class="dropdown-menu">
+								<li id="registerItem"><a id="registerLink" title="click to select the register task">REGISTER</a></li>
+								<li id="loadItem"><a id="loadLink" title="click to select the load task">LOAD</a></li>
+								<li class="divider"></li>
+								<li id="filterItem"><a id="filterLink" title="click to select the filter task">FILTER</a></li>
+								<li id="joinItem"><a id="joinLink" title="click to select the join task">JOIN</a></li>
+								<li id="selectItem"><a id="selectLink" title="click to select the select task">SELECT</a></li>
+								<li id="userScriptItem"><a id="userScriptLink" title="click to specify a user script">USER SCRIPT</a></li>
+								<li class="divider"></li>
+								<li id="storeItem"><a id="storeLink" title="click to select the store task">STORE</a></li>
+							</ul>
+						<button class="btn" id="helpBtn" title="toggle to display/hide explanations"><i class="icon-info-sign" id="helpBtnIcon"></i></button>
+						</div>
+				
+						<form class="form-search hide" id="registerDialog">
+							<input class="span2" id="regFileName" name="relation" type="text" placeholder="jar file name" title="jar file name" autocomplete="off" value="" required><p>
+							<button class="btn" id="registerClear" type="reset">cancel</button>
+							<button class="btn btn-danger hide delete" id="registerDelete" type="reset">delete</button>
+							<button class="btn btn-success hide" id="registerSubmitChange" type="submit">save changes</button>
+							<button class="btn btn-success" id="registerSubmit" type="submit">add operation</button><br>
+						</form>
+				
+						<form class="form-search hide" id="loadDialog">
+							<div id="loaderSpecification">
+								<div class="btn-group" id="loadFiletype" data-toggle="buttons-radio" title="file format">
+									<button class="btn btn-mini active" id="loadVcf" type="button">vcf</button>
+									<button class="btn btn-mini" id="loadTxt" type="button">txt</button>
+								</div>
+								<div class="btn-group" id="loadFiletypeSeparator" data-toggle="buttons-radio" title="separator symbol">
+									<button class="btn btn-mini active" id="tabSeparator" type="button">tab</button>
+									<button class="btn btn-mini" id="spaceSeparator" type="button">space</button>
+									<button class="btn btn-mini" id="commaSeparator" type="button">comma</button>
+								</div>
+								<div class="btn-group" id="referenceFileOption" data-toggle="buttons-radio" title="separator symbol">
+									<button class="btn btn-mini active" id="stdFileBtn" type="button">ordinary</button>
+									<button class="btn btn-mini" id="refFileBtn" type="button">reference</button>
+								</div>
+								<br>
+							</div>
+							<input class="span2" id="loadName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required>
+							<input class="span2 hide" id="loadSchema" name="schema" type="text" placeholder="input scheme" title="input scheme" autocomplete="off" value=""><br>
+							<button class="btn" id="loadClear" type="reset">cancel</button>
+							<button class="btn btn-danger hide delete" id="loadDelete" type="reset">delete</button>
+							<button class="btn btn-success hide" id="loadSubmitChange" type="submit">save changes</button>
+							<button class="btn btn-success" id="loadSubmit" type="submit">add operation</button><br>
+						</form>
+						
+						<form class="form-search hide" id="storeDialog">
+							<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" title="relation to store" value="" data-provide="typeahead" autocomplete="off" required><br>
+							<button class="btn" id="storeClear" type="reset">cancel</button>
+							<button class="btn btn-danger hide delete" id="storeDelete" type="reset">delete</button>
+							<button class="btn btn-success hide" id="storeSubmitChange" type="submit">save changes</button>
+							<button class="btn btn-success" id="storeSubmit" type="submit">add operation</button><br>
+						</form>
+						
+						<form class="form-search hide" id="filterDialog">
+							<input class="span2" id="filtName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
+							<input class="span2" id="filtRel" name="relation" type="text" placeholder="relation to filter" title="relation to filter" value="" data-provide="typeahead" autocomplete="off" required>
+							<input class="span2" id="filtOpt" name="options" type="text" placeholder="filter option(s)" title="filter option(s)" autocomplete="off" value="" required><p>
+							<button class="btn" id="filterClear" type="reset">cancel</button>
+							<button class="btn btn-danger hide delete" id="filterDelete" type="reset">delete</button>
+							<button class="btn btn-success hide" id="filterSubmitChange" type="submit">save changes</button>
+							<button class="btn btn-success" id="filterSubmit" type="submit">add operation</button><br>
+						</form>
+				
+						<form class="form-search hide" id="joinDialog">
+							<input class="span2" id="joinName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
+							<input class="span2" id="joinRel" name="relation" type="text" placeholder="relation to join" title="relation to join" value="" data-provide="typeahead" autocomplete="off" required>
+							<input class="span2" id="joinOpt" name="options" type="text" placeholder="join column(s) rel1" title="join column(s) rel1" autocomplete="off" value="" required><br/>
+							<input class="span2" id="joinRel2" name="relation2" type="text" placeholder="relation to join with" title="relation to join with" value="" data-provide="typeahead" autocomplete="off" required>
+							<input class="span2" id="joinOpt2" name="options2" type="text" placeholder="join column(s) rel2" title="join column(s) rel2" autocomplete="off" value="" required><p>
+							<button class="btn" id="joinClear" type="reset">cancel</button>
+							<button class="btn btn-danger hide delete" id="joinDelete" type="reset">delete</button>
+							<button class="btn btn-success hide" id="joinSubmitChange" type="submit">save changes</button>
+							<button class="btn btn-success" id="joinSubmit" type="submit">add operation</button><br>
+						</form>
+						
+						<form class="form-search hide" id="selectDialog">
+							<input class="span2" id="selectName" name="name" type="text" placeholder="new relation name" title="new relation name" autocomplete="off" value="" required><br/>
+							<input class="span2" id="selectRel" name="relation" type="text" placeholder="relation to select" title="relation to select" value="" data-provide="typeahead" autocomplete="off" required>
+							<input class="span2" id="selectOpt" name="options" type="text" placeholder="column(s)" title="selection column(s)" autocomplete="off" value="" required><p>
+							<button class="btn" id="selectClear" type="reset">cancel</button>
+							<button class="btn btn-danger hide delete" id="selectDelete" type="reset">delete</button>
+							<button class="btn btn-success hide" id="selectSubmitChange" type="submit">save changes</button>
+							<button class="btn btn-success" id="selectSubmit" type="submit">add operation</button><br>
+						</form>
+						
+						<form class="form-search hide" id="scriptDialog">
+							<textarea id="scriptTextarea" placeholder="type your script" title="user script"></textarea><br>
+							<button class="btn" id="scriptClear" type="reset">cancel</button>
+							<button class="btn btn-danger hide delete" id="scriptDelete" type="reset">delete</button>
+							<button class="btn btn-success hide" id="scriptSubmitChange" type="submit">save changes</button>
+							<button class="btn btn-success" id="scriptSubmit" type="submit">add script</button><br>
+						</form>
+					</div>
+					
+					<!-- input error dialog -->
+					<div class="alert alert-block alert-error fade in hide" id="inputError">
+				        <h4 class="alert-heading">Warning! Input error!</h4><br>
+				        <p id="inputErrMsg"></p>
+			        </div>
+			        
+			        <!-- help dialog -->
+					<div class="alert alert-block alert-info fade in hide" id="explanationDialog">
+				        <p id="explanationMsg"></p>
+			        </div>
+				</div>
+			</div>
+			
+			<div class="clear"></div>
 		</div>
 	</div>
 
