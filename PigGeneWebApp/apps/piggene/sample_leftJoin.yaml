@@ -1,7 +1,8 @@
 !cloudgene.mapred.apps.App
 name: sample_leftJoin
 category: Piggene
-description: join vcf file with reference file and remove all entries, where there exists an rsNumber.
+description: Joins a vcf-file with the vcf-reference-file and removes all entries, where there exists
+   an rsNumber.
 mapred: 
    inputs: 
    -  id: input1

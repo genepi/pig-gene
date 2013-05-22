@@ -1,36 +1,36 @@
 !piggene.serialisation.Workflow
 name: sample_normalJoin
-description: join vcf file with reference file
+description: Joins a vcf-file with the vcf-reference-file.
 workflow: 
--  comment: '-'
+-  comment: Loads the vcf-input file.
    input: input1
    input2: '-'
    operation: LOAD
    options: vcf
    options2: '-'
    relation: R1
--  comment: '-'
+-  comment: Loads the vcf-reference file.
    input: input2
    input2: '-'
    operation: LOAD
    options: vcf
    options2: ref
    relation: R2
--  comment: '-'
+-  comment: Joins the two loaded relations. The join columns are chrom and pos.
    input: R1
    input2: R2
    operation: JOIN
    options: chrom,pos
    options2: chrom,pos
    relation: R3
--  comment: '-'
+-  comment: Selects the needed columns.
    input: R3
    input2: '-'
    operation: SELECT
    options: R1::chrom, R1::pos, R2::id, R1::ref .. R1::persID
    options2: '-'
    relation: R4
--  comment: '-'
+-  comment: Stores the output.
    input: R4
    input2: '-'
    operation: STORE

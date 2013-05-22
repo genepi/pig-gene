@@ -1,7 +1,7 @@
 !cloudgene.mapred.apps.App
 name: sample_normalJoin
 category: Piggene
-description: join vcf file with reference file
+description: Joins a vcf-file with the vcf-reference-file.
 mapred: 
    inputs: 
    -  id: input1

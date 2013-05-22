@@ -1,7 +1,8 @@
 !cloudgene.mapred.apps.App
 name: sample_distance
 category: Piggene
-description: calculates the distance between two given locations using the haversine formula
+description: Calculates the distance between two locations (given by latitude and longitude) using the
+   haversine formula.
 mapred: 
    inputs: 
    -  id: input1

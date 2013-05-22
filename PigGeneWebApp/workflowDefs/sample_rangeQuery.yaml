@@ -1,72 +1,72 @@
 !piggene.serialisation.Workflow
 name: sample_rangeQuery
-description: 'This workflow performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and saves
-   the result'
+description: 'Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and saves the result.'
 workflow: 
--  comment: load input file
+-  comment: Loads the vcf-input file.
    input: input1
    input2: '-'
    operation: LOAD
    options: vcf
    options2: '-'
    relation: R1
--  comment: load reference file to match the rsNumber
+-  comment: Loads the vcf-reference file.
    input: input2
    input2: '-'
    operation: LOAD
    options: vcf
    options2: ref
    relation: R2
--  comment: select all entries which match chrom 20
+-  comment: Filters all lines that match chromosome '20'.
    input: R1
    input2: '-'
    operation: FILTER
    options: chrom == '20'
    options2: '-'
    relation: R3
--  comment: select all entries with pos greater or equal 1
+-  comment: Filters all lines where position is larger or equal than 1.
    input: R3
    input2: '-'
    operation: FILTER
    options: pos >= 1
    options2: '-'
    relation: R4
--  comment: select all entries with pos less or equal 1000000
+-  comment: Filters all lines where position is smaller or equal than 1000000.
    input: R4
    input2: '-'
    operation: FILTER
    options: pos <= 1000000
    options2: '-'
    relation: R5
--  comment: select all entries of the reference file which match chrom 20
+-  comment: Filters all lines that match chromosome '20'.
    input: R2
    input2: '-'
    operation: FILTER
    options: chrom == '20'
    options2: '-'
    relation: R6
--  comment: multiple different filtering options can be combined using the AND keyword
+-  comment: Filters all lines where position is larger or equal than 1 and position is smaller or equal
+      than 1000000.
    input: R6
    input2: '-'
    operation: FILTER
    options: pos >= 1 AND pos <= 1000000
    options2: '-'
    relation: R7
--  comment: combines two relations if the value in the columns chrom AND pos are identically
+-  comment: Joins the filtered relations. The join columns are chrom and pos.
    input: R5
    input2: R7
    operation: JOIN
    options: chrom,pos
    options2: chrom,pos
    relation: R8
--  comment: eliminates not specified columns
+-  comment: Selects needed columns.
    input: R8
    input2: '-'
    operation: SELECT
    options: R7::id, R7::pos, pigGene.UDFs.ExtractQuality(R5::genotype), R5::genotype, R5::persID
    options2: '-'
    relation: R9
--  comment: stores the result on the hard disk
+-  comment: Stores the output.
    input: R9
    input2: '-'
    operation: STORE

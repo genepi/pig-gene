@@ -36,7 +36,7 @@ public class DeserialisationProcessor extends ServerResource {
 			obj.setData(workflow);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
-			obj.setMessage("An error occured while loading the workflow. Please check the filename you typed.");
+			obj.setMessage("An error occured while loading the workflow.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final JSONException e) {
 			obj.setSuccess(false);
