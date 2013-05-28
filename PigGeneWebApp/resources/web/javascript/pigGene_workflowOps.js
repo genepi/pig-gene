@@ -60,7 +60,7 @@ function ajaxRequestSaveWorkflow(filename) {
 	var data = '{"filename":"' + filename + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: 'http://localhost:8080/ex',
+	    url: serverAddressPigGene + 'ex',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -91,7 +91,7 @@ function ajaxRequestDeleteWfAlreadyExists(filename) {
 	var data = '{"filename":"' + filename + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: 'http://localhost:8080/ex',
+	    url: serverAddressPigGene + 'ex',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -130,7 +130,7 @@ function saveWorkflow(filename) {
 	
 	$.ajax({
 		type: 'POST',
-	    url: 'http://localhost:8080/ser',
+	    url: serverAddressPigGene + 'ser',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -172,7 +172,7 @@ function loadWorkflow(fileName) {
 		var data = '{"filename":"' + fileName + '"}';
 		$.ajax({
     		type: 'POST',
-    	    url: 'http://localhost:8080/ld',
+    	    url: serverAddressPigGene + 'ld',
     	    data: data,
     	    dataType:'json',
     	    success: function(response) {
@@ -210,7 +210,7 @@ function deleteWorkflow(fileName) {
 	var data = '{"filename":"' + fileName + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: 'http://localhost:8080/del',
+	    url: serverAddressPigGene + 'del',
 	    data: data,
 	    dataType:'json',
 	    success: function(response) {
@@ -243,7 +243,7 @@ function handleWorkflowRequest(buttonName) {
 	} else {
 		$.ajax({
     		type: 'POST',
-    	    url: 'http://localhost:8080/wf',
+    	    url: serverAddressPigGene + 'wf',
     	    data: null,
     	    dataType:'json',
     	    success: function(response) {

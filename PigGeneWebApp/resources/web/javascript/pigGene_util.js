@@ -461,7 +461,7 @@ function processDownloadRequest(e) {
 		if($('#saveState').hasClass('saved')) {
 			var filename = $('#workflowName').html();
 			$('#downloadScript').attr('download', filename + '.pig');
-			$('#downloadScript').attr('href', 'http://localhost:8080/dwld/' + filename);
+			$('#downloadScript').attr('href', serverAddressPigGene + 'dwld/' + filename);
 			resetDialogsAndHighlightings();
 		} else {
 			$('#downloadScript').removeAttr('download').removeAttr('href');
@@ -488,8 +488,8 @@ function processRunJobRequest(e) {
 	} else {
 		if($('#saveState').hasClass('saved')) {
 			var filename = $('#workflowName').html();
-			$('#runJob').attr('target', '_newTab');
-			$('#runJob').attr('href', 'http://138.232.66.81/start.html#piggene/' + filename);
+			$('#runJob').attr('target', '_blank');
+			$('#runJob').attr('href', serverAddressCloudgene + filename);
 		} else {
 			$('#runJob').removeAttr('target').removeAttr('href');
 			$('#unsavedHeaderText').html('Running job...');
@@ -739,7 +739,7 @@ function inputLongEnough(input) {
 function updateTypeaheadSaved() {
 	$.ajax({
 		type: 'POST',
-	    url: 'http://localhost:8080/wf',
+	    url: serverAddressPigGene + 'wf',
 	    data: null,
 	    dataType:'json',
 	    success: function(response) {

@@ -1,0 +1,24 @@
+!cloudgene.mapred.apps.App
+name: test
+category: Piggene
+description: Calculates the distance between two locations (given by latitude and longitude) using the
+   haversine formula.
+mapred: 
+   inputs: 
+   -  id: input1
+      description: input1
+      type: hdfs-file
+   -  id: input2
+      description: input2
+      type: hdfs-file
+   outputs: 
+   -  id: output1
+      description: output1
+      mergeOutput: false
+      type: hdfs-folder
+      zip: false
+   steps: 
+   -  name: PigScript
+      params: -param input1=$input1 -param input2=$input2 -param output1=$output1
+      pig: test.pig
+version: 1.0.0
