@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_jar" name="" >
+    
+	<property name="app.jar" value="pigGene.jar" />
+	
+	<target name="compile">
+    	<javac srcdir="src" destdir="bin" classpath="" target="1.6" includeantruntime="false">
+			<classpath>
+				<fileset dir="../PigGene-Scripts/lib" />
+			</classpath>
+    	</javac>   		
+    </target>
+	
+    <target name="create_jar" depends="compile">  	
+    	<delete dir="../PigGene-Scripts/dist"></delete>
+    	<mkdir dir="../PigGene-Scripts/dist"></mkdir>
+    	
+        <jar destfile="../PigGene-Scripts/dist/${app.jar}" filesetmanifest="mergewithoutmain">
+            <fileset dir="../PigGene-Scripts/bin"/>
+        </jar>
+    </target>
+	
+</project>
