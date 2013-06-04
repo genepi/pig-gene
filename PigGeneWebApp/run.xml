@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?> 
 <project default="copy_jar_file" name="" >
     
 	<property name="cloud.host" value="192.168.71.201" />
