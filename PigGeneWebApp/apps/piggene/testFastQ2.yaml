@@ -1,0 +1,10 @@
+!cloudgene.mapred.apps.App
+name: testFastQ2
+category: Piggene
+description: 
+mapred: 
+   steps: 
+   -  name: PigScript
+      params: 
+      pig: testFastQ2.pig
+version: 1.0.0
