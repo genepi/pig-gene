@@ -85,6 +85,8 @@ function processLoadOperation() {
 		input2 = values[1].value;
 	} else if($('#refFileBtn').hasClass('active')) {
 		opt2 = 'ref';
+	} else if($('#seqPigBtn').hasClass('active')) {
+		opt2 = 'seqpig';
 	}
 
 	if($('#loadSubmitChange').hasClass('modification')) {

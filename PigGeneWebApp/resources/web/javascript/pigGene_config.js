@@ -5,5 +5,5 @@
  * @date April 2013
  */
 
-var serverAddressCloudgene = 'http://138.232.66.81/start.html#piggene/';
+var serverAddressCloudgene = 'http://192.168.71.201:8082/start.html#piggene/';
 var serverAddressPigGene = 'http://localhost:8080/';

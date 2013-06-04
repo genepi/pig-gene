@@ -349,8 +349,14 @@ function displayCorrespondingContainerInfo() {
 			if(data.options2 == 'ref') {
 				$('#refFileBtn').addClass('active');
 				$('#stdFileBtn').removeClass('active');
+				$('#seqPigBtn').removeClass('active');
+			} else if(data.options2 == 'seqpig') {
+				$('#seqPigBtn').addClass('active');
+				$('#refFileBtn').removeClass('active');
+				$('#stdFileBtn').removeClass('active');
 			} else {
 				$('#refFileBtn').removeClass('active');
+				$('#seqPigBtn').removeClass('active');
 				$('#stdFileBtn').addClass('active');
 			}
 			hideTxtSeparatorOptions();
@@ -361,6 +367,7 @@ function displayCorrespondingContainerInfo() {
 			$('#loadSchema').val(data.input2);
 			$('#loadVcf').removeClass('active');
 			$('#refFileBtn').removeClass('active');
+			$('#seqPigBtn').removeClass('active');
 			$('#stdFileBtn').addClass('active');
 			$('#loadTxt').addClass('active');
 			if(data.options2 == 'tab') {
@@ -758,4 +765,5 @@ function resetLoadSpecifier() {
 	$('#commaSeparator').removeClass('active');
 	$('#stdFileBtn').addClass('active');
 	$('#refFileBtn').removeClass('active');
+	$('#seqPigBtn').removeClass('active');
 }
