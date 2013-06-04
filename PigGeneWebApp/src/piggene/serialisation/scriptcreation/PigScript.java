@@ -15,7 +15,7 @@ import piggene.serialisation.WorkflowComponent;
  * @date April 2013
  */
 public class PigScript {
-	private static final String[] jarFilenames = new String[] { "pigGene.jar", "hadoop-bam-5.1.jar", "sam-1.76.jar", "picard-1.76.jar" };
+	private static final String[] jarFilenames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-5.1.jar", "sam-1.76.jar", "picard-1.76.jar" };
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private static final char SEMICOLON = ';';
 	private static final String PATH = "apps/piggene/";
