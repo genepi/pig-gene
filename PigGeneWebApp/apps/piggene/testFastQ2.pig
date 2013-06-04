@@ -3,6 +3,7 @@ REGISTER SeqPig.jar;
 REGISTER hadoop-bam-5.1.jar;
 REGISTER sam-1.76.jar;
 REGISTER picard-1.76.jar;
+REGISTER piggybank.jar;
 DEFINE SUBSTRING org.apache.pig.piggybank.evaluation.string.SUBSTRING();
 DEFINE LENGTH org.apache.pig.piggybank.evaluation.string.LENGTH();
 A = load '$input1' using fi.aalto.seqpig.FastqUDFLoader();
