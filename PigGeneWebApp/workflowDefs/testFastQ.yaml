@@ -1,0 +1,26 @@
+!piggene.serialisation.Workflow
+name: testFastQ
+description: 
+workflow: 
+-  comment: '-'
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: seqpig
+   relation: FF
+-  comment: '-'
+   input: '-'
+   input2: '-'
+   operation: SCRIPT
+   options: |-
+      top = FILTER FF BY tile >= 1000 AND tile < 2000;
+      sp = FOREACH top GENERATE UnalignedReadSplit(sequence, quality);
+      bases = FOREACH sp GENERATE FLATTEN($0);
+      first_10 = FILTER bases BY pos <= 10;
+      grpd_by_pos = GROUP first_10 BY pos;
+      result = FOREACH grpd_by_pos GENERATE group AS cycle, AVG($1.basequal);
+      sorted_cycle_avg = ORDER result BY cycle;
+      DUMP sorted_cycle_avg
+   options2: '-'
+   relation: script
