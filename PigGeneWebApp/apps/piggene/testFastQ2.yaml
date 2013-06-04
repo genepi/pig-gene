@@ -3,8 +3,12 @@ name: testFastQ2
 category: Piggene
 description: 
 mapred: 
+   inputs: 
+   -  id: input1
+      description: input1
+      type: hdfs-file
    steps: 
    -  name: PigScript
-      params: 
+      params: -param input1=$input1
       pig: testFastQ2.pig
 version: 1.0.0

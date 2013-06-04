@@ -10,14 +10,20 @@ workflow:
    options2: '-'
    relation: '-'
 -  comment: '-'
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: seqpig
+   relation: AA
+-  comment: '-'
    input: '-'
    input2: '-'
    operation: SCRIPT
    options: |-
       DEFINE SUBSTRING org.apache.pig.piggybank.evaluation.string.SUBSTRING();
       DEFINE LENGTH org.apache.pig.piggybank.evaluation.string.LENGTH();
-      A = load '$input1' using fi.aalto.seqpig.FastqUDFLoader();
-      B = FOREACH A GENERATE instrument, run_number, flow_cell_id, lane, tile, xpos, ypos, read, qc_passed, control_number, index_sequence, SUBSTRING(sequence, 0, LENGTH(sequence) - 3) AS sequence, SUBSTRING(quality, 0, LENGTH(quality) - 3) AS quality;
+      B = FOREACH AA GENERATE instrument, run_number, flow_cell_id, lane, tile, xpos, ypos, read, qc_passed, control_number, index_sequence, SUBSTRING(sequence, 0, LENGTH(sequence) - 3) AS sequence, SUBSTRING(quality, 0, LENGTH(quality) - 3) AS quality;
       store B into '$output' using fi.aalto.seqpig.FastqUDFStorer();
    options2: '-'
    relation: script
