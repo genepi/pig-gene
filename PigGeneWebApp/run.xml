@@ -5,7 +5,6 @@
 	<property name="cloud.username" value="hadoop" />
 	<property name="cloud.dir" value="/home/hadoop/cloudgene/apps/piggene" />
 	<property name="local.pig" value="apps/piggene" />
-	<property name="hadoop.bin" value="/home/hadoop/hadoop-0.20.2-cdh3u5/bin/hadoop" />
 	<property name="app.jar" value="pigGene.jar" />
 	<property name="datafu.jar" value="datafu-0.0.9.jar" />
 	<property name="seqpig.jar" value="SeqPig.jar" />
@@ -14,7 +13,7 @@
 	<property name="bam.jar" value="hadoop-bam-5.1.jar" />
 	
 	<target name="compile">
-    	<javac srcdir="src" destdir="bin" classpath="" target="1.6">
+    	<javac srcdir="src" destdir="bin" classpath="" target="1.6" includeantruntime="false">
 			<classpath>
 				<fileset dir="../PigGene-Scripts/lib" />
 			</classpath>

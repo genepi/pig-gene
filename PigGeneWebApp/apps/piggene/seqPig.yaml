@@ -1,0 +1,25 @@
+!cloudgene.mapred.apps.App
+name: seqPig
+category: Piggene
+description: 
+mapred: 
+   inputs: 
+   -  id: input1
+      description: input1
+      type: hdfs-file
+   outputs: 
+   -  id: output1
+      description: output1
+      mergeOutput: false
+      type: hdfs-folder
+      zip: false
+   -  id: output2
+      description: output2
+      mergeOutput: false
+      type: hdfs-folder
+      zip: false
+   steps: 
+   -  name: PigScript
+      params: -param input1=$input1 -param output1=$output1 -param output2=$output2
+      pig: seqPig.pig
+version: 1.0.0

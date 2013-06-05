@@ -10,6 +10,7 @@ import piggene.serialisation.WorkflowComponent;
  * @date April 2013
  */
 public class StoreSnippet extends PigSnippet {
+	private static final String FASTQ_STORAGE = "fi.aalto.seqpig.io.FastqLoader()";
 
 	public StoreSnippet(final WorkflowComponent comp) {
 		super(comp);
