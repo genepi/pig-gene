@@ -90,7 +90,7 @@ read_len_counts = FOREACH (GROUP read_len BY $0) GENERATE group AS len, COUNT_ST
 
 read_seq_qual = FOREACH reads GENERATE quality;
 avgbase_qual_counts = FOREACH (GROUP read_seq_qual ALL) GENERATE fi.aalto.seqpig.stats.AvgBaseQualCounts($1.$0);
-formatted_avgbase_qual_counts = FOREACH avgbase_qual_counts GENERATE fi.aalto.seqpig.stats.FormatAvgBaseQualCounts($0);
+formatted_avgbase_qual_counts = FOREACH avgbase_qual_counts GENERATE FLATTEN(fi.aalto.seqpig.stats.FormatAvgBaseQualCounts($0));
 
 
 

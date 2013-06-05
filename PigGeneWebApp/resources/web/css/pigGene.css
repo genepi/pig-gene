@@ -242,11 +242,23 @@ form input[type=text] {
 	margin-top: 4px;
 }
 
-#description, #comments, #scriptTextarea {
+#description, #comments {
 	margin-bottom: 5px;
 	width: 286px;
 	height: 42px;
 	resize: none;
+}
+
+#scriptTextarea {
+	margin-bottom: 5px;
+	width: 755px;
+	height: 42px;
+	resize: none;
+}
+
+#UserScriptInputModal.modal {
+	width: 800px;
+	margin-left: -400px;
 }
 
 #description {

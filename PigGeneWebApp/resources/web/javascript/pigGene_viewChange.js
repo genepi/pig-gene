@@ -123,8 +123,9 @@ function showInputDialogSlow(dialog) {
  * Function displays the script dialog.
  */
 function showScriptDialogSlow() {
-	$('#scriptDialog').show('slow');
-	$('#scriptDialog').removeClass('hide');
+	$('#UserScriptInputModal').modal('show');
+//	$('#scriptDialog').show('slow');
+//	$('#scriptDialog').removeClass('hide');
 }
 
 
@@ -132,9 +133,11 @@ function showScriptDialogSlow() {
  * Function hides the script dialog.
  */
 function hideScriptDialogSlow() {
-	$('#scriptTextarea').val('');
-	$('#scriptDialog').hide('slow');
-	$('#scriptDialog').addClass('hide');
+	$('#UserScriptInputModal').modal('hide');
+//	$('#scriptTextarea').val('');
+//	$('#scriptModal').hide('slow');
+//	$('#scriptDialog').hide('slow');
+//	$('#scriptDialog').addClass('hide');
 }
 
 
@@ -412,9 +415,14 @@ function displayCorrespondingContainerInfo() {
 		hideScriptDialogSlow();
 		setOperationDialog('select');
 	} else if(data.operation=='SCRIPT') {
+		resetDialogsAndHighlightings();
 		$('#scriptTextarea').val(data.options);
-		setOperationDialog('script');
-		setFormContainerOperation('user defined script');
+		$('#scriptSubmit').addClass('hide');
+		$('#scriptDelete').removeClass('hide');
+		$('#scriptSubmitChange').removeClass('hide');
+		showScriptDialogSlow();
+//		setOperationDialog('script');
+//		setFormContainerOperation('user defined script');
 	}
 	
 	if($('#helpBtn').hasClass('btn-info')) {

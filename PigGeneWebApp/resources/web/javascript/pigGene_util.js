@@ -240,6 +240,7 @@ function getFormData(dialog) {
  */
 function processInputFormCancellation(button) {
 	if(button.hasClass('delete')) {
+		$('#UserScriptInputModal').modal('hide');
 		showSecurityAlertRemoveLine();
 		return;
 	}

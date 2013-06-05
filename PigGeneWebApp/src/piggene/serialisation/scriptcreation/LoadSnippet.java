@@ -13,7 +13,6 @@ public class LoadSnippet extends PigSnippet {
 	private static final String TXT_STORAGE = "PigStorage";
 	private static final String VCF_STORAGE = "pigGene.storage.merged.PigGeneStorage()";
 	private static final String VCF_STORAGE_REF = "pigGene.storage.reference.PigGeneStorageReferenceFile()";
-	private static final String BAM_STORAGE = "fi.aalto.seqpig.BamUDFLoader('yes')";
 	private static final String FASTQ_STORAGE = "fi.aalto.seqpig.io.FastqLoader()";
 
 	private static final String TXT_STORAGE_TAB_SEPARATOR = "('\\t')";
@@ -58,7 +57,6 @@ public class LoadSnippet extends PigSnippet {
 			if (comp.getOptions2().equals("ref")) {
 				sb.append(VCF_STORAGE_REF);
 			} else if (comp.getOptions2().equals("seqpig")) {
-				// sb.append(BAM_STORAGE);
 				sb.append(FASTQ_STORAGE);
 			} else {
 				sb.append(VCF_STORAGE);

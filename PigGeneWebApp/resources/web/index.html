@@ -173,6 +173,10 @@
 							<button class="btn btn-success" id="selectSubmit" type="submit">add operation</button><br>
 						</form>
 						
+						
+						
+						<!-- quick and dirty hackathon implementation... -->
+						<!--  
 						<form class="form-search hide" id="scriptDialog">
 							<textarea id="scriptTextarea" placeholder="type your script" title="user script"></textarea><br>
 							<button class="btn" id="scriptClear" type="reset">cancel</button>
@@ -180,6 +184,30 @@
 							<button class="btn btn-success hide" id="scriptSubmitChange" type="submit">save changes</button>
 							<button class="btn btn-success" id="scriptSubmit" type="submit">add script</button><br>
 						</form>
+						-->
+						 
+						<div class="modal hide fade" id="UserScriptInputModal">
+						  <div class="modal-header">
+						    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+						    <h3>USER DEFINED SKRIPT</h3>
+						  </div>
+						  <div class="modal-body">
+							<textarea id="scriptTextarea" placeholder="type your script" title="user script"></textarea><br>
+							<button class="btn" id="scriptClear">cancel</button>
+							<button class="btn btn-danger hide delete" id="scriptDelete" type="reset">delete</button>
+							<button class="btn btn-success hide" id="scriptSubmitChange">save changes</button>
+							<button class="btn btn-success" id="scriptSubmit">add script</button><br>
+								
+								<!-- 
+						  	<form class="form-search hide" id="scriptDialog">
+							</form>
+							 -->
+							 
+							 
+						  </div>
+						</div>
+						<!-- ........................................... -->
+						
 					</div>
 					
 					<!-- input error dialog -->

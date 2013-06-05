@@ -50,11 +50,36 @@ $(document).ready(function() {
 		processOperationLinkRequest('select');
 	});
 	$('#userScriptLink').on('click', function() {
-		setFormContainerOperation('user defined script');
-		setOperationRelatedHelpContent('user defined script');
+//		setFormContainerOperation('user defined script');
+//		setOperationRelatedHelpContent('user defined script');
 		showScriptDialogSlow();
-		modifyContainerHeight();
+//		modifyContainerHeight();
 	});
+	
+	
+	
+	
+	/* quick and dirty hackathon implementation... */
+	$('#scriptClear').on('click', function() {
+		$('#scriptTextarea').val('');
+		hideScriptDialogSlow();
+	});
+	
+	$('#scriptSubmit').on('click', function() {
+		processScriptOperation();
+		hideScriptDialogSlow();
+	});
+	
+	$('#scriptSubmitChange').on('click', function() {
+		$('#scriptSubmitChange').addClass('modification');
+		processScriptOperation();
+		$('#scriptSubmitChange').removeClass('modification');
+		hideScriptDialogSlow();
+	});
+	
+	/*	............	*/
+	
+	
 	
 	
 	/**

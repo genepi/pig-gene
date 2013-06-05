@@ -33,10 +33,10 @@ workflow:
       ad_q_counts = FOREACH (GROUP read_q BY read_qual) GENERATE group as avg_read_qual, COUNT_STAR($\
       1) as count;\n\n\n\n\nread_seq_qual = FOREACH reads GENERATE quality;\navgbase_qual_counts = FO\
       REACH (GROUP read_seq_qual ALL) GENERATE fi.aalto.seqpig.stats.AvgBaseQualCounts($1.$0);\nforma\
-      tted_avgbase_qual_counts = FOREACH avgbase_qual_counts GENERATE fi.aalto.seqpig.stats.FormatAvg\
-      BaseQualCounts($0);\n\n\n\n\n\n\n\n\n------- generate output\n\n\n\n\n-- STORE read_len_counts \
-      INTO '$outputpath/read_len_counts';\n-- STORE read_q_counts INTO '$outputpath/read_q_counts';\n\
-      -- STORE formatted_avgbase_qual_counts INTO '$outputpath/read_q_counts';\n"
+      tted_avgbase_qual_counts = FOREACH avgbase_qual_counts GENERATE FLATTEN(fi.aalto.seqpig.stats.F\
+      ormatAvgBaseQualCounts($0));\n\n\n\n\n\n\n\n\n------- generate output\n\n\n\n\n-- STORE read_le\
+      n_counts INTO '$outputpath/read_len_counts';\n-- STORE read_q_counts INTO '$outputpath/read_q_c\
+      ounts';\n-- STORE formatted_avgbase_qual_counts INTO '$outputpath/read_q_counts';\n"
    options2: '-'
    relation: script
 -  comment: '-'
