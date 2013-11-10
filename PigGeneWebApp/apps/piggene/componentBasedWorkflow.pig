@@ -1,0 +1,10 @@
+REGISTER pigGene.jar;
+REGISTER SeqPig.jar;
+REGISTER hadoop-bam-5.1.jar;
+REGISTER sam-1.76.jar;
+REGISTER picard-1.76.jar;
+REGISTER standard.jar;
+R1 = LOAD '$input1' USING pigGene.storage.merged.PigGeneStorage();
+R2 = FILTER R1 BY a == b;
+R3 = FOREACH R2 GENERATE a,c,d;
+STORE R3 INTO '$output1';
