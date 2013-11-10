@@ -16,14 +16,14 @@ import com.google.gson.JsonSyntaxException;
  */
 public class JSONConverter {
 
-	public static ArrayList<WorkflowComponent> convertJsonArrayIntoWorkflow(final JSONArray array) throws JsonSyntaxException, JSONException {
-		final ArrayList<WorkflowComponent> workflow = new ArrayList<WorkflowComponent>();
+	public static ArrayList<SingleWorkflowElement> convertJsonArrayIntoWorkflow(final JSONArray array) throws JsonSyntaxException, JSONException {
+		final ArrayList<SingleWorkflowElement> workflow = new ArrayList<SingleWorkflowElement>();
 		final Gson gson = new Gson();
-		WorkflowComponent comp;
+		SingleWorkflowElement comp;
 
 		// length-2: last two element elements are description and file name
 		for (int i = 0; i < array.length() - 2; i++) {
-			comp = gson.fromJson(array.getString(i), WorkflowComponent.class);
+			comp = gson.fromJson(array.getString(i), SingleWorkflowElement.class);
 			workflow.add(comp);
 		}
 		return workflow;

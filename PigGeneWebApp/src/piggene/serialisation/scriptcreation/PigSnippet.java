@@ -1,6 +1,6 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * PigSnippet class is used as an abstract definition for the different possible
@@ -11,9 +11,9 @@ import piggene.serialisation.WorkflowComponent;
  */
 public abstract class PigSnippet implements IPigSnippet {
 	protected static final String EQUAL_SYMBOL = " = ";
-	protected WorkflowComponent comp;
+	protected SingleWorkflowElement comp;
 
-	public PigSnippet(final WorkflowComponent comp) {
+	public PigSnippet(final SingleWorkflowElement comp) {
 		this.comp = comp;
 	}
 

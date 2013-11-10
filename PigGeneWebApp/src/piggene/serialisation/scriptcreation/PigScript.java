@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import piggene.serialisation.Workflow;
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * PigScript class is responsible for creating and writing the pig script to the
@@ -28,7 +28,7 @@ public class PigScript {
 			sb.append(System.getProperty("line.separator"));
 		}
 		sb.append(insertHeader());
-		for (final WorkflowComponent comp : workflow.getWorkflow()) {
+		for (final SingleWorkflowElement comp : workflow.getWorkflow()) {
 			sb.append(PigSnippetFactory.getPigScriptSnippet(comp));
 			sb.append(SEMICOLON);
 			sb.append(LINE_SEPARATOR);

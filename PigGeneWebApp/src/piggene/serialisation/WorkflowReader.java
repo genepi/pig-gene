@@ -17,7 +17,7 @@ public class WorkflowReader {
 
 	public static Workflow read(final String name) throws IOException {
 		final YamlReader reader = new YamlReader(new FileReader(PATH.concat(name.concat(".yaml"))));
-		reader.getConfig().setPropertyElementType(Workflow.class, "workflow", WorkflowComponent.class);
+		reader.getConfig().setPropertyElementType(Workflow.class, "workflow", SingleWorkflowElement.class);
 		final Workflow workflow = (Workflow) reader.read();
 		reader.close();
 		return workflow;

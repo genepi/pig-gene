@@ -12,12 +12,13 @@ import java.util.ArrayList;
  */
 public class WorkflowFiles {
 	private static final String YAML_PATH_WORKFLOW = "workflowDefs/";
+	private static final String YAML_PATH_WORKFLOWCOMPONENT = "workflowComp/";
 	private static final String YAML_PATH_CLOUDGENE = "apps/piggene/";
 	private static final String PIG_PATH = "apps/piggene/";
 	private static final String YAML_EXTENSION = ".yaml";
 	private static final String PIG_EXTENSION = ".pig";
 
-	public static boolean doesFileExist(final String filename) {
+	public static boolean doesWorkflowFileExist(final String filename) {
 		final File file = new File(YAML_PATH_WORKFLOW.concat(filename.concat(YAML_EXTENSION)));
 		if (file.exists()) {
 			return true;
@@ -25,8 +26,29 @@ public class WorkflowFiles {
 		return false;
 	}
 
-	public static ArrayList<String> getAllFileNames() {
+	public static boolean doesWorkflowComponentFileExist(final String filename) {
+		final File file = new File(YAML_PATH_WORKFLOWCOMPONENT.concat(filename.concat(YAML_EXTENSION)));
+		if (file.exists()) {
+			return true;
+		}
+		return false;
+	}
+
+	public static ArrayList<String> getAllWorkflowFileNames() {
 		final File file = new File(YAML_PATH_WORKFLOW);
+		final File[] files = file.listFiles();
+		if (files.length == 0) {
+			return null;
+		}
+		final ArrayList<String> fileNames = new ArrayList<String>();
+		for (final File f : files) {
+			fileNames.add(f.getName());
+		}
+		return fileNames;
+	}
+
+	public static ArrayList<String> getAllWorkflowComponentFileNames() {
+		final File file = new File(YAML_PATH_WORKFLOWCOMPONENT);
 		final File[] files = file.listFiles();
 		if (files.length == 0) {
 			return null;

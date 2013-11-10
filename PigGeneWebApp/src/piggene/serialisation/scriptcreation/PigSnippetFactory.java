@@ -1,6 +1,6 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * PigSnippetFactory is used to return a snippet. Which snippet representation
@@ -12,7 +12,7 @@ import piggene.serialisation.WorkflowComponent;
  */
 public class PigSnippetFactory {
 
-	public static String getPigScriptSnippet(final WorkflowComponent comp) {
+	public static String getPigScriptSnippet(final SingleWorkflowElement comp) {
 		if (comp.getOperation().equals("FILTER")) {
 			return new FilterSnippet(comp).toPigScript();
 		} else if (comp.getOperation().equals("JOIN")) {

@@ -1,6 +1,6 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * SelectSnippet class is used to return a "FOREACH - GENERATE" statement based
@@ -11,7 +11,7 @@ import piggene.serialisation.WorkflowComponent;
  */
 public class SelectSnippet extends PigSnippet {
 
-	public SelectSnippet(final WorkflowComponent comp) {
+	public SelectSnippet(final SingleWorkflowElement comp) {
 		super(comp);
 	}
 

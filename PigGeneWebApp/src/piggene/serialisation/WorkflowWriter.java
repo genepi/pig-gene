@@ -18,7 +18,7 @@ public class WorkflowWriter {
 
 	public static void write(final Workflow workflow) throws IOException {
 		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(PATH.concat(workflow.getName().concat(".yaml")))));
-		writer.getConfig().setPropertyElementType(Workflow.class, "workflow", WorkflowComponent.class);
+		writer.getConfig().setPropertyElementType(Workflow.class, "workflow", SingleWorkflowElement.class);
 		writer.write(workflow);
 		writer.close();
 	}

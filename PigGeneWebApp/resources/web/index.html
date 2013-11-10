@@ -26,7 +26,10 @@
 			<div class="span10" id="actionBtns">
 				<a id="newWfBtn" class="btn btn-inverse" title="create new workflow"><i class="icon-file icon-white"></i> new</a>
 				<a id="showWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="open existing workflow"><i class="icon-edit icon-white"></i> open</a>
-				<a id="saveWfBtn" class="btn btn-inverse hide" title="save workflow"><i class="icon-folder-open icon-white"></i> save</a>
+
+				<a id="showWfCompBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="add workflow component"><i class="icon-plus icon-white"></i> component</a>
+
+				<a id="saveWfBtn" class="btn btn-inverse hide" title="save"><i class="icon-folder-open icon-white"></i> save</a>
 				<a id="deleteWfBtn" class="btn btn-inverse hide" title="delete workflow"><i class="icon-ban-circle icon-white"></i> delete</a>
 				<a id="downloadScript" class="btn btn-inverse hide" title="download pig script"><i class="icon-download icon-white"></i> download</a>
 				<a id="runJob" class="btn btn-inverse hide" title="run job"><i class="icon-chevron-right icon-white"></i> run</a>
@@ -173,10 +176,6 @@
 							<button class="btn btn-success" id="selectSubmit" type="submit">add operation</button><br>
 						</form>
 						
-						
-						
-						<!-- quick and dirty hackathon implementation... -->
-						<!--  
 						<form class="form-search hide" id="scriptDialog">
 							<textarea id="scriptTextarea" placeholder="type your script" title="user script"></textarea><br>
 							<button class="btn" id="scriptClear" type="reset">cancel</button>
@@ -184,30 +183,6 @@
 							<button class="btn btn-success hide" id="scriptSubmitChange" type="submit">save changes</button>
 							<button class="btn btn-success" id="scriptSubmit" type="submit">add script</button><br>
 						</form>
-						-->
-						 
-						<div class="modal hide fade" id="UserScriptInputModal">
-						  <div class="modal-header">
-						    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-						    <h3>USER DEFINED SKRIPT</h3>
-						  </div>
-						  <div class="modal-body">
-							<textarea id="scriptTextarea" placeholder="type your script" title="user script"></textarea><br>
-							<button class="btn" id="scriptClear">cancel</button>
-							<button class="btn btn-danger hide delete" id="scriptDelete" type="reset">delete</button>
-							<button class="btn btn-success hide" id="scriptSubmitChange">save changes</button>
-							<button class="btn btn-success" id="scriptSubmit">add script</button><br>
-								
-								<!-- 
-						  	<form class="form-search hide" id="scriptDialog">
-							</form>
-							 -->
-							 
-							 
-						  </div>
-						</div>
-						<!-- ........................................... -->
-						
 					</div>
 					
 					<!-- input error dialog -->
@@ -282,6 +257,22 @@
 	  <div class="modal-footer"></div>
 	</div>
 	
+	<div class="modal hide fade" id="saveNameCompModal">
+	  <div class="modal-header">
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+	    <h3>Saving workflow component...</h3>
+	  </div>
+	  <div class="modal-body">
+	    Please type a workflow component name:
+	    <form id="saveWorkflowComp">
+	    	<input class="span5" id="saveCompDialogInput" name="name" type="text" placeholder="workflow component name" title="workflow component name" value="" required><br>
+		    <button type="reset" class="btn" data-dismiss="modal" aria-hidden="true">cancel</button>
+		    <button type="submit" class="btn btn-success" id="saveWfCompFormBtn">save</button>
+	    </form>
+	  </div>
+	  <div class="modal-footer"></div>
+	</div>
+	
 	<div class="modal hide fade" id="saveCheckModal">
 	  <div class="modal-header">
 	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
@@ -351,6 +342,21 @@
 	  <div class="modal-footer">
 	    <a type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">no</a>
 	    <a type="button" class="btn btn-success" id="removeWfBtn">yes</a>
+	  </div>
+	</div>
+	
+	<div class="modal hide fade" id="saveWfOrWfCoponentModal">
+	  <div class="modal-header">
+	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+	    <h3>Save options:</h3>
+	  </div>
+	  <div class="modal-body">
+	    <p id="saveMsg">Do you want to save the current state as workflow or as reusable workflow component?
+	    Workflow components can be added within multiple workflows via the add component button on the top.</p>
+	  </div>
+	  <div class="modal-footer">
+	    <a type="button" class="btn" id="saveAsWfComp">as workflow component</a>
+	    <a type="button" class="btn btn-inverse" id="saveAsWf" data-dismiss="modal" aria-hidden="true">as workflow</a>
 	  </div>
 	</div>
 

@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import piggene.serialisation.Workflow;
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
@@ -19,8 +19,8 @@ public class CloudgeneYaml {
 		final ArrayList<Parameter> inputs = new ArrayList<Parameter>();
 		final ArrayList<Parameter> outputs = new ArrayList<Parameter>();
 
-		final ArrayList<WorkflowComponent> workflowDefinition = workflow.getWorkflow();
-		for (final WorkflowComponent wfc : workflowDefinition) {
+		final ArrayList<SingleWorkflowElement> workflowDefinition = workflow.getWorkflow();
+		for (final SingleWorkflowElement wfc : workflowDefinition) {
 			if (wfc.getOperation().equals("LOAD")) {
 				parameters = appendParameter(parameters, wfc.getInput());
 				inputs.add(createInputParameter(wfc.getInput()));

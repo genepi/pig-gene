@@ -240,7 +240,6 @@ function getFormData(dialog) {
  */
 function processInputFormCancellation(button) {
 	if(button.hasClass('delete')) {
-		$('#UserScriptInputModal').modal('hide');
 		showSecurityAlertRemoveLine();
 		return;
 	}
@@ -513,6 +512,12 @@ function processRunJobRequest(e) {
  * @param fileName
  */
 function loadDeleteWfRequest(fileName) {
+	//TODO
+	if($('#showWfCompBtn').hasClass('showWfCompBtnPopover')) {
+		processLoadDeleteWfRequest(fileName);
+		return;
+	}
+	
 	if(!$('#saveState').hasClass('saved') && $('#showWfBtn').hasClass('showWfBtnPopover')) {
 		$('#discardFilename').html($('#workflowName').html());
 		$('#discardFilename').addClass('load');
@@ -533,10 +538,14 @@ function processLoadDeleteWfRequest(fileName) {
 	if($('#showWfBtn').hasClass('showWfBtnPopover')) {
 		$('#workflowName').removeClass('new');
 		loadWorkflow(fileName);
-		$('#downloadScript').removeAttr('download').removeAttr('href');
-		$('#runJob').removeAttr('target').removeAttr('href');
+		removeDownloadAndRunAttr();
 		hideShowWfBtnPopover();
 		resetDescription();
+	} else if($('#showWfCompBtn').hasClass('showWfCompBtnPopover')) {
+		//TODO
+		loadWfComponent(fileName);
+		removeDownloadAndRunAttr();
+		hideShowWfCompBtnPopover();
 	} else {
 		showSecurityAlertRemoveWorkflow(fileName);
 	}

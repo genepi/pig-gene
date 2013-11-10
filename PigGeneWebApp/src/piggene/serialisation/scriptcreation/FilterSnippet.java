@@ -1,6 +1,6 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * FilterSnippet class is used to return a "FILTER" statement based on the
@@ -11,7 +11,7 @@ import piggene.serialisation.WorkflowComponent;
  */
 public class FilterSnippet extends PigSnippet {
 
-	public FilterSnippet(final WorkflowComponent comp) {
+	public FilterSnippet(final SingleWorkflowElement comp) {
 		super(comp);
 	}
 

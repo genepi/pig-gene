@@ -1,6 +1,6 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * StoreSnippet class is used to return a "STORE" statement based on the
@@ -11,7 +11,7 @@ import piggene.serialisation.WorkflowComponent;
  */
 public class StoreSnippet extends PigSnippet {
 
-	public StoreSnippet(final WorkflowComponent comp) {
+	public StoreSnippet(final SingleWorkflowElement comp) {
 		super(comp);
 	}
 

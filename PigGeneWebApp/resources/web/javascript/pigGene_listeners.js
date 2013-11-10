@@ -50,36 +50,11 @@ $(document).ready(function() {
 		processOperationLinkRequest('select');
 	});
 	$('#userScriptLink').on('click', function() {
-//		setFormContainerOperation('user defined script');
-//		setOperationRelatedHelpContent('user defined script');
+		setFormContainerOperation('user defined script');
+		setOperationRelatedHelpContent('user defined script');
 		showScriptDialogSlow();
-//		modifyContainerHeight();
+		modifyContainerHeight();
 	});
-	
-	
-	
-	
-	/* quick and dirty hackathon implementation... */
-	$('#scriptClear').on('click', function() {
-		$('#scriptTextarea').val('');
-		hideScriptDialogSlow();
-	});
-	
-	$('#scriptSubmit').on('click', function() {
-		processScriptOperation();
-		hideScriptDialogSlow();
-	});
-	
-	$('#scriptSubmitChange').on('click', function() {
-		$('#scriptSubmitChange').addClass('modification');
-		processScriptOperation();
-		$('#scriptSubmitChange').removeClass('modification');
-		hideScriptDialogSlow();
-	});
-	
-	/*	............	*/
-	
-	
 	
 	
 	/**
@@ -229,7 +204,20 @@ $(document).ready(function() {
 	 * Function shows the save dialog.
 	 */
 	$('#saveWfBtn').on('click', function() {
+		//TODO: vorschalten einer Abfrage... soll als comp oder als wf gespeichert werden
+		//open new modal
+		showSaveOptionModal();
+		//processSaveWfRequest();
+	});
+	
+	//TODO
+	$('#saveAsWf').on('click', function() {
 		processSaveWfRequest();
+	});
+	
+	//TODO
+	$('#saveAsWfComp').on('click', function() {
+		processSaveWfCompRequest();
 	});
 	
 	
@@ -242,6 +230,12 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	//TODO
+	$('#saveWorkflowComp').on('submit', function() {
+		saveWfComp();
+		return false;
+	});
+	
 	
 	/**
 	 * Function is used to save the workflow after the user clicked
@@ -249,7 +243,12 @@ $(document).ready(function() {
 	 */
 	$('#overrideBtn').on('click', function() {
 		$('#saveCheckModal').modal('hide');
-		saveWorkflow($('#overrideFilename').html());
+		if($('#saveCheckModal').hasClass('component')) {
+			$('#saveCheckModal').removeClass('component');
+			saveWorkflowComp($('#overrideFilename').html());
+		} else {
+			saveWorkflow($('#overrideFilename').html());
+		}
 	});
 	
 	
@@ -332,7 +331,14 @@ $(document).ready(function() {
 	 * If a popover gets displayed - the existing workflows are fetched from the server.
 	 */
 	$('#showWfBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
+		$('#showWfCompBtn').popover('hide').removeClass('pop');
 		handleWorkflowRequest('#showWfBtn');
+	});
+	
+	//TODO
+	$('#showWfCompBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
+		$('#showWfBtn').popover('hide').removeClass('pop');
+		handleWfCompRequest('#showWfCompBtn');
 	});
 	
 	/**

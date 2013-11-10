@@ -1,0 +1,10 @@
+!piggene.serialisation.WorkflowComponent
+name: registerComponent
+wfComponent: 
+-  comment: '-'
+   input: standard.jar
+   input2: '-'
+   operation: REGISTER
+   options: '-'
+   options2: '-'
+   relation: '-'

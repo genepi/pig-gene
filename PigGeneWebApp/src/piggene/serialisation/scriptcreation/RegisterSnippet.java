@@ -1,6 +1,6 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * RegisterSnippet class is used to return a "REGISTER" statement based on the
@@ -11,7 +11,7 @@ import piggene.serialisation.WorkflowComponent;
  */
 public class RegisterSnippet extends PigSnippet {
 
-	public RegisterSnippet(final WorkflowComponent comp) {
+	public RegisterSnippet(final SingleWorkflowElement comp) {
 		super(comp);
 	}
 

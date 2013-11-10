@@ -123,9 +123,8 @@ function showInputDialogSlow(dialog) {
  * Function displays the script dialog.
  */
 function showScriptDialogSlow() {
-	$('#UserScriptInputModal').modal('show');
-//	$('#scriptDialog').show('slow');
-//	$('#scriptDialog').removeClass('hide');
+	$('#scriptDialog').show('slow');
+	$('#scriptDialog').removeClass('hide');
 }
 
 
@@ -133,11 +132,9 @@ function showScriptDialogSlow() {
  * Function hides the script dialog.
  */
 function hideScriptDialogSlow() {
-	$('#UserScriptInputModal').modal('hide');
-//	$('#scriptTextarea').val('');
-//	$('#scriptModal').hide('slow');
-//	$('#scriptDialog').hide('slow');
-//	$('#scriptDialog').addClass('hide');
+	$('#scriptTextarea').val('');
+	$('#scriptDialog').hide('slow');
+	$('#scriptDialog').addClass('hide');
 }
 
 
@@ -415,14 +412,9 @@ function displayCorrespondingContainerInfo() {
 		hideScriptDialogSlow();
 		setOperationDialog('select');
 	} else if(data.operation=='SCRIPT') {
-		resetDialogsAndHighlightings();
 		$('#scriptTextarea').val(data.options);
-		$('#scriptSubmit').addClass('hide');
-		$('#scriptDelete').removeClass('hide');
-		$('#scriptSubmitChange').removeClass('hide');
-		showScriptDialogSlow();
-//		setOperationDialog('script');
-//		setFormContainerOperation('user defined script');
+		setOperationDialog('script');
+		setFormContainerOperation('user defined script');
 	}
 	
 	if($('#helpBtn').hasClass('btn-info')) {
@@ -484,16 +476,27 @@ function showDiscardChangesAlert() {
 	$('#discardChangesCheckModal').modal('show');
 }
 
+//TODO
+function showSaveOptionModal() {
+	$('#saveWfOrWfCoponentModal').modal('show');
+}
+
+//TODO
+function hideSaveOptionModal() {
+	$('#saveWfOrWfCoponentModal').modal('hide');
+}
 
 /**
  * Function is used to show a security alert to check if the user
  * really wants to override a workflow with the given name.
  * @param fileName
  */
-function showSecurityAlert(fileName) {
+function showSecurityAlert(fileName, type) {
 	$('#overrideFilename').html(fileName);
+	if(type == 'component') {
+		$('#saveCheckModal').addClass(type);
+	}
 	$('#saveCheckModal').modal('show');
-	
 }
 
 
@@ -570,6 +573,11 @@ function hideLineDetailDialog() {
  */
 function hideShowWfBtnPopover() {
 	$('#showWfBtn').popover('hide').removeClass('pop').removeClass('showWfBtnPopover');
+}
+
+//TODO
+function hideShowWfCompBtnPopover() {
+	$('#showWfCompBtn').popover('hide').removeClass('pop').removeClass('showWfCompBtnPopover');
 }
 
 
@@ -653,6 +661,10 @@ function showSaveNameModal() {
 	$('#saveNameModal').modal('show');
 }
 
+//TODO
+function showSaveNameCompModal() {
+	$('#saveNameCompModal').modal('show');
+}
 
 /**
  * Function is used to implement a toggle functionality
@@ -774,4 +786,10 @@ function resetLoadSpecifier() {
 	$('#stdFileBtn').addClass('active');
 	$('#refFileBtn').removeClass('active');
 	$('#seqPigBtn').removeClass('active');
+}
+
+//TODO
+function removeDownloadAndRunAttr() {
+	$('#downloadScript').removeAttr('download').removeAttr('href');
+	$('#runJob').removeAttr('target').removeAttr('href');
 }

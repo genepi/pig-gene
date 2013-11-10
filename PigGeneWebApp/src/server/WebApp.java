@@ -13,6 +13,10 @@ import piggene.resources.DeletionService;
 import piggene.resources.DeserialisationProcessor;
 import piggene.resources.ScriptProvider;
 import piggene.resources.SerialisationProcessor;
+import piggene.resources.WorkflowCompDeserialisationProcessor;
+import piggene.resources.WorkflowComponentPresenter;
+import piggene.resources.WorkflowCompSerialisationProcessor;
+import piggene.resources.WorkflowComponentFinder;
 import piggene.resources.WorkflowFinder;
 import piggene.resources.WorkflowPresenter;
 
@@ -39,10 +43,14 @@ public class WebApp extends Application {
 
 		// routes
 		router.attach("/ser", SerialisationProcessor.class);
+		router.attach("/serComp", WorkflowCompSerialisationProcessor.class);
 		router.attach("/ld", DeserialisationProcessor.class);
+		router.attach("/ldComp", WorkflowCompDeserialisationProcessor.class);
 		router.attach("/del", DeletionService.class);
 		router.attach("/wf", WorkflowPresenter.class);
+		router.attach("/comp", WorkflowComponentPresenter.class);
 		router.attach("/ex", WorkflowFinder.class);
+		router.attach("/exComp", WorkflowComponentFinder.class);
 		router.attach("/dwld/{filename}", ScriptProvider.class);
 
 		// clap protocol for usage in jar files

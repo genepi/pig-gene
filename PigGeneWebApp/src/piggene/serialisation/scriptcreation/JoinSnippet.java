@@ -1,6 +1,6 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * JoinSnippet class is used to return a "JOIN" statement based on the specified
@@ -11,7 +11,7 @@ import piggene.serialisation.WorkflowComponent;
  */
 public class JoinSnippet extends PigSnippet {
 
-	public JoinSnippet(final WorkflowComponent comp) {
+	public JoinSnippet(final SingleWorkflowElement comp) {
 		super(comp);
 	}
 

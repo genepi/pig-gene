@@ -12,38 +12,27 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
-import piggene.exceptions.UnpossibleWorkflowFileOperation;
 import piggene.response.ServerResponseObject;
-import piggene.serialisation.UntouchableFiles;
-import piggene.serialisation.WorkflowFiles;
+import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.WorkflowComponentReader;
+import piggene.serialisation.Workflow;
+import piggene.serialisation.WorkflowReader;
 
-/**
- * WorkflowFinder class is used to check if a specified workflow-file exists.
- * 
- * @author Clemens Banas
- * @date April 2013
- */
-public class WorkflowFinder extends ServerResource {
+public class WorkflowCompDeserialisationProcessor extends ServerResource {
 
 	@Override
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		String filename = "";
-
+		
 		try {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
-			filename = representant.getJsonObject().getString("filename");
-			if (UntouchableFiles.list.contains(filename)) {
-				throw new UnpossibleWorkflowFileOperation();
-			}
-		} catch (final UnpossibleWorkflowFileOperation e) {
-			obj.setSuccess(false);
-			obj.setMessage("It is impossible to override an example workflow!");
-			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+			final String filename = representant.getJsonObject().getString("filename");
+			final WorkflowComponent component = WorkflowComponentReader.read(filename);
+			obj.setData(component);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
-			obj.setMessage("An error occured while checking if the filename is already used.");
+			obj.setMessage("An error occured while loading the workflow component.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final JSONException e) {
 			obj.setSuccess(false);
@@ -53,11 +42,6 @@ public class WorkflowFinder extends ServerResource {
 
 		obj.setSuccess(true);
 		obj.setMessage("success");
-		if (WorkflowFiles.doesWorkflowFileExist(filename)) {
-			obj.setData(Boolean.TRUE);
-		} else {
-			obj.setData(Boolean.FALSE);
-		}
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 

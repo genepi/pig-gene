@@ -12,13 +12,13 @@ import java.util.ArrayList;
 public class Workflow {
 	private String name;
 	private String description;
-	private ArrayList<WorkflowComponent> workflow;
+	private ArrayList<SingleWorkflowElement> workflow;
 
 	public Workflow() {
 
 	}
 
-	public Workflow(final String name, final String description, final ArrayList<WorkflowComponent> workflow) {
+	public Workflow(final String name, final String description, final ArrayList<SingleWorkflowElement> workflow) {
 		this.name = name;
 		this.description = description;
 		this.workflow = workflow;
@@ -32,7 +32,7 @@ public class Workflow {
 		this.description = description;
 	}
 
-	public void setWorkflow(final ArrayList<WorkflowComponent> workflow) {
+	public void setWorkflow(final ArrayList<SingleWorkflowElement> workflow) {
 		this.workflow = workflow;
 	}
 
@@ -44,7 +44,7 @@ public class Workflow {
 		return description;
 	}
 
-	public ArrayList<WorkflowComponent> getWorkflow() {
+	public ArrayList<SingleWorkflowElement> getWorkflow() {
 		return workflow;
 	}
 

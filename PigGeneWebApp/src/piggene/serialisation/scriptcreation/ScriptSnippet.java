@@ -1,6 +1,6 @@
 package piggene.serialisation.scriptcreation;
 
-import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.SingleWorkflowElement;
 
 /**
  * ScriptSnippet class is used to return a USER SCRIPT based on the specified
@@ -11,7 +11,7 @@ import piggene.serialisation.WorkflowComponent;
  */
 public class ScriptSnippet extends PigSnippet {
 
-	public ScriptSnippet(final WorkflowComponent comp) {
+	public ScriptSnippet(final SingleWorkflowElement comp) {
 		super(comp);
 	}
 

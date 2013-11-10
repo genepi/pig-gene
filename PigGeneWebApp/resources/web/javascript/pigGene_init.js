@@ -88,6 +88,11 @@ function processSaveWfRequest() {
 	showSaveNameModal();
 }
 
+//TODO
+function processSaveWfCompRequest() {
+	hideSaveOptionModal();
+	showSaveNameCompModal();
+}
 
 /**
  * Function is used to initialize the data loaded from the server.
@@ -99,6 +104,13 @@ function initializeLoadedWorkflow(data) {
 	workflow = data.workflow;
 }
 
+//TODO
+function addWorkflowComponent(data) {
+	if(workflow.length == 0) {
+		$('#workflowName').html('unnamed');
+	}
+	workflow = workflow.concat(data.wfComponent);
+}
 
 /**
  * Function is used to display the delete button, the save button, the download button

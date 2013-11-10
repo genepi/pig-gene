@@ -12,18 +12,12 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
-import piggene.exceptions.UnpossibleWorkflowFileOperation;
+import piggene.exceptions.UnpossibleWorkflowComponentFileOperation;
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.UntouchableFiles;
 import piggene.serialisation.WorkflowFiles;
 
-/**
- * WorkflowFinder class is used to check if a specified workflow-file exists.
- * 
- * @author Clemens Banas
- * @date April 2013
- */
-public class WorkflowFinder extends ServerResource {
+public class WorkflowComponentFinder extends ServerResource {
 
 	@Override
 	@Post
@@ -35,11 +29,11 @@ public class WorkflowFinder extends ServerResource {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
 			filename = representant.getJsonObject().getString("filename");
 			if (UntouchableFiles.list.contains(filename)) {
-				throw new UnpossibleWorkflowFileOperation();
+				throw new UnpossibleWorkflowComponentFileOperation();
 			}
-		} catch (final UnpossibleWorkflowFileOperation e) {
+		} catch (final UnpossibleWorkflowComponentFileOperation e) {
 			obj.setSuccess(false);
-			obj.setMessage("It is impossible to override an example workflow!");
+			obj.setMessage("It is impossible to override an example workflow component!");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
@@ -53,7 +47,7 @@ public class WorkflowFinder extends ServerResource {
 
 		obj.setSuccess(true);
 		obj.setMessage("success");
-		if (WorkflowFiles.doesWorkflowFileExist(filename)) {
+		if (WorkflowFiles.doesWorkflowComponentFileExist(filename)) {
 			obj.setData(Boolean.TRUE);
 		} else {
 			obj.setData(Boolean.FALSE);
