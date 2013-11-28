@@ -1,5 +1,5 @@
 /** usage:
-  * pig -param fastq=/home/clemens/hadoop/input/Exome1_1.fastq seqPigLoaderTest.pig
+  * pig -param input=/home/clemens/hadoop/input/HG00006.chrom20.bam seqPig-bamLoader.pig
   */
 
 REGISTER SeqPig.jar;
@@ -10,9 +10,8 @@ REGISTER variant-1.93.jar;
 REGISTER tribble-1.93.jar;
 REGISTER commons-jexl-2.1.1.jar;
 
-R1 = LOAD '$fastq' USING fi.aalto.seqpig.io.FastqLoader();
+R1 = LOAD '$input' USING fi.aalto.seqpig.io.BamLoader('yes');
 
-FastQout = LIMIT R1 3;
+BAMout = LIMIT R1 3;
 
-DUMP FastQout;
 DUMP BAMout;
