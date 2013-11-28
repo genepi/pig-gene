@@ -73,7 +73,7 @@ function ajaxRequestSaveWorkflow(filename) {
 	var data = '{"filename":"' + filename + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'ex',
+	    url: serverAddressPigGene + 'exist/wf',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -100,7 +100,7 @@ function ajaxRequestSaveWorkflowComp(filename) {
 	var data = '{"filename":"' + filename + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'exComp',
+	    url: serverAddressPigGene + 'exist/comp',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -131,7 +131,7 @@ function ajaxRequestDeleteWfAlreadyExists(filename) {
 	var data = '{"filename":"' + filename + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'ex',
+	    url: serverAddressPigGene + 'exist/wf',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -170,7 +170,7 @@ function saveWorkflow(filename) {
 	
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'ser',
+	    url: serverAddressPigGene + 'save/wf',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -213,7 +213,7 @@ function saveWorkflowComp(filename) {
 	
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'serComp',
+	    url: serverAddressPigGene + 'save/comp',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -244,7 +244,7 @@ function loadWorkflow(fileName) {
 		var data = '{"filename":"' + fileName + '"}';
 		$.ajax({
     		type: 'POST',
-    	    url: serverAddressPigGene + 'ld',
+    	    url: serverAddressPigGene + 'ld/wf',
     	    data: data,
     	    dataType:'json',
     	    success: function(response) {
@@ -306,7 +306,7 @@ function loadWfComponent(fileName) {
 	var data = '{"filename":"' + fileName + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'ldComp',
+	    url: serverAddressPigGene + 'ld/comp',
 	    data: data,
 	    dataType:'json',
 	    success: function(response) {
@@ -350,7 +350,7 @@ function handleWorkflowRequest(buttonName) {
 	} else {
 		$.ajax({
     		type: 'POST',
-    	    url: serverAddressPigGene + 'wf',
+    	    url: serverAddressPigGene + 'get/wf',
     	    data: null,
     	    dataType:'json',
     	    success: function(response) {
@@ -378,7 +378,7 @@ function handleWfCompRequest(buttonName) {
 	} else {
 		$.ajax({
     		type: 'POST',
-    	    url: serverAddressPigGene + 'comp',
+    	    url: serverAddressPigGene + 'get/comp',
     	    data: null,
     	    dataType:'json',
     	    success: function(response) {

@@ -11,7 +11,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import piggene.response.ServerResponseObject;
-import piggene.serialisation.WorkflowFiles;
+import piggene.serialisation.PersistentFiles;
 
 /**
  * WorkflowPresenter class is used to collect the names of all saved workflow
@@ -26,11 +26,18 @@ public class WorkflowPresenter extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		final ArrayList<String> filenames = WorkflowFiles.getAllWorkflowFileNames();
+		ArrayList<String> filenames = null;
+		final String type = getRequest().getAttributes().get("type").toString();
+
+		if (type.equals("wf")) {
+			filenames = PersistentFiles.getAllWorkflowFileNames();
+		} else {
+			filenames = PersistentFiles.getAllWorkflowComponentFileNames();
+		}
 
 		if (filenames == null) {
 			obj.setSuccess(false);
-			obj.setMessage("There are no existing workflows.");
+			obj.setMessage("There are no representations saved.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 

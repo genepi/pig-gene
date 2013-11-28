@@ -14,8 +14,8 @@ import org.restlet.resource.ServerResource;
 
 import piggene.exceptions.UnpossibleWorkflowFileOperation;
 import piggene.response.ServerResponseObject;
+import piggene.serialisation.PersistentFiles;
 import piggene.serialisation.UntouchableFiles;
-import piggene.serialisation.WorkflowFiles;
 
 /**
  * WorkflowFinder class is used to check if a specified workflow-file exists.
@@ -29,7 +29,8 @@ public class WorkflowFinder extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		String filename = "";
+		final String type = getRequest().getAttributes().get("type").toString();
+		String filename = null;
 
 		try {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
@@ -39,7 +40,7 @@ public class WorkflowFinder extends ServerResource {
 			}
 		} catch (final UnpossibleWorkflowFileOperation e) {
 			obj.setSuccess(false);
-			obj.setMessage("It is impossible to override an example workflow!");
+			obj.setMessage("It is impossible to override an example!");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
@@ -53,12 +54,12 @@ public class WorkflowFinder extends ServerResource {
 
 		obj.setSuccess(true);
 		obj.setMessage("success");
-		if (WorkflowFiles.doesWorkflowFileExist(filename)) {
+
+		if (type.equals("wf") && PersistentFiles.doesWorkflowFileExist(filename) || type.equals("comp") && PersistentFiles.doesWorkflowComponentFileExist(filename)) {
 			obj.setData(Boolean.TRUE);
 		} else {
 			obj.setData(Boolean.FALSE);
 		}
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
-
 }

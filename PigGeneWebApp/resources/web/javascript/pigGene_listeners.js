@@ -331,13 +331,13 @@ $(document).ready(function() {
 	 * If a popover gets displayed - the existing workflows are fetched from the server.
 	 */
 	$('#showWfBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
-		$('#showWfCompBtn').popover('hide').removeClass('pop');
+		$('#showWfCompBtn').popover('hide').removeClass('pop').removeClass('showWfCompBtnPopover');
 		handleWorkflowRequest('#showWfBtn');
 	});
 	
 	//TODO
 	$('#showWfCompBtn').popover({trigger: 'manual', html: true, placement: 'bottom'}).click(function() {
-		$('#showWfBtn').popover('hide').removeClass('pop');
+		$('#showWfBtn').popover('hide').removeClass('pop').removeClass('showWfBtnPopover');
 		handleWfCompRequest('#showWfCompBtn');
 	});
 	

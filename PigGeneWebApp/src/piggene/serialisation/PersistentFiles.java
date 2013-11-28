@@ -4,13 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * WorkflowFiles class is used for operations on the workflow definition files
- * saved on the file system.
+ * PersistentFiles class is used for operations on the workflow and workflow
+ * component definition files saved on the file system.
  * 
  * @author Clemens Banas
  * @date April 2013
  */
-public class WorkflowFiles {
+public class PersistentFiles {
 	private static final String YAML_PATH_WORKFLOW = "workflowDefs/";
 	private static final String YAML_PATH_WORKFLOWCOMPONENT = "workflowComp/";
 	private static final String YAML_PATH_CLOUDGENE = "apps/piggene/";

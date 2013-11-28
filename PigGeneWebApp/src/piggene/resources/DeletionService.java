@@ -15,7 +15,7 @@ import org.restlet.resource.ServerResource;
 import piggene.exceptions.UnpossibleWorkflowFileOperation;
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.UntouchableFiles;
-import piggene.serialisation.WorkflowFiles;
+import piggene.serialisation.PersistentFiles;
 
 /**
  * DeletionService class is used to delete a resource.
@@ -38,7 +38,7 @@ public class DeletionService extends ServerResource {
 			if (UntouchableFiles.list.contains(filename)) {
 				throw new UnpossibleWorkflowFileOperation();
 			}
-			final boolean deleted = WorkflowFiles.deleteFile(filename);
+			final boolean deleted = PersistentFiles.deleteFile(filename);
 			if (deleted) {
 				obj.setSuccess(true);
 				obj.setMessage("success");

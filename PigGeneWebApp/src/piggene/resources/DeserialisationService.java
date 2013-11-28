@@ -14,29 +14,37 @@ import org.restlet.resource.ServerResource;
 
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.Workflow;
+import piggene.serialisation.WorkflowComponent;
+import piggene.serialisation.WorkflowComponentReader;
 import piggene.serialisation.WorkflowReader;
 
 /**
- * DeserialisationProcessor is used to deserialize a saved workflow definition.
+ * DeserialisationService is used to deserialize a saved workflow definition.
  * 
  * @author Clemens Banas
  * @date April 2013
  */
-public class DeserialisationProcessor extends ServerResource {
+public class DeserialisationService extends ServerResource {
 
 	@Override
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
+		final String type = getRequest().getAttributes().get("type").toString();
 
 		try {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
 			final String filename = representant.getJsonObject().getString("filename");
-			final Workflow workflow = WorkflowReader.read(filename);
-			obj.setData(workflow);
+			if (type.equals("wf")) {
+				final Workflow workflow = WorkflowReader.read(filename);
+				obj.setData(workflow);
+			} else {
+				final WorkflowComponent component = WorkflowComponentReader.read(filename);
+				obj.setData(component);
+			}
 		} catch (final IOException e) {
 			obj.setSuccess(false);
-			obj.setMessage("An error occured while loading the workflow.");
+			obj.setMessage("An error occured while loading the data.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final JSONException e) {
 			obj.setSuccess(false);

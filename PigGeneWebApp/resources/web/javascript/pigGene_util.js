@@ -751,7 +751,7 @@ function inputLongEnough(input) {
 function updateTypeaheadSaved() {
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'wf',
+	    url: serverAddressPigGene + 'get/wf',
 	    data: null,
 	    dataType:'json',
 	    success: function(response) {
