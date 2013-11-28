@@ -15,8 +15,6 @@ import org.restlet.resource.ServerResource;
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.WorkflowComponent;
 import piggene.serialisation.WorkflowComponentReader;
-import piggene.serialisation.Workflow;
-import piggene.serialisation.WorkflowReader;
 
 public class WorkflowCompDeserialisationProcessor extends ServerResource {
 
@@ -24,7 +22,7 @@ public class WorkflowCompDeserialisationProcessor extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		
+
 		try {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
 			final String filename = representant.getJsonObject().getString("filename");

@@ -311,7 +311,7 @@ function loadWfComponent(fileName) {
 	    dataType:'json',
 	    success: function(response) {
 	    	if(response.success) {
-	    		addWorkflowComponent(response.data);
+	    		addWorkflowComponent(response.data.wfComponent);
 				$('#saveState').removeClass('saved');
 				toggleSaveStateVisualisation();
 				initializeTypeaheadRelations(); //modify

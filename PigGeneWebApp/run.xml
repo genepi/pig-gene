@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?> 
 <project default="copy_jar_file" name="" >
     
-	<property name="cloud.host" value="138.232.66.81" />
-	<property name="cloud.username" value="hadoop" />
-	<property name="cloud.dir" value="/home/hadoop/cloudgene/apps/piggene" />
+	<property name="cloud.host" value="genepi-calc.uibk.ac.at" />
+	<property name="cloud.username" value="clemens" />
+	<property name="cloud.dir" value="/home/clemens/piggene" />
 	<property name="local.pig" value="apps/piggene" />
 	<property name="app.jar" value="pigGene.jar" />
 	<property name="datafu.jar" value="datafu-0.0.9.jar" />
 	<property name="seqpig.jar" value="SeqPig.jar" />
-	<property name="picard.jar" value="picard-1.76.jar" />
-	<property name="sam.jar" value="sam-1.76.jar" />
-	<property name="bam.jar" value="hadoop-bam-5.1.jar" />
+	<property name="hadoopbam.jar" value="hadoop-bam-6.0.jar" />
+	<property name="sam.jar" value="sam-1.93.jar" />
+	<property name="picard.jar" value="picard-1.93.jar" />
+	<property name="variant.jar" value="variant-1.93.jar" />
+	<property name="tribble.jar" value="tribble-1.93.jar" />
+	<property name="jexl.jar" value="commons-jexl-2.1.1.jar" />
 	
 	<target name="compile">
     	<javac srcdir="src" destdir="bin" classpath="" target="1.6" includeantruntime="false">
@@ -34,14 +37,20 @@
 		<scp file="../PigGene-Scripts/dist/${app.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
 		<echo>copy data-fu jar file...</echo>
 		<scp file="lib/${datafu.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
-		<echo>copy SeqPig jar file...</echo>
+		<echo>copy seqpig jar file...</echo>
 		<scp file="lib/${seqpig.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
-		<echo>copy picard jar file...</echo>
-		<scp file="lib/${picard.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<echo>copy hadoop bam jar file...</echo>
+		<scp file="lib/${hadoopbam.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
 		<echo>copy sam jar file...</echo>
 		<scp file="lib/${sam.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
-		<echo>copy bam jar file...</echo>
-		<scp file="lib/${bam.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<echo>copy picard jar file...</echo>
+		<scp file="lib/${picard.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<echo>copy variant jar file...</echo>
+		<scp file="lib/${variant.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<echo>copy tribble jar file...</echo>
+		<scp file="lib/${tribble.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
+		<echo>copy jexl jar file...</echo>
+		<scp file="lib/${jexl.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
 		<echo>copy yaml- and pig-files...</echo>
 		<scp todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"><fileset dir="${local.pig}"></fileset></scp>
 	</target>

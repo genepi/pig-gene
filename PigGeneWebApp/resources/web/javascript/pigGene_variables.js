@@ -36,3 +36,7 @@ var forceRun = false;
 
 //saves the name of the workflow that should be loaded/deleted
 var loadDeleteWorkflowName = '';
+
+//stores the current number of component lines - serves as reference
+//to rename the relation names of newly added components
+var componentLineCounter = 1;

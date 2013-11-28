@@ -116,12 +116,12 @@ function processStoreOperation() {
 	}
 	
 	if($('#storeSubmitChange').hasClass('modification')) {
-		var name = generateOutputName('mod');
+		var name = generateOutputName('mod',0);
 		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm};
 		resetOperationDialog('store');
 	} else {
-		var name = generateOutputName('-');
+		var name = generateOutputName('-',0);
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm});
 	}
 	finalizeSubmit('#storeDialog');
@@ -649,11 +649,11 @@ function generateInputName(opt) {
 /**
  * Function dynamically generates an output name (used for STORE operations).
  */
-function generateOutputName(opt) {
+function generateOutputName(opt,componentStoreOps) {
 	var outputPrefix = 'output';
 	var number = 0;
 	if(opt != 'mod') {
-		number = countNumberOfStoreOperations() + 1;
+		number = countNumberOfStoreOperations() + componentStoreOps + 1;
 	} else {
 		if(workflow != null && workflow != []) {
 			for(var i=0; i<highlightedRowIndex; i++) {

@@ -29,11 +29,12 @@ function setMissingFormValueText(textfield) {
 
 /**
  * Function is used to reset the workflow to the behavior it had in the beginning. 
- * The workflow variable is cleared and all the operation dialogs get set to their
- * initial behavior.
+ * The workflow variable is cleared, the componentLineCounter variable is resetted, 
+ * and all the operation dialogs get set to their initial behavior.
  */
 function resetWorkflow() {
 	workflow = [];
+	componentLineCounter = 1;
 	resetTypeaheadRelations();
 	resetWorkflowButtonsAndTableContent();
 	setSaveStateSavedAndDisplayStatus();
@@ -95,21 +96,70 @@ function processSaveWfCompRequest() {
 }
 
 /**
- * Function is used to initialize the data loaded from the server.
+ * Function is used to initialize the data loaded from the server and to
+ * reset the componentLineCounter variable to it's initial value.
  * @param data
  */
 function initializeLoadedWorkflow(data) {
+	componentLineCounter = 1;
 	description = data.description;
 	resetDescription();
 	workflow = data.workflow;
 }
 
 //TODO
-function addWorkflowComponent(data) {
+function addWorkflowComponent(component) {
 	if(workflow.length == 0) {
 		$('#workflowName').html('unnamed');
 	}
-	workflow = workflow.concat(data.wfComponent);
+	workflow = workflow.concat(renameComponentRelationNames(component));
+}
+
+//TODO
+function renameComponentRelationNames(component) {
+	if(component != null || component != undefined || component.lenght != 0) {
+		//changed used relation names within operations
+		for(var i=component.length-1; i>=0; i--) {
+			for(var j=i; j>=0; j--) {
+				var in1changed = false;
+				var in2changed = false;
+				if(!in1changed && component[i].input == component[j].relation) { 
+					component[i].input = calculatedNewComponentRelationName(j);
+					in1changed = true;
+				} else if(!in2changed && component[i].input2 == component[j].relation) { //join
+					component[i].input2 = calculatedNewComponentRelationName(j);
+					in2changed = true;
+				}
+			}
+		}
+		
+		//change operation result name
+		for(var k=0; k<component.length; k++) {
+			if(component[k].operation == 'STORE') {
+				component[k].relation = generateOutputName('-',countNumberOfComponentStoreOperations(component, k));
+				componentLineCounter++;
+			} else {
+				component[k].relation = 'C' + componentLineCounter++;
+			} 
+		}
+	}
+	return component;
+}
+
+//TODO
+function calculatedNewComponentRelationName(lineNo) {
+	return 'C' + (componentLineCounter+lineNo);
+}
+
+//TODO
+function countNumberOfComponentStoreOperations(component, endIndex) {
+	var number = 0;
+	for(var i=0; i<endIndex; i++) {
+		if(component[i].operation == 'STORE') {
+			number++;
+		}
+	}
+	return number;
 }
 
 /**
