@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="copy_jar_file" name="" >
     
-	<property name="cloud.host" value="138.232.66.81" />
-	<property name="cloud.username" value="hadoop" />
-	<property name="cloud.dir" value="/home/hadoop/clemens/clemens/tests/auswertungen" />
+	<property name="cloud.host" value="genepi-calc.uibk.ac.at" />
+	<property name="cloud.username" value="clemens" />
+	<property name="cloud.dir" value="/home/clemens/piggene" />
 	<property name="local.pig" value="pigFiles" />
-	<property name="hadoop.bin" value="/home/hadoop/hadoop-0.20.2-cdh3u5/bin/hadoop" />
 	<property name="app.jar" value="pigGene.jar" />
 	
 	<target name="compile">

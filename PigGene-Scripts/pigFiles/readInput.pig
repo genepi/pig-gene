@@ -10,5 +10,5 @@
  */
  
 REGISTER pigGene.jar;
-data = LOAD '$input' USING pigGene.PigGeneStorage();
+data = LOAD '$input' USING pigGene.storage.merged.PigGeneStorage();
 DUMP data;
