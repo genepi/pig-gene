@@ -1,63 +1,74 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_jar" name="create server jar-file" >
+<project default="zip" name="" >
     
-	<property name="src.dir" value="src" />
-	<property name="ressource.dir" value="resources" />
-	<property name="lib.dir" value="lib" />
-	<property name="class.dir" value="bin" />
-	<property name="server.jar.dir" value="dist" />
-	<property name="server.jar" value="pigGene-server.jar" />
-	<property name="main-class" value="server.Main" />
+	<property name="app.jar" value="cloudgene-piggene.jar" />
+	<property name="app.main" value="server.Main" />
 	
-	<path id="libraries.path">
-		<fileset dir="${lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-	
-	<target name="clean" description="delete old files">
-		<delete dir="${class.dir}" />
-		<delete dir="${server.jar.dir}" />
-	</target>
-	
-	<target name="compile" description="build class files" depends="clean">
-		<mkdir dir="${class.dir}" />
-		<javac srcdir="${src.dir}:${ressource.dir}" destdir="${class.dir}" target="1.6" includeantruntime="false">
-			<classpath refid="libraries.path" />
-		</javac>
-	</target>
-	
-	<target name="create_jar" depends="compile">
-		<mkdir dir="${server.jar.dir}" />
-		<mkdir dir="${class.dir}/${lib.dir}" />
-		<copy todir="${class.dir}/${lib.dir}" flatten="true">
-			<path refid="libraries.path" />
+	<target name="clean">
+    	<delete dir="dist"></delete>
+    	<mkdir dir="dist"></mkdir>
+		
+    	<mkdir dir="dist/src" />
+		
+		<mkdir dir="dist/src/src" />
+    	<copy todir="dist/src/src">
+    		<fileset dir="src" />
+    	</copy>
+		
+		<mkdir dir="dist/src/resources" />
+		   <copy todir="dist/src/resources">
+		   <fileset dir="resources" />
 		</copy>
+    			
+		<mkdir dir="dist/src/lib" />
+    	<copy todir="dist/src/lib">
+    		<fileset dir="lib" />
+    	</copy>   
 		
-		<manifestclasspath property="manifest.classpath" jarfile="${server.jar}">
-			<classpath refid="libraries.path" />
-		</manifestclasspath>
+        <mkdir dir="dist/jar" />
+		<copy todir="dist/jar">
+		     <fileset dir="files" />
+		        </copy>		
+		<mkdir dir="dist/jar/lib" />
+    	<copy todir="dist/jar/lib">
+    		<fileset dir="lib" />
+    	</copy>    
 		
-		<jar destfile="${server.jar.dir}/${server.jar}" basedir="${class.dir}" >
-			<manifest>
-				<attribute name="Main-Class" value="${main-class}" />
-				<attribute name="Class-Path" value="${manifest.classpath}" />
-			</manifest>
+		<mkdir dir="dist/temp" />
 			
-			<zipfileset excludes="META-INF/*.SF" src="lib/commons-logging-1.1.1.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.restlet.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.restlet.ext.json.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.restlet.ext.jetty.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.restlet.ext.fileupload.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.json.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.util.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.server.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.io.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.http.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.continuations.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.ajp.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="lib/javax.servlet.jar"/>
-		</jar>
+   
 	</target>
 	
+	<target name="compile" depends="clean">
+    	<javac srcdir="src" destdir="dist/temp" classpath="" >
+			<classpath>
+				<fileset dir="lib" />
+			</classpath>
+    	</javac>   	
+    </target>
+
+	
+    <target name="create_jar" depends="compile">   	
+    	<fileset dir="lib" id="lib.dist.fileset">
+    	   <include name="**/*.jar"/>
+    	  </fileset>
+    	  <pathconvert pathsep=" " property="compile.classpath" refid="lib.dist.fileset" dirsep="/" >
+    	   <map from="${basedir}\lib\" to="lib/" />
+    	  </pathconvert>
+    	
+    	
+        <jar destfile="dist/jar/${app.jar}" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="${app.main}"/>
+            	<attribute name="Class-Path" value=". ${compile.classpath}"/>
+            </manifest>
+            <fileset dir="bin"/>
+        </jar>
+    </target>
+
+	
+	<target name="zip" depends="create_jar">
+		<zip zipfile="dist/cloudgene-piggene-0.1.0.zip" basedir="dist/jar" whenempty="create" />
+		<zip zipfile="dist/cloudgene-piggene-src-0.1.0.zip" basedir="dist/src" whenempty="create" />
+	</target>
 </project>
