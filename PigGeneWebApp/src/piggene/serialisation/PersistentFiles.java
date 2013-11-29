@@ -37,7 +37,7 @@ public class PersistentFiles {
 	public static ArrayList<String> getAllWorkflowFileNames() {
 		final File file = new File(YAML_PATH_WORKFLOW);
 		final File[] files = file.listFiles();
-		if (files.length == 0) {
+		if (files == null || files.length == 0) {
 			return null;
 		}
 		final ArrayList<String> fileNames = new ArrayList<String>();
@@ -50,7 +50,7 @@ public class PersistentFiles {
 	public static ArrayList<String> getAllWorkflowComponentFileNames() {
 		final File file = new File(YAML_PATH_WORKFLOWCOMPONENT);
 		final File[] files = file.listFiles();
-		if (files.length == 0) {
+		if (files == null || files.length == 0) {
 			return null;
 		}
 		final ArrayList<String> fileNames = new ArrayList<String>();

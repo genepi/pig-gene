@@ -1,23 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_jar" name="" >
+<project default="create_jar" name="create server jar-file" >
     
-	<property name="app.jar" value="pigGene.jar" />
+	<property name="src.dir" value="src" />
+	<property name="ressource.dir" value="resources" />
+	<property name="lib.dir" value="lib" />
+	<property name="class.dir" value="bin" />
+	<property name="server.jar.dir" value="dist" />
+	<property name="server.jar" value="pigGene-server.jar" />
+	<property name="main-class" value="server.Main" />
 	
-	<target name="compile">
-    	<javac srcdir="src" destdir="bin" classpath="" target="1.6" includeantruntime="false">
-			<classpath>
-				<fileset dir="../PigGene-Scripts/lib" />
-			</classpath>
-    	</javac>   		
-    </target>
+	<path id="libraries.path">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
 	
-    <target name="create_jar" depends="compile">  	
-    	<delete dir="../PigGene-Scripts/dist"></delete>
-    	<mkdir dir="../PigGene-Scripts/dist"></mkdir>
-    	
-        <jar destfile="../PigGene-Scripts/dist/${app.jar}" filesetmanifest="mergewithoutmain">
-            <fileset dir="../PigGene-Scripts/bin"/>
-        </jar>
-    </target>
+	<target name="clean" description="delete old files">
+		<delete dir="${class.dir}" />
+		<delete dir="${server.jar.dir}" />
+	</target>
+	
+	<target name="compile" description="build class files" depends="clean">
+		<mkdir dir="${class.dir}" />
+		<javac srcdir="${src.dir}:${ressource.dir}" destdir="${class.dir}" target="1.6" includeantruntime="false">
+			<classpath refid="libraries.path" />
+		</javac>
+	</target>
+	
+	<target name="create_jar" depends="compile">
+		<mkdir dir="${server.jar.dir}" />
+		<mkdir dir="${class.dir}/${lib.dir}" />
+		<copy todir="${class.dir}/${lib.dir}" flatten="true">
+			<path refid="libraries.path" />
+		</copy>
+		
+		<manifestclasspath property="manifest.classpath" jarfile="${server.jar}">
+			<classpath refid="libraries.path" />
+		</manifestclasspath>
+		
+		<jar destfile="${server.jar.dir}/${server.jar}" basedir="${class.dir}" >
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+				<attribute name="Class-Path" value="${manifest.classpath}" />
+			</manifest>
+			
+			<zipfileset excludes="META-INF/*.SF" src="lib/commons-logging-1.1.1.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.restlet.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.restlet.ext.json.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.restlet.ext.jetty.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.restlet.ext.fileupload.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.json.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.util.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.server.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.io.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.http.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.continuations.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jetty.ajp.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="lib/javax.servlet.jar"/>
+		</jar>
+	</target>
 	
 </project>

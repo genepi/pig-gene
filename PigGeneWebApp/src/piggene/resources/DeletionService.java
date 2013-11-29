@@ -14,8 +14,8 @@ import org.restlet.resource.ServerResource;
 
 import piggene.exceptions.UnpossibleWorkflowFileOperation;
 import piggene.response.ServerResponseObject;
-import piggene.serialisation.UntouchableFiles;
 import piggene.serialisation.PersistentFiles;
+import piggene.serialisation.UntouchableFiles;
 
 /**
  * DeletionService class is used to delete a resource.
