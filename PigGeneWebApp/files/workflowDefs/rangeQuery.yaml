@@ -1,0 +1,70 @@
+!piggene.serialisation.Workflow
+name: rangeQuery
+description: 'Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000), extracts the quality
+   of the genotype column.'
+workflow: 
+-  comment: Loads the vcf-input file.
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+-  comment: Loads the vcf-reference file.
+   input: input2
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: ref
+   relation: R2
+-  comment: Filters all lines that match chromosome '20'.
+   input: R1
+   input2: '-'
+   operation: FILTER
+   options: chrom == '20'
+   options2: '-'
+   relation: R3
+-  comment: Filters all lines where position is larger or equal than 1 and position is smaller or equal
+      than 1000000.
+   input: R3
+   input2: '-'
+   operation: FILTER
+   options: pos >= 1 AND pos <= 1000000
+   options2: '-'
+   relation: R4
+-  comment: Filters all lines that match chromosome '20'.
+   input: R2
+   input2: '-'
+   operation: FILTER
+   options: chrom == '20'
+   options2: '-'
+   relation: R5
+-  comment: Filters all lines where position is larger or equal than 1 and position is smaller or equal
+      than 1000000.
+   input: R5
+   input2: '-'
+   operation: FILTER
+   options: pos >= 1 AND pos <= 1000000
+   options2: '-'
+   relation: R6
+-  comment: Joins the filtered relations. The join columns are chrom and pos.
+   input: R4
+   input2: R6
+   operation: JOIN
+   options: chrom,pos
+   options2: chrom,pos
+   relation: R7
+-  comment: Selects the needed columns and extracts the quality of the genotype.
+   input: R7
+   input2: '-'
+   operation: SELECT
+   options: R6::chrom, R6::pos, R6::id, R4::genotype, pigGene.UDFs.ExtractQuality(R4::genotype), R4::persID
+   options2: '-'
+   relation: R8
+-  comment: Stores the output.
+   input: R8
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output1

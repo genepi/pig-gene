@@ -1,0 +1,39 @@
+!piggene.serialisation.Workflow
+name: componentBasedWorkflow
+description: 
+workflow: 
+-  comment: '-'
+   input: standard.jar
+   input2: '-'
+   operation: REGISTER
+   options: '-'
+   options2: '-'
+   relation: '-'
+-  comment: '-'
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+-  comment: '-'
+   input: R1
+   input2: '-'
+   operation: FILTER
+   options: a == b
+   options2: '-'
+   relation: R2
+-  comment: '-'
+   input: R2
+   input2: '-'
+   operation: SELECT
+   options: a,c,d
+   options2: '-'
+   relation: R3
+-  comment: '-'
+   input: R3
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output1

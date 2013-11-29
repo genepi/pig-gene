@@ -1,0 +1,58 @@
+!piggene.serialisation.Workflow
+name: sample_distance
+description: Calculates the distance between two locations (given by latitude and longitude) using the
+   haversine formula.
+workflow: 
+-  comment: Registers the dataFu library which contains the method to calculate the distance.
+   input: datafu-0.0.9.jar
+   input2: '-'
+   operation: REGISTER
+   options: '-'
+   options2: '-'
+   relation: '-'
+-  comment: Loads the file which contains the information about the locations and their positions.
+   input: input1
+   input2: (id:int, city:chararray, place:chararray, lat:double, lon:double)
+   operation: LOAD
+   options: txt
+   options2: tab
+   relation: R1
+-  comment: Loads the same file again. This is needed because the locations get joined with each other
+      to calculate the distance between them.
+   input: input2
+   input2: (id:int, city:chararray, place:chararray, lat:double, lon:double)
+   operation: LOAD
+   options: txt
+   options2: tab
+   relation: R2
+-  comment: Joins locations with the same id.
+   input: R1
+   input2: R2
+   operation: JOIN
+   options: id
+   options2: id
+   relation: R3
+-  comment: 'Filters locations where the joined city names are the same (avoids: Innsbruck-Innsbruck:
+      distance: 0).'
+   input: R3
+   input2: '-'
+   operation: FILTER
+   options: R1::city != R2::city
+   options2: '-'
+   relation: R4
+-  comment: Selects only the needed columns and adds a distance column which is calculated by the dataFu
+      library.
+   input: R4
+   input2: '-'
+   operation: SELECT
+   options: R1::id .. R1::lon, R2::city .. R2::lon, datafu.pig.geo.HaversineDistInMiles(R1::lat, R1::lon,
+      R2::lat, R2::lon) as distance
+   options2: '-'
+   relation: R5
+-  comment: Stores the output of the calculation.
+   input: R5
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output1

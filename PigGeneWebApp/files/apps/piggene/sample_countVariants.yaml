@@ -1,0 +1,20 @@
+!cloudgene.mapred.apps.App
+name: sample_countVariants
+category: Piggene
+description: Counts the number of samples for chrom 20 and pos 138004 that don't match the reference (0/0).
+mapred: 
+   inputs: 
+   -  id: input1
+      description: input1
+      type: hdfs-file
+   outputs: 
+   -  id: output1
+      description: output1
+      mergeOutput: false
+      type: hdfs-folder
+      zip: false
+   steps: 
+   -  name: PigScript
+      params: -param input1=$input1 -param output1=$output1
+      pig: sample_countVariants.pig
+version: 1.0.0
