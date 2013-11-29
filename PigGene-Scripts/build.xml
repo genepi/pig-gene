@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="copy_jar_file" name="" >
+<project default="create_jar" name="" >
     
-	<property name="cloud.host" value="genepi-calc.uibk.ac.at" />
-	<property name="cloud.username" value="clemens" />
-	<property name="cloud.dir" value="/home/clemens/piggene" />
-	<property name="local.pig" value="pigFiles" />
-	
 	<property name="src.dir" value="src" />
 	<property name="class.dir" value="bin" />
 	<property name="lib.dir" value="lib" />
@@ -39,10 +34,4 @@
         </jar>
     </target>
 	
-	<target name="copy_jar_file" depends="create_jar">
-		<echo>Copy jar file...</echo>
-		<scp file="dist/${app.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
-		<scp todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"><fileset dir="${local.pig}"></fileset></scp>
-	</target>
-
 </project>
