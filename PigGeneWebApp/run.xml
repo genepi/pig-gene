@@ -15,24 +15,7 @@
 	<property name="tribble.jar" value="tribble-1.93.jar" />
 	<property name="jexl.jar" value="commons-jexl-2.1.1.jar" />
 	
-	<target name="compile">
-    	<javac srcdir="src" destdir="bin" classpath="" target="1.6" includeantruntime="false">
-			<classpath>
-				<fileset dir="../PigGene-Scripts/lib" />
-			</classpath>
-    	</javac>   		
-    </target>
-	
-    <target name="create_jar" depends="compile">  	
-    	<delete dir="../PigGene-Scripts/dist"></delete>
-    	<mkdir dir="../PigGene-Scripts/dist"></mkdir>
-    	
-        <jar destfile="../PigGene-Scripts/dist/${app.jar}" filesetmanifest="mergewithoutmain">
-            <fileset dir="../PigGene-Scripts/bin"/>
-        </jar>
-    </target>
-	
-	<target name="copy_jar_file" depends="create_jar">
+	<target name="copy_jar_file">
 		<echo>copy pig-gene jar file...</echo>
 		<scp file="../PigGene-Scripts/dist/${app.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
 		<echo>copy data-fu jar file...</echo>

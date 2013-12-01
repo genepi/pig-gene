@@ -2,6 +2,7 @@ package piggene.serialisation;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Properties;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 
@@ -13,10 +14,21 @@ import com.esotericsoftware.yamlbeans.YamlReader;
  * @date April 2013
  */
 public class WorkflowReader {
-	private final static String PATH = "workflowDefs/";
+	private static Properties prop = new Properties();
+	private static String workflowDefs;
+
+	static {
+		try {
+			prop.load(WorkflowReader.class.getClassLoader().getResourceAsStream("config.properties"));
+			workflowDefs = prop.getProperty("workflowDefs");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public static Workflow read(final String name) throws IOException {
-		final YamlReader reader = new YamlReader(new FileReader(PATH.concat(name.concat(".yaml"))));
+		final YamlReader reader = new YamlReader(new FileReader(workflowDefs.concat(name.concat(".yaml"))));
 		reader.getConfig().setPropertyElementType(Workflow.class, "workflow", SingleWorkflowElement.class);
 		final Workflow workflow = (Workflow) reader.read();
 		reader.close();

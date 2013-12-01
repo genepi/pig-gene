@@ -6,8 +6,7 @@
 	
 	<target name="clean">
     	<delete dir="dist"></delete>
-    	<mkdir dir="dist"></mkdir>
-		
+		<mkdir dir="dist" />
     	<mkdir dir="dist/src" />
 		
 		<mkdir dir="dist/src/src" />
@@ -16,7 +15,7 @@
     	</copy>
 		
 		<mkdir dir="dist/src/resources" />
-		   <copy todir="dist/src/resources">
+		<copy todir="dist/src/resources">
 		   <fileset dir="resources" />
 		</copy>
     			
@@ -28,15 +27,14 @@
         <mkdir dir="dist/jar" />
 		<copy todir="dist/jar">
 		     <fileset dir="files" />
-		        </copy>		
+		</copy>		
+		
 		<mkdir dir="dist/jar/lib" />
     	<copy todir="dist/jar/lib">
     		<fileset dir="lib" />
     	</copy>    
 		
 		<mkdir dir="dist/temp" />
-			
-   
 	</target>
 	
 	<target name="compile" depends="clean">
@@ -46,16 +44,14 @@
 			</classpath>
     	</javac>   	
     </target>
-
 	
     <target name="create_jar" depends="compile">   	
     	<fileset dir="lib" id="lib.dist.fileset">
     	   <include name="**/*.jar"/>
-    	  </fileset>
-    	  <pathconvert pathsep=" " property="compile.classpath" refid="lib.dist.fileset" dirsep="/" >
-    	   <map from="${basedir}\lib\" to="lib/" />
-    	  </pathconvert>
-    	
+	  	</fileset>
+	  	<pathconvert pathsep=" " property="compile.classpath" refid="lib.dist.fileset" dirsep="/" >
+    		<map from="${basedir}\lib\" to="lib/" />
+    	</pathconvert>
     	
         <jar destfile="dist/jar/${app.jar}" filesetmanifest="mergewithoutmain">
             <manifest>
@@ -65,10 +61,10 @@
             <fileset dir="bin"/>
         </jar>
     </target>
-
 	
 	<target name="zip" depends="create_jar">
 		<zip zipfile="dist/cloudgene-piggene-0.1.0.zip" basedir="dist/jar" whenempty="create" />
 		<zip zipfile="dist/cloudgene-piggene-src-0.1.0.zip" basedir="dist/src" whenempty="create" />
 	</target>
+	
 </project>

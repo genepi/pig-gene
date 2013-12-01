@@ -1,7 +1,9 @@
 package piggene.serialisation;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  * PersistentFiles class is used for operations on the workflow and workflow
@@ -11,15 +13,30 @@ import java.util.ArrayList;
  * @date April 2013
  */
 public class PersistentFiles {
-	private static final String YAML_PATH_WORKFLOW = "workflowDefs/";
-	private static final String YAML_PATH_WORKFLOWCOMPONENT = "workflowComp/";
-	private static final String YAML_PATH_CLOUDGENE = "apps/piggene/";
-	private static final String PIG_PATH = "apps/piggene/";
+	private static Properties prop = new Properties();
+	private static String workflowDefs;
+	private static String workflowCompDefs;
+	private static String cloudgeneYaml;
+	private static String pigFiles;
+
 	private static final String YAML_EXTENSION = ".yaml";
 	private static final String PIG_EXTENSION = ".pig";
 
+	static {
+		try {
+			prop.load(PersistentFiles.class.getClassLoader().getResourceAsStream("config.properties"));
+			workflowDefs = prop.getProperty("workflowDefs");
+			workflowCompDefs = prop.getProperty("workflowCompDefs");
+			cloudgeneYaml = prop.getProperty("cloudgeneYaml");
+			pigFiles = prop.getProperty("pigFiles");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public static boolean doesWorkflowFileExist(final String filename) {
-		final File file = new File(YAML_PATH_WORKFLOW.concat(filename.concat(YAML_EXTENSION)));
+		final File file = new File(workflowDefs.concat(filename.concat(YAML_EXTENSION)));
 		if (file.exists()) {
 			return true;
 		}
@@ -27,7 +44,7 @@ public class PersistentFiles {
 	}
 
 	public static boolean doesWorkflowComponentFileExist(final String filename) {
-		final File file = new File(YAML_PATH_WORKFLOWCOMPONENT.concat(filename.concat(YAML_EXTENSION)));
+		final File file = new File(workflowCompDefs.concat(filename.concat(YAML_EXTENSION)));
 		if (file.exists()) {
 			return true;
 		}
@@ -35,7 +52,7 @@ public class PersistentFiles {
 	}
 
 	public static ArrayList<String> getAllWorkflowFileNames() {
-		final File file = new File(YAML_PATH_WORKFLOW);
+		final File file = new File(workflowDefs);
 		final File[] files = file.listFiles();
 		if (files == null || files.length == 0) {
 			return null;
@@ -48,7 +65,7 @@ public class PersistentFiles {
 	}
 
 	public static ArrayList<String> getAllWorkflowComponentFileNames() {
-		final File file = new File(YAML_PATH_WORKFLOWCOMPONENT);
+		final File file = new File(workflowCompDefs);
 		final File[] files = file.listFiles();
 		if (files == null || files.length == 0) {
 			return null;
@@ -61,9 +78,9 @@ public class PersistentFiles {
 	}
 
 	public static boolean deleteFile(final String filename) {
-		final File pigFile = new File(PIG_PATH.concat(filename.concat(PIG_EXTENSION)));
-		final File yamlFileWorkflow = new File(YAML_PATH_WORKFLOW.concat(filename.concat(YAML_EXTENSION)));
-		final File yamlFileCloudgene = new File(YAML_PATH_CLOUDGENE.concat(filename.concat(YAML_EXTENSION)));
+		final File pigFile = new File(pigFiles.concat(filename.concat(PIG_EXTENSION)));
+		final File yamlFileWorkflow = new File(workflowDefs.concat(filename.concat(YAML_EXTENSION)));
+		final File yamlFileCloudgene = new File(cloudgeneYaml.concat(filename.concat(YAML_EXTENSION)));
 		return pigFile.delete() && yamlFileWorkflow.delete() && yamlFileCloudgene.delete();
 	}
 

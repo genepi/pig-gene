@@ -4,14 +4,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 
-import piggene.serialisation.Workflow;
 import piggene.serialisation.SingleWorkflowElement;
+import piggene.serialisation.Workflow;
 
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
 public class CloudgeneYaml {
-	private final static String PATH = "apps/piggene/";
+	private static Properties prop = new Properties();
+	private static String pigFiles = "apps/piggene/";
+
+	static {
+		try {
+			prop.load(CloudgeneYaml.class.getClassLoader().getResourceAsStream("config.properties"));
+			pigFiles = prop.getProperty("pigFiles");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public static void generateCloudgeneYamlFile(final Workflow workflow) throws IOException {
 		final App app = new App();
@@ -45,11 +57,11 @@ public class CloudgeneYaml {
 
 		app.setName(workflow.getName());
 		app.setDescription(workflow.getDescription());
-		app.setVersion("1.0.0");
+		app.setVersion("0.1.0");
 		app.setCategory("Piggene");
 		app.setMapred(mapred);
 
-		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(PATH.concat(workflow.getName().concat(".yaml")))));
+		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(pigFiles.concat(workflow.getName().concat(".yaml")))));
 		writer.getConfig().setClassTag("cloudgene.mapred.apps.App", App.class);
 		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "steps", Step.class);
 		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "inputs", InputParameter.class);
