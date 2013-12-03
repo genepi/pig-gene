@@ -1,44 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="zip" name="" >
+<project default="copy_file" name="" >
     
-	<property name="app.jar" value="cloudgene-piggene.jar" />
+	<property name="cloud.host" value="genepi-calc.uibk.ac.at" />
+	<property name="cloud.username" value="clemens" />
+	<property name="cloud.dir" value="/home/clemens/pigGeneApp" />
+	
+	<property name="app.jar" value="pigGene_server.jar" />
 	<property name="app.main" value="server.Main" />
+	
+	<property name="pigGene.src.dir" value="../PigGene-Scripts/src" />
+	<property name="pigGene.bin.dir" value="../PigGene-Scripts/bin" />
+	<property name="pigGene.lib.dir" value="../PigGene-Scripts/lib" />
+	<property name="pigGene.jar.dir" value="../PigGene-Scripts/dist" />
+	<property name="pigGene.app" value="../PigGene-Scripts/dist/pigGene.jar" />
 	
 	<target name="clean">
     	<delete dir="dist"></delete>
+		<delete dir="${pigGene.jar.dir}" />
+		<delete dir="${pigGene.bin.dir}" />
+
 		<mkdir dir="dist" />
     	<mkdir dir="dist/src" />
-		
+		<mkdir dir="dist/temp" />
+        <mkdir dir="dist/jar" />
 		<mkdir dir="dist/src/src" />
+		<mkdir dir="dist/src/resources" />
+		<mkdir dir="dist/src/lib" />
+		<mkdir dir="dist/jar/lib" />
+		<mkdir dir="${pigGene.jar.dir}" />
+		<mkdir dir="${pigGene.bin.dir}" />
+		
     	<copy todir="dist/src/src">
     		<fileset dir="src" />
     	</copy>
-		
-		<mkdir dir="dist/src/resources" />
 		<copy todir="dist/src/resources">
 		   <fileset dir="resources" />
 		</copy>
-    			
-		<mkdir dir="dist/src/lib" />
     	<copy todir="dist/src/lib">
     		<fileset dir="lib" />
     	</copy>   
-		
-        <mkdir dir="dist/jar" />
 		<copy todir="dist/jar">
 		     <fileset dir="files" />
 		</copy>		
-		
-		<mkdir dir="dist/jar/lib" />
     	<copy todir="dist/jar/lib">
     		<fileset dir="lib" />
     	</copy>    
-		
-		<mkdir dir="dist/temp" />
 	</target>
 	
 	<target name="compile" depends="clean">
-    	<javac srcdir="src" destdir="dist/temp" classpath="" >
+    	<javac srcdir="src" destdir="dist/temp" classpath="" target="1.6" includeantruntime="false">
 			<classpath>
 				<fileset dir="lib" />
 			</classpath>
@@ -50,7 +60,7 @@
     	   <include name="**/*.jar"/>
 	  	</fileset>
 	  	<pathconvert pathsep=" " property="compile.classpath" refid="lib.dist.fileset" dirsep="/" >
-    		<map from="${basedir}\lib\" to="lib/" />
+    		<map from="${basedir}/lib/" to="lib/" />
     	</pathconvert>
     	
         <jar destfile="dist/jar/${app.jar}" filesetmanifest="mergewithoutmain">
@@ -62,9 +72,33 @@
         </jar>
     </target>
 	
-	<target name="zip" depends="create_jar">
-		<zip zipfile="dist/cloudgene-piggene-0.1.0.zip" basedir="dist/jar" whenempty="create" />
-		<zip zipfile="dist/cloudgene-piggene-src-0.1.0.zip" basedir="dist/src" whenempty="create" />
+	<target name="compile_pigGene" depends="clean">
+    	<javac srcdir="${pigGene.src.dir}" destdir="${pigGene.bin.dir}" target="1.6" includeantruntime="false">
+    		<classpath>
+    			<fileset dir="${pigGene.lib.dir}" />
+    		</classpath>
+    	</javac>   		
+    </target>
+	
+    <target name="create_pigGene_jar" depends="compile_pigGene">  	
+        <jar destfile="../dist/${pigGene.app}" filesetmanifest="mergewithoutmain">
+            <fileset dir="${pigGene.lib.dir}">
+            	<include name="**/*.jar" />
+            </fileset>
+        </jar>
+    	<copy todir="dist/jar/lib">
+    		<fileset dir="${pigGene.jar.dir}" />
+    	</copy>
+    </target>
+	
+	<target name="zip" depends="create_jar,create_pigGene_jar">
+		<zip zipfile="dist/pigGene-0.1.0.zip" basedir="dist/jar" whenempty="create" />
+		<zip zipfile="dist/pigGene-src-0.1.0.zip" basedir="dist/src" whenempty="create" />
+	</target>
+	
+	<target name="copy_file" depends="zip">
+		<echo>copy file to genepi-calc server...</echo>
+		<scp file="dist/pigGene-0.1.0.zip"  todir="${cloud.username}@${cloud.host}:${cloud.dir}" password="${cloud.password}" trust="true"></scp>
 	</target>
 	
 </project>
