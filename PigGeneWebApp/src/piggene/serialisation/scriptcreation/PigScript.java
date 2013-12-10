@@ -4,8 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import piggene.serialisation.Workflow;
 import piggene.serialisation.SingleWorkflowElement;
+import piggene.serialisation.Workflow;
 
 /**
  * PigScript class is responsible for creating and writing the pig script to the
@@ -15,7 +15,8 @@ import piggene.serialisation.SingleWorkflowElement;
  * @date April 2013
  */
 public class PigScript {
-	private static final String[] jarFilenames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-5.1.jar", "sam-1.76.jar", "picard-1.76.jar" };
+	private static final String[] jarFilenames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-6.0.jar", "sam-1.93.jar", "picard-1.93.jar", "variant-1.93.jar",
+			"tribble-1.93.jar", "commons-jexl-2.1.1.jar" };
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private static final char SEMICOLON = ';';
 	private static final String PATH = "apps/piggene/";

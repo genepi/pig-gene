@@ -6,4 +6,4 @@
  */
 
 var serverAddressCloudgene = 'http://genepi-calc.uibk.ac.at:8080/start.html#piggene/';
-var serverAddressPigGene = 'http://genepi-calc.uibk.ac.at:8080/';
+var serverAddressPigGene = 'http://localhost:8080/';

@@ -309,10 +309,29 @@ $(document).ready(function() {
 	 * Functions are used to toggle the display of additional text separator options
 	 * in the operations dialog when a load operation is selected.
 	 */
+	$('#loadFastQ').on('click', function() {
+		hideTxtSeparatorOptions();
+		hideReadAttrOptions();
+		hideRefFileOptions();
+	});
+	$('#loadBam').on('click', function() {
+		hideTxtSeparatorOptions();
+		hideRefFileOptions();
+		showReadAttrOptions();
+	});
+	$('#loadSam').on('click', function() {
+		hideTxtSeparatorOptions();
+		hideRefFileOptions();
+		showReadAttrOptions();
+	});
 	$('#loadVcf').on('click', function() {
 		hideTxtSeparatorOptions();
+		hideReadAttrOptions();
+		showRefFileOptions();
 	});
 	$('#loadTxt').on('click', function() {
+		hideReadAttrOptions();
+		hideRefFileOptions();
 		showTxtSeparatorOptions();
 	});
 

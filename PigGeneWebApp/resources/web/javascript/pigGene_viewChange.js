@@ -343,45 +343,50 @@ function displayCorrespondingContainerInfo() {
 		setOperationDialog('register');
 	} else if(data.operation=='LOAD') {
 		$('#loadName').val(data.relation);
-		if(data.options == 'vcf') {
+		hideTxtSeparatorOptions();
+		hideReadAttrOptions();
+		hideRefFileOptions();
+		setAllLoadButtonsInactive();
+		resetFiletypeSeparatorButtons();
+		resetReferenceFileOptionButtons();
+		resetReadAttrOptionButtons();
+		
+		if(data.options == 'fastQ') {
+			$('#loadFastQ').addClass('active');
+		} else if (data.options == 'bam') {
+			$('#loadBam').addClass('active');
+			if(data.options2 == 'yes') {
+				$('#yesBtn').addClass('active');
+				$('#noBtn').removeClass('active');
+			}
+			showReadAttrOptions();
+		} else if (data.options == 'sam') {
+			$('#loadSam').addClass('active');
+			if(data.options2 == 'yes') {
+				$('#yesBtn').addClass('active');
+				$('#noBtn').removeClass('active');
+			}
+			showReadAttrOptions();
+		} else if(data.options == 'vcf') {
 			$('#loadVcf').addClass('active');
-			$('#loadTxt').removeClass('active');
 			if(data.options2 == 'ref') {
 				$('#refFileBtn').addClass('active');
 				$('#stdFileBtn').removeClass('active');
-				$('#seqPigBtn').removeClass('active');
-			} else if(data.options2 == 'seqpig') {
-				$('#seqPigBtn').addClass('active');
-				$('#refFileBtn').removeClass('active');
-				$('#stdFileBtn').removeClass('active');
-			} else {
-				$('#refFileBtn').removeClass('active');
-				$('#seqPigBtn').removeClass('active');
-				$('#stdFileBtn').addClass('active');
 			}
-			hideTxtSeparatorOptions();
-			$('#tabSeparator').addClass('active');
-			$('#spaceSeparator').removeClass('active');
-			$('#commaSeparator').removeClass('active');
-		} else {
-			$('#loadSchema').val(data.input2);
-			$('#loadVcf').removeClass('active');
-			$('#refFileBtn').removeClass('active');
-			$('#seqPigBtn').removeClass('active');
-			$('#stdFileBtn').addClass('active');
+			showRefFileOptions();
+		} else if (data.options == 'txt') {
 			$('#loadTxt').addClass('active');
+			$('#loadSchema').val(data.input2);
 			if(data.options2 == 'tab') {
-				$('#tabSeparator').addClass('active');
-				$('#spaceSeparator').removeClass('active');
-				$('#commaSeparator').removeClass('active');
+				//nothing to do
 			} else if(data.options2 == 'space') {
-				$('#spaceSeparator').addClass('active');
 				$('#tabSeparator').removeClass('active');
+				$('#spaceSeparator').addClass('active');
 				$('#commaSeparator').removeClass('active');
 			} else {
-				$('#commaSeparator').addClass('active');
 				$('#tabSeparator').removeClass('active');
 				$('#spaceSeparator').removeClass('active');
+				$('#commaSeparator').addClass('active');
 			}
 			showTxtSeparatorOptions();
 		}
@@ -424,6 +429,34 @@ function displayCorrespondingContainerInfo() {
 			setOperationRelatedHelpContent('user defined script');
 		}
 	}
+}
+
+//TODO
+function setAllLoadButtonsInactive() {
+	$('#loadFastQ').removeClass('active');
+	$('#loadBam').removeClass('active');
+	$('#loadSam').removeClass('active');
+	$('#loadVcf').removeClass('active');
+	$('#loadTxt').removeClass('active');
+}
+
+//TODO
+function resetFiletypeSeparatorButtons() {
+	$('#tabSeparator').addClass('active');
+	$('#spaceSeparator').removeClass('active');
+	$('#commaSeparator').removeClass('active');
+}
+
+//TODO
+function resetReferenceFileOptionButtons() {
+	$('#stdFileBtn').addClass('active');
+	$('#refFileBtn').removeClass('active');
+}
+
+//TODO
+function resetReadAttrOptionButtons() {
+	$('#noBtn').addClass('active');
+	$('#yesBtn').removeClass('active');
 }
 
 
@@ -536,7 +569,18 @@ function hoverOverArrowAction(element) {
 function hideTxtSeparatorOptions() {
 	$('#loadFiletypeSeparator.btn-group').css('display','none');
 	$('#loadSchema').css('display','none');
-	$('#referenceFileOption.btn-group').css('display','inline-block');
+}
+
+//TODO
+function hideReadAttrOptions() {
+	$('#readAttrOption.btn-group').css('display','none');
+	$('#loadSchema').css('display','none');
+}
+
+//TODO
+function hideRefFileOptions() {
+	$('#referenceFileOption.btn-group').css('display','none');
+	$('#loadSchema').css('display','none');
 }
 
 
@@ -548,9 +592,17 @@ function hideTxtSeparatorOptions() {
 function showTxtSeparatorOptions() {
 	$('#loadFiletypeSeparator.btn-group').css('display','inline-block');
 	$('#loadSchema').css('display','inline-block');
-	$('#referenceFileOption.btn-group').css('display','none');
 }
 
+//TODO
+function showReadAttrOptions() {
+	$('#readAttrOption.btn-group').css('display','inline-block');
+}
+
+//TODO
+function showRefFileOptions() {
+	$('#referenceFileOption.btn-group').css('display','inline-block');
+}
 
 /**
  * Function is used to show the line details dialog.
@@ -775,18 +827,14 @@ function showWorkflowProblemModal() {
  * Resets the standard options after each load operation.  
  */
 function resetLoadSpecifier() {
-	$('#loadFiletypeSeparator.btn-group').css('display','none');
+	setAllLoadButtonsInactive();
+	$('#loadFastQ').addClass('active');
 	$('#loadSchema').css('display','none');
-	$('#referenceFileOption.btn-group').css('display','inline-block');
-	$('#loadVcf').addClass('active');
-	$('#loadTxt').removeClass('active');
-	$('#tabSeparator').addClass('active');
-	$('#spaceSeparator').removeClass('active');
-	$('#commaSeparator').removeClass('active');
-	$('#stdFileBtn').addClass('active');
-	$('#refFileBtn').removeClass('active');
-	$('#seqPigBtn').removeClass('active');
+	resetFiletypeSeparatorButtons();
+	resetReferenceFileOptionButtons();
+	resetReadAttrOptionButtons();
 }
+
 
 //TODO
 function removeDownloadAndRunAttr() {

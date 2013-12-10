@@ -15,6 +15,9 @@ function processOperationLinkRequest(operation) {
 	var operationDialog = '#'+operation+'Dialog';
 	setFormContainerOperation(operation);
 	setArtificialRelationName(operation);
+	hideTxtSeparatorOptions();
+	hideReadAttrOptions();
+	hideRefFileOptions();
 	showInputDialogSlow(operationDialog);
 }
 
@@ -80,15 +83,22 @@ function processLoadOperation() {
 	var opt = $('#loadFiletype.btn-group > button.btn.active').html();
 	var opt2 = '-';
 	var input2 = '-';
-	if($('#loadTxt').hasClass('active')) {
+	
+	if($('#loadFastQ').hasClass('active')) {
+		//nothing to do
+	} else if ($('#loadBam').hasClass('active')) {
+		opt2 = $('#readAttrOption.btn-group > button.btn.active').html();
+	} else if ($('#loadSam').hasClass('active')) {
+		opt2 = $('#readAttrOption.btn-group > button.btn.active').html();
+	} else if ($('#loadVcf').hasClass('active')) {
+		if($('#refFileBtn').hasClass('active')) {
+			opt2 = 'ref';
+		}
+	} else { //loadTxt
 		opt2 = $('#loadFiletypeSeparator.btn-group > button.btn.active').html();
 		input2 = values[1].value;
-	} else if($('#refFileBtn').hasClass('active')) {
-		opt2 = 'ref';
-	} else if($('#seqPigBtn').hasClass('active')) {
-		opt2 = 'seqpig';
 	}
-
+	
 	if($('#loadSubmitChange').hasClass('modification')) {
 		var rel = generateInputName('mod');
 		deleteTypeaheadRelationByOperation(oper);
