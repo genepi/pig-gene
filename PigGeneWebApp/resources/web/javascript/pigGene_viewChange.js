@@ -104,6 +104,9 @@ function resetOperationDialog(operation) {
 	if(operation == 'load') {
 		resetLoadSpecifier();
 	}
+	if(operation == 'store') {
+		resetStoreFiletypeButtons();
+	}
 	if(operation == 'script') {
 		hideScriptDialogSlow();
 	}
@@ -394,6 +397,23 @@ function displayCorrespondingContainerInfo() {
 		setOperationDialog('load');
 	} else if(data.operation=='STORE'){
 		$('#relToStore').val(data.input);
+		resetStoreFiletypeButtons()
+		if(data.options == 'fastQ') {
+			$('#storeStd').removeClass('active');
+			$('#storeFastQ').addClass('active');
+			$('#storeBam').removeClass('active');
+			$('#storeSam').removeClass('active');
+		} else if (data.options == 'bam') {
+			$('#storeStd').removeClass('active');
+			$('#storeFastQ').removeClass('active');
+			$('#storeBam').addClass('active');
+			$('#storeSam').removeClass('active');
+		} else if (data.options == 'sam') {
+			$('#storeStd').removeClass('active');
+			$('#storeFastQ').removeClass('active');
+			$('#storeBam').removeClass('active');
+			$('#storeSam').addClass('active');
+		}
 		hideScriptDialogSlow();
 		setOperationDialog('store');
 	} else if(data.operation=='FILTER') {
@@ -457,6 +477,14 @@ function resetReferenceFileOptionButtons() {
 function resetReadAttrOptionButtons() {
 	$('#noBtn').addClass('active');
 	$('#yesBtn').removeClass('active');
+}
+
+//TODO
+function resetStoreFiletypeButtons() {
+	$('#storeStd').addClass('active');
+	$('#storeFastQ').removeClass('active');
+	$('#storeBam').removeClass('active');
+	$('#storeSam').removeClass('active');
 }
 
 

@@ -143,6 +143,13 @@
 						</form>
 						
 						<form class="form-search hide" id="storeDialog">
+							<div class="btn-group" id="storeFiletype" data-toggle="buttons-radio" title="file format">
+								<button class="btn btn-mini active" id="storeStd" type="button">std</button>
+								<button class="btn btn-mini" id="storeFastQ" type="button">fastQ</button>
+								<button class="btn btn-mini" id="storeBam" type="button">bam</button>
+								<button class="btn btn-mini" id="storeSam" type="button">sam</button>
+							</div>
+							<br>
 							<input class="span2" id="relToStore" name="relation" type="text" placeholder="relation to store" title="relation to store" value="" data-provide="typeahead" autocomplete="off" required><br>
 							<button class="btn" id="storeClear" type="reset">cancel</button>
 							<button class="btn btn-danger hide delete" id="storeDelete" type="reset">delete</button>

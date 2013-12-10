@@ -125,14 +125,19 @@ function processStoreOperation() {
 		comm = '-';
 	}
 	
+	var opt = "-";
+	if(!$('#storeStd').hasClass('active')) {
+		opt = $('#storeFiletype.btn-group > button.btn.active').html();
+	}
+		
 	if($('#storeSubmitChange').hasClass('modification')) {
 		var name = generateOutputName('mod',0);
 		deleteTypeaheadRelationByOperation(oper);
-		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm};
+		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('store');
 	} else {
 		var name = generateOutputName('-',0);
-		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:'-', options2:'-', comment:comm});
+		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
 	}
 	finalizeSubmit('#storeDialog');
 }
