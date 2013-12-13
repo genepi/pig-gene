@@ -49,6 +49,14 @@ $(document).ready(function() {
 	$('#selectLink').on('click', function() {
 		processOperationLinkRequest('select');
 	});
+	//TODO
+	$('#groupLink').on('click', function() {
+		processOperationLinkRequest('group');
+	});
+	//TODO
+	$('#orderLink').on('click', function() {
+		processOperationLinkRequest('order');
+	});
 	$('#userScriptLink').on('click', function() {
 		setFormContainerOperation('user defined script');
 		setOperationRelatedHelpContent('user defined script');
@@ -82,6 +90,14 @@ $(document).ready(function() {
 	});
 	$('#selectDialog').on('submit', function() {
 		processSelectOperation();
+		return false;
+	});
+	$('#groupDialog').on('submit', function() {
+		processGroupOperation();
+		return false;
+	});
+	$('#orderDialog').on('submit', function() {
+		processOrderOperation();
 		return false;
 	});
 	$('#scriptDialog').on('submit', function() {

@@ -218,6 +218,58 @@ function processSelectOperation() {
 	updateTypeaheadRelations(name);
 	finalizeSubmit('#selectDialog');
 }
+function processGroupOperation() {
+	var values = getFormData('#groupDialog');
+	var oper = 'GROUP';
+	var name = values[0].value;
+	var rel = values[1].value;
+	var opt = values[2].value;
+	var comm = $('#comments').val();
+	
+	if(!(inputLongEnough(rel) && inputLongEnough(name) && inputLongEnough(opt))) {
+		showErrorMessageShortInput();
+		return false;
+	}
+	if(comm == null || comm == ''){
+		comm = '-';
+	}
+	
+	if($('#groupSubmitChange').hasClass('modification')) {
+		deleteTypeaheadRelationByOperation(oper);
+		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
+		resetOperationDialog('group');
+	} else {
+		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
+	}
+	updateTypeaheadRelations(name);
+	finalizeSubmit('#groupDialog');
+}
+function processOrderOperation() {
+	var values = getFormData('#orderDialog');
+	var oper = 'ORDER';
+	var name = values[0].value;
+	var rel = values[1].value;
+	var opt = values[2].value;
+	var comm = $('#comments').val();
+	
+	if(!(inputLongEnough(rel) && inputLongEnough(name) && inputLongEnough(opt))) {
+		showErrorMessageShortInput();
+		return false;
+	}
+	if(comm == null || comm == ''){
+		comm = '-';
+	}
+	
+	if($('#orderSubmitChange').hasClass('modification')) {
+		deleteTypeaheadRelationByOperation(oper);
+		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
+		resetOperationDialog('order');
+	} else {
+		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
+	}
+	updateTypeaheadRelations(name);
+	finalizeSubmit('#orderDialog');
+}
 function processScriptOperation() {
 	var script = $('#scriptTextarea').val();
 	var oper = 'SCRIPT';
@@ -865,6 +917,8 @@ function performTypeaheadButtonUpdate() {
 	$('#joinRel').typeahead().data('typeahead').source = typeaheadRelations;
 	$('#joinRel2').typeahead().data('typeahead').source = typeaheadRelations;
 	$('#selectRel').typeahead().data('typeahead').source = typeaheadRelations;
+	$('#groupRel').typeahead().data('typeahead').source = typeaheadRelations;
+	$('#orderRel').typeahead().data('typeahead').source = typeaheadRelations;
 	$('#relToStore').typeahead().data('typeahead').source = typeaheadRelations;
 }
 

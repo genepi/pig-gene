@@ -23,6 +23,10 @@ public class PigSnippetFactory {
 			return new LoadSnippet(comp).toPigScript();
 		} else if (comp.getOperation().equals("REGISTER")) {
 			return new RegisterSnippet(comp).toPigScript();
+		} else if (comp.getOperation().equals("GROUP")) {
+			return new GroupSnippet(comp).toPigScript();
+		} else if (comp.getOperation().equals("ORDER")) {
+			return new OrderSnippet(comp).toPigScript();
 		} else if (comp.getOperation().equals("STORE")) {
 			return new StoreSnippet(comp).toPigScript();
 		} else {

@@ -50,6 +50,8 @@ function resetAllOperationDialogs() {
 	resetOperationDialog('filter');
 	resetOperationDialog('join');
 	resetOperationDialog('select');
+	resetOperationDialog('group');
+	resetOperationDialog('order');
 	resetOperationDialog('script');
 }
 
@@ -173,6 +175,10 @@ function finishReset(button) {
 			resetOperationDialog('join');
 		} else if (buttonName.indexOf('select') == 0) {
 			resetOperationDialog('select');
+		} else if (buttonName.indexOf('group') == 0) {
+			resetOperationDialog('group');
+		} else if (buttonName.indexOf('order') == 0) {
+			resetOperationDialog('order')
 		} else if (buttonName.indexOf('script') == 0) {
 			resetOperationDialog('script');
 		}
@@ -436,6 +442,18 @@ function displayCorrespondingContainerInfo() {
 		$('#selectOpt').val(data.options);
 		hideScriptDialogSlow();
 		setOperationDialog('select');
+	} else if(data.operation=='GROUP') {
+		$('#groupName').val(data.relation);
+		$('#groupRel').val(data.input);
+		$('#groupOpt').val(data.options);
+		hideScriptDialogSlow();
+		setOperationDialog('group');
+	} else if(data.operation=='ORDER') {
+		$('#orderName').val(data.relation);
+		$('#orderRel').val(data.input);
+		$('#orderOpt').val(data.options);
+		hideScriptDialogSlow();
+		setOperationDialog('order');
 	} else if(data.operation=='SCRIPT') {
 		$('#scriptTextarea').val(data.options);
 		setOperationDialog('script');
@@ -523,6 +541,12 @@ function hideNotSpecifiedInputDialogs(dialog) {
 	}
 	if(dialog != 'select') {
 		$('#selectDialog').hide('slow');
+	}
+	if(dialog != 'group') {
+		$('#groupDialog').hide('slow');
+	}
+	if(dialog != 'order') {
+		$('#orderDialog').hide('slow');
 	}
 	if(dialog != 'script') {
 		$('#scriptDialog').hide('slow');
@@ -836,6 +860,10 @@ function setArtificialRelationName(operation) {
 		$('#joinName').val(getArtificialName());
 	} else if (operation == 'select') {
 		$('#selectName').val(getArtificialName());
+	} else if (operation == 'group') {
+		$('#groupName').val(getArtificialName());
+	} else if (operation == 'order') {
+		$('#orderName').val(getArtificialName());
 	}
 	//else: ignore
 }
