@@ -21,7 +21,6 @@ public class Main {
 	public static void initializeFolders() {
 		ArrayList<String> paths = new ArrayList<String>();
 		paths.add(prop.getProperty("workflowDefs"));
-		paths.add(prop.getProperty("workflowCompDefs"));
 		paths.add(prop.getProperty("cloudgeneYaml"));
 		paths.add(prop.getProperty("pigFiles"));
 		for (String path : paths) {
@@ -34,7 +33,6 @@ public class Main {
 
 	public static void main(final String[] args) throws IOException {
 		try {
-			// prop.load(App.class.getClassLoader().getResourceAsStream("config.properties");));
 			prop.load(Main.class.getClassLoader().getResourceAsStream("config.properties"));
 			final int port = Integer.valueOf(prop.getProperty("port"));
 			initializeFolders();

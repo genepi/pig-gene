@@ -29,7 +29,6 @@ public class WorkflowFinder extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		final String type = getRequest().getAttributes().get("type").toString();
 		String filename = null;
 
 		try {
@@ -55,7 +54,7 @@ public class WorkflowFinder extends ServerResource {
 		obj.setSuccess(true);
 		obj.setMessage("success");
 
-		if (type.equals("wf") && PersistentFiles.doesWorkflowFileExist(filename) || type.equals("comp") && PersistentFiles.doesWorkflowComponentFileExist(filename)) {
+		if (PersistentFiles.doesWorkflowFileExist(filename)) {
 			obj.setData(Boolean.TRUE);
 		} else {
 			obj.setData(Boolean.FALSE);

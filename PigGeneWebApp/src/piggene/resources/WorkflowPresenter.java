@@ -26,14 +26,7 @@ public class WorkflowPresenter extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		ArrayList<String> filenames = null;
-		final String type = getRequest().getAttributes().get("type").toString();
-
-		if (type.equals("wf")) {
-			filenames = PersistentFiles.getAllWorkflowFileNames();
-		} else {
-			filenames = PersistentFiles.getAllWorkflowComponentFileNames();
-		}
+		ArrayList<String> filenames = PersistentFiles.getAllWorkflowFileNames();
 
 		if (filenames == null) {
 			obj.setSuccess(false);

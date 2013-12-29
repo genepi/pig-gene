@@ -38,11 +38,11 @@ public class WebApp extends Application {
 		route.setMatchingMode(Template.MODE_EQUALS);
 
 		// routes
-		router.attach("/save/{type}", SerialisationService.class);
-		router.attach("/ld/{type}", DeserialisationService.class);
+		router.attach("/save", SerialisationService.class);
+		router.attach("/ld", DeserialisationService.class);
 		router.attach("/del", DeletionService.class);
-		router.attach("/get/{type}", WorkflowPresenter.class);
-		router.attach("/exist/{type}", WorkflowFinder.class);
+		router.attach("/get", WorkflowPresenter.class);
+		router.attach("/exist", WorkflowFinder.class);
 		router.attach("/dwld/{filename}", ScriptProvider.class);
 
 		// clap protocol for usage in jar files

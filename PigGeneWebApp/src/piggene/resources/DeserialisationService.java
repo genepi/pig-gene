@@ -14,8 +14,6 @@ import org.restlet.resource.ServerResource;
 
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.Workflow;
-import piggene.serialisation.WorkflowComponent;
-import piggene.serialisation.WorkflowComponentReader;
 import piggene.serialisation.WorkflowReader;
 
 /**
@@ -30,18 +28,12 @@ public class DeserialisationService extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		final String type = getRequest().getAttributes().get("type").toString();
 
 		try {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
 			final String filename = representant.getJsonObject().getString("filename");
-			if (type.equals("wf")) {
-				final Workflow workflow = WorkflowReader.read(filename);
-				obj.setData(workflow);
-			} else {
-				final WorkflowComponent component = WorkflowComponentReader.read(filename);
-				obj.setData(component);
-			}
+			final Workflow workflow = WorkflowReader.read(filename);
+			obj.setData(workflow);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while loading the data.");

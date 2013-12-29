@@ -17,6 +17,7 @@
 <script type="text/javascript" src="javascript/pigGene_variables.js"></script>
 <script type="text/javascript" src="javascript/pigGene_viewChange.js"></script>
 <script type="text/javascript" src="javascript/pigGene_workflowOps.js"></script>
+<script type="text/javascript" src="javascript/pigGene_workflowRepresentation.js"></script>
 </head>
 
 <body class="well">
@@ -26,9 +27,6 @@
 			<div class="span10" id="actionBtns">
 				<a id="newWfBtn" class="btn btn-inverse" title="create new workflow"><i class="icon-file icon-white"></i> new</a>
 				<a id="showWfBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="open existing workflow"><i class="icon-edit icon-white"></i> open</a>
-
-				<a id="showWfCompBtn" class="btn btn-inverse" rel="popover" data-content="" data-original-title="add workflow component"><i class="icon-plus icon-white"></i> component</a>
-
 				<a id="saveWfBtn" class="btn btn-inverse hide" title="save"><i class="icon-folder-open icon-white"></i> save</a>
 				<a id="deleteWfBtn" class="btn btn-inverse hide" title="delete workflow"><i class="icon-ban-circle icon-white"></i> delete</a>
 				<a id="downloadScript" class="btn btn-inverse hide" title="download pig script"><i class="icon-download icon-white"></i> download</a>
@@ -43,7 +41,7 @@
 		
 		<div id="operationArea">
 			<!-- user defined workflow representation -->
-			<div class="span12 well" id="workflowContainer">
+			<div class="" id="workflowContainer">
 				<div id="title">
 					<a id="descriptionBtn" class="btn btn-link hide" title="add workflow description"><i class="icon-plus-sign" id="descriptionIcon"></i></a>
 					<h3 id="workflowName">PigGene - graphical pig script generator</h3>
@@ -288,22 +286,6 @@
 	    	<input class="span5" id="saveDialogInput" name="name" type="text" placeholder="workflow name" title="workflow name" value="" data-provide="typeahead" autocomplete="off" required><br>
 		    <button type="reset" class="btn" data-dismiss="modal" aria-hidden="true">cancel</button>
 		    <button type="submit" class="btn btn-success" id="saveWorkflowFormBtn">save</button>
-	    </form>
-	  </div>
-	  <div class="modal-footer"></div>
-	</div>
-	
-	<div class="modal hide fade" id="saveNameCompModal">
-	  <div class="modal-header">
-	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-	    <h3>Saving workflow component...</h3>
-	  </div>
-	  <div class="modal-body">
-	    Please type a workflow component name:
-	    <form id="saveWorkflowComp">
-	    	<input class="span5" id="saveCompDialogInput" name="name" type="text" placeholder="workflow component name" title="workflow component name" value="" required><br>
-		    <button type="reset" class="btn" data-dismiss="modal" aria-hidden="true">cancel</button>
-		    <button type="submit" class="btn btn-success" id="saveWfCompFormBtn">save</button>
 	    </form>
 	  </div>
 	  <div class="modal-footer"></div>

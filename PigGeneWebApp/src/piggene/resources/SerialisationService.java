@@ -20,8 +20,6 @@ import piggene.serialisation.JSONConverter;
 import piggene.serialisation.SingleWorkflowElement;
 import piggene.serialisation.UntouchableFiles;
 import piggene.serialisation.Workflow;
-import piggene.serialisation.WorkflowComponent;
-import piggene.serialisation.WorkflowComponentWriter;
 import piggene.serialisation.WorkflowWriter;
 import piggene.serialisation.scriptcreation.PigScript;
 import piggene.serialisation.yaml.CloudgeneYaml;
@@ -42,23 +40,13 @@ public class SerialisationService extends ServerResource {
 	@Post
 	public Representation post(final Representation entity) {
 		final ServerResponseObject obj = new ServerResponseObject();
-		final String type = getRequest().getAttributes().get("type").toString();
-		WorkflowComponent component = null;
 		Workflow workflow = null;
 
 		try { // parse the input
 			final JSONArray array = getJsonArray(entity);
-			if (type.equals("wf")) {
-				workflow = processClientWfData(array);
-				if (UntouchableFiles.list.contains(workflow.getName())) {
-					throw new UnpossibleWorkflowFileOperation();
-				}
-			} else {
-				component = processClientCompData(array);
-				if (UntouchableFiles.list.contains(component.getName())) {
-					throw new UnpossibleWorkflowFileOperation();
-				}
-
+			workflow = processClientWfData(array);
+			if (UntouchableFiles.list.contains(workflow.getName())) {
+				throw new UnpossibleWorkflowFileOperation();
 			}
 		} catch (final UnpossibleWorkflowFileOperation e) {
 			obj.setSuccess(false);
@@ -78,33 +66,22 @@ public class SerialisationService extends ServerResource {
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
-		if (type.equals("wf")) {
-			try { // write pig-script
-				PigScript.generateAndWrite(workflow);
-			} catch (final IOException e1) {
-				obj.setSuccess(false);
-				obj.setMessage("An error occured while creating the pig-script.");
-				return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
-			}
+		try { // write pig-script
+			PigScript.generateAndWrite(workflow);
+		} catch (final IOException e1) {
+			obj.setSuccess(false);
+			obj.setMessage("An error occured while creating the pig-script.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+		}
 
-			try { // write yaml-file && cloudgene yaml-file
-				WorkflowWriter.write(workflow);
-				CloudgeneYaml.generateCloudgeneYamlFile(workflow);
-			} catch (final IOException e) {
-				e.printStackTrace();
-				obj.setSuccess(false);
-				obj.setMessage("An error occured while saving the data.");
-				return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
-			}
-		} else {
-			try { // write workflow component yaml-file
-				WorkflowComponentWriter.write(component);
-			} catch (final IOException e) {
-				e.printStackTrace();
-				obj.setSuccess(false);
-				obj.setMessage("An error occured while saving the data.");
-				return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
-			}
+		try { // write yaml-file && cloudgene yaml-file
+			WorkflowWriter.write(workflow);
+			CloudgeneYaml.generateCloudgeneYamlFile(workflow);
+		} catch (final IOException e) {
+			e.printStackTrace();
+			obj.setSuccess(false);
+			obj.setMessage("An error occured while saving the data.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
 		obj.setSuccess(true);
@@ -117,12 +94,6 @@ public class SerialisationService extends ServerResource {
 		final String filename = array.getString(array.length() - 1);
 		ArrayList<SingleWorkflowElement> workflow = JSONConverter.convertJsonArrayIntoWorkflow(array);
 		return new Workflow(filename, description, workflow);
-	}
-
-	private WorkflowComponent processClientCompData(final JSONArray array) throws JsonSyntaxException, JSONException {
-		final String filename = array.getString(array.length() - 1);
-		ArrayList<SingleWorkflowElement> wfComponent = JSONConverter.convertJsonArrayIntoWorkflow(array);
-		return new WorkflowComponent(filename, wfComponent);
 	}
 
 	private JSONArray getJsonArray(final Representation entity) throws JSONException, IOException {

@@ -50,19 +50,6 @@ function save() {
 }
 
 
-//TODO
-function saveWfComp() {
-	var filename = $('#saveCompDialogInput').val().replace(/\s/g,'');
-	$('#saveNameCompModal').modal('hide');
-	if(!inputLongEnough(filename)) {
-		showErrorMessageShortInput();
-		return false;
-	}
-	ajaxRequestSaveWorkflowComp(filename);
-	return false;
-}
-
-
 /**
  * Function is used to transfer the filename to the server. If the server returns true to indicate that the name
  * is already in use then an alert is shown to double check if the user really wants to override the old workflow.
@@ -73,7 +60,7 @@ function ajaxRequestSaveWorkflow(filename) {
 	var data = '{"filename":"' + filename + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'exist/wf',
+	    url: serverAddressPigGene + 'exist',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -82,33 +69,6 @@ function ajaxRequestSaveWorkflow(filename) {
 					showSecurityAlert(filename,'');
 				} else {
 					saveWorkflow(filename);
-				}
-	    	} else {
-	    		$('#errmsg').html(response.message);
-	    		$('#errorModal').modal('show');
-	    	}
-	    },
-	    error: function (xhr, ajaxOptions, thrownError) {
-	    	$('#errmsg').html(xhr.responseText);
-    		$('#errorModal').modal('show');
-	   }
-	});
-}
-
-//TODO
-function ajaxRequestSaveWorkflowComp(filename) {
-	var data = '{"filename":"' + filename + '"}';
-	$.ajax({
-		type: 'POST',
-	    url: serverAddressPigGene + 'exist/comp',
-	    data: data,
-	    dataType: 'json',
-	    success: function(response) {
-	    	if(response.success) {
-				if(response.data) {
-					showSecurityAlert(filename,'component');
-				} else {
-					saveWorkflowComp(filename);
 				}
 	    	} else {
 	    		$('#errmsg').html(response.message);
@@ -131,7 +91,7 @@ function ajaxRequestDeleteWfAlreadyExists(filename) {
 	var data = '{"filename":"' + filename + '"}';
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'exist/wf',
+	    url: serverAddressPigGene + 'exist',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -170,7 +130,7 @@ function saveWorkflow(filename) {
 	
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'save/wf',
+	    url: serverAddressPigGene + 'save',
 	    data: data,
 	    dataType: 'json',
 	    success: function(response) {
@@ -200,39 +160,6 @@ function saveWorkflow(filename) {
 	return false;
 }
 
-//TODO
-function saveWorkflowComp(filename) {
-	//last two elements just needed for the ajax request, remove afterwards
-	workflow.push("");
-	workflow.push(filename); 
-	var data = JSON.stringify(workflow);
-	workflow.splice(-2,2);
-	
-	$('#inputError').hide('slow');
-	$('#comments').val('');
-	
-	$.ajax({
-		type: 'POST',
-	    url: serverAddressPigGene + 'save/comp',
-	    data: data,
-	    dataType: 'json',
-	    success: function(response) {
-	    	if(response.success) {
-	    		//TODO ueberlegen was alles gebraucht wird
-	    		resetDialogsAndHighlightings();
-	    	} else {
-	    		$('#errmsg').html(response.message);
-	    		$('#errorModal').modal('show');
-	    	}
-	    },
-	    error: function (xhr, ajaxOptions, thrownError) {
-	    	$('#errmsg').html(xhr.responseText);
-    		$('#errorModal').modal('show');
-	   }
-	});
-	return false;
-}
-
 /**
  * Function is used to load the workflow that matches the given file name.
  * After successfully loading the workflow it gets initialized and displayed
@@ -244,7 +171,7 @@ function loadWorkflow(fileName) {
 		var data = '{"filename":"' + fileName + '"}';
 		$.ajax({
     		type: 'POST',
-    	    url: serverAddressPigGene + 'ld/wf',
+    	    url: serverAddressPigGene + 'ld',
     	    data: data,
     	    dataType:'json',
     	    success: function(response) {
@@ -301,41 +228,6 @@ function deleteWorkflow(fileName) {
 	return false;
 }
 
-//TODO
-function loadWfComponent(fileName) {
-	var data = '{"filename":"' + fileName + '"}';
-	$.ajax({
-		type: 'POST',
-	    url: serverAddressPigGene + 'ld/comp',
-	    data: data,
-	    dataType:'json',
-	    success: function(response) {
-	    	if(response.success) {
-	    		addWorkflowComponent(response.data.wfComponent);
-				$('#saveState').removeClass('saved');
-				toggleSaveStateVisualisation();
-				initializeTypeaheadRelations(); //modify
-				displayTable();
-	    	} else {
-	    		$('#errmsg').html(response.message);
-	    		$('#errorModal').modal('show');
-	    	}
-	    },
-	    error: function (xhr, ajaxOptions, thrownError) {
-	    	$('#errmsg').html(xhr.responseText);
-    		$('#errorModal').modal('show');
-	   }
-	});
-	
-	//TODO: da braucht's bestimmt nicht mehr alles...
-	prepareContainers();
-	resetAllOperationDialogs();
-	setSaveStateSavedAndDisplayStatus();
-	resetFormContainerOperation();
-	initializeButtons();
-	return false;
-}
-
 
 /**
  * Function is used to load all existing workflow names from the server if no PopUp is present.
@@ -350,35 +242,7 @@ function handleWorkflowRequest(buttonName) {
 	} else {
 		$.ajax({
     		type: 'POST',
-    	    url: serverAddressPigGene + 'get/wf',
-    	    data: null,
-    	    dataType:'json',
-    	    success: function(response) {
-    	    	if(response.success) {
-    	    		var popContent = convertFilenamesToLinks(buttonName, response.data);
-    	    		$(buttonName).attr('data-content', popContent).popover('show').addClass('pop').addClass(id);
-    	    	} else {
-    	    		$('#errmsg').html(response.message);
-    	    		$('#errorModal').modal('show');
-    	    	}
-    	    },
-    	    error: function (xhr, ajaxOptions, thrownError) {
-    	    	$('#errmsg').html(xhr.responseText);
-	    		$('#errorModal').modal('show');
-    	   }
-    	});
-	}
-}
-
-//TODO
-function handleWfCompRequest(buttonName) {
-	var id = buttonName.substring(1,buttonName.length) + 'Popover';
-	if($(buttonName).hasClass('pop')) {
-		$(buttonName).popover('hide').removeClass('pop').removeClass(id);
-	} else {
-		$.ajax({
-    		type: 'POST',
-    	    url: serverAddressPigGene + 'get/comp',
+    	    url: serverAddressPigGene + 'get',
     	    data: null,
     	    dataType:'json',
     	    success: function(response) {

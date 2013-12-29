@@ -753,8 +753,11 @@ function closeUnsavedModal() {
  * Calls a helper function to convert the workflow-object into a html table and displays the result.
  */
 function displayTable() {
-	var tab = convertJsonToTable(workflow, 'operationTable', 'table table-striped table-hover');
-	$('#tableContainer').html(tab);
+	//var tab = convertJsonToTable(workflow, 'operationTable', 'table table-striped table-hover');
+	var tab = renderWorkflowArray(workflow);
+	
+	$('#workflowContainer').html("");
+	$('#workflowContainer').html(tab);
 }
 
 
@@ -763,11 +766,6 @@ function displayTable() {
  */
 function showSaveNameModal() {
 	$('#saveNameModal').modal('show');
-}
-
-//TODO
-function showSaveNameCompModal() {
-	$('#saveNameCompModal').modal('show');
 }
 
 /**

@@ -818,7 +818,7 @@ function inputLongEnough(input) {
 function updateTypeaheadSaved() {
 	$.ajax({
 		type: 'POST',
-	    url: serverAddressPigGene + 'get/wf',
+	    url: serverAddressPigGene + 'get',
 	    data: null,
 	    dataType:'json',
 	    success: function(response) {
@@ -849,16 +849,17 @@ function updateTypeaheadSaved() {
  */
 function initializeTypeaheadRelations() {
 	typeaheadRelations = [];
-	var relation; 
-	for(var i=0; i<workflow.length; i++) {
-		relation = workflow[i].relation;
-		operation = workflow[i].operation;
-		if(relation != '-' && relation != 'script' && operation != 'STORE') {
-			typeaheadRelations.push(relation);
-		}
-	}
-	sortTypeaheadRelationElements();
-	performTypeaheadButtonUpdate();
+	//TODO
+//	var relation; 
+//	for(var i=0; i<workflow.length; i++) {
+//		relation = workflow[i].relation;
+//		operation = workflow[i].operation;
+//		if(relation != '-' && relation != 'script' && operation != 'STORE') {
+//			typeaheadRelations.push(relation);
+//		}
+//	}
+//	sortTypeaheadRelationElements();
+//	performTypeaheadButtonUpdate();
 }
 
 
@@ -980,10 +981,11 @@ function handleProblemIgnore() {
  * @param index
  */
 function relationNameAlreadyInUse(value, index) {
-	for(var i=0; i<index; i++) {
-		if(workflow[i].relation == value) {
-			return true;
-		}
-	}
+	//TODO
+//	for(var i=0; i<index; i++) {
+//		if(workflow[i].relation == value) {
+//			return true;
+//		}
+//	}
 	return false;
 }

@@ -34,7 +34,7 @@ function setMissingFormValueText(textfield) {
  */
 function resetWorkflow() {
 	workflow = [];
-	componentLineCounter = 1;
+	componentLineCounter = 0;
 	resetTypeaheadRelations();
 	resetWorkflowButtonsAndTableContent();
 	setSaveStateSavedAndDisplayStatus();
@@ -92,19 +92,22 @@ function processSaveWfRequest() {
 //TODO
 function processSaveWfCompRequest() {
 	hideSaveOptionModal();
-	showSaveNameCompModal();
 }
 
+
+//TODO ... description
 /**
  * Function is used to initialize the data loaded from the server and to
  * reset the componentLineCounter variable to it's initial value.
  * @param data
  */
 function initializeLoadedWorkflow(data) {
-	componentLineCounter = 1;
-	description = data.description;
-	resetDescription();
-	workflow = data.workflow;
+	//componentLineCounter = 1; nur wenn auf new gecklickt wird
+//	description = data.description;
+//	resetDescription();
+//	workflow = data.workflow;
+	workflow[componentLineCounter] = {name:data.name, description:data.description, data:data.workflow};
+	componentLineCounter++;	
 }
 
 //TODO

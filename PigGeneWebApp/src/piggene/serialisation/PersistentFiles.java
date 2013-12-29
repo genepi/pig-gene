@@ -15,7 +15,6 @@ import java.util.Properties;
 public class PersistentFiles {
 	private static Properties prop = new Properties();
 	private static String workflowDefs;
-	private static String workflowCompDefs;
 	private static String cloudgeneYaml;
 	private static String pigFiles;
 
@@ -26,7 +25,6 @@ public class PersistentFiles {
 		try {
 			prop.load(PersistentFiles.class.getClassLoader().getResourceAsStream("config.properties"));
 			workflowDefs = prop.getProperty("workflowDefs");
-			workflowCompDefs = prop.getProperty("workflowCompDefs");
 			cloudgeneYaml = prop.getProperty("cloudgeneYaml");
 			pigFiles = prop.getProperty("pigFiles");
 		} catch (IOException e) {
@@ -43,29 +41,8 @@ public class PersistentFiles {
 		return false;
 	}
 
-	public static boolean doesWorkflowComponentFileExist(final String filename) {
-		final File file = new File(workflowCompDefs.concat(filename.concat(YAML_EXTENSION)));
-		if (file.exists()) {
-			return true;
-		}
-		return false;
-	}
-
 	public static ArrayList<String> getAllWorkflowFileNames() {
 		final File file = new File(workflowDefs);
-		final File[] files = file.listFiles();
-		if (files == null || files.length == 0) {
-			return null;
-		}
-		final ArrayList<String> fileNames = new ArrayList<String>();
-		for (final File f : files) {
-			fileNames.add(f.getName());
-		}
-		return fileNames;
-	}
-
-	public static ArrayList<String> getAllWorkflowComponentFileNames() {
-		final File file = new File(workflowCompDefs);
 		final File[] files = file.listFiles();
 		if (files == null || files.length == 0) {
 			return null;

@@ -89,18 +89,35 @@ form input[type=text] {
 	margin-left: 0px;
 }
 
-#workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDescription {
-	background-color: #FFFFFF;
-}
-
 #operationArea {
 	width: 1250px;
 }
+
+/**
+workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDescription {
+	background-color: #FFFFFF;
+}
+
 
 #workflowContainer.well {
 	padding: 5px 0px 0px 0px;
 	min-height: 193px;
 }
+*/
+
+#processElements, #lineDetails, #formContainer, #workflowDescription {
+	background-color: #FFFFFF;
+}
+
+
+.container {
+	padding: 5px 0px 0px 0px;
+	margin: 0px 0px 20px 0px;
+	border: 1px solid #e3e3e3;
+	min-height: 193px;
+	background-color: #FFFFFF;
+}
+
 
 #operationPanels {
 	margin-left: 0px;
