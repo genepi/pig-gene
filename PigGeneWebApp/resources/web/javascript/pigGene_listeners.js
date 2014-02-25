@@ -14,7 +14,7 @@ $(document).ready(function() {
 	 */
 	$(window).load(function(){
 		preSaveStdContent();
-		updateTypeaheadSaved();
+//		updateTypeaheadSaved();
 	});
 	
 	
@@ -26,7 +26,7 @@ $(document).ready(function() {
     	setMissingFormValueText($(this).get(0));
     });
     
-    
+
     /**
      * Functions to process clicks that select the different 
      * operations in the menu on the right side.
@@ -133,14 +133,15 @@ $(document).ready(function() {
 	});
 
 	
-	/**
-	 * Function resets the workflow description from the global
-	 * description variable and collapses the description.
-	 */
-	$('#workflowDescrClear').on('click', function() {
-		resetDescription();
-		descriptionButtonHandling();
-	});
+	//TODO needed?
+//	/**
+//	 * Function resets the workflow description from the global
+//	 * description variable and collapses the description.
+//	 */
+//	$('#workflowDescrClear').on('click', function() {
+//		resetDescription();
+//		descriptionButtonHandling();
+//	});
 	
 	
 	/**
@@ -170,24 +171,33 @@ $(document).ready(function() {
 	});
 	
 	
-	/**
-	 * Function reacts on a user click within the workflow container.
-	 * Resets the table row highlighting and the display of the 
-	 * operation dialog by calling a helper method.
-	 */
-	$('#workflowContainer').on('click', function(e) {
-		checkAndResetRowHighlighting($(e.target));
-	});
+	//TODO umbauen
+//	/**
+//	 * Function reacts on a user click within the workflow container.
+//	 * Resets the table row highlighting and the display of the 
+//	 * operation dialog by calling a helper method.
+//	 */
+//	$('#workflowContainer').on('click', function(e) {
+//		checkAndResetRowHighlighting($(e.target));
+//	});
 	
 	
-	/**
-	 * Function is used to react on a user click within a table row.
-	 * The row gets highlighted and the corresponding information
-	 * gets displayed in the operation dialog by calling a helper function.
-	 */
-	$('#tableContainer').on('click', 'tr', function() {
-		processTableRowClick($(this));
-	});
+//	/**
+//	 * Function is used to react on a user click within a table row.
+//	 * The row gets highlighted and the corresponding information
+//	 * gets displayed in the operation dialog by calling a helper function.
+//	 */
+//	$('#tableContainer').on('click', 'tr', function() {
+//		processTableRowClick($(this));
+//	});
+
+	
+	//TODO
+//	$('#workflowContainer').on('click', 'div.container', function() {
+//		$(this).addClass('workflowHighlighting');
+//		highlightedWorkflowIndex = $(this).index();
+//		$('#workflowSorting').removeClass('hide');
+//	});
 	
 	
 	/**
@@ -222,19 +232,19 @@ $(document).ready(function() {
 	$('#saveWfBtn').on('click', function() {
 		//TODO: vorschalten einer Abfrage... soll als comp oder als wf gespeichert werden
 		//open new modal
-		showSaveOptionModal();
+//		showSaveOptionModal();
 		//processSaveWfRequest();
-	});
-	
-	//TODO
-	$('#saveAsWf').on('click', function() {
 		processSaveWfRequest();
 	});
 	
 	//TODO
-	$('#saveAsWfComp').on('click', function() {
-		processSaveWfCompRequest();
-	});
+//	$('#saveAsWf').on('click', function() {
+//	});
+	
+	//TODO
+//	$('#saveAsWfComp').on('click', function() {
+//		processSaveWfCompRequest();
+//	});
 	
 	
 	/**
@@ -309,6 +319,14 @@ $(document).ready(function() {
 	});
 	
 	
+	//TODO
+	$('#wfUp').hover(function() {
+		hoverOverArrowAction('#wfUpArrow');
+	});
+	$('#wfDown').hover(function() {
+		hoverOverArrowAction('#wfDownArrow');
+	});
+	
 	/**
 	 * Functions are used to rearrange two table lines if the 
 	 * user clicks on the up or down links in the line dialog.
@@ -318,6 +336,14 @@ $(document).ready(function() {
 	});
 	$('#orderDown').on('click', function(){
 		orderDownHandling();
+	});
+	
+	//TODO
+	$('#wfUp').on('click', function() {
+		wfOrderUpHandling();
+	});
+	$('#wfDown').on('click', function() {
+		wfOrderDownHandling();
 	});
 	
 	
@@ -384,14 +410,27 @@ $(document).ready(function() {
 	});
 	
 	
+	//TODO
 	/**
 	 * Function handles a click on the description 
 	 * button by calling a helper function.
 	 */
-	$('#descriptionBtn').on('click', function() {
-		processDescriptionBtnClick();
+	$('#workflowContainer').on('click', 'a.descBtn', function() {
+		processDescriptionBtnClick(this);
 	});
 	
+	
+	//TODO
+	$('#workflowContainer').on('click', 'a.compDetBtn', function() {
+		toggleWorkflowDetails(this);
+	});
+	
+	
+	//TODO
+	$('#workflowContainer').on('submit','form.inputFileNames', function() {
+		saveInputFileNames(this);
+		return false;
+	});
 	
 	/**
 	 * Function handles the deletion of a workflow.

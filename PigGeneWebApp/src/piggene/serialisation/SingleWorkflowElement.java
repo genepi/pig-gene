@@ -8,6 +8,7 @@ package piggene.serialisation;
  * @date April 2013
  */
 public class SingleWorkflowElement {
+	private String referenceName;
 	private String relation;
 	private String input;
 	private String operation;
@@ -15,6 +16,14 @@ public class SingleWorkflowElement {
 	private String options;
 	private String options2;
 	private String comment;
+
+	public String getReferenceName() {
+		return referenceName;
+	}
+
+	public void setReferenceName(String referenceName) {
+		this.referenceName = referenceName;
+	}
 
 	public String getRelation() {
 		return relation;
@@ -75,6 +84,9 @@ public class SingleWorkflowElement {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
+		sb.append("referenceName:");
+		sb.append(referenceName);
+		sb.append(" ");
 		sb.append("relation:");
 		sb.append(relation);
 		sb.append(" ");

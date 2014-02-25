@@ -35,7 +35,7 @@ function setMissingFormValueText(textfield) {
 function resetWorkflow() {
 	workflow = [];
 	componentLineCounter = 0;
-	resetTypeaheadRelations();
+//	resetTypeaheadRelations();
 	resetWorkflowButtonsAndTableContent();
 	setSaveStateSavedAndDisplayStatus();
 	resetAllOperationDialogs();
@@ -54,7 +54,8 @@ function resetWorkflow() {
  * Also the used relations get reseted.
  */
 function initializeNewWorkflow() {
-	$('#workflowName').addClass('new');
+	//TODO
+//	$('#workflowName').addClass('new');
 	clearCommentTextbox();
 	hideLineDetailDialog();
 	prepareContainers();
@@ -62,6 +63,8 @@ function initializeNewWorkflow() {
 	showHelp();
 	forceDownload = false;
 	forceRun = false;
+	//TODO
+	$('#workflowContainer').html('');
 }
 
 
@@ -90,9 +93,9 @@ function processSaveWfRequest() {
 }
 
 //TODO
-function processSaveWfCompRequest() {
-	hideSaveOptionModal();
-}
+//function processSaveWfCompRequest() {
+//	hideSaveOptionModal();
+//}
 
 
 //TODO ... description
@@ -102,12 +105,21 @@ function processSaveWfCompRequest() {
  * @param data
  */
 function initializeLoadedWorkflow(data) {
+	//TODO aufrauemen
 	//componentLineCounter = 1; nur wenn auf new gecklickt wird
-//	description = data.description;
-//	resetDescription();
-//	workflow = data.workflow;
-	workflow[componentLineCounter] = {name:data.name, description:data.description, data:data.workflow};
-	componentLineCounter++;	
+	//	resetDescription();
+	if(data.workflows.length > 1) {
+		workflowName = data.name;
+		description = data.description;
+	}
+	var workflowInformation = data.workflows;
+	
+	for(var i=0; i<workflowInformation.length; i++) {
+		workflow[componentLineCounter] = {name:workflowInformation[i].name, description:workflowInformation[i].description, ref:true, data:workflowInformation[i].workflow};
+		workflowDetailDisplay[componentLineCounter] = false;
+		workflowDescDisplay[componentLineCounter] = false;
+		componentLineCounter++;	
+	}
 }
 
 //TODO

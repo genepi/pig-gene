@@ -77,7 +77,8 @@ form input[type=text] {
 }
 
 #tableContainer {
-	padding: 0px 19px 0px 19px;
+	padding-left: 19px;
+	padding-right: 20px;
 }
 
 #workflowName {
@@ -105,7 +106,7 @@ workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDesc
 }
 */
 
-#processElements, #lineDetails, #formContainer, #workflowDescription {
+#processElements, #lineDetails, #formContainer, #workflowDescription, #workflowSorting {
 	background-color: #FFFFFF;
 }
 
@@ -113,8 +114,6 @@ workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDesc
 .container {
 	padding: 5px 0px 0px 0px;
 	margin: 0px 0px 20px 0px;
-	border: 1px solid #e3e3e3;
-	min-height: 193px;
 	background-color: #FFFFFF;
 }
 
@@ -220,6 +219,21 @@ workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDesc
 #workflowDescription {
 	width: 760px;
 	height: 119px;
+	margin-left: 19px;
+	margin-right: 19px;
+}
+
+.compDetBtn {
+	float: right;
+	margin-top: 5px;
+	margin-right: 2px;
+	padding-left: 0px;
+	padding-right: 0px;
+	width: 115px;
+}
+
+.workflowHighlighting {
+	background-color: #e3e3e3;
 }
 
 #lineDetails {
@@ -231,7 +245,7 @@ workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDesc
 	margin-bottom: 5px;
 }
 
-#lineOrdering {
+#lineOrdering, #workflowOrdering {
 	margin: 10px 0px 0px 0px; 
 	display: inline;
 }
@@ -273,4 +287,8 @@ workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDesc
 #scriptTextarea {
 	height: 200px;
 	white-space: nowrap;
+}
+
+.inputFileNames {
+	margin: 19px;
 }

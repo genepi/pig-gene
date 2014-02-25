@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -23,10 +24,26 @@ public class JSONConverter {
 
 		// length-2: last two element elements are description and file name
 		for (int i = 0; i < array.length() - 2; i++) {
-			comp = gson.fromJson(array.getString(i), SingleWorkflowElement.class);
-			workflow.add(comp);
+			JSONObject currentArrayElement = array.getJSONObject(i);
+
+			if ((Boolean) currentArrayElement.get("ref")) {
+				String referenceWfName = (String) currentArrayElement.get("name");
+				comp = new SingleWorkflowElement();
+				comp.setReferenceName(referenceWfName);
+				workflow.add(comp);
+
+				// TODO add info to original (referenced) file that it is beeing
+				// referenced!!! (needed to prevent deletion)
+
+			} else {
+				JSONArray workflowComponent = array.getJSONObject(i).getJSONArray("data");
+				for (int j = 0; j < workflowComponent.length(); j++) {
+					comp = gson.fromJson(workflowComponent.getString(j), SingleWorkflowElement.class);
+					workflow.add(comp);
+				}
+			}
+
 		}
 		return workflow;
 	}
-
 }

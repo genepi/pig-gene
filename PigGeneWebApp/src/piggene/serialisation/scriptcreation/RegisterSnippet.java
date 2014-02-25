@@ -18,13 +18,7 @@ public class RegisterSnippet extends PigSnippet {
 	@Override
 	public String toPigScript() {
 		final StringBuilder sb = new StringBuilder();
-		final String comment = comp.getComment();
-		if (!comment.equals("-")) {
-			sb.append(System.getProperty("line.separator"));
-			sb.append("--");
-			sb.append(comment);
-			sb.append(System.getProperty("line.separator"));
-		}
+		sb.append(parseComment(comp.getComment()));
 		sb.append(comp.getOperation());
 		sb.append(" ");
 		sb.append(comp.getInput());

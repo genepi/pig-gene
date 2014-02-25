@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app>
+<head>
+<meta charset="utf-8">
+<title>PigGene project</title>
+<link href="css/pigGene_new.css" rel="stylesheet">
+<script src="javascript/pigGene_model.js"></script>
+<script src="javascript/pigGene_controllers.js"></script>
+<!-- jQuery -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- angular JS -->
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+<!-- twitter bootstrap -->
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div ng-controller="NavBarController">
+		<button class="btn btn-primary" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons"> {{button.text}}</button>
+	</div>
+
+	<table ng-controller="WorkflowController">
+		<tr ng-repeat="operation in workflow">
+			<td>{{operation.relation}}</td>
+			<td>{{operation.input}}</td>
+			<td>{{operation.operation}}</td>
+			<td>{{operation.input2}}</td>
+			<td>{{operation.options}}</td>
+			<td>{{operation.options2}}</td>
+			<td>{{operation.comment}}</td>
+		</tr>
+	</table>
+	
+	<div ng-controller="SettingsController"></div>
+
+</body>
+
+</html>

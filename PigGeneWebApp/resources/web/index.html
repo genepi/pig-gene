@@ -42,6 +42,7 @@
 		<div id="operationArea">
 			<!-- user defined workflow representation -->
 			<div class="" id="workflowContainer">
+				<!--  
 				<div id="title">
 					<a id="descriptionBtn" class="btn btn-link hide" title="add workflow description"><i class="icon-plus-sign" id="descriptionIcon"></i></a>
 					<h3 id="workflowName">PigGene - graphical pig script generator</h3>
@@ -61,12 +62,20 @@
 					Alternatively you can click "open" to load an already existing workflow definition.</p>
 					<table id="operationTable"></table>
 				</div>
+				-->
 			</div>
 	
 			<!-- workflow related operation dialogs -->
 			<div class="span5" id="affixContainer">
 				<div class="span5 affix-top" data-spy="affix" data-offset-top="105" id="operationPanels">
 					
+					<!-- workflow sorting details dialog -->
+					<div class="well hide" id="workflowSorting">
+						<h4 id="workflowOrdering">WORKFLOW ORDER</h4>
+						<button class="btn btn-link" id="wfUp" title="move workflow up"><i id="wfUpArrow" class="icon-arrow-up"></i></button>
+						<button class="btn btn-link" id="wfDown" title="move workflow down"><i id="wfDownArrow" class="icon-arrow-down"></i></button><p>
+					</div>
+										
 					<!-- workflow line details dialog -->
 					<div class="well hide" id="lineDetails">
 						<h4 id="lineOrdering">LINE</h4>
@@ -363,20 +372,22 @@
 	  </div>
 	</div>
 	
+	
+	<!-- TODO  
 	<div class="modal hide fade" id="saveWfOrWfCoponentModal">
 	  <div class="modal-header">
 	    <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-	    <h3>Save options:</h3>
+	    <h3>Save workflow:</h3>
 	  </div>
 	  <div class="modal-body">
-	    <p id="saveMsg">Do you want to save the current state as workflow or as reusable workflow component?
-	    Workflow components can be added within multiple workflows via the add component button on the top.</p>
+	    <p id="saveMsg">Do you want to save the current workflow?</p>
 	  </div>
 	  <div class="modal-footer">
 	    <a type="button" class="btn" id="saveAsWfComp">as workflow component</a>
 	    <a type="button" class="btn btn-inverse" id="saveAsWf" data-dismiss="modal" aria-hidden="true">as workflow</a>
 	  </div>
 	</div>
+	-->
 
 </body>
 </html>

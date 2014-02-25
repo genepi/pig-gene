@@ -135,10 +135,11 @@ function saveWorkflow(filename) {
 	    dataType: 'json',
 	    success: function(response) {
 	    	if(response.success) {
-	    		resetDialogsAndHighlightings();
+	    		//TODO anpassen an neuen Code
+//	    		resetDialogsAndHighlightings();
 	    		setWorkflowName(filename);
-	    		setSaveStateSavedAndDisplayStatus();
-	    		updateTypeaheadSaved();
+//	    		setSaveStateSavedAndDisplayStatus();
+//	    		updateTypeaheadSaved();
 	    		if(forceDownload) {
 	    			forceDownload = false;
 	    			$('#downloadScript')[0].click();
@@ -180,7 +181,7 @@ function loadWorkflow(fileName) {
     	    		setWorkflowName(fileName);
 					$('#saveState').addClass('saved');
 					toggleSaveStateVisualisation();
-					initializeTypeaheadRelations();
+//					initializeTypeaheadRelations();
 					displayTable();
     	    	} else {
     	    		$('#errmsg').html(response.message);
@@ -214,7 +215,7 @@ function deleteWorkflow(fileName) {
 	    dataType:'json',
 	    success: function(response) {
 	    	if(response.success) {
-				updateTypeaheadSaved();
+//				updateTypeaheadSaved();
 	    	} else {
 	    		$('#errmsg').html(response.message);
 	    		$('#errorModal').modal('show');

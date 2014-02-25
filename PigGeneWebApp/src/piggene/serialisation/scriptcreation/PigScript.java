@@ -23,18 +23,24 @@ public class PigScript {
 
 	public static void generateAndWrite(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		if (!workflow.getDescription().equals("")) {
-			sb.append("--");
-			sb.append(workflow.getDescription());
-			sb.append(System.getProperty("line.separator"));
-		}
+		// TODO relationen umbenennen!!!
+
+		sb.append(insertDescription(workflow.getDescription()));
 		sb.append(insertHeader());
 		for (final SingleWorkflowElement comp : workflow.getWorkflow()) {
-			sb.append(PigSnippetFactory.getPigScriptSnippet(comp));
-			sb.append(SEMICOLON);
-			sb.append(LINE_SEPARATOR);
+			sb.append(parseSnippet(comp));
 		}
 		PigScript.write(sb.toString(), workflow.getName());
+	}
+
+	private static String insertDescription(String description) {
+		final StringBuilder sb = new StringBuilder();
+		if (!description.equals("")) {
+			sb.append("--");
+			sb.append(description);
+			sb.append(System.getProperty("line.separator"));
+		}
+		return sb.toString();
 	}
 
 	private static String insertHeader() {
@@ -45,6 +51,14 @@ public class PigScript {
 			sb.append(SEMICOLON);
 			sb.append(LINE_SEPARATOR);
 		}
+		return sb.toString();
+	}
+
+	private static String parseSnippet(SingleWorkflowElement comp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(PigSnippetFactory.getPigScriptSnippet(comp));
+		sb.append(SEMICOLON);
+		sb.append(LINE_SEPARATOR);
 		return sb.toString();
 	}
 

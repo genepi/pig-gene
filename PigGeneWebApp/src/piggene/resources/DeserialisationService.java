@@ -1,6 +1,7 @@
 package piggene.resources;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import net.sf.json.JSONObject;
 
@@ -13,7 +14,9 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import piggene.response.ServerResponseObject;
+import piggene.serialisation.SingleWorkflowElement;
 import piggene.serialisation.Workflow;
+import piggene.serialisation.WorkflowContainer;
 import piggene.serialisation.WorkflowReader;
 
 /**
@@ -33,7 +36,8 @@ public class DeserialisationService extends ServerResource {
 			final JsonRepresentation representant = new JsonRepresentation(entity);
 			final String filename = representant.getJsonObject().getString("filename");
 			final Workflow workflow = WorkflowReader.read(filename);
-			obj.setData(workflow);
+			final WorkflowContainer resolvedWorkflow = resolveWfReferences(workflow);
+			obj.setData(resolvedWorkflow);
 		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while loading the data.");
@@ -49,4 +53,25 @@ public class DeserialisationService extends ServerResource {
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 
+	private WorkflowContainer resolveWfReferences(final Workflow workflow) throws IOException {
+		ArrayList<Workflow> workflows = new ArrayList<Workflow>();
+
+		// TODO einzelfall überlegen, wenn keine referenzierten Workflows
+		// enthalten sind...
+		ArrayList<SingleWorkflowElement> allWfElements = new ArrayList<SingleWorkflowElement>();
+		boolean added = false;
+		for (final SingleWorkflowElement comp : workflow.getWorkflow()) {
+			String referenceName = comp.getReferenceName();
+			if (referenceName != null) {
+				workflows.add(WorkflowReader.read(referenceName));
+				added = true;
+			}
+		}
+		// TODO
+		if (!added) {
+			workflows.add(workflow);
+		}
+
+		return new WorkflowContainer(workflow.getName(), workflow.getDescription(), workflows);
+	}
 }

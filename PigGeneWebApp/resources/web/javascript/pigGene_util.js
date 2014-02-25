@@ -62,8 +62,12 @@ function processRegisterOperation() {
 	if($('#registerSubmitChange').hasClass('modification')) {
 		workflow[highlightedRowIndex] = {relation:'-', input:input, operation:oper, input2:'-', options:'-', options2:'-', comment:comm};
 		resetOperationDialog('register');
+	} else if(!workflow[workflow.length-1].ref) {
+		workflow[workflow.length-1].data.push({relation:'-', input:input, operation:oper, input2:'-', options:'-', options2:'-', comment:comm});
 	} else {
-		workflow.push({relation:'-', input:input, operation:oper, input2:'-', options:'-', options2:'-', comment:comm});
+		var data = {relation:'-', input:input, operation:oper, input2:'-', options:'-', options2:'-', comment:comm};
+		workflow.push({ref:false, data:[data]});
+		componentLineCounter++;
 	}
 	finalizeSubmit('#registerDialog');
 }
@@ -101,15 +105,20 @@ function processLoadOperation() {
 	
 	if($('#loadSubmitChange').hasClass('modification')) {
 		var rel = generateInputName('mod');
-		deleteTypeaheadRelationByOperation(oper);
+//		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:input2, options:opt, options2:opt2, comment:comm};
 		resetOperationDialog('load');
+	} else if(!workflow[workflow.length-1].ref) { 
+		var rel = generateInputName('-');
+		workflow[workflow.length-1].data.push({relation:name, input:rel, operation:oper, input2:input2, options:opt, options2:opt2, comment:comm});
 	} else {
 		var rel = generateInputName('-');
-		workflow.push({relation:name, input:rel, operation:oper, input2:input2, options:opt, options2:opt2, comment:comm});
+		var data = {relation:name, input:rel, operation:oper, input2:input2, options:opt, options2:opt2, comment:comm};
+		workflow.push({ref:false, data:[data]});
+		componentLineCounter++;
 	}
 	resetLoadSpecifier();
-	updateTypeaheadRelations(name);
+//	updateTypeaheadRelations(name);
 	finalizeSubmit('#loadDialog');
 }
 function processStoreOperation() {
@@ -132,7 +141,7 @@ function processStoreOperation() {
 		
 	if($('#storeSubmitChange').hasClass('modification')) {
 		var name = generateOutputName('mod',0);
-		deleteTypeaheadRelationByOperation(oper);
+//		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('store');
 	} else {
@@ -157,13 +166,13 @@ function processFilterOperation() {
 	}
 	
 	if($('#filterSubmitChange').hasClass('modification')) {
-		deleteTypeaheadRelationByOperation(oper);
+//		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('filter');
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
 	}
-	updateTypeaheadRelations(name);
+//	updateTypeaheadRelations(name);
 	finalizeSubmit('#filterDialog');
 }
 function processJoinOperation() {
@@ -184,13 +193,13 @@ function processJoinOperation() {
 	}
 	
 	if($('#joinSubmitChange').hasClass('modification')) {
-		deleteTypeaheadRelationByOperation(oper);
+//		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel1, operation:oper, input2:rel2, options:opt1, options2:opt2, comment:comm};
 		resetOperationDialog('join');
 	} else {
 		workflow.push({relation:name, input:rel1, operation:oper, input2:rel2, options:opt1, options2:opt2, comment:comm});
 	}
-	updateTypeaheadRelations(name);
+//	updateTypeaheadRelations(name);
 	finalizeSubmit('#joinDialog');
 }
 function processSelectOperation() {
@@ -209,13 +218,13 @@ function processSelectOperation() {
 	}
 	
 	if($('#selectSubmitChange').hasClass('modification')) {
-		deleteTypeaheadRelationByOperation(oper);
+//		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('select');
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
 	}
-	updateTypeaheadRelations(name);
+//	updateTypeaheadRelations(name);
 	finalizeSubmit('#selectDialog');
 }
 function processGroupOperation() {
@@ -235,13 +244,13 @@ function processGroupOperation() {
 	}
 	
 	if($('#groupSubmitChange').hasClass('modification')) {
-		deleteTypeaheadRelationByOperation(oper);
+//		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('group');
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
 	}
-	updateTypeaheadRelations(name);
+//	updateTypeaheadRelations(name);
 	finalizeSubmit('#groupDialog');
 }
 function processOrderOperation() {
@@ -261,13 +270,13 @@ function processOrderOperation() {
 	}
 	
 	if($('#orderSubmitChange').hasClass('modification')) {
-		deleteTypeaheadRelationByOperation(oper);
+//		deleteTypeaheadRelationByOperation(oper);
 		workflow[highlightedRowIndex] = {relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm};
 		resetOperationDialog('order');
 	} else {
 		workflow.push({relation:name, input:rel, operation:oper, input2:'-', options:opt, options2:'-', comment:comm});
 	}
-	updateTypeaheadRelations(name);
+//	updateTypeaheadRelations(name);
 	finalizeSubmit('#orderDialog');
 }
 function processScriptOperation() {
@@ -338,8 +347,8 @@ function setSaveStateUnsavedAndDisplayStatus() {
  * Function is used to reset the description to the value 
  * saved in the global description variable.
  */
-function resetDescription() {
-	$('#description').val(description);
+function resetDescription(description, value) {
+	$(description).val(value);
 }
 
 
@@ -441,11 +450,12 @@ function processTableRowClick(tableRow) {
  * function.
  */
 function processNewWfRequest() {
-	if(!$('#saveState').hasClass('saved')) {
-		$('#discardFilename').html($('#workflowName').html());
-		showDiscardChangesAlert();
-		return;
-	}
+//	if(!$('#saveState').hasClass('saved')) {
+//		$('#discardFilename').html($('#workflowName').html());
+//		//TODO
+////		showDiscardChangesAlert();
+//		return;
+//	}
 	initializeNewWorkflow();
 }
 
@@ -465,13 +475,22 @@ function showErrorMessageShortInput() {
  * icon of the button gets changed to indicate the expanded state.
  * Otherwise the cancel button gets triggered to close the dialog.
  */
-function processDescriptionBtnClick() {
-	if($('#workflowDescription').hasClass('hide')) {
-		$('#workflowDescription').removeClass('hide');
-		resetDescription();
-		showExpandedDescriptionIcon();
+function processDescriptionBtnClick(descriptionBtn) {
+	var component = $(descriptionBtn).parent().parent();
+	var description = $(component).children('#workflowDescription');
+	var index = $(component).index();
+	
+	if($(description).hasClass('hide')) {
+		$(description).removeClass('hide');
+		
+		//TODO schauen wo sonst noch ueberall aufgerufen wird...
+		resetDescription(description, workflow[index].description);
+		showExpandedDescriptionIcon(descriptionBtn.children);
+		workflowDescDisplay[index] = true;
 	} else {
-		$('#workflowDescrClear').trigger('click');
+		$(description).addClass('hide');
+		showCollapsedDescriptionIcon(descriptionBtn.children);
+		workflowDescDisplay[index] = false;
 	}
 }
 
@@ -509,6 +528,17 @@ function orderDownHandling() {
 		addTableRowHighlighting(highlightedRowIndex+2);
 		highlightedRowIndex++;
 		setSaveStateUnsavedAndDisplayStatus();
+	}
+}
+
+//TODO
+function wfOrderUpHandling() {
+	var rowCount = workflow.length;
+	if(~highlightedWorkflowIndex) { //TODO zusätzliche Abfragen einbauen
+		var tmp = workflow[highlightedWorkflowIndex-1];
+		workflow[highlightedWorkflowIndex-1] = workflow[highlightedWorkflowIndex];
+		workflow[highlightedWorkflowIndex] = tmp;
+		displayTable();
 	}
 }
 
@@ -585,13 +615,14 @@ function loadDeleteWfRequest(fileName) {
 		return;
 	}
 	
-	if(!$('#saveState').hasClass('saved') && $('#showWfBtn').hasClass('showWfBtnPopover')) {
-		$('#discardFilename').html($('#workflowName').html());
-		$('#discardFilename').addClass('load');
-		loadDeleteWorkflowName = fileName;
-		showDiscardChangesAlert();
-		return;
-	}
+//	if(!$('#saveState').hasClass('saved') && $('#showWfBtn').hasClass('showWfBtnPopover')) {
+//		$('#discardFilename').html($('#workflowName').html());
+//		$('#discardFilename').addClass('load');
+//		loadDeleteWorkflowName = fileName;
+//		//TODO
+////		showDiscardChangesAlert();
+//		return;
+//	}
 	processLoadDeleteWfRequest(fileName);
 }
 
@@ -660,34 +691,36 @@ function convertFilenamesToLinks(buttonName, data) {
 }
 
 
+//TODO umändern
 /**
  * Returns a default relation-name.
  */
 function getArtificialName() {
-	if(workflow.length == 0) {
-		return 'R' + 1;
-	}
-	var j = workflow.length-1;
-	while (j>=0 && (workflow[j].operation == 'REGISTER' || workflow[j].operation == 'SCRIPT' || workflow[j].operation == 'STORE')) {
-		j--;
-	}
-	var precedingNumber;
-	if(j<0) {
-		precedingNumber = 1;
-	} else {
-		precedingNumber = parseInt(workflow[j].relation.replace('R','')) + 1;
-		if(isNaN(precedingNumber)) { //case: user defined name not using schema R<number>
-			var otherOpsCounter = 0;
-			for(var i=0; i<workflow.length; i++) {
-				var workflowOper = workflow[i].operation;
-				if(workflowOper == 'REGISTER' || workflowOper == 'SCRIPT' || workflowOper == 'STORE') {
-					otherOpsCounter++;
-				}
-			}
-			precedingNumber = workflow.length+1-otherOpsCounter;
-		}
-	}
-	return 'R' + precedingNumber;
+	return 'name';
+//	if(workflow.length == 0) {
+//		return 'R' + 1;
+//	}
+//	var j = workflow.length-1;
+//	while (j>=0 && (workflow[j].operation == 'REGISTER' || workflow[j].operation == 'SCRIPT' || workflow[j].operation == 'STORE')) {
+//		j--;
+//	}
+//	var precedingNumber;
+//	if(j<0) {
+//		precedingNumber = 1;
+//	} else {
+//		precedingNumber = parseInt(workflow[j].relation.replace('R','')) + 1;
+//		if(isNaN(precedingNumber)) { //case: user defined name not using schema R<number>
+//			var otherOpsCounter = 0;
+//			for(var i=0; i<workflow.length; i++) {
+//				var workflowOper = workflow[i].operation;
+//				if(workflowOper == 'REGISTER' || workflowOper == 'SCRIPT' || workflowOper == 'STORE') {
+//					otherOpsCounter++;
+//				}
+//			}
+//			precedingNumber = workflow.length+1-otherOpsCounter;
+//		}
+//	}
+//	return 'R' + precedingNumber;
 }
 
 
@@ -811,117 +844,117 @@ function inputLongEnough(input) {
 }
 
 
-/**
- * Function is used to update the typeahead feature of the 
- * save dialog by sending an ajax request to the server.
- */
-function updateTypeaheadSaved() {
-	$.ajax({
-		type: 'POST',
-	    url: serverAddressPigGene + 'get',
-	    data: null,
-	    dataType:'json',
-	    success: function(response) {
-	    	if(response.success) {
-	    		var savedNames = [];
-	    		var toRemove = '.yaml';
-	    		for(var i=0; i<response.data.length; i++) {
-	    			var fileName = response.data[i].replace(toRemove,'');
-	    			if($.inArray(fileName, sampleWorkflows) < 0) {
-	    				savedNames.push(fileName);
-	    			}
-	    		}
-	    		savedNames.sort();
-	    		$('#saveDialogInput').typeahead({source: savedNames, items: 2});
-	    	}
-	    },
-	    error: function (xhr, ajaxOptions, thrownError) {
-	    	$('#errmsg').html(xhr.responseText);
-    		$('#errorModal').modal('show');
-	   }
-	});
-}
-
-
-/**
- * Function is used to initialize the typeahead values. Therefor
- * it loads the needed data from the global workflow array.
- */
-function initializeTypeaheadRelations() {
-	typeaheadRelations = [];
-	//TODO
-//	var relation; 
-//	for(var i=0; i<workflow.length; i++) {
-//		relation = workflow[i].relation;
-//		operation = workflow[i].operation;
-//		if(relation != '-' && relation != 'script' && operation != 'STORE') {
-//			typeaheadRelations.push(relation);
-//		}
-//	}
-//	sortTypeaheadRelationElements();
+//TODO not needed at the moment
+//
+///**
+// * Function is used to update the typeahead feature of the 
+// * save dialog by sending an ajax request to the server.
+// */
+//function updateTypeaheadSaved() {
+//	$.ajax({
+//		type: 'POST',
+//	    url: serverAddressPigGene + 'get',
+//	    data: null,
+//	    dataType:'json',
+//	    success: function(response) {
+//	    	if(response.success) {
+//	    		var savedNames = [];
+//	    		var toRemove = '.yaml';
+//	    		for(var i=0; i<response.data.length; i++) {
+//	    			var fileName = response.data[i].replace(toRemove,'');
+//	    			if($.inArray(fileName, sampleWorkflows) < 0) {
+//	    				savedNames.push(fileName);
+//	    			}
+//	    		}
+//	    		savedNames.sort();
+//	    		$('#saveDialogInput').typeahead({source: savedNames, items: 2});
+//	    	}
+//	    },
+//	    error: function (xhr, ajaxOptions, thrownError) {
+//	    	$('#errmsg').html(xhr.responseText);
+//    		$('#errorModal').modal('show');
+//	   }
+//	});
+//}
+///**
+// * Function is used to initialize the typeahead values. Therefor
+// * it loads the needed data from the global workflow array.
+// */
+//function initializeTypeaheadRelations() {
+//	typeaheadRelations = [];
+//	//TODO
+////	var relation; 
+////	for(var i=0; i<workflow.length; i++) {
+////		relation = workflow[i].relation;
+////		operation = workflow[i].operation;
+////		if(relation != '-' && relation != 'script' && operation != 'STORE') {
+////			typeaheadRelations.push(relation);
+////		}
+////	}
+////	sortTypeaheadRelationElements();
+////	performTypeaheadButtonUpdate();
+//}
+//
+//
+///**
+// * Function is used to reset and delete all globally 
+// * saved typeahead values.
+// */
+//function resetTypeaheadRelations() {
+//	typeaheadRelations = [];
 //	performTypeaheadButtonUpdate();
-}
-
-
-/**
- * Function is used to reset and delete all globally 
- * saved typeahead values.
- */
-function resetTypeaheadRelations() {
-	typeaheadRelations = [];
-	performTypeaheadButtonUpdate();
-}
-
-
-/**
- * Function is used to add a new value to the globally 
- * saved typeahead values.
- * @param relation name
- */
-function updateTypeaheadRelations(relation) {
-	if($.inArray(relation, typeaheadRelations) == -1) {
-		typeaheadRelations.push(relation);
-		sortTypeaheadRelationElements();
-		performTypeaheadButtonUpdate();
-	}
-}
-
-
-/**
- * Function is used to remove the given element from the typeahead
- * relations array because a line was deleted in the workflow.
- * @param element name to remove from array
- */
-function removeTypeaheadRelationElement(name) {
-	if($.inArray(name, typeaheadRelations) > -1 && !relationNameAlreadyInUse(name,highlightedRowIndex)) {
-		typeaheadRelations.splice($.inArray(name, typeaheadRelations), 1);
-		sortTypeaheadRelationElements();
-		performTypeaheadButtonUpdate();
-	}
-}
-
-
-/**
- * Function is used to sort the typeahead relation elements.
- */
-function sortTypeaheadRelationElements() {
-	typeaheadRelations.sort();
-}
-
-
-/**
- * Function is used to update all the buttons, that rely
- * on the globally saved typeahead values.
- */
-function performTypeaheadButtonUpdate() {
-	$('#filtRel').typeahead().data('typeahead').source = typeaheadRelations;
-	$('#joinRel').typeahead().data('typeahead').source = typeaheadRelations;
-	$('#joinRel2').typeahead().data('typeahead').source = typeaheadRelations;
-	$('#selectRel').typeahead().data('typeahead').source = typeaheadRelations;
-	$('#groupRel').typeahead().data('typeahead').source = typeaheadRelations;
-	$('#orderRel').typeahead().data('typeahead').source = typeaheadRelations;
-	$('#relToStore').typeahead().data('typeahead').source = typeaheadRelations;
-}
+//}
+//
+//
+///**
+// * Function is used to add a new value to the globally 
+// * saved typeahead values.
+// * @param relation name
+// */
+//function updateTypeaheadRelations(relation) {
+//	if($.inArray(relation, typeaheadRelations) == -1) {
+//		typeaheadRelations.push(relation);
+//		sortTypeaheadRelationElements();
+//		performTypeaheadButtonUpdate();
+//	}
+//}
+//
+//
+///**
+// * Function is used to remove the given element from the typeahead
+// * relations array because a line was deleted in the workflow.
+// * @param element name to remove from array
+// */
+//function removeTypeaheadRelationElement(name) {
+//	if($.inArray(name, typeaheadRelations) > -1 && !relationNameAlreadyInUse(name,highlightedRowIndex)) {
+//		typeaheadRelations.splice($.inArray(name, typeaheadRelations), 1);
+//		sortTypeaheadRelationElements();
+//		performTypeaheadButtonUpdate();
+//	}
+//}
+//
+//
+///**
+// * Function is used to sort the typeahead relation elements.
+// */
+//function sortTypeaheadRelationElements() {
+//	typeaheadRelations.sort();
+//}
+//
+//
+///**
+// * Function is used to update all the buttons, that rely
+// * on the globally saved typeahead values.
+// */
+//function performTypeaheadButtonUpdate() {
+//	$('#filtRel').typeahead().data('typeahead').source = typeaheadRelations;
+//	$('#joinRel').typeahead().data('typeahead').source = typeaheadRelations;
+//	$('#joinRel2').typeahead().data('typeahead').source = typeaheadRelations;
+//	$('#selectRel').typeahead().data('typeahead').source = typeaheadRelations;
+//	$('#groupRel').typeahead().data('typeahead').source = typeaheadRelations;
+//	$('#orderRel').typeahead().data('typeahead').source = typeaheadRelations;
+//	$('#relToStore').typeahead().data('typeahead').source = typeaheadRelations;
+//}
 
 
 /**
@@ -943,18 +976,18 @@ function relationIsUsed(value, index) {
 }
 
 
-/**
- * Function is used to update the typeahead and used relations
- * in case of a modification or deletion of a workflow line.
- * @param operation
- */
-function deleteTypeaheadRelationByOperation(op) {
-	removeTypeaheadRelationElement(workflow[highlightedRowIndex].relation);
-	var operation = op;
-	if(op == '') {
-		operation = $('#workflowOps').html();
-	}
-}
+///**
+// * Function is used to update the typeahead and used relations
+// * in case of a modification or deletion of a workflow line.
+// * @param operation
+// */
+//function deleteTypeaheadRelationByOperation(op) {
+//	removeTypeaheadRelationElement(workflow[highlightedRowIndex].relation);
+//	var operation = op;
+//	if(op == '') {
+//		operation = $('#workflowOps').html();
+//	}
+//}
 
 
 /**
@@ -973,6 +1006,23 @@ function handleProblemIgnore() {
 	workflowProblem = true;
 }
 
+//TODO
+function toggleWorkflowDetails(detailBtn) {
+	var container = $(detailBtn).parent().parent()
+	var table = $(container).children('#tableContainer');
+	var index = $(container).index();
+	
+	if(table.hasClass('hide')) {
+		$(table).removeClass('hide');
+		$(detailBtn).html('<i class="icon-upload icon-white"></i> hide details');
+		workflowDetailDisplay[index] = true;
+	} else {
+		$(table).addClass('hide');
+		$(detailBtn).html('<i class="icon-download icon-white"></i> show details');
+		workflowDetailDisplay[index] = false;
+	}
+}
+
 
 /**
  * Function checks the workflow if the given 
@@ -988,4 +1038,20 @@ function relationNameAlreadyInUse(value, index) {
 //		}
 //	}
 	return false;
+}
+
+
+//TODO
+function saveInputFileNames(form) {
+	var inputElements = $(form).children('input');
+	var index = $(form).parent().attr('index');
+	var j = 0;
+	for(var i=0;i<inputElements.length;i++) {
+		for(j; j<workflow[index].data.length;j++) {
+			if(workflow[index].data[j].operation == 'LOAD') {
+				workflow[index].data[j++].input = inputElements[i].value;
+				break;
+			}
+		}
+	}
 }

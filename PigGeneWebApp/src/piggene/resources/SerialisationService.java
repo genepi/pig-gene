@@ -20,6 +20,7 @@ import piggene.serialisation.JSONConverter;
 import piggene.serialisation.SingleWorkflowElement;
 import piggene.serialisation.UntouchableFiles;
 import piggene.serialisation.Workflow;
+import piggene.serialisation.WorkflowReader;
 import piggene.serialisation.WorkflowWriter;
 import piggene.serialisation.scriptcreation.PigScript;
 import piggene.serialisation.yaml.CloudgeneYaml;
@@ -45,6 +46,9 @@ public class SerialisationService extends ServerResource {
 		try { // parse the input
 			final JSONArray array = getJsonArray(entity);
 			workflow = processClientWfData(array);
+
+			// TODO überlegen was in diesem Fall zu tun ist - unten bereits neue
+			// Eintragung gemacht...
 			if (UntouchableFiles.list.contains(workflow.getName())) {
 				throw new UnpossibleWorkflowFileOperation();
 			}
@@ -66,27 +70,30 @@ public class SerialisationService extends ServerResource {
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
-		try { // write pig-script
-			PigScript.generateAndWrite(workflow);
-		} catch (final IOException e1) {
-			obj.setSuccess(false);
-			obj.setMessage("An error occured while creating the pig-script.");
-			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
-		}
-
-		try { // write yaml-file && cloudgene yaml-file
+		try {
 			WorkflowWriter.write(workflow);
+
+			workflow = resolveWfReferences(workflow);
+			PigScript.generateAndWrite(workflow);
 			CloudgeneYaml.generateCloudgeneYamlFile(workflow);
 		} catch (final IOException e) {
 			e.printStackTrace();
 			obj.setSuccess(false);
-			obj.setMessage("An error occured while saving the data.");
+			obj.setMessage("An error occured while saving the submitted data.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
 		obj.setSuccess(true);
 		obj.setMessage("success");
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+	}
+
+	private JSONArray getJsonArray(final Representation entity) throws JSONException, IOException {
+		JsonRepresentation representant = null;
+		JSONArray data = null;
+		representant = new JsonRepresentation(entity);
+		data = representant.getJsonArray();
+		return data;
 	}
 
 	private Workflow processClientWfData(final JSONArray array) throws JsonSyntaxException, JSONException {
@@ -96,12 +103,23 @@ public class SerialisationService extends ServerResource {
 		return new Workflow(filename, description, workflow);
 	}
 
-	private JSONArray getJsonArray(final Representation entity) throws JSONException, IOException {
-		JsonRepresentation representant = null;
-		JSONArray data = null;
-		representant = new JsonRepresentation(entity);
-		data = representant.getJsonArray();
-		return data;
+	private Workflow resolveWfReferences(Workflow workflow) throws IOException {
+		ArrayList<SingleWorkflowElement> allWfElements = new ArrayList<SingleWorkflowElement>();
+		for (final SingleWorkflowElement comp : workflow.getWorkflow()) {
+			String referenceName = comp.getReferenceName();
+			if (referenceName != null) {
+				Workflow referencedWf = WorkflowReader.read(referenceName);
+				// TODO
+				// UntouchableFiles.referencedWorkflows.add(referencedWf.getName());
+				// recursion einbauen
+				for (SingleWorkflowElement refComp : referencedWf.getWorkflow()) {
+					allWfElements.add(refComp);
+				}
+			} else {
+				allWfElements.add(comp);
+			}
+		}
+		return new Workflow(workflow.getName(), workflow.getDescription(), allWfElements);
 	}
 
 }

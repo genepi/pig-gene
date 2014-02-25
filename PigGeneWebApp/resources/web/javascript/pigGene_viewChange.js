@@ -209,7 +209,7 @@ function deleteRowAndDisplayTable() {
 	closePopovers();
 	hideInputErrors();
 	var operation = workflow[highlightedRowIndex].operation;
-	deleteTypeaheadRelationByOperation(operation);
+//	deleteTypeaheadRelationByOperation(operation);
 	workflow.splice(highlightedRowIndex,1);
 	modifyInputNames();
 	modifyOutputNames();
@@ -238,8 +238,9 @@ function resetWorkflowButtonsAndTableContent() {
 	$('#descriptionBtn').addClass('hide');
 	description = '';
 	$('#description').val('');
-	setWorkflowName('PigGene - graphical pig script generator');
-	$('#tableContainer').html(stdContent);
+	//TODO
+//	setWorkflowName('PigGene - graphical pig script generator');
+//	$('#tableContainer').html(stdContent);
 }
 
 
@@ -275,13 +276,28 @@ function toggleSaveStateVisualisation() {
 
 
 /**
+ * Function is used to change the description icon 
+ * from plus to minus to indicate the expanded view.
+ */
+function showExpandedDescriptionIcon(descriptionBtn) {
+	$(descriptionBtn).removeClass('icon-plus-sign').addClass('icon-minus-sign');
+}
+
+
+//TODO beschreibung
+function showCollapsedDescriptionIcon(descriptionBtn) {
+	$(descriptionBtn).removeClass('icon-minus-sign').addClass('icon-plus-sign');
+}
+
+//TODO noch wo aufgerufen???
+/**
  * Function is used to hide the description of the workflow and to display the plus
  * icon instead of the minus icon to indicate that the description is collapsed.
  */
-function descriptionButtonHandling() {
-	$('#workflowDescription').addClass('hide');
-	$('#descriptionIcon').removeClass('icon-minus-sign').addClass('icon-plus-sign');
-}
+//function descriptionButtonHandling() {
+//	$('#workflowDescription').addClass('hide');
+//	$('#descriptionIcon').removeClass('icon-minus-sign').addClass('icon-plus-sign');
+//}
 
 
 /**
@@ -562,14 +578,14 @@ function showDiscardChangesAlert() {
 }
 
 //TODO
-function showSaveOptionModal() {
-	$('#saveWfOrWfCoponentModal').modal('show');
-}
+//function showSaveOptionModal() {
+//	$('#saveWfOrWfCoponentModal').modal('show');
+//}
 
 //TODO
-function hideSaveOptionModal() {
-	$('#saveWfOrWfCoponentModal').modal('hide');
-}
+//function hideSaveOptionModal() {
+//	$('#saveWfOrWfCoponentModal').modal('hide');
+//}
 
 /**
  * Function is used to show a security alert to check if the user
@@ -591,15 +607,6 @@ function showSecurityAlert(fileName, type) {
 function showSecurityAlertRemoveWorkflow(fileName) {
 	$('#deleteWfName').html(fileName);
 	$('#removeWorkflowCheckModal').modal('show');
-}
-
-
-/**
- * Function is used to change the description icon 
- * from plus to minus to indicate the expanded view.
- */
-function showExpandedDescriptionIcon() {
-	$('#descriptionIcon').removeClass('icon-plus-sign').addClass('icon-minus-sign');
 }
 
 
@@ -753,9 +760,7 @@ function closeUnsavedModal() {
  * Calls a helper function to convert the workflow-object into a html table and displays the result.
  */
 function displayTable() {
-	//var tab = convertJsonToTable(workflow, 'operationTable', 'table table-striped table-hover');
 	var tab = renderWorkflowArray(workflow);
-	
 	$('#workflowContainer').html("");
 	$('#workflowContainer').html(tab);
 }

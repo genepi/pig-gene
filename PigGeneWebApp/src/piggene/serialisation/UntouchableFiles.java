@@ -1,5 +1,6 @@
 package piggene.serialisation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,5 +12,8 @@ import java.util.List;
  * @date April 2013
  */
 public class UntouchableFiles {
-	public static final List<String> list = Arrays.asList("sample_countVariants", "sample_distance", "sample_filterGT", "sample_leftJoin", "sample_normalJoin", "sample_rangeQuery");
+	public static final List<String> list = Arrays
+			.asList("sample_countVariants", "sample_distance", "sample_filterGT", "sample_leftJoin", "sample_normalJoin", "sample_rangeQuery");
+
+	public static final List<String> referencedWorkflows = new ArrayList<String>();
 }

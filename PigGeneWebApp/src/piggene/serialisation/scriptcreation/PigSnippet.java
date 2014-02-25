@@ -17,6 +17,16 @@ public abstract class PigSnippet implements IPigSnippet {
 		this.comp = comp;
 	}
 
+	protected String parseComment(String comment) {
+		final StringBuilder sb = new StringBuilder();
+		if (!comment.equals("-")) {
+			sb.append("--");
+			sb.append(comment);
+			sb.append(System.getProperty("line.separator"));
+		}
+		return sb.toString();
+	}
+
 	@Override
 	public abstract String toPigScript();
 

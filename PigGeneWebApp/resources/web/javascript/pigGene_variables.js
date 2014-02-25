@@ -12,7 +12,7 @@ var stdContent = '';
 var workflow = [];
 
 //saves the names of the relations used by the typeahead feature
-var typeaheadRelations = [];
+//var typeaheadRelations = [];
 
 //saves the names of the pre installed workflows - they do not
 //show up in the "delete" section, therefore they cannot be deleted
@@ -21,6 +21,9 @@ var sampleWorkflows = ["filterExample","joinExample"];
 //is used to indicate that the workflow is defined and
 //contains problems regarding use/naming of the relations
 var workflowProblem = false;
+
+//TODO
+var workflowName = 'unnamed';
 
 //saves the workflow definition
 var description = '';
@@ -39,3 +42,12 @@ var loadDeleteWorkflowName = '';
 
 //stores the current number of component lines
 var componentLineCounter = 0;
+
+//TODO
+var workflowDetailDisplay = [];
+
+//TODO
+var workflowDescDisplay = [];
+
+//TODO
+var highlightedWorkflowIndex = -1;

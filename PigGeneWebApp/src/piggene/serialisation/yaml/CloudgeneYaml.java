@@ -33,10 +33,10 @@ public class CloudgeneYaml {
 
 		final ArrayList<SingleWorkflowElement> workflowDefinition = workflow.getWorkflow();
 		for (final SingleWorkflowElement wfc : workflowDefinition) {
-			if (wfc.getOperation().equals("LOAD")) {
+			if ("LOAD".equals(wfc.getOperation())) {
 				parameters = appendParameter(parameters, wfc.getInput());
 				inputs.add(createInputParameter(wfc.getInput()));
-			} else if (wfc.getOperation().equals("STORE")) {
+			} else if ("STORE".equals(wfc.getOperation())) {
 				parameters = appendParameter(parameters, wfc.getRelation());
 				outputs.add(createOutputParameter(wfc.getRelation()));
 			}
