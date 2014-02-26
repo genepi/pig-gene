@@ -1,4 +1,10 @@
-function NavBarController($scope) {
+var pigGeneApp = angular.module("pigGene",["xeditable"]);
+pigGeneApp.run(function(editableOptions) {
+	  editableOptions.theme = 'bs3'; // bootstrap3 theme
+});
+
+
+pigGeneApp.controller("NavBarCtrl", function($scope) {
 	$scope.buttons = [
 	   {name:"newWfBtn", title:"create new workflow", showState:true, text:"new"},
 	   {name:"showWfBtn", title:"open existing workflow", showState:true, text:"open"},
@@ -7,21 +13,47 @@ function NavBarController($scope) {
 	   {name:"downloadScriptBtn", title:"download pig script", showState:true, text:"download"},
 	   {name:"runJobBtn", title:"run workflow on cluster", showState:true, text:"run"}
 	];
-}
+});
 
 
-var workflow = [
-                {relation:"R1", input:"input1", input2:"-", operation:"LOAD", options:"vcf", options2:"-", comment:"Loads the input file."},
-                {relation:"R2", input:"R1", input2:"-", operation:"FILTER", options:"pos==138004", options2:"-", comment:"Filters all lines that match position '138004'."},
-                {relation:"R3", input:"R2", input2:"", operation:"STORE", options:"-", options2:"-", comment:"-"}          
-             ];
 
-
-function WorkflowController($scope) {
+pigGeneApp.controller('EditableRowCtrl', function($scope, $filter, $http) {
 	$scope.workflow = workflow;
-} 
 
+	$scope.operations = [
+		{name: 'REGISTER'},
+		{name: 'LOAD'},
+		{name: 'FILTER'},
+		{name: 'JOIN'},
+		{name: 'SELECT'},
+		{name: 'GROUP BY'},
+		{name: 'ORDER BY'},
+		{name: 'USER SCRIPT'},
+		{name: 'STORE'}
+	]; 
 
-function SettingsController($scope) {
+	$scope.showStatus = function(step,index) {
+		if(step.operation && step.operation.name) {
+			workflow[index].operation = step.operation.name;
+		}
+		return workflow[index].operation;
+	};
+
+	$scope.removeStep = function(index) {
+		$scope.workflow.splice(index, 1);
+	};
+
+	$scope.addStep = function() {
+		$scope.inserted = {
+			relation: "R" + ($scope.workflow.length+1),
+			input: "-",
+			operation: null,
+			options: "-",
+			options2: "-",
+			comment: "-",
+			active: false
+		};
+		$scope.workflow.push($scope.inserted);
+	};
 	
-}
+});
