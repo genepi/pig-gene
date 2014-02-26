@@ -21,9 +21,17 @@
 </head>
 
 <body>
-	<div ng-controller="NavBarCtrl">
-		<button class="btn btn-primary" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons"> {{button.text}}</button>
-	</div>
+	<nav class="navbar navbar-inverse" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+		      	<a class="navbar-brand" href="#">pigGene project</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+     			<ul class="nav navbar-nav" ng-controller="NavBarCtrl">
+        			<li class="{{button.active}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons"><a href="#"><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
+       			</ul>
+		</div>
+	</nav>
 	<br/>
 	
 	<div ng-controller="EditableRowCtrl">
@@ -48,12 +56,12 @@
 				<td><span editable-textarea="step.comment" e-name="comment" e-form ="rowform" e-rows="1" e-cols="60">{{step.comment}}</span></td>
 				<td style="white-space:nowrap">
 					<form editable-form name="rowform" ng-show="rowform.$visible">
-						<button type="submit" class="btn btn-primary" ng-disabled="rowform.$waiting">save</button>
-						<button type="button" class="btn btn-default" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()">cancel</button>
+						<button type="submit" class="btn btn-success" ng-disabled="rowform.$waiting"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()"><span class="glyphicon glyphicon-remove"></span></button>
 					</form>
 					<div class="buttons" ng-show="!rowform.$visible">
-						<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-						<button class="btn btn-danger" ng-click="removeStep($index)">del</button>
+						<button class="btn btn-primary" ng-click="rowform.$show()"><span class="glyphicon glyphicon-pencil"></span></button>
+						<button class="btn btn-danger" ng-click="removeStep($index)"><span class="glyphicon glyphicon-trash"></span></button>
 					</div>
 				</td>
 			</tr>
@@ -61,7 +69,4 @@
 		<button class="btn btn-default" ng-click="addStep()">add step</button>
 	</div>
 </body>
-
-
-
 </html>
