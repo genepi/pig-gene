@@ -11,6 +11,7 @@ import org.restlet.routing.TemplateRoute;
 
 import piggene.resources.DeletionService;
 import piggene.resources.DeserialisationService;
+import piggene.resources.MyRestTest;
 import piggene.resources.ScriptProvider;
 import piggene.resources.SerialisationService;
 import piggene.resources.WorkflowFinder;
@@ -38,6 +39,8 @@ public class WebApp extends Application {
 		route.setMatchingMode(Template.MODE_EQUALS);
 
 		// routes
+		router.attach("/workflow/{id}", MyRestTest.class);
+
 		router.attach("/save", SerialisationService.class);
 		router.attach("/ld", DeserialisationService.class);
 		router.attach("/del", DeletionService.class);
