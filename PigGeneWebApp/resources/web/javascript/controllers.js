@@ -31,6 +31,10 @@ pigGeneApp.controller('EditableRowCtrl', function($scope) {
 	};	
 });
 
+pigGeneApp.controller('WorkflowCtrl', function($scope) {
+	$scope.steps = wiw;
+});
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 // test
