@@ -5,9 +5,9 @@ import org.restlet.Restlet;
 import org.restlet.data.LocalReference;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Redirector;
+import org.restlet.routing.Route;
 import org.restlet.routing.Router;
-import org.restlet.routing.Template;
-import org.restlet.routing.TemplateRoute;
+import org.restlet.util.Template;
 
 import piggene.resources.MyRestTest;
 
@@ -28,8 +28,10 @@ public class WebApp extends Application {
 		// Create a router Restlet that routes each call
 		final Router router = new Router(getContext());
 		final String target = "riap://host/index_new.html";
-		final Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_SERVER_OUTBOUND);
-		TemplateRoute route = router.attach("/", redirector);
+		// final Redirector redirector = new Redirector(getContext(), target,
+		// Redirector.MODE_SERVER_OUTBOUND);
+		Redirector redirector = new Redirector(getContext(), target);
+		Route route = router.attach("/", redirector);
 		route.setMatchingMode(Template.MODE_EQUALS);
 
 		// routes

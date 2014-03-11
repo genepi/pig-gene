@@ -1,0 +1,76 @@
+!piggene.serialisation.Workflow
+name: sample_rangeQuery
+description: 'Performs a range query for 20:1-1000000 (chrom 20 : pos 1-1000000) and extracts the quality
+   of the genotype.'
+workflow: 
+-  comment: Loads the vcf-input file.
+   input: input1
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: '-'
+   relation: R1
+-  comment: Loads the vcf-reference file.
+   input: input2
+   input2: '-'
+   operation: LOAD
+   options: vcf
+   options2: ref
+   relation: R2
+-  comment: Filters all lines that match chromosome '20'.
+   input: R1
+   input2: '-'
+   operation: FILTER
+   options: chrom == '20'
+   options2: '-'
+   relation: R3
+-  comment: Filters all lines where position is larger or equal than 1.
+   input: R3
+   input2: '-'
+   operation: FILTER
+   options: pos >= 1
+   options2: '-'
+   relation: R4
+-  comment: Filters all lines where position is smaller or equal than 1000000.
+   input: R4
+   input2: '-'
+   operation: FILTER
+   options: pos <= 1000000
+   options2: '-'
+   relation: R5
+-  comment: Filters all lines that match chromosome '20'.
+   input: R2
+   input2: '-'
+   operation: FILTER
+   options: chrom == '20'
+   options2: '-'
+   relation: R6
+-  comment: Filters all lines where position is larger or equal than 1 and position is smaller or equal
+      than 1000000.
+   input: R6
+   input2: '-'
+   operation: FILTER
+   options: pos >= 1 AND pos <= 1000000
+   options2: '-'
+   relation: R7
+-  comment: Joins the filtered relations. The join columns are chrom and pos.
+   input: R5
+   input2: R7
+   operation: JOIN
+   options: chrom,pos
+   options2: chrom,pos
+   relation: R8
+-  comment: Selects the needed columns and extracts the quality of the genotype.
+   input: R8
+   input2: '-'
+   operation: SELECT
+   options: R7::id, R7::pos, pigGene.UDFs.ExtractQuality(R5::genotype), R5::genotype, R5::persID
+   options2: '-'
+   relation: R9
+-  comment: Stores the output.
+   input: R9
+   input2: '-'
+   operation: STORE
+   options: '-'
+   options2: '-'
+   relation: output1

@@ -51,3 +51,7 @@ function ListController($scope) {
 function DetailController($scope, $routeParams) {
 	$scope.message = messages[$routeParams.id];
 }
+
+function WorkflowTabCtrl($scope) {
+	$scope.workflow = workflowArr;
+}

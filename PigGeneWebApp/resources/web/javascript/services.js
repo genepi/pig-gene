@@ -11,7 +11,7 @@ pigGeneApp.directive('workflow', function() {
 		scope : {
 			workflow: '='
 		},
-		template: "<ul><member ng-repeat='member in workflow' member='member'></member></ul>"
+		template: "<div><member ng-repeat='member in workflow' member='member'></member></div>"
 	}
 });
 
@@ -22,7 +22,7 @@ pigGeneApp.directive('member', function($compile) {
 		scope: {
 			member: '='
 		},
-		template: "<li><b>{{member.name}}</b>{{member.relation}}</li>",
+		template: "<div><b>{{member.name}}</b>{{member.relation}}</div>",
 		link: function(scope, iElement, iAttrs) {
 			if(angular.isArray(scope.member.data)) {
 				$compile("<workflow workflow='member.data'></workflow")(scope, function(cloned, scope) {
@@ -51,6 +51,14 @@ function emailRouteConfig($routeProvider) {
 			controller: DetailController,
 			templateUrl: 'detail.html'
 		})
+		
+		//testing
+		.when('/wfTable', {
+			controller: WorkflowTabCtrl,
+			templateUrl: 'workflow.html'
+		})
+		///
+		
 		.otherwise({
 			redirectTo: '/'
 		});

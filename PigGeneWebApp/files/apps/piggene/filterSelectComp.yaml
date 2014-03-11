@@ -1,0 +1,10 @@
+!cloudgene.mapred.apps.App
+name: filterSelectComp
+category: Piggene
+description: 
+mapred: 
+   steps: 
+   -  name: PigScript
+      params: 
+      pig: filterSelectComp.pig
+version: 1.0.0
