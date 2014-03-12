@@ -1,0 +1,294 @@
+/**
+ * CSS design
+ * 
+ * @author Clemens Banas
+ * @date April 2013
+ */
+
+body.well {
+	border: 0px;
+}
+
+form input[type=text] {
+	margin-bottom: 5px;
+}
+
+.well {
+	min-height: 17px;
+}
+
+.affix {
+	top: 20px;
+}
+
+.span12 {
+	width: 1200px;
+}
+
+.span10 {
+	width: 840px;
+}
+
+.span5 {
+	width: 340px;
+}
+
+.popover-title {
+	font-weight: bold;
+}
+
+.fileNames {
+	font-size: 11pt;
+}
+
+.icon-grey {
+  background-image: url("../img/glyphicons-halflings-grey.png");
+}
+
+.unused {
+	color: #000000;
+}
+
+.unexisting {
+	color: #FF0000;
+}
+
+#logoContainer.well {
+	margin-top: 10px;
+	margin-right: 10px;
+	padding: 3px 2px 3px 10px;
+	width: 200px;
+	height: 40px;
+	float: right;
+	cursor: pointer;
+}
+
+#pigIcon {
+	margin-top: -10px;
+}
+
+#saveState {
+	display: inline;
+}
+
+#title {
+	padding: 0px 19px 0 19px;
+	margin-bottom: 5px;
+}
+
+#tableContainer {
+	padding-left: 19px;
+	padding-right: 20px;
+}
+
+#workflowName {
+	display: inline;
+}
+
+#actionBtns {
+	padding: 19px;
+	margin-left: 0px;
+}
+
+#operationArea {
+	width: 1250px;
+}
+
+/**
+workflowContainer, #processElements, #lineDetails, #formContainer, #workflowDescription {
+	background-color: #FFFFFF;
+}
+
+
+#workflowContainer.well {
+	padding: 5px 0px 0px 0px;
+	min-height: 193px;
+}
+*/
+
+#processElements, #lineDetails, #formContainer, #workflowDescription, #workflowSorting {
+	background-color: #FFFFFF;
+}
+
+
+.container {
+	padding: 5px 0px 0px 0px;
+	margin: 0px 0px 20px 0px;
+	background-color: #FFFFFF;
+}
+
+
+#operationPanels {
+	margin-left: 0px;
+	margin-bottom: 20px;
+}
+
+#stdExplanation {
+	padding-bottom: 5px;
+}
+
+#processElements {
+	height: 68px;
+	padding: 0px;
+	margin-bottom: 20px;
+}
+
+#newWfBtn, #showWfBtn, #showWfCompBtn, #saveWfBtn, #deleteWfBtn, #downloadScript, #runJob {
+	padding-left: 8px;
+	padding-right: 10px;
+	margin-left: 0px;
+	margin-bottom: 5px;
+  	webkit-border-radius: 4px;
+    moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#descriptionBtn {
+	padding: 0px 2px 0px 0px;
+	margin-top: -7px;
+	width: 10px;
+}
+
+#projectName {
+	display: inline;
+}
+
+#showWfBtn {
+	width: 52px;
+}
+
+#downloadScript {
+	width: 85px;
+}
+
+#runJob {
+	padding-left: 5px;
+	padding-right: 11px;
+	width: 40px;
+}
+
+#saveWorkflowFormBtn {
+	margin-left: 4px;
+}
+
+#saveWorkflowName {
+	width: 150px;
+}
+
+#saveBtn {
+	width: 135px;
+}
+
+#formContainer {
+	padding: 5px 0px 19px 19px;
+	height: 175px;
+}
+
+#workflowOps {
+	padding: 0px;
+}
+
+#helpBtn {
+	margin-left: 4px;
+	padding-left: 3px;
+	padding-right: 3px;
+	width: 30px;
+	webkit-border-radius: 4px;
+    moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#stepAction {
+	margin-bottom: 5px;
+}
+
+#action {
+	padding-left: 9px;
+	width: 99px;
+}
+
+#loadFiletypeSeparator.btn-group {
+	display: none;
+	margin-left: 0px;
+}
+
+#loadName, #relToStore, #loadSchema {
+	margin-top: 4px;
+}
+
+#workflowDescription {
+	width: 760px;
+	height: 119px;
+	margin-left: 19px;
+	margin-right: 19px;
+}
+
+.compDetBtn {
+	float: right;
+	margin-top: 5px;
+	margin-right: 2px;
+	padding-left: 0px;
+	padding-right: 0px;
+	width: 115px;
+}
+
+.workflowHighlighting {
+	background-color: #e3e3e3;
+}
+
+#lineDetails {
+	padding: 13px 0px 20px 20px;
+	height: 152px;
+}
+
+#lineDetails p {
+	margin-bottom: 5px;
+}
+
+#lineOrdering, #workflowOrdering {
+	margin: 10px 0px 0px 0px; 
+	display: inline;
+}
+
+#orderUp {
+	padding-left: 5px;
+	width: 17px;
+}
+
+#orderDown {
+	padding-left: 0px;
+	width: 17px;
+}
+
+#up, #down {
+	margin-top: -2px;
+}
+
+#comText, #descrText {
+	margin-top: 0px;
+	margin-bottom: 11px;
+}
+
+#saveDialogInput {
+	margin-top: 4px;
+}
+
+#description, #comments, #scriptTextarea {
+	margin-bottom: 5px;
+	width: 286px;
+	height: 42px;
+	resize: none;
+}
+
+#description {
+	width: 745px;
+}
+
+#scriptTextarea {
+	height: 200px;
+	white-space: nowrap;
+}
+
+.inputFileNames {
+	margin: 19px;
+}
