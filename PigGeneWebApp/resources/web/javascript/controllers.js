@@ -55,3 +55,14 @@ function DetailController($scope, $routeParams) {
 function WorkflowTabCtrl($scope) {
 	$scope.workflow = workflowArr;
 }
+
+pigGeneApp.controller('SendDataToServer', ['$scope', '$http', 'SaveWf', function($scope,$http, SaveWf) {
+	$scope.performPostRequest = function() {
+//		var obj = new Object();
+//		obj.id = "id3";
+//		obj.sonstwas = "nix";
+		
+		var myWiw = new SaveWf(wiw);
+		myWiw.$save();
+	}
+}]);

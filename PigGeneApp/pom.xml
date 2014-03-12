@@ -4,11 +4,10 @@
   <artifactId>PigGeneApp</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <repositories>
-	<repository>  
-		<id>maven-restlet</id>  
-		<name>Public online Restlet repository</name>  
-		<url>http://maven.restlet.org</url>  
-	</repository>
+	<repository>
+    <id>restlet-releases</id>
+    <url>http://maven.restlet.org/</url>
+  </repository>
   </repositories>
   <dependencies>
   	<dependency>
@@ -43,9 +42,9 @@
   		<version>1.1.10</version>
   	</dependency>
   	<dependency>
-  		<groupId>org.restlet</groupId>
+  		<groupId>org.restlet.jee</groupId>
   		<artifactId>org.restlet</artifactId>
-  		<version>2.0-M3</version>
+  		<version>2.1.7</version>
   	</dependency>
   </dependencies>
 </project>

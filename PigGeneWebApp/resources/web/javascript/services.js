@@ -38,7 +38,11 @@ pigGeneApp.directive('member', function($compile) {
 // test
 
 pigGeneApp.factory("Workflow", function($resource) {
-	return $resource("/workflow/:id", {id: '@id'})
+	return $resource("/workflow/:id", {id: '@id'});
+});
+
+pigGeneApp.factory("SaveWf", function($resource){
+	return $resource("/save/wf/");
 });
 
 function emailRouteConfig($routeProvider) {

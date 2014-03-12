@@ -1,8 +1,8 @@
 package server;
 
 import org.restlet.Component;
+import org.restlet.VirtualHost;
 import org.restlet.data.Protocol;
-import org.restlet.routing.VirtualHost;
 
 /**
  * Webserver class.

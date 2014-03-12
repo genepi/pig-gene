@@ -5,11 +5,12 @@ import org.restlet.Restlet;
 import org.restlet.data.LocalReference;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Redirector;
-import org.restlet.routing.Route;
 import org.restlet.routing.Router;
+import org.restlet.routing.TemplateRoute;
 import org.restlet.util.Template;
 
 import piggene.resources.MyRestTest;
+import piggene.resources.SaveWorkflowDefinitionService;
 
 /**
  * WebApp class.
@@ -27,15 +28,14 @@ public class WebApp extends Application {
 
 		// Create a router Restlet that routes each call
 		final Router router = new Router(getContext());
-		final String target = "riap://host/index_new.html";
-		// final Redirector redirector = new Redirector(getContext(), target,
-		// Redirector.MODE_SERVER_OUTBOUND);
-		Redirector redirector = new Redirector(getContext(), target);
-		Route route = router.attach("/", redirector);
+		final String target = "riap://host/index.html";
+		final Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_SERVER_OUTBOUND);
+		TemplateRoute route = router.attach("/", redirector);
 		route.setMatchingMode(Template.MODE_EQUALS);
 
 		// routes
 		router.attach("/workflow/{id}", MyRestTest.class);
+		router.attach("/save/wf", SaveWorkflowDefinitionService.class);
 
 		// router.attach("/save", SerialisationService.class);
 		// router.attach("/ld", DeserialisationService.class);

@@ -10,6 +10,7 @@ import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
 import piggene.resources.MyRestTest;
+import piggene.resources.SaveWorkflowDefinitionService;
 
 /**
  * WebApp class.
@@ -34,6 +35,7 @@ public class WebApp extends Application {
 
 		// routes
 		router.attach("/workflow/{id}", MyRestTest.class);
+		router.attach("/save/wf", SaveWorkflowDefinitionService.class);
 
 		// router.attach("/save", SerialisationService.class);
 		// router.attach("/ld", DeserialisationService.class);

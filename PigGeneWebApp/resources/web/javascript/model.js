@@ -64,7 +64,7 @@ var messages = [{ id: 0, sender: 'jean@somecompany.com', subject: 'Hi there, old
     message: 'blubbbbb' }, 
 ];
 
-var wiw = [
+var wiw = {id:"asdf4", data: [
 			{name:"wf1", description:"desc1", data: [
 			                                         {relation:"R1", input:"input1", input2:"-", operation:"LOAD", options:"vcf", options2:"-", comment:"Loads the input file.", active:false},
 			                                         {relation:"R2", input:"R1", input2:"-", operation:"FILTER", options:"pos==138004", options2:"-", comment:"Filters all lines that match position '138004'.", active:false},
@@ -87,4 +87,4 @@ var wiw = [
                                                          {relation:"R5", input:"R2", input2:"-", operation:"STORE", options:"-", options2:"-", comment:"-", active:false},
                                                          ]
             },
-		];
+		]};
