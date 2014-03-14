@@ -15,6 +15,25 @@ function WorkflowCtrl($scope, $routeParams, WfPersistency) {
 	});
 };
 
+pigGeneApp.controller('EditableRowCtrl', function($scope) {
+	$scope.removeStep = function(index) {
+		$scope.workflow.workflow.splice(index, 1);
+	};
+
+	$scope.addStep = function() {
+		$scope.inserted = {
+			relation: "R" + ($scope.workflow.workflow.length+1),
+			input: "-",
+			operation: null,
+			options: "-",
+			options2: "-",
+			comment: "-",
+			active: false
+		};
+		$scope.workflow.workflow.push($scope.inserted);
+	};	
+});
+
 //pigGeneApp.controller("SendDataToServer", ["$scope", "WfPersistency", function($scope, WfPersistency) {
 //	$scope.performPostRequest = function() {
 //		var myWiw = new WfPersistency.Save(wiw);
