@@ -29,7 +29,7 @@ public class WebApp extends Application {
 
 		// Create a router Restlet that routes each call
 		final Router router = new Router(getContext());
-		final String target = "riap://host/index_new.html";
+		final String target = "riap://host/index.html";
 		final Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_SERVER_OUTBOUND);
 		TemplateRoute route = router.attach("/", redirector);
 		route.setMatchingMode(Template.MODE_EQUALS);
@@ -38,13 +38,6 @@ public class WebApp extends Application {
 		router.attach("/wf", WorkflowOverviewLoaderService.class);
 		router.attach("/wf/{id}", WorkflowLoaderService.class);
 		router.attach("/save/wf", WorkflowSaverService.class);
-
-		// router.attach("/save", SerialisationService.class);
-		// router.attach("/ld", DeserialisationService.class);
-		// router.attach("/del", DeletionService.class);
-		// router.attach("/get", WorkflowPresenter.class);
-		// router.attach("/exist", WorkflowFinder.class);
-		// router.attach("/dwld/{filename}", ScriptProvider.class);
 
 		// clap protocol for usage in jar files
 		final Directory dir = new Directory(getContext(), new LocalReference("clap://thread/web"));

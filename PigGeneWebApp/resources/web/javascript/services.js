@@ -10,3 +10,13 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 		Save: $resource("/save/wf/")
 	};
 });
+
+function workflowRouteConfig($routeProvider) {
+	$routeProvider
+		.when('/wf/:id', {
+			controller: WorkflowCtrl,
+			templateUrl: 'workflowRepresentation.html'
+		});
+}
+	
+pigGeneApp.config(workflowRouteConfig);

@@ -1,0 +1,23 @@
+<h1>{{workflow.name}}</h1>
+<h4>{{workflow.description}}</h4>
+
+<table class="table table-striped table-hover">
+	<tr>
+		<th>relation</th>
+		<th>input</th>
+		<th>operation</th>
+		<th>input2</th>
+		<th>options</th>
+		<th>options2</th>
+		<th>comment</th>
+	</tr>
+	<tr ng-repeat="step in workflow.workflow">
+		<td>{{step.relation}}</td>
+		<td>{{step.input}}</td>
+		<td>{{step.operation}}</td>
+		<td>{{step.input2}}</td>
+		<td>{{step.options}}</td>
+		<td>{{step.options2}}</td>
+		<td>{{step.comment}}</td>
+	</tr>
+</table>
