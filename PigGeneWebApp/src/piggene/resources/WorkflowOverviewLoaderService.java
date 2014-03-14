@@ -7,30 +7,21 @@ import net.sf.json.JSONObject;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 import piggene.response.ServerResponseObject;
 import piggene.serialisation.PersistentFiles;
 
-/**
- * WorkflowPresenter class is used to collect the names of all saved workflow
- * definitions.
- * 
- * @author Clemens Banas
- * @date April 2013
- */
-public class WorkflowPresenter extends ServerResource {
+public class WorkflowOverviewLoaderService extends ServerResource {
 
 	@Override
-	@Post
-	public Representation post(final Representation entity) {
-		final ServerResponseObject obj = new ServerResponseObject();
+	public Representation get() {
+		ServerResponseObject obj = new ServerResponseObject();
 		ArrayList<String> filenames = PersistentFiles.getAllWorkflowFileNames();
 
 		if (filenames == null) {
 			obj.setSuccess(false);
-			obj.setMessage("There are no representations saved.");
+			obj.setMessage("Currently there are no workflow definitions saved on the server.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 

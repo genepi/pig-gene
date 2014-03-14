@@ -9,8 +9,9 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
-import piggene.resources.MyRestTest;
-import piggene.resources.SaveWorkflowDefinitionService;
+import piggene.resources.WorkflowLoaderService;
+import piggene.resources.WorkflowOverviewLoaderService;
+import piggene.resources.WorkflowSaverService;
 
 /**
  * WebApp class.
@@ -34,8 +35,9 @@ public class WebApp extends Application {
 		route.setMatchingMode(Template.MODE_EQUALS);
 
 		// routes
-		router.attach("/workflow/{id}", MyRestTest.class);
-		router.attach("/save/wf", SaveWorkflowDefinitionService.class);
+		router.attach("/wf", WorkflowOverviewLoaderService.class);
+		router.attach("/wf/{id}", WorkflowLoaderService.class);
+		router.attach("/save/wf", WorkflowSaverService.class);
 
 		// router.attach("/save", SerialisationService.class);
 		// router.attach("/ld", DeserialisationService.class);

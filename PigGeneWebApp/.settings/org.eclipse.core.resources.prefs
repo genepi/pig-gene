@@ -1,8 +1,4 @@
 eclipse.preferences.version=1
 encoding//resources/web/javascript/controllers.js=UTF-8
-encoding//resources/web/javascript/pigGene_util.js=UTF-8
-encoding//resources/web/javascript/pigGene_viewChange.js=UTF-8
-encoding//src/piggene/resources/DeserialisationService.java=UTF-8
-encoding//src/piggene/resources/SerialisationService.java=UTF-8
 encoding//src/piggene/serialisation/scriptcreation/PigScript.java=UTF-8
 encoding//src/piggene/serialisation/yaml/CloudgeneYaml.java=UTF-8

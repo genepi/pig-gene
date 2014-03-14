@@ -2,67 +2,22 @@ pigGeneApp.controller("NavBarCtrl", function($scope) {
 	$scope.buttons = buttons;
 });
 
-pigGeneApp.controller('EditableRowCtrl', function($scope) {
-	$scope.workflow = workflow;
-	$scope.operations = operations;
-	
-	$scope.showStatus = function(step,index) {
-		if(step.operation && step.operation.name) {
-			workflow[index].operation = step.operation.name;
-		}
-		return workflow[index].operation;
-	};
-	
-	$scope.removeStep = function(index) {
-		$scope.workflow.splice(index, 1);
-	};
-
-	$scope.addStep = function() {
-		$scope.inserted = {
-			relation: "R" + ($scope.workflow.length+1),
-			input: "-",
-			operation: null,
-			options: "-",
-			options2: "-",
-			comment: "-",
-			active: false
-		};
-		$scope.workflow.push($scope.inserted);
-	};	
-});
-
-pigGeneApp.controller('WorkflowCtrl', function($scope) {
-	$scope.steps = wiw;
-});
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-// test
-
-pigGeneApp.controller('MyCtrl1', ['$scope', 'Workflow', function($scope, Workflow) {
-		var res = Workflow.get({}, {'id':1});
-		$scope.returnValue = res;
+pigGeneApp.controller("WorkflowCtrl", ["$scope", "WfPersistency", function($scope, WfPersistency) {
+		$scope.data = {};
+		var res = WfPersistency.Load.get({"id":"rangeQuery"}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert("something baaaaaaaaaaaaaaaaaaad happend");
+				console.log(response.message);
+				return;
+			}
+			$scope.data.returnValue = response.data;
+		});
 }]);
 
-function ListController($scope) {
-	$scope.messages = messages;
-}
-
-function DetailController($scope, $routeParams) {
-	$scope.message = messages[$routeParams.id];
-}
-
-function WorkflowTabCtrl($scope) {
-	$scope.workflow = workflowArr;
-}
-
-pigGeneApp.controller('SendDataToServer', ['$scope', '$http', 'SaveWf', function($scope,$http, SaveWf) {
+pigGeneApp.controller("SendDataToServer", ["$scope", "WfPersistency", function($scope, WfPersistency) {
 	$scope.performPostRequest = function() {
-//		var obj = new Object();
-//		obj.id = "id3";
-//		obj.sonstwas = "nix";
-		
-		var myWiw = new SaveWf(wiw);
+		var myWiw = new WfPersistency.Save(wiw);
 		myWiw.$save();
 	}
 }]);

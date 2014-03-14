@@ -1,5 +1,7 @@
 package piggene.resources;
 
+import java.io.IOException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
@@ -7,8 +9,9 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ServerResource;
 
 import piggene.response.ServerResponseObject;
+import piggene.serialisation.Workflow;
 
-public class SaveWorkflowDefinitionService extends ServerResource {
+public class WorkflowSaverService extends ServerResource {
 
 	@Override
 	public Representation post(final Representation entity) {
@@ -19,9 +22,12 @@ public class SaveWorkflowDefinitionService extends ServerResource {
 		JSONObject wfDefinition = null;
 		try {
 			representant = new JsonRepresentation(entity);
-			wfDefinition = representant.toJsonObject();
+			wfDefinition = representant.getJsonObject();
 
 			// Workflow workflow = processClientWfData(wfDefinition);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,14 +38,14 @@ public class SaveWorkflowDefinitionService extends ServerResource {
 		return null;
 	}
 
-	// private Workflow processClientWfData(final JSONObject wfDefinition) {
-	// System.out.println("i was hereeeeeeee2");
-	// return null;
-	// // final String description = wfDefinition.getString(array.length() -
-	// // 2);
-	// // final String filename = array.getString(array.length() - 1);
-	// // ArrayList<SingleWorkflowElement> workflow =
-	// // JSONConverter.convertJsonArrayIntoWorkflow(array);
-	// // return new Workflow(filename, description, workflow);
-	// }
+	private Workflow processClientWfData(final JSONObject wfDefinition) {
+		System.out.println("i was hereeeeeeee2");
+		return null;
+		// final String description = wfDefinition.getString(array.length() -
+		// 2);
+		// final String filename = array.getString(array.length() - 1);
+		// ArrayList<SingleWorkflowElement> workflow =
+		// JSONConverter.convertJsonArrayIntoWorkflow(array);
+		// return new Workflow(filename, description, workflow);
+	}
 }
