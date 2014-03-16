@@ -2,6 +2,7 @@
 name: sample_test
 description: Calculates the distance between two locations (given by latitude and longitude) using the
    haversine formula.
+inputParameters: []
 workflow: 
 -  comment: Selects only the needed columns and adds a distance column which is calculated by the dataFu
       library.
@@ -15,11 +16,17 @@ workflow:
    relation: R5
 -  comment: '-'
    input: '-'
+   input2: 
+   operation: 
    options: '-'
    options2: '-'
+   referenceName: 
    relation: R2
 -  comment: -wuzaaa
    input: '-'
+   input2: 
+   operation: 
    options: '-'
    options2: '-'
+   referenceName: 
    relation: R3

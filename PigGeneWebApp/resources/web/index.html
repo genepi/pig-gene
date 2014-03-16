@@ -31,7 +31,7 @@
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
      			<ul class="nav navbar-nav">
-        			<li class="{{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons" ng-click="performNavBarAction($index)"><a href="#"><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
+        			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons" ng-click="performNavBarAction($index)"><a><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
        			</ul>
 		</div>
 	</nav>
@@ -49,13 +49,13 @@
 				<div class="modal-body">
 					<div class="radio" ng-repeat="workflowName in existingWorkflows.names">
 						<label>
-							<input type="radio" name="optionsRadios" id="optionsRadios{{$index}}" value="{{workflowName}}" ng-checked="{{$first}}">{{workflowName}}
+							<input type="radio" name="optionsRadios" id="optionsRadios{{$index}}" value="{{workflowName}}" ng-model="$parent.radioSelection" ng-checked="{{$first}}">{{workflowName}}
 						</label>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
-					<button type="button" class="btn btn-primary">open workflow</button>
+					<button type="button" class="btn btn-primary" ng-click="openSelectedWorkflow()">open workflow</button>
 				</div>
 			</div>
 		</div>

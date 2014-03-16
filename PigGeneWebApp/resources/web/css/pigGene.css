@@ -2,6 +2,10 @@
 	margin: 15px;
 }
 
+.navbarBtn {
+	cursor: pointer;
+}
+
 .workflowContainer {
 	background-color: #f4f4f4;
 }

@@ -2,10 +2,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	$scope.buttons = buttons;
 	
 	$scope.performNavBarAction = function(index) {
-		for(var i=0; i<buttons.length; i++) {
-			buttons[i].active = "";
-		}
-		buttons[index].active = "active";
+		$scope.changeActiveNavBarIcon(index);
 		
 		//TODO button handling depending on current button...
 		switch(buttons[index].name) {
@@ -26,6 +23,13 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 			default: break;
 		}
 	}
+	
+	$scope.changeActiveNavBarIcon = function(index) {
+		for(var i=0; i<buttons.length; i++) {
+			buttons[i].active = "";
+		}
+		buttons[index].active = "active";
+	};
 }]);
 
 function WorkflowCtrl($scope, $routeParams, SharedWfService) {
@@ -53,11 +57,18 @@ function WorkflowCtrl($scope, $routeParams, SharedWfService) {
 	}
 };
 
-pigGeneApp.controller("ModalCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
+	$scope.radioSelection = "";
+	
 	$scope.$on("handleExWfNamesChange", function() {
 		$scope.existingWorkflows = SharedWfService.existingWorkflows;
-		$('#myModal').modal('toggle'); //laden der wfNamen darf nur dann durchgefuehrt werden wenn open gecklickt wurde...
+		$('#myModal').modal('toggle');
 	});
+	
+	$scope.openSelectedWorkflow = function() {
+		$location.path("/wf/" + $scope.radioSelection);
+		$('#myModal').modal('toggle');
+	}
 }]);
 
 

@@ -1,15 +1,11 @@
 !cloudgene.mapred.apps.App
 name: sample_test
 category: Piggene
-description: Removes chromosomes that match 'M', 'X' or 'Y' and removes entries where genotype does not
-   match '0/1' or '1/0'.
+description: Calculates the distance between two locations (given by latitude and longitude) using the
+   haversine formula.
 mapred: 
-   inputs: 
-   -  id: input1
-      description: input1
-      type: hdfs-file
    steps: 
    -  name: PigScript
-      params: -param input1=$input1
+      params: 
       pig: sample_test.pig
 version: 0.1.0
