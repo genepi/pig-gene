@@ -1,42 +1,63 @@
-pigGeneApp.controller("NavBarCtrl", function($scope) {
+pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
 	$scope.buttons = buttons;
-});
-
-function WorkflowCtrl($scope, $routeParams, WfPersistency) {
-	WfPersistency.Load.get({"id":$routeParams.id}).$promise.then(function(response) {
-		if(!response.success) {
-			//TODO fix error message
-			alert("something baaaaaaaaaaaaaaaaaaad happend");
-			console.log(response.message);
-			return;
+	
+	$scope.performNavBarAction = function(index) {
+		for(var i=0; i<buttons.length; i++) {
+			buttons[i].active = "";
 		}
-		workflow = response.data;
-		$scope.workflow = workflow;
+		buttons[index].active = "active";
+		
+		//TODO button handling depending on current button...
+		switch(buttons[index].name) {
+			case "newWfBtn":
+						break;
+			case "openWfBtn":
+						SharedWfService.loadExistingWorkflowNames();
+						break;
+			case "saveWfBtn": 
+						SharedWfService.persistWfDefinition();
+						break;
+			case "deleteWfBtn": 		
+						break;
+			case "downloadScriptBtn": 	
+						break;
+			case "runJobBtn": 			
+						break;
+			default: break;
+		}
+	}
+}]);
+
+function WorkflowCtrl($scope, $routeParams, SharedWfService) {
+	SharedWfService.loadWfDefinition($routeParams.id);
+		
+	$scope.$on("handleWfChange", function() {
+		$scope.workflow = SharedWfService.workflow;
 	});
-};
-
-pigGeneApp.controller('EditableRowCtrl', function($scope) {
+	
 	$scope.removeStep = function(index) {
-		$scope.workflow.workflow.splice(index, 1);
+		SharedWfService.removeStep(index);
 	};
-
+	
 	$scope.addStep = function() {
 		$scope.inserted = {
-			relation: "R" + ($scope.workflow.workflow.length+1),
-			input: "-",
-			operation: null,
-			options: "-",
-			options2: "-",
-			comment: "-",
-			active: false
+				relation: 'R' + ($scope.workflow.workflow.length+1),
+				input: '-',
+				operation: null,
+				options: '-',
+				options2: '-',
+				comment: '-',
+				active: false
 		};
-		$scope.workflow.workflow.push($scope.inserted);
-	};	
-});
+		SharedWfService.addStep($scope.inserted);
+	}
+};
 
-//pigGeneApp.controller("SendDataToServer", ["$scope", "WfPersistency", function($scope, WfPersistency) {
-//	$scope.performPostRequest = function() {
-//		var myWiw = new WfPersistency.Save(wiw);
-//		myWiw.$save();
-//	}
-//}]);
+pigGeneApp.controller("ModalCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	$scope.$on("handleExWfNamesChange", function() {
+		$scope.existingWorkflows = SharedWfService.existingWorkflows;
+		$('#myModal').modal('toggle'); //laden der wfNamen darf nur dann durchgefuehrt werden wenn open gecklickt wurde...
+	});
+}]);
+
+

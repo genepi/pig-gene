@@ -10,7 +10,6 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import piggene.response.ServerResponseObject;
 import piggene.serialisation.Workflow;
 import piggene.serialisation.WorkflowReader;
 
@@ -27,6 +26,7 @@ public class WorkflowLoaderService extends ServerResource {
 		} catch (IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while loading the workflow data.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
 		obj.setSuccess(true);

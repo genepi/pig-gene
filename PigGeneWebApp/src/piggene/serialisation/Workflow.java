@@ -13,15 +13,17 @@ public class Workflow {
 	private String name;
 	private String description;
 	private ArrayList<SingleWorkflowElement> workflow;
+	private ArrayList<String> inputParameters;
 
 	public Workflow() {
 
 	}
 
-	public Workflow(final String name, final String description, final ArrayList<SingleWorkflowElement> workflow) {
+	public Workflow(final String name, final String description, final ArrayList<SingleWorkflowElement> workflow, final ArrayList<String> inputParameters) {
 		this.name = name;
 		this.description = description;
 		this.workflow = workflow;
+		this.inputParameters = inputParameters;
 	}
 
 	public void setName(final String name) {
@@ -46,6 +48,14 @@ public class Workflow {
 
 	public ArrayList<SingleWorkflowElement> getWorkflow() {
 		return workflow;
+	}
+
+	public ArrayList<String> getInputParameters() {
+		return inputParameters;
+	}
+
+	public void setInputParameters(final ArrayList<String> inputParameters) {
+		this.inputParameters = inputParameters;
 	}
 
 }

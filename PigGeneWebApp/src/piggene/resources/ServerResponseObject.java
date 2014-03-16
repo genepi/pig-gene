@@ -1,4 +1,4 @@
-package piggene.response;
+package piggene.resources;
 
 /**
  * ServerResponseObject class is used to hold the information transfered from

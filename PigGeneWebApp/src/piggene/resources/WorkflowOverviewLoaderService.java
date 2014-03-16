@@ -2,6 +2,7 @@ package piggene.resources;
 
 import java.util.ArrayList;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.restlet.data.MediaType;
@@ -9,7 +10,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ServerResource;
 
-import piggene.response.ServerResponseObject;
 import piggene.serialisation.PersistentFiles;
 
 public class WorkflowOverviewLoaderService extends ServerResource {
@@ -17,7 +17,7 @@ public class WorkflowOverviewLoaderService extends ServerResource {
 	@Override
 	public Representation get() {
 		ServerResponseObject obj = new ServerResponseObject();
-		ArrayList<String> filenames = PersistentFiles.getAllWorkflowFileNames();
+		ArrayList<String> filenames = PersistentFiles.getAllWorkflowFileNamesWithoutExtension();
 
 		if (filenames == null) {
 			obj.setSuccess(false);
@@ -27,7 +27,7 @@ public class WorkflowOverviewLoaderService extends ServerResource {
 
 		obj.setSuccess(true);
 		obj.setMessage("success");
-		obj.setData(filenames);
+		obj.setData(new JSONObject().accumulate("title", "open existing workflow").accumulate("names", JSONArray.fromObject(filenames)));
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 

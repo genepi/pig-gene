@@ -54,6 +54,19 @@ public class PersistentFiles {
 		return fileNames;
 	}
 
+	public static ArrayList<String> getAllWorkflowFileNamesWithoutExtension() {
+		final File file = new File(workflowDefs);
+		final File[] files = file.listFiles();
+		if (files == null || files.length == 0) {
+			return null;
+		}
+		final ArrayList<String> fileNames = new ArrayList<String>();
+		for (final File f : files) {
+			fileNames.add(f.getName().replaceAll(YAML_EXTENSION, ""));
+		}
+		return fileNames;
+	}
+
 	public static boolean deleteFile(final String filename) {
 		final File pigFile = new File(pigFiles.concat(filename.concat(PIG_EXTENSION)));
 		final File yamlFileWorkflow = new File(workflowDefs.concat(filename.concat(YAML_EXTENSION)));

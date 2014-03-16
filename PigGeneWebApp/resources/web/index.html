@@ -24,26 +24,41 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse windowGap" role="navigation">
+	<nav id="navBar" class="navbar navbar-inverse windowGap" role="navigation" ng-controller="NavBarCtrl">
 		<div class="container-fluid">
 			<div class="navbar-header">
 		      	<a class="navbar-brand" href="#">pigGene project</a>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-     			<ul class="nav navbar-nav" ng-controller="NavBarCtrl">
-        			<li class="{{button.active}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons"><a href="#"><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
+     			<ul class="nav navbar-nav">
+        			<li class="{{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons" ng-click="performNavBarAction($index)"><a href="#"><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
        			</ul>
 		</div>
 	</nav>
 
-	<!--  
-	<br><br>
-	<div ng-controller=SendDataToServer>
-		<button class="btn btn-primary" ng-click="performPostRequest()">send data to server</button>
+	<div id="workflowContainer" class="windowGap" ng-view>
 	</div>
-	-->
 	
-	<div class="windowGap" ng-view>
+	<div id="myModal" class="modal fade" ng-controller="ModalCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">{{existingWorkflows.title}}</h4>
+				</div>
+				<div class="modal-body">
+					<div class="radio" ng-repeat="workflowName in existingWorkflows.names">
+						<label>
+							<input type="radio" name="optionsRadios" id="optionsRadios{{$index}}" value="{{workflowName}}" ng-checked="{{$first}}">{{workflowName}}
+						</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
+					<button type="button" class="btn btn-primary">open workflow</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 </body>

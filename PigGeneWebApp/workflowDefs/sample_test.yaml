@@ -1,0 +1,25 @@
+!piggene.serialisation.Workflow
+name: sample_test
+description: Calculates the distance between two locations (given by latitude and longitude) using the
+   haversine formula.
+workflow: 
+-  comment: Selects only the needed columns and adds a distance column which is calculated by the dataFu
+      library.
+   input: R47
+   input2: '-'
+   operation: SELECT
+   options: R1::id .. R1::lon, R2::city .. R2::lon, datafu.pig.geo.HaversineDistInMiles(R1::lat, R1::lon,
+      R2::lat, R2::lon) as distance
+   options2: '-'
+   referenceName: 
+   relation: R5
+-  comment: '-'
+   input: '-'
+   options: '-'
+   options2: '-'
+   relation: R2
+-  comment: -wuzaaa
+   input: '-'
+   options: '-'
+   options2: '-'
+   relation: R3
