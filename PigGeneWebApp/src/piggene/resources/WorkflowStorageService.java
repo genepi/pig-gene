@@ -61,7 +61,8 @@ public class WorkflowStorageService extends ServerResource {
 		String description = data.getString("description");
 		ArrayList<SingleWorkflowElement> workflowElements = JSONConverter.convertJSONWorkflow(data.getJSONArray("workflow"));
 		ArrayList<String> inputParameters = JSONConverter.convertJSONWorkflowParams(data.getJSONArray("inputParameters"));
-		return new Workflow(name, description, workflowElements, inputParameters);
+		ArrayList<String> outputParameters = JSONConverter.convertJSONWorkflowParams(data.getJSONArray("outputParameters"));
+		return new Workflow(name, description, workflowElements, inputParameters, outputParameters);
 	}
 
 }

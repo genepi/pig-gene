@@ -6,6 +6,14 @@
 	cursor: pointer;
 }
 
+.parameterHeadline {
+	margin-left: 2px;
+}
+
+.connectionParameter {
+	margin-top: 10px;
+}
+
 .workflowContainer {
 	background-color: #f4f4f4;
 }

@@ -32,28 +32,63 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	};
 }]);
 
-function WorkflowCtrl($scope, $routeParams, SharedWfService) {
+function WorkflowCtrl($scope, $routeParams, $filter, SharedWfService) {
 	SharedWfService.loadWfDefinition($routeParams.id);
+	$scope.operations = operations;
 		
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;
 	});
 	
-	$scope.removeStep = function(index) {
-		SharedWfService.removeStep(index);
+	$scope.changeInputParameter = function(newInputParameter, index) {
+		var modWf = $scope.workflow;
+		modWf.inputParameters[index] = newInputParameter;
+		SharedWfService.prepForBroadcast(modWf);
 	};
+	
+	$scope.changeOutputParameter = function(newOutputParameter, index) {
+		var modWf = $scope.workflow;
+		modWf.outputParameters[index] = newOutputParameter;
+		SharedWfService.prepForBroadcast(modWf);
+	};
+	
+	//TODO change implementation of changeStatus!!!
+	$scope.changeStatus = function(step, index) {
+		var selected = [];
+		if (step.operation.name) {
+			selected = $filter('filter')($scope.operations, {name: step.operation.name});
+			$scope.changeWfOperation(selected[0].name, index);
+		} else if(step.operation) {
+			selected = $filter('filter')($scope.operations, {name: step.operation});
+		}
+		return selected.length ? selected[0].name : "Not set";
+	};
+	
+	$scope.removeStep = function(index) {
+		var modWf = $scope.workflow;
+		modWf.workflow.splice(index, 1);
+		SharedWfService.prepForBroadcast(modWf);
+	}
 	
 	$scope.addStep = function() {
 		$scope.inserted = {
 				relation: 'R' + ($scope.workflow.workflow.length+1),
 				input: '-',
-				operation: null,
+				operation: $scope.operations[2].name,
 				options: '-',
 				options2: '-',
 				comment: '-',
 				active: false
 		};
-		SharedWfService.addStep($scope.inserted);
+		var modWf = $scope.workflow;
+		modWf.workflow.push($scope.inserted);
+		SharedWfService.prepForBroadcast(modWf);
+	}
+	
+	$scope.changeWfOperation = function(operation, index) {
+		var modWf = $scope.workflow;
+		modWf.workflow[index].operation = operation;
+		SharedWfService.prepForBroadcast(modWf);
 	}
 };
 

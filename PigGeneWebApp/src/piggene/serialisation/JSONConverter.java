@@ -21,13 +21,13 @@ public class JSONConverter {
 	}
 
 	public static ArrayList<String> convertJSONWorkflowParams(final JSONArray jsonArray) throws JsonSyntaxException, JSONException {
-		ArrayList<String> inputParams = new ArrayList<String>();
+		ArrayList<String> params = new ArrayList<String>();
 		Gson gson = new Gson();
 
 		for (int i = 0; i < jsonArray.length(); i++) {
-			inputParams.add(gson.fromJson(jsonArray.get(i).toString(), String.class));
+			params.add(gson.fromJson(jsonArray.get(i).toString(), String.class));
 		}
-		return inputParams;
+		return params;
 	}
 
 }

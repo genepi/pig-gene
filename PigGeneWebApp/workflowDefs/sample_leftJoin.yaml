@@ -2,6 +2,9 @@
 name: sample_leftJoin
 description: Joins a vcf-file with the vcf-reference-file and removes all entries, where there exists
    an rsNumber.
+inputParameters: 
+- meinInput1
+- meinInput2
 workflow: 
 -  comment: Loads the vcf-input file.
    input: input1
@@ -9,6 +12,7 @@ workflow:
    operation: LOAD
    options: vcf
    options2: '-'
+   referenceName: 
    relation: R1
 -  comment: Loads the vcf-reference file.
    input: input2
@@ -16,6 +20,7 @@ workflow:
    operation: LOAD
    options: vcf
    options2: ref
+   referenceName: 
    relation: R2
 -  comment: Performs a LEFT join between the two loaded relations. The joint columns are chrom and pos.
    input: '-'
@@ -23,6 +28,7 @@ workflow:
    operation: SCRIPT
    options: R3 = JOIN R1 BY (chrom,pos) LEFT, R2 BY (chrom,pos);
    options2: '-'
+   referenceName: 
    relation: script
 -  comment: Selects the needed columns
    input: R3
@@ -30,6 +36,7 @@ workflow:
    operation: SELECT
    options: R1::chrom .. R1::persID, R2::id
    options2: '-'
+   referenceName: 
    relation: R4
 -  comment: 'Filters all lines where the id column is null. That means: where the join was not able to
       match the two relations.'
@@ -38,6 +45,7 @@ workflow:
    operation: FILTER
    options: R2::id is null
    options2: '-'
+   referenceName: 
    relation: R5
 -  comment: Filters the needed columns.
    input: R5
@@ -45,6 +53,7 @@ workflow:
    operation: SELECT
    options: R1::chrom .. R1::persID
    options2: '-'
+   referenceName: 
    relation: R6
 -  comment: Stores the output.
    input: R6
@@ -52,4 +61,5 @@ workflow:
    operation: STORE
    options: '-'
    options2: '-'
+   referenceName: 
    relation: output1

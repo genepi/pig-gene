@@ -25,25 +25,51 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "WfPersistency", function($
 				console.log(response.message);
 				return;
 			}
-			sharedWorkflow.workflow = response.data;
+			var loadedWf = sharedWorkflow.checkAndModifyInputParameters(response.data);
+			loadedWf = sharedWorkflow.checkAndModifyOutputParameters(loadedWf);
+			sharedWorkflow.workflow = loadedWf;
 			sharedWorkflow.broadcastWfChange();
 		});
 	};
+	
+	//TODO remove: just temporarily needed
+	sharedWorkflow.checkAndModifyInputParameters = function(wf) {
+		var noInputFields = 0;
+		var noInputParameters = wf.inputParameters.length;
+		for(var i=0; i<wf.workflow.length; i++) {
+			if(wf.workflow[i].operation == "LOAD") {
+				noInputFields++;
+			}
+		}
+		if(noInputParameters <= noInputFields) {
+			for(var i=noInputParameters; i<noInputFields; i++) {
+				wf.inputParameters.push("");
+			}
+		} 
+		return wf;
+	}
+	
+	//TODO remove: just temporarily needed
+	sharedWorkflow.checkAndModifyOutputParameters = function(wf) {
+		var noOutputFields = 0;
+		var noOutputParameters = wf.outputParameters.length;
+		for(var i=0; i<wf.workflow.length; i++) {
+			if(wf.workflow[i].operation == "STORE") {
+				noOutputFields++;
+			}
+		}
+		if(noOutputParameters <= noOutputFields) {
+			for(var i=noOutputParameters; i<noOutputFields; i++) {
+				wf.outputParameters.push("");
+			}
+		} 
+		return wf;
+	}
 	
 	sharedWorkflow.persistWfDefinition = function() {
 		var myWf = new WfPersistency.Save(this.workflow);
 		myWf.$save();
 	};
-	
-	sharedWorkflow.removeStep = function(index) {
-		this.workflow.workflow.splice(index, 1);
-		this.broadcastWfChange();
-	}
-	
-	sharedWorkflow.addStep = function(insertedStep) {
-		this.workflow.workflow.push(insertedStep);
-		this.broadcastWfChange();
-	}
 	
 	sharedWorkflow.loadExistingWorkflowNames = function() {
 		WfPersistency.Load.get({}).$promise.then(function(response) {
@@ -58,6 +84,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "WfPersistency", function($
 		});
 	};
 	
+	sharedWorkflow.prepForBroadcast = function(modWf) {
+		this.workflow = modWf;
+		this.broadcastWfChange();
+	}
+	
 	sharedWorkflow.broadcastWfChange = function() {
 		$rootScope.$broadcast("handleWfChange");
 	};
@@ -65,10 +96,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "WfPersistency", function($
 	sharedWorkflow.broadcastExWfNamesChange = function() {
 		$rootScope.$broadcast("handleExWfNamesChange");
 	}
-	
-//	sharedWorkflow.broadcastExistingWfChange = function() {
-//		$rootScope.$broadcast("handleExistingWfChange");
-//	};
 	
 	return sharedWorkflow;
 }]);

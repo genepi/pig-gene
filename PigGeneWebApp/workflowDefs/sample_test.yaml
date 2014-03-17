@@ -4,29 +4,17 @@ description: Calculates the distance between two locations (given by latitude an
    haversine formula.
 inputParameters: []
 workflow: 
--  comment: Selects only the needed columns and adds a distance column which is calculated by the dataFu
-      library.
-   input: R47
-   input2: '-'
-   operation: SELECT
-   options: R1::id .. R1::lon, R2::city .. R2::lon, datafu.pig.geo.HaversineDistInMiles(R1::lat, R1::lon,
-      R2::lat, R2::lon) as distance
-   options2: '-'
-   referenceName: 
-   relation: R5
 -  comment: '-'
    input: '-'
    input2: 
-   operation: 
-   options: '-'
-   options2: '-'
+   operation: REGISTER
+   options: 89
+   options2: mouse
    referenceName: 
    relation: R2
--  comment: -wuzaaa
+-  comment: cat
    input: '-'
-   input2: 
-   operation: 
+   operation: FILTER
    options: '-'
    options2: '-'
-   referenceName: 
-   relation: R3
+   relation: R5

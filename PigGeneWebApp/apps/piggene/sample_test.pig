@@ -7,8 +7,6 @@ REGISTER picard-1.93.jar;
 REGISTER variant-1.93.jar;
 REGISTER tribble-1.93.jar;
 REGISTER commons-jexl-2.1.1.jar;
---Selects only the needed columns and adds a distance column which is calculated by the dataFu library.
-R5 = FOREACH R47 GENERATE R1::id .. R1::lon, R2::city .. R2::lon, datafu.pig.geo.HaversineDistInMiles(R1::lat, R1::lon, R2::lat, R2::lon) as distance;
--;
----wuzaaa
--;
+REGISTER -;
+--cat
+R5 = FILTER - BY -;

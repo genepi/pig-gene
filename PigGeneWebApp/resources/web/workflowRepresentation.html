@@ -5,10 +5,11 @@
 	<br>
 	
 	<div class="paramDefinition well">
-		<form>
-			<label>input:</label>
-			<input type="text" ng-repeat="input in workflow.inputParameters">
-		</form>
+		<b class="parameterHeadline">input parameters:</b>
+		<div class="connectionParameter input-group" ng-repeat="input in workflow.inputParameters track by $index">
+			<input class="form-control" type="text" placeholder="input parameter {{$index+1}}" ng-model="input">
+			<span class="input-group-btn"><button class="btn btn-success" ng-click="changeInputParameter(input,$index)">ok</button></span>
+		</div>
 	</div>
 	<br>
 	
@@ -28,7 +29,7 @@
 				<form editable-form name="rowform" shown="inserted == step">
 					<td><span editable-text="step.relation" e-name="relation" e-form="rowform">{{step.relation}}</span></td>
 					<td><span editable-text="step.input" e-name="input" e-form="rowform">{{step.input}}</span></td>
-					<td><span editable-select="step.operation" e-name="operation" e-form="rowform">{{step.operation}}</span></td>
+					<td><span editable-select="step.operation" e-name="operation" e-form="rowform" e-ng-options="o.name for o in operations">{{changeStatus(step,$index)}}</span></td>
 					<td><span editable-text="step.input2" e-name="input2" e-form="rowform">{{step.input2}}</span></td>
 					<td><span editable-textarea="step.options" e-name="options" e-form ="rowform" e-rows="1" e-cols="60">{{step.options}}</span></td>
 					<td><span editable-textarea="step.options2" e-name="options2" e-form ="rowform" e-rows="1" e-cols="60">{{step.options2}}</span></td>
@@ -52,10 +53,10 @@
 	<br>
 	
 	<div class="paramDefinition well">
-		<form>
-			<label>output:</label>
-			<input type="text" ng-repeat="output in workflow.outputParameters" value="output">
-		</form>
+		<b class="parameterHeadline">output parameters:</b>
+		<div class="connectionParameter input-group" ng-repeat="output in workflow.outputParameters track by $index">
+			<input class="form-control" type="text" placeholder="output parameter {{$index+1}}" ng-model="output">
+			<span class="input-group-btn"><button class="btn btn-success" ng-click="changeOutputParameter(output,$index)">ok</button></span>
+		</div>
 	</div>
-
 </div>
