@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -13,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import piggene.serialisation.WorkflowConverter;
+import piggene.serialisation.WorkflowSerialisation;
 import piggene.serialisation.workflow.FilterOperation;
 import piggene.serialisation.workflow.JoinOperation;
 import piggene.serialisation.workflow.LoadOperation;
@@ -116,13 +118,29 @@ public class PersistencyTests {
 
 	@Test
 	public void persistWfDefinition() {
-		Workflow wf = new Workflow();
+		Workflow wf = null;
+		try {
+			wf = WorkflowConverter.processClientJSONData(wfJSON);
+			assertNotNull(wf);
+			WorkflowSerialisation.store(wf);
+		} catch (JSONException e) {
+			fail("error: JSON conversion of workflow failed");
+		} catch (IOException e) {
+			fail("error: workflow-definition could not be saved to disk");
+		}
 
 	}
 
 	@Test
 	public void loadAndCheckPersistedWfDefinition() {
-
+		Workflow wf = null;
+		try {
+			wf = WorkflowSerialisation.load("testWf");
+			assertNotNull(wf);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

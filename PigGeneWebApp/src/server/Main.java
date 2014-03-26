@@ -21,7 +21,7 @@ public class Main {
 	public static void initializeFolders() {
 		ArrayList<String> paths = new ArrayList<String>();
 		paths.add(prop.getProperty("workflowDefs"));
-		paths.add(prop.getProperty("cloudgeneYaml"));
+		paths.add(prop.getProperty("cloudgeneYamls"));
 		paths.add(prop.getProperty("pigFiles"));
 		for (String path : paths) {
 			File f = new File(path);

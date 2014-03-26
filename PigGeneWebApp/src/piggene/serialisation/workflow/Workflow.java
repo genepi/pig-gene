@@ -20,6 +20,7 @@ public class Workflow implements WorkflowInterface {
 			final ArrayList<String> inputParameters, final ArrayList<String> outputParameters) {
 		this.workflowType = WorkflowType.WORKFLOW;
 		this.name = name;
+		this.description = description;
 		this.steps = steps;
 		this.inputParameters = inputParameters;
 		this.outputParameters = outputParameters;
