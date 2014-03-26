@@ -1,7 +1,6 @@
 package piggene.resources;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import net.sf.json.JSONObject;
 
@@ -13,12 +12,10 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import piggene.serialisation.JSONConverter;
-import piggene.serialisation.SingleWorkflowElement;
-import piggene.serialisation.Workflow;
-import piggene.serialisation.WorkflowWriter;
+import piggene.serialisation.WorkflowConverter;
+import piggene.serialisation.WorkflowSerialisation;
 import piggene.serialisation.scriptcreation.PigScript;
-import piggene.serialisation.yaml.CloudgeneYaml;
+import piggene.serialisation.workflow.Workflow;
 
 public class WorkflowStorageService extends ServerResource {
 
@@ -30,7 +27,7 @@ public class WorkflowStorageService extends ServerResource {
 		try {
 			JsonRepresentation representation = new JsonRepresentation(entity);
 			org.json.JSONObject data = representation.getJsonObject();
-			workflow = processClientWfData(data);
+			workflow = WorkflowConverter.processClientJSONData(data);
 		} catch (IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error ocurred while parsing the input data");
@@ -42,9 +39,10 @@ public class WorkflowStorageService extends ServerResource {
 		}
 
 		try {
-			WorkflowWriter.write(workflow);
+			WorkflowSerialisation.store(workflow);
 			PigScript.generateAndWrite(workflow);
-			CloudgeneYaml.generateCloudgeneYamlFile(workflow);
+			// TODO
+			// CloudgeneYaml.generateCloudgeneYamlFile(workflow);
 		} catch (IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while saving the submitted workflow data.");
@@ -56,13 +54,21 @@ public class WorkflowStorageService extends ServerResource {
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
 
-	private Workflow processClientWfData(final org.json.JSONObject data) throws JSONException {
-		String name = data.getString("name");
-		String description = data.getString("description");
-		ArrayList<SingleWorkflowElement> workflowElements = JSONConverter.convertJSONWorkflow(data.getJSONArray("workflow"));
-		ArrayList<String> inputParameters = JSONConverter.convertJSONWorkflowParams(data.getJSONArray("inputParameters"));
-		ArrayList<String> outputParameters = JSONConverter.convertJSONWorkflowParams(data.getJSONArray("outputParameters"));
-		return new Workflow(name, description, workflowElements, inputParameters, outputParameters);
-	}
+	// private Workflow processClientWfData(final org.json.JSONObject data)
+	// throws JSONException {
+	// String name = data.getString("name");
+	// String description = data.getString("description");
+	// ArrayList<SingleWorkflowElement> workflowElements =
+	// WorkflowConverter.convertJSONWorkflow(data
+	// .getJSONArray("workflow"));
+	// ArrayList<String> inputParameters =
+	// WorkflowConverter.convertJSONWorkflowParams(data
+	// .getJSONArray("inputParameters"));
+	// ArrayList<String> outputParameters =
+	// WorkflowConverter.convertJSONWorkflowParams(data
+	// .getJSONArray("outputParameters"));
+	// return new Workflow(name, description, workflowElements, inputParameters,
+	// outputParameters);
+	// }
 
 }

@@ -10,8 +10,8 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import piggene.serialisation.Workflow;
-import piggene.serialisation.WorkflowReader;
+import piggene.serialisation.WorkflowSerialisation;
+import piggene.serialisation.workflow.Workflow;
 
 public class WorkflowLoaderService extends ServerResource {
 
@@ -21,7 +21,7 @@ public class WorkflowLoaderService extends ServerResource {
 
 		String workflowName = getRequest().getAttributes().get("id").toString();
 		try {
-			Workflow workflow = WorkflowReader.read(workflowName);
+			Workflow workflow = WorkflowSerialisation.load(workflowName);
 			obj.setData(workflow);
 		} catch (IOException e) {
 			obj.setSuccess(false);
