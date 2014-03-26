@@ -4,6 +4,13 @@ category: Piggene
 description: Calculates the distance between two locations (given by latitude and longitude) using the
    haversine formula.
 mapred: 
+   inputs: 
+   -  id: input1
+      description: input1
+      type: hdfs-file
+   -  id: input2
+      description: input2
+      type: hdfs-file
    outputs: 
    -  id: output1
       description: output1
@@ -12,6 +19,6 @@ mapred:
       zip: false
    steps: 
    -  name: PigScript
-      params: -param output1=$output1
+      params: -param input1=$input1 -param input2=$input2 -param output1=$output1
       pig: sample_distance.pig
 version: 0.1.0

@@ -4,7 +4,9 @@ description: Joins a vcf-file with the vcf-reference-file and removes all entrie
    an rsNumber.
 inputParameters: 
 - meinInput1
-- meinInput2
+- meinInput22
+outputParameters: 
+- meinOutput
 workflow: 
 -  comment: Loads the vcf-input file.
    input: input1

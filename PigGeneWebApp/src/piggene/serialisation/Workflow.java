@@ -26,6 +26,7 @@ public class Workflow {
 		this.description = description;
 		this.workflow = workflow;
 		this.inputParameters = inputParameters;
+		this.outputParameters = outputParameters;
 	}
 
 	public void setName(final String name) {
