@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ PersistencyTests.class })
+@SuiteClasses({ PersistencyTests.class, ScriptCreationTests.class })
 public class AllTests {
 
 }

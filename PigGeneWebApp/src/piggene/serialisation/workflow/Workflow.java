@@ -89,7 +89,6 @@ public class Workflow implements WorkflowInterface {
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseComment(getName()));
 		sb.append(parseComment(getDescription()));
-		sb.append(System.getProperty("line.separator"));
 
 		for (Workflow wf : steps) {
 			sb.append(System.getProperty("line.separator"));
