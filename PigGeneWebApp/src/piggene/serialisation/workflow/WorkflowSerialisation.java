@@ -1,12 +1,10 @@
-package piggene.serialisation;
+package piggene.serialisation.workflow;
 
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Properties;
-
-import piggene.serialisation.workflow.Workflow;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;

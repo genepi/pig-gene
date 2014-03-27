@@ -10,8 +10,8 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import piggene.serialisation.WorkflowSerialisation;
 import piggene.serialisation.workflow.Workflow;
+import piggene.serialisation.workflow.WorkflowSerialisation;
 
 public class WorkflowLoaderService extends ServerResource {
 

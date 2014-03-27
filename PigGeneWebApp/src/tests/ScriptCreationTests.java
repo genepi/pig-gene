@@ -7,9 +7,10 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import piggene.serialisation.WorkflowSerialisation;
-import piggene.serialisation.scriptcreation.PigScript;
+import piggene.serialisation.cloudgene.CloudgeneYamlGenerator;
+import piggene.serialisation.pig.PigScriptGenerator;
 import piggene.serialisation.workflow.Workflow;
+import piggene.serialisation.workflow.WorkflowSerialisation;
 
 public class ScriptCreationTests {
 
@@ -18,7 +19,7 @@ public class ScriptCreationTests {
 		Workflow wf = null;
 		try {
 			wf = WorkflowSerialisation.load("testWf_PersistencyTests-std");
-			PigScript.generateAndWrite(wf);
+			PigScriptGenerator.generateAndStoreScript(wf);
 		} catch (IOException e) {
 			fail("error: serialized (standard) workflow could not be loaded - was it created??");
 		}
@@ -31,9 +32,35 @@ public class ScriptCreationTests {
 		Workflow wf = null;
 		try {
 			wf = WorkflowSerialisation.load("testWf_PersistencyTests-rec");
-			PigScript.generateAndWrite(wf);
+			PigScriptGenerator.generateAndStoreScript(wf);
 		} catch (IOException e) {
 			fail("error: serialized (standard) workflow could not be loaded - was it created??");
+		}
+		assertNotNull(wf);
+		// TODO !manually! check generated PigScript!!
+	}
+
+	@Test
+	public void generateCloudgeneYaml_standard() {
+		Workflow wf = null;
+		try {
+			wf = WorkflowSerialisation.load("testWf_PersistencyTests-std");
+			CloudgeneYamlGenerator.generateAndStoreFile(wf);
+		} catch (IOException e) {
+			fail("error: serialized (standard) workflow could not be loaded - was it created??");
+		}
+		assertNotNull(wf);
+		// TODO !manually! check generated PigScript!!
+	}
+
+	@Test
+	public void generateCloudgeneYaml_recursive() {
+		Workflow wf = null;
+		try {
+			wf = WorkflowSerialisation.load("testWf_PersistencyTests-rec");
+			CloudgeneYamlGenerator.generateAndStoreFile(wf);
+		} catch (IOException e) {
+			fail("error: serialized (recursive) workflow could not be loaded - was it created??");
 		}
 		assertNotNull(wf);
 		// TODO !manually! check generated PigScript!!

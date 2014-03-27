@@ -87,6 +87,7 @@ public class Workflow implements WorkflowInterface {
 	@Override
 	public String getPigScriptRepresentation() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(System.getProperty("line.separator"));
 		sb.append(parseComment(getName()));
 		sb.append(parseComment(getDescription()));
 

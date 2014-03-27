@@ -1,4 +1,4 @@
-package piggene.serialisation.scriptcreation;
+package piggene.serialisation.pig;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -7,13 +7,13 @@ import java.util.Properties;
 
 import piggene.serialisation.workflow.Workflow;
 
-public class PigScript {
+public class PigScriptGenerator {
 	private static Properties prop = new Properties();
 	private static String pigFilesPath;
 
 	static {
 		try {
-			prop.load(PigScript.class.getClassLoader().getResourceAsStream("config.properties"));
+			prop.load(PigScriptGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
 			pigFilesPath = prop.getProperty("pigFiles");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -21,11 +21,11 @@ public class PigScript {
 		}
 	}
 
-	public static void generateAndWrite(final Workflow workflow) throws IOException {
+	public static void generateAndStoreScript(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(insertHeader());
 		sb.append(workflow.getPigScriptRepresentation());
-		PigScript.write(sb.toString(), workflow.getName());
+		PigScriptGenerator.write(sb.toString(), workflow.getName());
 	}
 
 	private static String insertHeader() {

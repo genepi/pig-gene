@@ -1,20 +1,10 @@
-package piggene.serialisation;
+package piggene.serialisation.workflow;
 
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import piggene.serialisation.workflow.FilterOperation;
-import piggene.serialisation.workflow.GroupByOperation;
-import piggene.serialisation.workflow.JoinOperation;
-import piggene.serialisation.workflow.LoadOperation;
-import piggene.serialisation.workflow.OrderByOperation;
-import piggene.serialisation.workflow.RegisterOperation;
-import piggene.serialisation.workflow.SelectOperation;
-import piggene.serialisation.workflow.StoreOperation;
-import piggene.serialisation.workflow.Workflow;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;

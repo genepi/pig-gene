@@ -12,10 +12,10 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import piggene.serialisation.WorkflowConverter;
-import piggene.serialisation.WorkflowSerialisation;
-import piggene.serialisation.scriptcreation.PigScript;
+import piggene.serialisation.pig.PigScriptGenerator;
 import piggene.serialisation.workflow.Workflow;
+import piggene.serialisation.workflow.WorkflowConverter;
+import piggene.serialisation.workflow.WorkflowSerialisation;
 
 public class WorkflowStorageService extends ServerResource {
 
@@ -40,7 +40,7 @@ public class WorkflowStorageService extends ServerResource {
 
 		try {
 			WorkflowSerialisation.store(workflow);
-			PigScript.generateAndWrite(workflow);
+			PigScriptGenerator.generateAndStoreScript(workflow);
 			// TODO
 			// CloudgeneYaml.generateCloudgeneYamlFile(workflow);
 		} catch (IOException e) {

@@ -1,18 +1,11 @@
-package piggene.serialisation;
+package piggene.serialisation.helper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-/**
- * PersistentFiles class is used for operations on the workflow and workflow
- * component definition files saved on the file system.
- * 
- * @author Clemens Banas
- * @date April 2013
- */
-public class PersistentFiles {
+public class PersistentFilesHelper {
 	private static Properties prop = new Properties();
 	private static String workflowDefs;
 	private static String cloudgeneYaml;
@@ -23,7 +16,7 @@ public class PersistentFiles {
 
 	static {
 		try {
-			prop.load(PersistentFiles.class.getClassLoader().getResourceAsStream("config.properties"));
+			prop.load(PersistentFilesHelper.class.getClassLoader().getResourceAsStream("config.properties"));
 			workflowDefs = prop.getProperty("workflowDefs");
 			cloudgeneYaml = prop.getProperty("cloudgeneYaml");
 			pigFiles = prop.getProperty("pigFiles");

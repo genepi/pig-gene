@@ -15,8 +15,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import piggene.serialisation.WorkflowConverter;
-import piggene.serialisation.WorkflowSerialisation;
 import piggene.serialisation.workflow.FilterOperation;
 import piggene.serialisation.workflow.GroupByOperation;
 import piggene.serialisation.workflow.JoinOperation;
@@ -26,6 +24,8 @@ import piggene.serialisation.workflow.RegisterOperation;
 import piggene.serialisation.workflow.SelectOperation;
 import piggene.serialisation.workflow.StoreOperation;
 import piggene.serialisation.workflow.Workflow;
+import piggene.serialisation.workflow.WorkflowConverter;
+import piggene.serialisation.workflow.WorkflowSerialisation;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PersistencyTests {
@@ -54,12 +54,13 @@ public class PersistencyTests {
 		assertNotNull(wf.getDescription());
 		assertEquals("test description", wf.getDescription());
 		assertNotNull(wf.getSteps());
-		assertEquals(5, wf.getSteps().size());
+		assertEquals(6, wf.getSteps().size());
 		assertEquals(RegisterOperation.class, wf.getSteps().get(0).getClass());
 		assertEquals(LoadOperation.class, wf.getSteps().get(1).getClass());
-		assertEquals(FilterOperation.class, wf.getSteps().get(2).getClass());
-		assertEquals(JoinOperation.class, wf.getSteps().get(3).getClass());
-		assertEquals(StoreOperation.class, wf.getSteps().get(4).getClass());
+		assertEquals(LoadOperation.class, wf.getSteps().get(2).getClass());
+		assertEquals(FilterOperation.class, wf.getSteps().get(3).getClass());
+		assertEquals(JoinOperation.class, wf.getSteps().get(4).getClass());
+		assertEquals(StoreOperation.class, wf.getSteps().get(5).getClass());
 	}
 
 	@Test
@@ -77,25 +78,30 @@ public class PersistencyTests {
 		assertNotNull(wf.getDescription());
 		assertEquals("description of outermost workflow", wf.getDescription());
 		assertNotNull(wf.getSteps());
-		assertEquals(4, wf.getSteps().size());
+		assertEquals(5, wf.getSteps().size());
 		assertEquals(LoadOperation.class, wf.getSteps().get(0).getClass());
-		assertEquals(GroupByOperation.class, wf.getSteps().get(1).getClass());
-		assertEquals(StoreOperation.class, wf.getSteps().get(2).getClass());
-		assertEquals(Workflow.class, wf.getSteps().get(3).getClass());
+		assertEquals(LoadOperation.class, wf.getSteps().get(1).getClass());
+		assertEquals(GroupByOperation.class, wf.getSteps().get(2).getClass());
+		assertEquals(StoreOperation.class, wf.getSteps().get(3).getClass());
+		assertEquals(Workflow.class, wf.getSteps().get(4).getClass());
 
 		// level1 wf
-		Workflow wf_level1 = wf.getSteps().get(3);
+		Workflow wf_level1 = wf.getSteps().get(4);
 		assertNotNull(wf_level1);
 		assertNotNull(wf_level1.getName());
 		assertEquals("testWf_rec-level1", wf_level1.getName());
 		assertNotNull(wf_level1.getDescription());
 		assertEquals("description of rec-level1 workflow", wf_level1.getDescription());
 		assertNotNull(wf_level1.getSteps());
-		assertEquals(4, wf_level1.getSteps().size());
+		assertEquals(8, wf_level1.getSteps().size());
 		assertEquals(Workflow.class, wf_level1.getSteps().get(0).getClass());
 		assertEquals(RegisterOperation.class, wf_level1.getSteps().get(1).getClass());
-		assertEquals(FilterOperation.class, wf_level1.getSteps().get(2).getClass());
-		assertEquals(JoinOperation.class, wf_level1.getSteps().get(3).getClass());
+		assertEquals(LoadOperation.class, wf_level1.getSteps().get(2).getClass());
+		assertEquals(FilterOperation.class, wf_level1.getSteps().get(3).getClass());
+		assertEquals(JoinOperation.class, wf_level1.getSteps().get(4).getClass());
+		assertEquals(StoreOperation.class, wf_level1.getSteps().get(5).getClass());
+		assertEquals(StoreOperation.class, wf_level1.getSteps().get(6).getClass());
+		assertEquals(StoreOperation.class, wf_level1.getSteps().get(7).getClass());
 
 		// level2 wf
 		Workflow wf_level2 = wf_level1.getSteps().get(0);
@@ -105,27 +111,34 @@ public class PersistencyTests {
 		assertNotNull(wf_level2.getDescription());
 		assertEquals("description of rec-level2 workflow", wf_level2.getDescription());
 		assertNotNull(wf_level2.getSteps());
-		assertEquals(3, wf_level2.getSteps().size());
+		assertEquals(4, wf_level2.getSteps().size());
 		assertEquals(LoadOperation.class, wf_level2.getSteps().get(0).getClass());
 		assertEquals(GroupByOperation.class, wf_level2.getSteps().get(1).getClass());
-		assertEquals(Workflow.class, wf_level2.getSteps().get(2).getClass());
+		assertEquals(StoreOperation.class, wf_level2.getSteps().get(2).getClass());
+		assertEquals(Workflow.class, wf_level2.getSteps().get(3).getClass());
 
 		// level3 wf
-		Workflow wf_level3 = wf_level2.getSteps().get(2);
+		Workflow wf_level3 = wf_level2.getSteps().get(3);
 		assertNotNull(wf_level3);
 		assertNotNull(wf_level3.getName());
 		assertEquals("testWf_rec-level3", wf_level3.getName());
 		assertNotNull(wf_level3.getDescription());
 		assertEquals("description of rec-level3 workflow", wf_level3.getDescription());
 		assertNotNull(wf_level3.getSteps());
-		assertEquals(3, wf_level3.getSteps().size());
+		assertEquals(9, wf_level3.getSteps().size());
 		assertEquals(OrderByOperation.class, wf_level3.getSteps().get(0).getClass());
 		assertEquals(SelectOperation.class, wf_level3.getSteps().get(1).getClass());
-		assertEquals(JoinOperation.class, wf_level3.getSteps().get(2).getClass());
+		assertEquals(LoadOperation.class, wf_level3.getSteps().get(2).getClass());
+		assertEquals(LoadOperation.class, wf_level3.getSteps().get(3).getClass());
+		assertEquals(LoadOperation.class, wf_level3.getSteps().get(4).getClass());
+		assertEquals(LoadOperation.class, wf_level3.getSteps().get(5).getClass());
+		assertEquals(JoinOperation.class, wf_level3.getSteps().get(6).getClass());
+		assertEquals(StoreOperation.class, wf_level3.getSteps().get(7).getClass());
+		assertEquals(StoreOperation.class, wf_level3.getSteps().get(8).getClass());
 
 		// just to be sure
-		assertEquals(Workflow.class, wf.getSteps().get(3).getSteps().get(0).getClass());
-		assertEquals(LoadOperation.class, wf.getSteps().get(3).getSteps().get(0).getSteps().get(0).getClass());
+		assertEquals(Workflow.class, wf.getSteps().get(4).getSteps().get(0).getClass());
+		assertEquals(LoadOperation.class, wf.getSteps().get(4).getSteps().get(0).getSteps().get(0).getClass());
 	}
 
 	@Test
@@ -134,6 +147,7 @@ public class PersistencyTests {
 		try {
 			wf = WorkflowConverter.processClientJSONData(wfJSON);
 			assertNotNull(wf);
+			assertEquals(2, wf.getInputParameters().size());
 			WorkflowSerialisation.store(wf);
 		} catch (JSONException e) {
 			fail("error: JSON conversion of workflow failed");
@@ -191,6 +205,7 @@ public class PersistencyTests {
 				{
 					add("REGISTER");
 					add("LOAD");
+					add("LOAD");
 					add("FILTER");
 					add("JOIN");
 					add("STORE");
@@ -198,8 +213,17 @@ public class PersistencyTests {
 			};
 			for (int i = 0; i < differentOperations.size(); i++) {
 				wfLine = new JSONObject();
-				wfLine.accumulate("relation", "R".concat(String.valueOf(i)));
-				wfLine.accumulate("input", "R".concat(String.valueOf(i + 2)));
+				if (differentOperations.get(i).equals("STORE")) {
+					wfLine.accumulate("relation", "output_" + i);
+				} else {
+					wfLine.accumulate("relation", "R".concat(String.valueOf(i)));
+				}
+
+				if (differentOperations.get(i).equals("LOAD")) {
+					wfLine.accumulate("input", "input_" + i);
+				} else {
+					wfLine.accumulate("input", "R".concat(String.valueOf(i + 2)));
+				}
 				wfLine.accumulate("input2", "R".concat(String.valueOf(i + 3)));
 				wfLine.accumulate("operation", differentOperations.get(i));
 				wfLine.accumulate("options", "options part one");
@@ -211,10 +235,10 @@ public class PersistencyTests {
 			wfJSON.put("steps", wfDef);
 
 			JSONArray in = new JSONArray();
-			in.put("input1");
-			in.put("input2");
+			in.put("testinput1");
+			in.put("testinput2");
 			JSONArray out = new JSONArray();
-			out.put("output1");
+			out.put("testoutput");
 
 			wfJSON.put("inputParameters", in);
 			wfJSON.put("outputParameters", out);
@@ -244,8 +268,12 @@ public class PersistencyTests {
 				ArrayList<String> differentOperations_level1 = new ArrayList<String>() {
 					{
 						add("REGISTER");
+						add("LOAD");
 						add("FILTER");
 						add("JOIN");
+						add("STORE");
+						add("STORE");
+						add("STORE");
 					}
 				};
 
@@ -260,17 +288,24 @@ public class PersistencyTests {
 						{
 							add("LOAD");
 							add("GROUP");
+							add("STORE");
 						}
 					};
 					for (int i = 0; i < differentOperations_level2.size(); i++) {
 						wfLine_level2 = new JSONObject();
-						wfLine_level2.accumulate("relation", "R_level1".concat(String.valueOf(i)));
-						wfLine_level2.accumulate("input", "R_level1".concat(String.valueOf(i + 2)));
-						wfLine_level2.accumulate("input2", "R_level1".concat(String.valueOf(i + 3)));
+						wfLine_level2.accumulate("relation", "R_level2_".concat(String.valueOf(i)));
+						if (differentOperations_level2.get(i).equals("LOAD")) {
+							wfLine_level2.accumulate("input", "input_level2_" + i);
+						} else if (differentOperations_level2.get(i).equals("STORE")) {
+							wfLine_level2.accumulate("input", "output_level2_" + i);
+						} else {
+							wfLine_level2.accumulate("input", "R".concat(String.valueOf(i + 2)));
+						}
+						wfLine_level2.accumulate("input2", "R_level2_".concat(String.valueOf(i + 3)));
 						wfLine_level2.accumulate("operation", differentOperations_level2.get(i));
-						wfLine_level2.accumulate("options", "options_level1 part one");
-						wfLine_level2.accumulate("options2", "options_level1 part two");
-						wfLine_level2.accumulate("comment", "comment_level1".concat(String.valueOf(i)));
+						wfLine_level2.accumulate("options", "options_level2 part one");
+						wfLine_level2.accumulate("options2", "options_level2 part two");
+						wfLine_level2.accumulate("comment", "comment_level2".concat(String.valueOf(i)));
 						wfDef_level2.put(wfLine_level2);
 					}
 
@@ -285,14 +320,26 @@ public class PersistencyTests {
 							{
 								add("ORDER");
 								add("SELECT");
+								add("LOAD");
+								add("LOAD");
+								add("LOAD");
+								add("LOAD");
 								add("JOIN");
+								add("STORE");
+								add("STORE");
 							}
 						};
 						for (int i = 0; i < differentOperations_level3.size(); i++) {
 							wfLine_level3 = new JSONObject();
-							wfLine_level3.accumulate("relation", "R_level3".concat(String.valueOf(i)));
-							wfLine_level3.accumulate("input", "R_level3".concat(String.valueOf(i + 2)));
-							wfLine_level3.accumulate("input2", "R_level3".concat(String.valueOf(i + 3)));
+							wfLine_level3.accumulate("relation", "R_level3_".concat(String.valueOf(i)));
+							if (differentOperations_level3.get(i).equals("LOAD")) {
+								wfLine_level3.accumulate("input", "input_level3_" + i);
+							} else if (differentOperations_level3.get(i).equals("STORE")) {
+								wfLine_level3.accumulate("input", "output_level3_" + i);
+							} else {
+								wfLine_level3.accumulate("input", "R".concat(String.valueOf(i + 2)));
+							}
+							wfLine_level3.accumulate("input2", "R_level3_".concat(String.valueOf(i + 3)));
 							wfLine_level3.accumulate("operation", differentOperations_level3.get(i));
 							wfLine_level3.accumulate("options", "options_level3 part one");
 							wfLine_level3.accumulate("options2", "options_level3 part two");
@@ -303,9 +350,9 @@ public class PersistencyTests {
 
 						JSONArray in_level3 = new JSONArray();
 						in_level3.put("input1_level3");
-						in_level3.put("input1_level3");
-						in_level3.put("input1_level3");
-						in_level3.put("input1_level3");
+						in_level3.put("input2_level3");
+						in_level3.put("input3_level3");
+						in_level3.put("input4_level3");
 						JSONArray out_level3 = new JSONArray();
 						out_level3.put("output1_level3");
 						out_level3.put("output2_level3");
@@ -327,9 +374,15 @@ public class PersistencyTests {
 				wfDef_level1.put(wfJSON_level2);
 				for (int i = 0; i < differentOperations_level1.size(); i++) {
 					wfLine_level1 = new JSONObject();
-					wfLine_level1.accumulate("relation", "R_level1".concat(String.valueOf(i)));
-					wfLine_level1.accumulate("input", "R_level1".concat(String.valueOf(i + 2)));
-					wfLine_level1.accumulate("input2", "R_level1".concat(String.valueOf(i + 3)));
+					wfLine_level1.accumulate("relation", "R_level1_".concat(String.valueOf(i)));
+					if (differentOperations_level1.get(i).equals("LOAD")) {
+						wfLine_level1.accumulate("input", "input_level1_" + i);
+					} else if (differentOperations_level1.get(i).equals("STORE")) {
+						wfLine_level1.accumulate("input", "output_level1_" + i);
+					} else {
+						wfLine_level1.accumulate("input", "R".concat(String.valueOf(i + 2)));
+					}
+					wfLine_level1.accumulate("input2", "R_level1_".concat(String.valueOf(i + 3)));
 					wfLine_level1.accumulate("operation", differentOperations_level1.get(i));
 					wfLine_level1.accumulate("options", "options_level1 part one");
 					wfLine_level1.accumulate("options2", "options_level1 part two");
@@ -353,6 +406,7 @@ public class PersistencyTests {
 			ArrayList<String> differentOperations = new ArrayList<String>() {
 				{
 					add("LOAD");
+					add("LOAD");
 					add("GROUP");
 					add("STORE");
 				}
@@ -360,7 +414,13 @@ public class PersistencyTests {
 			for (int i = 0; i < differentOperations.size(); i++) {
 				wfLine = new JSONObject();
 				wfLine.accumulate("relation", "R_outermost".concat(String.valueOf(i)));
-				wfLine.accumulate("input", "R_outermost".concat(String.valueOf(i + 2)));
+				if (differentOperations.get(i).equals("LOAD")) {
+					wfLine.accumulate("input", "input_" + i);
+				} else if (differentOperations.get(i).equals("STORE")) {
+					wfLine.accumulate("input", "output_" + i);
+				} else {
+					wfLine.accumulate("input", "R".concat(String.valueOf(i + 2)));
+				}
 				wfLine.accumulate("input2", "R_outermost".concat(String.valueOf(i + 3)));
 				wfLine.accumulate("operation", differentOperations.get(i));
 				wfLine.accumulate("options", "options_outermost part one");

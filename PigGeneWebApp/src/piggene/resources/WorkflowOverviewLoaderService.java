@@ -10,14 +10,14 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ServerResource;
 
-import piggene.serialisation.PersistentFiles;
+import piggene.serialisation.helper.PersistentFilesHelper;
 
 public class WorkflowOverviewLoaderService extends ServerResource {
 
 	@Override
 	public Representation get() {
 		ServerResponseObject obj = new ServerResponseObject();
-		ArrayList<String> filenames = PersistentFiles.getAllWorkflowFileNamesWithoutExtension();
+		ArrayList<String> filenames = PersistentFilesHelper.getAllWorkflowFileNamesWithoutExtension();
 
 		if (filenames == null) {
 			obj.setSuccess(false);
