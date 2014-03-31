@@ -7,6 +7,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 		//TODO button handling depending on current button...
 		switch(buttons[index].name) {
 			case "newWfBtn":
+						SharedWfService.initializeNewWorkflow();
 						break;
 			case "openWfBtn":
 						SharedWfService.loadExistingWorkflowNames();
@@ -33,9 +34,14 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 }]);
 
 function WorkflowCtrl($scope, $routeParams, $filter, SharedWfService) {
-	SharedWfService.loadWfDefinition($routeParams.id);
+	//TODO des muss i no umbauen...
+	$scope.workflow = SharedWfService.workflow;
+	if($routeParams.id != "newWf") {
+		SharedWfService.loadWfDefinition($routeParams.id);
+	}
+	
 	$scope.operations = operations;
-		
+	
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;
 	});
@@ -66,28 +72,45 @@ function WorkflowCtrl($scope, $routeParams, $filter, SharedWfService) {
 	
 	$scope.removeStep = function(index) {
 		var modWf = $scope.workflow;
-		modWf.workflow.splice(index, 1);
+		modWf.steps.splice(index, 1);
 		SharedWfService.prepForBroadcast(modWf);
 	}
+	
+	$scope.addInputParameter = function() {
+		//TODO implement
+		var modWf = $scope.workflow;
+		modWf.inputParameters.push("");
+		SharedWfService.prepForBroadcast(modWf);
+	};
+	
+	$scope.addOutputParameter = function() {
+		var modWf = $scope.workflow;
+		modWf.outputParameters.push("");
+		SharedWfService.prepForBroadcast(modWf);
+	};
 	
 	$scope.addStep = function() {
 		$scope.inserted = {
-				relation: 'R' + ($scope.workflow.workflow.length+1),
-				input: '-',
+				relation: 'R' + ($scope.workflow.steps.length+1),
+				input: "",
 				operation: $scope.operations[2].name,
-				options: '-',
-				options2: '-',
-				comment: '-',
+				options: "",
+				options2: "",
+				comment: "",
 				active: false
 		};
 		var modWf = $scope.workflow;
-		modWf.workflow.push($scope.inserted);
+		modWf.steps.push($scope.inserted);
 		SharedWfService.prepForBroadcast(modWf);
 	}
 	
+	$scope.addWorkflow = function() {
+		//TODO implement this functionality
+	};
+	
 	$scope.changeWfOperation = function(operation, index) {
 		var modWf = $scope.workflow;
-		modWf.workflow[index].operation = operation;
+		modWf.steps[index].operation = operation;
 		SharedWfService.prepForBroadcast(modWf);
 	}
 };
@@ -101,8 +124,12 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 	});
 	
 	$scope.openSelectedWorkflow = function() {
-		$location.path("/wf/" + $scope.radioSelection);
-		$('#myModal').modal('toggle');
+		var selection = $scope.radioSelection;
+		if(!(selection == null || selection == "")) {
+			SharedWfService.loadWfDefinition(selection);
+			$location.path("/wf/" + $scope.radioSelection);
+			$('#myModal').modal('toggle');
+		}
 	}
 }]);
 

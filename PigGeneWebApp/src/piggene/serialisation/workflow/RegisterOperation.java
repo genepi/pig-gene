@@ -1,17 +1,37 @@
 package piggene.serialisation.workflow;
 
 public class RegisterOperation extends Workflow {
+	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
+
 	private String input;
+	private String operation;
 	private String comment;
 
 	public RegisterOperation() {
-		this.workflowType = WorkflowType.SINGLE_ELEM;
 	}
 
-	public RegisterOperation(final String input, final String comment) {
-		this();
+	public RegisterOperation(final String input, final String operation, final String comment) {
 		this.input = input;
+		this.operation = operation;
 		this.comment = comment;
+	}
+
+	@Override
+	public WorkflowType getWorkflowType() {
+		return workflowType;
+	}
+
+	@Override
+	public void setWorkflowType(final WorkflowType workflowType) {
+		RegisterOperation.workflowType = workflowType;
+	}
+
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(final String operation) {
+		this.operation = operation;
 	}
 
 	public String getInput() {

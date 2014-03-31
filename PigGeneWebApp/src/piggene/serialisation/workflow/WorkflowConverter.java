@@ -21,6 +21,19 @@ public class WorkflowConverter {
 		return new Workflow(name, description, steps, inputParameters, outputParameters);
 	}
 
+	/**
+	 * The if-branch handles standard operations and adds the corresponding
+	 * implementing classes to the steps collection. The else-branch handles the
+	 * case that a referenced workflow is contained within an other workflow. To
+	 * ensure up-to-date information in case the referenced workflow is
+	 * modified, only the reference to that workflow is stored within the
+	 * surrounding workflow. The "resolving" of that referenced information is
+	 * done not before the script and the yaml-files are persisted.
+	 * 
+	 * @param jsonArray
+	 * @return ArrayList<Workflow>
+	 * @throws JSONException
+	 */
 	private static ArrayList<Workflow> convertJSONSteps(final JSONArray jsonArray) throws JSONException {
 		ArrayList<Workflow> steps = new ArrayList<Workflow>();
 
@@ -30,34 +43,34 @@ public class WorkflowConverter {
 			if (step.has("operation")) { //
 				switch (step.getString("operation")) {
 				case "REGISTER":
-					steps.add(gson.fromJson(jsonArray.get(i).toString(), RegisterOperation.class));
+					steps.add(gson.fromJson(step.toString(), RegisterOperation.class));
 					break;
 				case "LOAD":
-					steps.add(gson.fromJson(jsonArray.get(i).toString(), LoadOperation.class));
+					steps.add(gson.fromJson(step.toString(), LoadOperation.class));
 					break;
 				case "FILTER":
-					steps.add(gson.fromJson(jsonArray.get(i).toString(), FilterOperation.class));
+					steps.add(gson.fromJson(step.toString(), FilterOperation.class));
 					break;
 				case "JOIN":
-					steps.add(gson.fromJson(jsonArray.get(i).toString(), JoinOperation.class));
+					steps.add(gson.fromJson(step.toString(), JoinOperation.class));
 					break;
 				case "SELECT":
-					steps.add(gson.fromJson(jsonArray.get(i).toString(), SelectOperation.class));
+					steps.add(gson.fromJson(step.toString(), SelectOperation.class));
 					break;
 				case "GROUP":
-					steps.add(gson.fromJson(jsonArray.get(i).toString(), GroupByOperation.class));
+					steps.add(gson.fromJson(step.toString(), GroupByOperation.class));
 					break;
 				case "ORDER":
-					steps.add(gson.fromJson(jsonArray.get(i).toString(), OrderByOperation.class));
+					steps.add(gson.fromJson(step.toString(), OrderByOperation.class));
 					break;
 				case "STORE":
-					steps.add(gson.fromJson(jsonArray.get(i).toString(), StoreOperation.class));
+					steps.add(gson.fromJson(step.toString(), StoreOperation.class));
 					break;
 				default:
 					break;
 				}
-			} else { // recursive workflow definition
-				steps.add(processClientJSONData((JSONObject) jsonArray.get(i)));
+			} else { // "recursive" workflow definition
+				steps.add(new ReferencedWorkflow(step.getString("name"), step.getString("description")));
 			}
 		}
 		return steps;

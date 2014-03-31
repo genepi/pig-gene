@@ -1,26 +1,46 @@
 package piggene.serialisation.workflow;
 
 public class JoinOperation extends Workflow {
+	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
+
 	private String relation;
 	private String input;
+	private String operation;
 	private String input2;
 	private String options;
 	private String options2;
 	private String comment;
 
 	public JoinOperation() {
-		this.workflowType = WorkflowType.SINGLE_ELEM;
 	}
 
-	public JoinOperation(final String relation, final String input, final String input2, final String options,
-			final String options2, final String comment) {
-		this();
+	public JoinOperation(final String relation, final String input, final String operation, final String input2,
+			final String options, final String options2, final String comment) {
 		this.relation = relation;
 		this.input = input;
+		this.operation = operation;
 		this.input2 = input2;
 		this.options = options;
 		this.options2 = options2;
 		this.comment = comment;
+	}
+
+	@Override
+	public WorkflowType getWorkflowType() {
+		return workflowType;
+	}
+
+	@Override
+	public void setWorkflowType(final WorkflowType workflowType) {
+		JoinOperation.workflowType = workflowType;
+	}
+
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(final String operation) {
+		this.operation = operation;
 	}
 
 	public String getRelation() {

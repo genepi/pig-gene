@@ -1,19 +1,39 @@
 package piggene.serialisation.workflow;
 
 public class StoreOperation extends Workflow {
+	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
+
 	private String relation;
 	private String input;
+	private String operation;
 	private String comment;
 
 	public StoreOperation() {
-		this.workflowType = WorkflowType.SINGLE_ELEM;
 	}
 
-	public StoreOperation(final String relation, final String input, final String comment) {
-		this();
+	public StoreOperation(final String relation, final String input, final String operation, final String comment) {
 		this.relation = relation;
 		this.input = input;
+		this.operation = operation;
 		this.comment = comment;
+	}
+
+	@Override
+	public WorkflowType getWorkflowType() {
+		return workflowType;
+	}
+
+	@Override
+	public void setWorkflowType(final WorkflowType workflowType) {
+		StoreOperation.workflowType = workflowType;
+	}
+
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(final String operation) {
+		this.operation = operation;
 	}
 
 	public String getRelation() {

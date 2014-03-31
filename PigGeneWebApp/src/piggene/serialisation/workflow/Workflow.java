@@ -1,9 +1,10 @@
 package piggene.serialisation.workflow;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class Workflow implements WorkflowInterface {
-	protected WorkflowType workflowType;
+public class Workflow implements IWorkflow {
+	private static WorkflowType workflowType = WorkflowType.WORKFLOW;
 
 	private String name;
 	private String description;
@@ -18,7 +19,6 @@ public class Workflow implements WorkflowInterface {
 
 	public Workflow(final String name, final String description, final ArrayList<Workflow> steps,
 			final ArrayList<String> inputParameters, final ArrayList<String> outputParameters) {
-		this.workflowType = WorkflowType.WORKFLOW;
 		this.name = name;
 		this.description = description;
 		this.steps = steps;
@@ -31,7 +31,7 @@ public class Workflow implements WorkflowInterface {
 	}
 
 	public void setWorkflowType(final WorkflowType workflowType) {
-		this.workflowType = workflowType;
+		Workflow.workflowType = workflowType;
 	}
 
 	public String getName() {
@@ -85,7 +85,7 @@ public class Workflow implements WorkflowInterface {
 	}
 
 	@Override
-	public String getPigScriptRepresentation() {
+	public String getPigScriptRepresentation() throws IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));
 		sb.append(parseComment(getName()));

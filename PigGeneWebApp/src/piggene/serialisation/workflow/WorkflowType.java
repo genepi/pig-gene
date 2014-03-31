@@ -1,5 +1,5 @@
 package piggene.serialisation.workflow;
 
 public enum WorkflowType {
-	SINGLE_ELEM, WORKFLOW
+	WORKFLOW_SINGLE_ELEM, WORKFLOW, WORKFLOW_REFERENCE
 }

@@ -5,11 +5,11 @@
 	<br>
 	
 	<div class="paramDefinition well">
-		<b class="parameterHeadline">input parameters:</b>
 		<div class="connectionParameter input-group" ng-repeat="input in workflow.inputParameters track by $index">
 			<input class="form-control" type="text" placeholder="input parameter {{$index+1}}" ng-model="input">
 			<span class="input-group-btn"><button class="btn btn-success" ng-click="changeInputParameter(input,$index)">ok</button></span>
-		</div>
+		</div><br>
+		<button class="btn btn-xs btn-default" ng-click="addInputParameter()"><span class="glyphicon glyphicon-plus"></span> add input variable</button>
 	</div>
 	<br>
 	
@@ -25,7 +25,7 @@
 				<th>comment</th>
 				<th>edit</th>
 			</tr>
-			<tr class="active-row-{{step.active}}" ng-repeat="step in workflow.workflow">
+			<tr class="active-row-{{step.active}}" ng-repeat="step in workflow.steps">
 				<form editable-form name="rowform" shown="inserted == step">
 					<td><span editable-text="step.relation" e-name="relation" e-form="rowform">{{step.relation}}</span></td>
 					<td><span editable-text="step.input" e-name="input" e-form="rowform">{{step.input}}</span></td>
@@ -49,14 +49,15 @@
 		</tr>
 		</table>
 		<button class="btn btn-sm btn-success" ng-click="addStep()"><span class="glyphicon glyphicon-plus"></span> add step</button>
+		<button class="btn btn-sm btn-warning" ng-click="addWorkflow()"><span class="glyphicon glyphicon-plus"></span> add workflow</button>
 	</div>
 	<br>
 	
 	<div class="paramDefinition well">
-		<b class="parameterHeadline">output parameters:</b>
 		<div class="connectionParameter input-group" ng-repeat="output in workflow.outputParameters track by $index">
 			<input class="form-control" type="text" placeholder="output parameter {{$index+1}}" ng-model="output">
 			<span class="input-group-btn"><button class="btn btn-success" ng-click="changeOutputParameter(output,$index)">ok</button></span>
-		</div>
+		</div><br>
+		<button class="btn btn-xs btn-default" ng-click="addOutputParameter()"><span class="glyphicon glyphicon-plus"></span> add output variable</button>
 	</div>
 </div>

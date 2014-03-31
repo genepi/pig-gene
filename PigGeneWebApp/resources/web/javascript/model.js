@@ -1,5 +1,5 @@
 var buttons =  [
-		{name:"newWfBtn", title:"create new workflow", showState:true, active:"active", text:"new", logo:"file"},
+		{name:"newWfBtn", title:"create new workflow", showState:true, active:"", text:"new", logo:"file"},
 		{name:"openWfBtn", title:"open existing workflow", showState:true, active:"", text:"open", logo:"folder-open"},
 		{name:"saveWfBtn", title:"save workflow", showState:true, active:"", text:"save", logo:"floppy-disk"},
 		{name:"deleteWfBtn", title:"delete workflow", showState:true, active:"", text:"delete", logo:"trash"},

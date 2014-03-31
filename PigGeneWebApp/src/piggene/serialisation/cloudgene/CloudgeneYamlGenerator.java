@@ -36,7 +36,7 @@ public class CloudgeneYamlGenerator {
 		outputs = new ArrayList<Parameter>();
 		App app = new App();
 
-		retrieveInAndOutputParameters(workflow, 0, 0);
+		retrieveInAndOutputParameters(workflow);
 
 		final Step step = new Step();
 		step.setName("PigScript");
@@ -67,31 +67,33 @@ public class CloudgeneYamlGenerator {
 		writer.close();
 	}
 
-	private static void retrieveInAndOutputParameters(final Workflow workflow, final int inIndex, final int outIndex) {
-		int inIdx = inIndex;
-		int outIdx = outIndex;
+	private static void retrieveInAndOutputParameters(final Workflow workflow) {
 		ArrayList<String> inputParams = workflow.getInputParameters();
 		ArrayList<String> outputParams = workflow.getOutputParameters();
 
+		int inIdx = 0;
+		int outIdx = 0;
 		for (Workflow step : workflow.getSteps()) {
-			if (step.getWorkflowType().equals(WorkflowType.WORKFLOW)) {
-				retrieveInAndOutputParameters(step, 0, 0);
-			}
-			if (step.getClass().equals(LoadOperation.class)) {
-				String inputParamName = ((LoadOperation) step).getInput();
-				parameters = appendParameter(parameters, inputParamName, inputParams.get(inIdx++));
-				inputs.add(createInputParameter(inputParamName));
-			} else if (step.getClass().equals(StoreOperation.class)) {
-				String outputParamName = ((StoreOperation) step).getRelation();
-				parameters = appendParameter(parameters, outputParamName, outputParams.get(outIdx++));
-				outputs.add(createOutputParameter(outputParamName));
+
+			// TODO mapping: inputs fuer subworkflow
+
+			if (step.getWorkflowType().equals(WorkflowType.WORKFLOW_SINGLE_ELEM)) {
+				if (step.getClass().equals(LoadOperation.class)) {
+					String inputParamName = ((LoadOperation) step).getInput();
+					parameters = appendParameter(parameters, inputParamName, inputParams.get(inIdx++));
+					inputs.add(createInputParameter(inputParamName));
+				} else if (step.getClass().equals(StoreOperation.class)) {
+					String outputParamName = ((StoreOperation) step).getRelation();
+					parameters = appendParameter(parameters, outputParamName, outputParams.get(outIdx++));
+					outputs.add(createOutputParameter(outputParamName));
+				}
 			}
 		}
 	}
 
-	private static StringBuilder appendParameter(final StringBuilder parameters, final String parameterName,
-			final String parameterValue) {
-		return parameters.append("-param ").append(parameterName).append("=").append(parameterValue).append(" ");
+	private static StringBuilder appendParameter(final StringBuilder parameters, final String parameterValue,
+			final String parameterName) {
+		return parameters.append("-param ").append(parameterName).append("=$").append(parameterValue).append(" ");
 	}
 
 	private static Parameter createInputParameter(final String parameterName) {

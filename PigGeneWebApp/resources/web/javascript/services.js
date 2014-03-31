@@ -11,60 +11,37 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 	};
 });
 
-pigGeneApp.factory("SharedWfService", ["$rootScope", "WfPersistency", function($rootScope, WfPersistency) {
+pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency", function($rootScope, $location, WfPersistency) {
 	var sharedWorkflow = {};
 	
 	sharedWorkflow.workflow = {};
 	sharedWorkflow.existingWorkflows = {};
 	
+	sharedWorkflow.initializeNewWorkflow = function() {
+		var emptyWorkflow = {
+				name: "newWf",
+				description: "description of the new workflow",
+				steps: [],
+				inputParameters: [],
+				outputParameters: []
+		};
+		sharedWorkflow.workflow = emptyWorkflow;
+		sharedWorkflow.broadcastWfChange();
+		$location.path('/wf/' + "newWf").replace();
+	};
+	
 	sharedWorkflow.loadWfDefinition = function(id) {
 		WfPersistency.Load.get({"id":id}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
-				alert("something baaaaaaaaaaaaaaaaaaad happend");
+				alert(response.message);
 				console.log(response.message);
 				return;
 			}
-			var loadedWf = sharedWorkflow.checkAndModifyInputParameters(response.data);
-			loadedWf = sharedWorkflow.checkAndModifyOutputParameters(loadedWf);
-			sharedWorkflow.workflow = loadedWf;
+			sharedWorkflow.workflow = response.data;
 			sharedWorkflow.broadcastWfChange();
 		});
 	};
-	
-	//TODO remove: just temporarily needed
-	sharedWorkflow.checkAndModifyInputParameters = function(wf) {
-		var noInputFields = 0;
-		var noInputParameters = wf.inputParameters.length;
-		for(var i=0; i<wf.workflow.length; i++) {
-			if(wf.workflow[i].operation == "LOAD") {
-				noInputFields++;
-			}
-		}
-		if(noInputParameters <= noInputFields) {
-			for(var i=noInputParameters; i<noInputFields; i++) {
-				wf.inputParameters.push("");
-			}
-		} 
-		return wf;
-	}
-	
-	//TODO remove: just temporarily needed
-	sharedWorkflow.checkAndModifyOutputParameters = function(wf) {
-		var noOutputFields = 0;
-		var noOutputParameters = wf.outputParameters.length;
-		for(var i=0; i<wf.workflow.length; i++) {
-			if(wf.workflow[i].operation == "STORE") {
-				noOutputFields++;
-			}
-		}
-		if(noOutputParameters <= noOutputFields) {
-			for(var i=noOutputParameters; i<noOutputFields; i++) {
-				wf.outputParameters.push("");
-			}
-		} 
-		return wf;
-	}
 	
 	sharedWorkflow.persistWfDefinition = function() {
 		var myWf = new WfPersistency.Save(this.workflow);
@@ -75,7 +52,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "WfPersistency", function($
 		WfPersistency.Load.get({}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
-				alert("something baaaaaaaaaaaaaaaaaaad happend");
+				alert(response.message);
 				console.log(response.message);
 				return;
 			}
