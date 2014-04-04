@@ -44,7 +44,7 @@
 	</target>
 	
 	<target name="compile" depends="clean">
-    	<javac srcdir="src" destdir="dist/temp" classpath="" target="1.6" includeantruntime="false">
+    	<javac srcdir="src" destdir="dist/temp" classpath="" target="1.7" includeantruntime="false">
 			<classpath>
 				<fileset dir="lib" />
 			</classpath>
@@ -69,7 +69,7 @@
     </target>
 	
 	<target name="compile_pigGene" depends="clean">
-    	<javac srcdir="${pigGene.src.dir}" destdir="${pigGene.bin.dir}" target="1.6" includeantruntime="false">
+    	<javac srcdir="${pigGene.src.dir}" destdir="${pigGene.bin.dir}" target="1.7" includeantruntime="false">
     		<classpath>
     			<fileset dir="${pigGene.lib.dir}" />
     		</classpath>
