@@ -1,0 +1,67 @@
+!piggene.serialisation.workflow.Workflow
+name: exampleWf
+description: description of the example workflow
+inputParameters: 
+- sample
+- sample2
+outputParameters: 
+- output
+steps: 
+- !piggene.serialisation.workflow.LoadOperation
+   name: 
+   comment: 
+   description: 
+   input: sample
+   inputParameters: []
+   operation: LOAD
+   options: 
+   options2: 
+   outputParameters: []
+   relation: in
+   steps: []
+- !piggene.serialisation.workflow.LoadOperation
+   name: 
+   comment: 
+   description: 
+   input: sample2
+   inputParameters: []
+   operation: LOAD
+   options: 
+   options2: 
+   outputParameters: []
+   relation: in2
+   steps: []
+- !piggene.serialisation.workflow.FilterOperation
+   name: 
+   comment: 
+   description: 
+   input: in
+   inputParameters: []
+   operation: FILTER
+   options: chrom == 20
+   outputParameters: []
+   relation: filtered
+   steps: []
+- !piggene.serialisation.workflow.JoinOperation
+   name: 
+   comment: 
+   description: 
+   input: filtered
+   input2: in2
+   inputParameters: []
+   operation: JOIN
+   options: chrom, pos
+   options2: chrom, pos
+   outputParameters: []
+   relation: out
+   steps: []
+- !piggene.serialisation.workflow.StoreOperation
+   name: 
+   comment: 
+   description: 
+   input: out
+   inputParameters: []
+   operation: STORE
+   outputParameters: []
+   relation: output
+   steps: []
