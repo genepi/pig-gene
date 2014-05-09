@@ -7,7 +7,8 @@ pigGeneApp.run(function(editableOptions) {
 pigGeneApp.factory("WfPersistency", function($resource) {
 	return {
 		Load: $resource("/wf/:id", {id: "@id"}),
-		Save: $resource("/save/wf/")
+		Save: $resource("/save/wf/"),
+		Download: $resource("/dwnld/:id", {id: "@id"})
 	};
 });
 
@@ -61,10 +62,22 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
+	sharedWorkflow.downloadScript = function() {
+		WfPersistency.Download.get({"id":sharedWorkflow.workflow.name}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			//TODO download der Datei initialisieren... -> (neuer Tab)
+		});
+	};
+	
 	sharedWorkflow.prepForBroadcast = function(modWf) {
 		this.workflow = modWf;
 		this.broadcastWfChange();
-	}
+	};
 	
 	sharedWorkflow.broadcastWfChange = function() {
 		$rootScope.$broadcast("handleWfChange");

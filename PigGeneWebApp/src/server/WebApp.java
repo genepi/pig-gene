@@ -12,6 +12,7 @@ import org.restlet.routing.TemplateRoute;
 import piggene.resources.WorkflowLoaderService;
 import piggene.resources.WorkflowOverviewLoaderService;
 import piggene.resources.WorkflowStorageService;
+import piggene.serialisation.pig.ScriptDownloadService;
 
 /**
  * WebApp class.
@@ -38,6 +39,7 @@ public class WebApp extends Application {
 		router.attach("/wf", WorkflowOverviewLoaderService.class);
 		router.attach("/wf/{id}", WorkflowLoaderService.class);
 		router.attach("/save/wf", WorkflowStorageService.class);
+		router.attach("/dwnld/{id}", ScriptDownloadService.class);
 
 		// clap protocol for usage in jar files
 		final Directory dir = new Directory(getContext(), new LocalReference("clap://thread/web"));

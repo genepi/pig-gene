@@ -12,7 +12,6 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import piggene.serialisation.pig.PigScriptGenerator;
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.WorkflowConverter;
 import piggene.serialisation.workflow.WorkflowSerialisation;
@@ -40,7 +39,7 @@ public class WorkflowStorageService extends ServerResource {
 
 		try {
 			WorkflowSerialisation.store(workflow);
-			PigScriptGenerator.generateAndStoreScript(workflow);
+//			PigScriptGenerator.generateAndStoreScript(workflow);
 			// TODO
 			// CloudgeneYaml.generateCloudgeneYamlFile(workflow);
 		} catch (IOException e) {
@@ -53,22 +52,5 @@ public class WorkflowStorageService extends ServerResource {
 		obj.setMessage("success");
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
-
-	// private Workflow processClientWfData(final org.json.JSONObject data)
-	// throws JSONException {
-	// String name = data.getString("name");
-	// String description = data.getString("description");
-	// ArrayList<SingleWorkflowElement> workflowElements =
-	// WorkflowConverter.convertJSONWorkflow(data
-	// .getJSONArray("workflow"));
-	// ArrayList<String> inputParameters =
-	// WorkflowConverter.convertJSONWorkflowParams(data
-	// .getJSONArray("inputParameters"));
-	// ArrayList<String> outputParameters =
-	// WorkflowConverter.convertJSONWorkflowParams(data
-	// .getJSONArray("outputParameters"));
-	// return new Workflow(name, description, workflowElements, inputParameters,
-	// outputParameters);
-	// }
 
 }
