@@ -70,9 +70,30 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				console.log(response.message);
 				return;
 			}
-			//TODO download der Datei initialisieren... -> (neuer Tab)
+			
+		    var element = angular.element("<a/>");
+		    element.attr({
+		    	href: "data:attachment/plain;charset=utf-8," + encodeURI(response.data),
+		    	target: "_blank",
+		        download: sharedWorkflow.workflow.name + ".pig"
+		     });
+		    
+		    var elem = element[0];
+		    if(document.dispatchEvent) {
+		    	var oEvent = document.createEvent( "MouseEvents" );
+		    	oEvent.initMouseEvent("click", true, true, window, 1, 1, 1, 1, 1, false, false, false, false, 0, elem);
+		    	elem.dispatchEvent(oEvent);
+		    } else if (elem.click) {
+		    	return elem.click();
+		    } else if(elem.onclick) { 
+		    	var result = elem.onclick(); 
+		    	if (!result) {
+		    		return result; 
+	    		}
+		    }
 		});
 	};
+	
 	
 	sharedWorkflow.prepForBroadcast = function(modWf) {
 		this.workflow = modWf;
