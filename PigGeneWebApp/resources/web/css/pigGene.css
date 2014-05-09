@@ -39,3 +39,8 @@
 h1 {
 	margin-top: 0px;
 }
+
+h1.editable-click, h4.editable-click {
+	color: black;
+	border: 0px;
+}

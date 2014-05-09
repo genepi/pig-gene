@@ -33,7 +33,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	};
 }]);
 
-function WorkflowCtrl($scope, $routeParams, $filter, SharedWfService) {
+function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService) {
 	//TODO des muss i no umbauen...
 	$scope.workflow = SharedWfService.workflow;
 	if($routeParams.id != "newWf") {
@@ -76,6 +76,26 @@ function WorkflowCtrl($scope, $routeParams, $filter, SharedWfService) {
 		SharedWfService.prepForBroadcast(modWf);
 	}
 	
+	$scope.moveUp = function(index) {
+		if(index != 0) {
+			var modWf = $scope.workflow;
+			var prevLine = modWf.steps[index-1];
+			modWf.steps[index-1] = modWf.steps[index];
+			modWf.steps[index] = prevLine;
+			SharedWfService.prepForBroadcast(modWf);
+		}
+	};
+	
+	$scope.moveDown = function(index) {
+		if(index != $scope.workflow.steps.length) {
+			var modWf = $scope.workflow;
+			var nextLine = modWf.steps[index+1];
+			modWf.steps[index+1] = modWf.steps[index];
+			modWf.steps[index] = nextLine;
+			SharedWfService.prepForBroadcast(modWf);
+		}
+	};
+
 	$scope.addInputParameter = function() {
 		//TODO implement
 		var modWf = $scope.workflow;
@@ -97,6 +117,7 @@ function WorkflowCtrl($scope, $routeParams, $filter, SharedWfService) {
 				options: "",
 				options2: "",
 				comment: "",
+				workflowType: "WORKFLOW_SINGLE_ELEM",
 				active: false
 		};
 		var modWf = $scope.workflow;
@@ -105,13 +126,32 @@ function WorkflowCtrl($scope, $routeParams, $filter, SharedWfService) {
 	}
 	
 	$scope.addWorkflow = function() {
-		//TODO implement this functionality
+		//TODO open up selection dialog where user selects previously saved workflow
+		var inserted = {
+				name: "exampleWf",
+				description: "my_TestDescr",
+				inputParameters: [],
+				outputParameters: [],
+				workflowType: "WORKFLOW",
+				steps: []
+		}
+		var modWf = $scope.workflow;
+		modWf.steps.push(inserted);
+		SharedWfService.prepForBroadcast(modWf);
 	};
 	
 	$scope.changeWfOperation = function(operation, index) {
 		var modWf = $scope.workflow;
 		modWf.steps[index].operation = operation;
 		SharedWfService.prepForBroadcast(modWf);
+	};
+	
+	$scope.checkType = function(type, checkVal) {
+		return (type == checkVal);
+	};
+
+	$scope.editReferencedWf = function(id) {
+		$location.path("/wf/" + id);
 	}
 };
 

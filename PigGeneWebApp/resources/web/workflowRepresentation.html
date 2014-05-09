@@ -1,7 +1,7 @@
 <div class="workflowContainer well">
 
-	<h1>{{workflow.name}}</h1>
-	<h4>{{workflow.description}}</h4>
+	<h1 editable-text="workflow.name">{{workflow.name}}</h1>
+	<h4 editable-text="workflow.description">{{workflow.description}}</h4>
 	<br>
 	
 	<div class="paramDefinition well">
@@ -25,16 +25,33 @@
 				<th>comment</th>
 				<th>edit</th>
 			</tr>
+			
 			<tr class="active-row-{{step.active}}" ng-repeat="step in workflow.steps">
-				<form editable-form name="rowform" shown="inserted == step">
-					<td><span editable-text="step.relation" e-name="relation" e-form="rowform">{{step.relation}}</span></td>
-					<td><span editable-text="step.input" e-name="input" e-form="rowform">{{step.input}}</span></td>
-					<td><span editable-select="step.operation" e-name="operation" e-form="rowform" e-ng-options="o.name for o in operations">{{changeStatus(step,$index)}}</span></td>
-					<td><span editable-text="step.input2" e-name="input2" e-form="rowform">{{step.input2}}</span></td>
-					<td><span editable-textarea="step.options" e-name="options" e-form ="rowform" e-rows="1" e-cols="60">{{step.options}}</span></td>
-					<td><span editable-textarea="step.options2" e-name="options2" e-form ="rowform" e-rows="1" e-cols="60">{{step.options2}}</span></td>
-					<td><span editable-textarea="step.comment" e-name="comment" e-form ="rowform" e-rows="1" e-cols="60">{{step.comment}}</span></td>
-					<td style="white-space:nowrap">
+				<!-- referenced workflow -->
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')"><b>{{step.name}}</b></td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')">
+					<button class="btn btn-sm btn-primary" ng-click="editReferencedWf(step.name)" title="edit"><span class="glyphicon glyphicon-pencil"></span></button>
+					<button class="btn btn-sm btn-danger" ng-click="removeStep($index)" title="delete"><span class="glyphicon glyphicon-trash"></span></button>
+					<button ng-if="$index != 0" class="btn btn-sm btn-info" ng-click="moveUp($index)" title="move up"><span class="glyphicon glyphicon-arrow-up"></span></button>
+					<button ng-if="$index != (workflow.steps.length-1)" class="btn btn-sm btn-info" ng-click="moveDown($index)" title="move down"><span class="glyphicon glyphicon-arrow-down"></span></button>
+				</td>
+				
+				<!-- "basic" workflow line -->
+				<form editable-form name="rowform" shown="inserted == step"> 
+					<td ng-if="checkType(step.workflowType,'WORKFLOW_SINGLE_ELEM')"><span editable-text="step.relation" e-name="relation" e-form="rowform">{{step.relation}}</span></td>
+					<td ng-if="checkType(step.workflowType,'WORKFLOW_SINGLE_ELEM')"><span editable-text="step.input" e-name="input" e-form="rowform">{{step.input}}</span></td>
+					<td ng-if="checkType(step.workflowType,'WORKFLOW_SINGLE_ELEM')"><span editable-select="step.operation" e-name="operation" e-form="rowform" e-ng-options="o.name for o in operations">{{changeStatus(step,$index)}}</span></td>
+					<td ng-if="checkType(step.workflowType,'WORKFLOW_SINGLE_ELEM')"><span editable-text="step.input2" e-name="input2" e-form="rowform">{{step.input2}}</span></td>
+					<td ng-if="checkType(step.workflowType,'WORKFLOW_SINGLE_ELEM')"><span editable-textarea="step.options" e-name="options" e-form ="rowform" e-rows="1" e-cols="60">{{step.options}}</span></td>
+					<td ng-if="checkType(step.workflowType,'WORKFLOW_SINGLE_ELEM')"><span editable-textarea="step.options2" e-name="options2" e-form ="rowform" e-rows="1" e-cols="60">{{step.options2}}</span></td>
+					<td ng-if="checkType(step.workflowType,'WORKFLOW_SINGLE_ELEM')"><span editable-textarea="step.comment" e-name="comment" e-form ="rowform" e-rows="1" e-cols="60">{{step.comment}}</span></td>
+					<td ng-if="checkType(step.workflowType,'WORKFLOW_SINGLE_ELEM')" style="white-space:nowrap">
 						<div ng-show="rowform.$visible">
 							<button type="submit" class="btn btn-sm btn-success" ng-disabled="rowform.$waiting" ng-click="rowform.$submit()" title="save"><span class="glyphicon glyphicon-ok"></span></button>
 							<button type="button" class="btn btn-sm btn-default" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" title="cancel"><span class="glyphicon glyphicon-remove"></span></button>
@@ -42,12 +59,15 @@
 						<div class="buttons" ng-show="!rowform.$visible">
 							<button class="btn btn-sm btn-primary" ng-click="rowform.$show()" title="edit"><span class="glyphicon glyphicon-pencil"></span></button>
 							<button class="btn btn-sm btn-danger" ng-click="removeStep($index)" title="delete"><span class="glyphicon glyphicon-trash"></span></button>
+							<button ng-if="$index != 0" class="btn btn-sm btn-info" ng-click="moveUp($index)" title="move up"><span class="glyphicon glyphicon-arrow-up"></span></button>
+							<button ng-if="$index != (workflow.steps.length-1)" class="btn btn-sm btn-info" ng-click="moveDown($index)" title="move down"><span class="glyphicon glyphicon-arrow-down"></span></button>
 						</div>
 					</td>
 				</form>
+				
 			</tr>
-		</tr>
 		</table>
+		
 		<button class="btn btn-sm btn-success" ng-click="addStep()"><span class="glyphicon glyphicon-plus"></span> add step</button>
 		<button class="btn btn-sm btn-warning" ng-click="addWorkflow()"><span class="glyphicon glyphicon-plus"></span> add workflow</button>
 	</div>
