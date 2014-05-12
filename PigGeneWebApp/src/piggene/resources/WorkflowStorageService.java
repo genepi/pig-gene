@@ -39,9 +39,6 @@ public class WorkflowStorageService extends ServerResource {
 
 		try {
 			WorkflowSerialisation.store(workflow);
-//			PigScriptGenerator.generateAndStoreScript(workflow);
-			// TODO
-			// CloudgeneYaml.generateCloudgeneYamlFile(workflow);
 		} catch (IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while saving the submitted workflow data.");

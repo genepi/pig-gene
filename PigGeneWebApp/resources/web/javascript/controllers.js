@@ -17,6 +17,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 						SharedWfService.persistWfDefinition();
 						break;
 			case "deleteWfBtn": 	
+						SharedWfService.deleteWfDefinition();
 						break;
 			case "downloadScriptBtn": 
 						SharedWfService.downloadScript();

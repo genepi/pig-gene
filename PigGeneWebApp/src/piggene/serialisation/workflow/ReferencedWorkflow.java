@@ -6,14 +6,12 @@ public class ReferencedWorkflow extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_REFERENCE;
 
 	private String name;
-	private String description;
 
 	public ReferencedWorkflow() {
 	}
 
-	public ReferencedWorkflow(final String name, final String description) {
+	public ReferencedWorkflow(final String name) {
 		this.name = name;
-		this.description = description;
 	}
 
 	@Override
@@ -34,16 +32,6 @@ public class ReferencedWorkflow extends Workflow {
 	@Override
 	public void setName(final String name) {
 		this.name = name;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	@Override
-	public void setDescription(final String description) {
-		this.description = description;
 	}
 
 	@Override

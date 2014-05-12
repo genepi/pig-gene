@@ -9,6 +9,7 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
+import piggene.resources.WorkflowDeletionService;
 import piggene.resources.WorkflowLoaderService;
 import piggene.resources.WorkflowOverviewLoaderService;
 import piggene.resources.WorkflowStorageService;
@@ -39,6 +40,7 @@ public class WebApp extends Application {
 		router.attach("/wf", WorkflowOverviewLoaderService.class);
 		router.attach("/wf/{id}", WorkflowLoaderService.class);
 		router.attach("/save/wf", WorkflowStorageService.class);
+		router.attach("/del/{id}", WorkflowDeletionService.class);
 		router.attach("/dwnld/{id}", ScriptDownloadService.class);
 
 		// clap protocol for usage in jar files

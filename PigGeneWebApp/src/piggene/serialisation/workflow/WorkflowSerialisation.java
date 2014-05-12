@@ -1,5 +1,6 @@
 package piggene.serialisation.workflow;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
 public class WorkflowSerialisation {
 	private static Properties prop = new Properties();
 	private static String workflowDefsPath;
+	private static String fileExtension = ".yaml";
 
 	static {
 		try {
@@ -26,14 +28,14 @@ public class WorkflowSerialisation {
 
 	public static void store(final Workflow workflow) throws IOException {
 		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(
-				workflowDefsPath.concat(workflow.getName().concat(".yaml")))));
+				workflowDefsPath.concat(workflow.getName().concat(fileExtension)))));
 		writer.getConfig().setPropertyElementType(Workflow.class, "steps", Workflow.class);
 		writer.write(workflow);
 		writer.close();
 	}
 
 	public static Workflow load(final String name) throws IOException {
-		final YamlReader reader = new YamlReader(new FileReader(workflowDefsPath.concat(name.concat(".yaml"))));
+		final YamlReader reader = new YamlReader(new FileReader(workflowDefsPath.concat(name.concat(fileExtension))));
 		reader.getConfig().setPropertyElementType(Workflow.class, "steps", Workflow.class);
 		final Workflow workflow = (Workflow) reader.read();
 		reader.close();
@@ -54,6 +56,11 @@ public class WorkflowSerialisation {
 		}
 		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps,
 				workflow.getInputParameters(), workflow.getOutputParameters());
+	}
+	
+	public static boolean remove(String name) {
+		File file = new File(workflowDefsPath.concat(name).concat(fileExtension));
+		return file.delete();
 	}
 
 }

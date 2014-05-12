@@ -70,7 +70,7 @@ public class WorkflowConverter {
 					break;
 				}
 			} else { // "recursive" workflow definition
-				steps.add(new ReferencedWorkflow(step.getString("name"), step.getString("description")));
+				steps.add(new ReferencedWorkflow(step.getString("name")));
 			}
 		}
 		return steps;

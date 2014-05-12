@@ -8,6 +8,7 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 	return {
 		Load: $resource("/wf/:id", {id: "@id"}),
 		Save: $resource("/save/wf/"),
+		Delete: $resource("/del/:id", {id: "@id"}),
 		Download: $resource("/dwnld/:id", {id: "@id"})
 	};
 });
@@ -47,8 +48,22 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.persistWfDefinition = function() {
 		var myWf = new WfPersistency.Save(this.workflow);
-		myWf.$save();
+		myWf.$save(function(u,putResponseHeaders) {
+			$location.path('/wf/' + sharedWorkflow.workflow.name).replace();
+		});
 	};
+	
+	sharedWorkflow.deleteWfDefinition = function() {
+		WfPersistency.Delete.remove({"id":this.workflow.name}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			$location.path("").replace();
+		});
+	}
 	
 	sharedWorkflow.loadExistingWorkflowNames = function() {
 		WfPersistency.Load.get({}).$promise.then(function(response) {
