@@ -10,6 +10,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 						SharedWfService.initializeNewWorkflow();
 						break;
 			case "openWfBtn":
+						SharedWfService.openDef = true;
 						SharedWfService.loadExistingWorkflowNames();
 						break;
 			case "saveWfBtn": 
@@ -127,18 +128,8 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	}
 	
 	$scope.addWorkflow = function() {
-		//TODO open up selection dialog where user selects previously saved workflow
-		var inserted = {
-				name: "exampleWf",
-				description: "my_TestDescr",
-				inputParameters: [],
-				outputParameters: [],
-				workflowType: "WORKFLOW",
-				steps: []
-		}
-		var modWf = $scope.workflow;
-		modWf.steps.push(inserted);
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.openDef = false;
+		SharedWfService.loadExistingWorkflowNames();
 	};
 	
 	$scope.changeWfOperation = function(operation, index) {
@@ -158,9 +149,11 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 
 pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
 	$scope.radioSelection = "";
+	$scope.openDef = true;
 	
 	$scope.$on("handleExWfNamesChange", function() {
 		$scope.existingWorkflows = SharedWfService.existingWorkflows;
+		$scope.openDef = SharedWfService.openDef;
 		$('#myModal').modal('toggle');
 	});
 	
@@ -172,6 +165,25 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 			$('#myModal').modal('toggle');
 		}
 	}
+	
+	$scope.addSelectedWorkflow = function() {
+		var selection = $scope.radioSelection;
+		if(!(selection == null || selection == "")) {
+			//concrete parameters not important at
+			// this point - therefore avoid ajax call
+			var inserted = {
+				name: selection,
+				description: "",
+				inputParameters: [],
+				outputParameters: [],
+				workflowType: "WORKFLOW",
+				steps: []
+			}
+			var modWf = SharedWfService.workflow;
+			modWf.steps.push(inserted);
+			SharedWfService.prepForBroadcast(modWf);
+			$('#myModal').modal('toggle');
+		}
+	}
+	
 }]);
-
-

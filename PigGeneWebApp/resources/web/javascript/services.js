@@ -17,6 +17,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.workflow = {};
 	sharedWorkflow.existingWorkflows = {};
+	sharedWorkflow.openDef = true;
 	
 	sharedWorkflow.initializeNewWorkflow = function() {
 		var emptyWorkflow = {
@@ -93,7 +94,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		    }
 		});
 	};
-	
 	
 	sharedWorkflow.prepForBroadcast = function(modWf) {
 		this.workflow = modWf;
