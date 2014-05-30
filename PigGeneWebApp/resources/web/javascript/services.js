@@ -17,6 +17,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	var sharedWorkflow = {};
 	
 	sharedWorkflow.workflow = {};
+	sharedWorkflow.refWorkflow = {};
 	sharedWorkflow.existingWorkflows = {};
 	sharedWorkflow.openDef = true;
 	
@@ -24,9 +25,12 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		var emptyWorkflow = {
 				name: "newWf",
 				description: "description of the new workflow",
+				workflowType: "WORKFLOW",
 				steps: [],
 				inputParameters: [],
-				outputParameters: []
+				outputParameters: [],
+				inputParameterMapping: {},
+				outputParameterMapping: {}
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
 		sharedWorkflow.broadcastWfChange();
@@ -46,10 +50,38 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
+	sharedWorkflow.loadReferencedWfDefinition = function(id) {
+		WfPersistency.Load.get({"id":id}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			sharedWorkflow.refWorkflow = response.data;
+			sharedWorkflow.broadcastRefWfChange();
+		});
+	};
+	
 	sharedWorkflow.persistWfDefinition = function() {
+		this.updateInOutParams();
 		var myWf = new WfPersistency.Save(this.workflow);
 		myWf.$save(function(u,putResponseHeaders) {
 			$location.path('/wf/' + sharedWorkflow.workflow.name).replace();
+		});
+	};
+	
+	sharedWorkflow.updateInOutParams = function() {
+		this.workflow.inputParameters = [];
+		this.workflow.outputParameters = [];
+		this.workflow.steps.forEach(function(entry) {
+			if(entry.workflowType === "WORKFLOW_SINGLE_ELEM") {
+				if(entry.operation === "LOAD") {
+					sharedWorkflow.workflow.inputParameters.push(entry.input);
+				} else if(entry.operation === "STORE") {
+					sharedWorkflow.workflow.outputParameters.push(entry.relation);
+				}
+			}
 		});
 	};
 	
@@ -117,6 +149,10 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.broadcastWfChange = function() {
 		$rootScope.$broadcast("handleWfChange");
+	};
+	
+	sharedWorkflow.broadcastRefWfChange = function() {
+		$rootScope.$broadcast("handleRefWfChange");
 	};
 	
 	sharedWorkflow.broadcastExWfNamesChange = function() {

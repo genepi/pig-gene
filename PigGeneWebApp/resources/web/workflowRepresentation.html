@@ -4,6 +4,7 @@
 	<h4 editable-text="workflow.description">{{workflow.description}}</h4>
 	<br>
 	
+	<!-- 
 	<div class="paramDefinition well">
 		<div class="connectionParameter input-group" ng-repeat="input in workflow.inputParameters track by $index">
 			<input class="form-control" type="text" placeholder="input parameter {{$index+1}}" ng-model="input">
@@ -11,6 +12,8 @@
 		</div><br>
 		<button class="btn btn-xs btn-default" ng-click="addInputParameter()"><span class="glyphicon glyphicon-plus"></span> add input variable</button>
 	</div>
+	-->
+	
 	<br>
 	
 	<div>
@@ -40,6 +43,17 @@
 					<button class="btn btn-sm btn-danger" ng-click="removeStep($index)" title="delete"><span class="glyphicon glyphicon-trash"></span></button>
 					<button ng-if="$index != 0" class="btn btn-sm btn-info" ng-click="moveUp($index)" title="move up"><span class="glyphicon glyphicon-arrow-up"></span></button>
 					<button ng-if="$index != (workflow.steps.length-1)" class="btn btn-sm btn-info" ng-click="moveDown($index)" title="move down"><span class="glyphicon glyphicon-arrow-down"></span></button>
+				</td><br>
+				
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')">
+					<div class="paramDefinition well">
+						input mapping:
+						<div class="connectionParameter input-group" ng-repeat="input in workflow.inputParameterMapping[step.name] track by $index">
+							<label>{{input}}</label>
+							<input class="form-control" type="text" placeholder="relation name" ng-model="workflow.inputParameterMapping[step.name][input]">
+							<span class="input-group-btn"><button class="btn btn-success" ng-click="changeInputParameter(input,$index)">ok</button></span>
+						</div><br>
+					</div>
 				</td>
 				
 				<!-- "basic" workflow line -->
@@ -73,6 +87,7 @@
 	</div>
 	<br>
 	
+	<!-- 
 	<div class="paramDefinition well">
 		<div class="connectionParameter input-group" ng-repeat="output in workflow.outputParameters track by $index">
 			<input class="form-control" type="text" placeholder="output parameter {{$index+1}}" ng-model="output">
@@ -80,4 +95,5 @@
 		</div><br>
 		<button class="btn btn-xs btn-default" ng-click="addOutputParameter()"><span class="glyphicon glyphicon-plus"></span> add output variable</button>
 	</div>
+	-->
 </div>
