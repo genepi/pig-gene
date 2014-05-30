@@ -32,8 +32,24 @@
 			<tr class="active-row-{{step.active}}" ng-repeat="step in workflow.steps">
 				<!-- referenced workflow -->
 				<td ng-if="checkType(step.workflowType,'WORKFLOW')"><b>{{step.name}}</b></td>
-				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
-				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')">
+					<div class="paramDefinition well">
+						input mapping:
+						<div class="connectionParameter input-group" ng-repeat="inParamName in step.inputParameters track by $index">
+							<label>{{inParamName}}</label>
+							<input class="form-control" type="text" name="input" placeholder="relation name" ng-model="workflow.inputParameterMapping[step.name][inParamName]">
+						</div><br>
+					</div>
+				</td>
+				<td ng-if="checkType(step.workflowType,'WORKFLOW')">
+					<div class="paramDefinition well">
+						output mapping:
+						<div class="connectionParameter input-group" ng-repeat="outParamName in step.outputParameters track by $index">
+							<label>{{outParamName}}</label>
+							<input class="form-control" type="text" name="input" placeholder="relation name" ng-model="workflow.outputParameterMapping[step.name][outParamName]">
+						</div><br>
+					</div>
+				</td>
 				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
 				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
 				<td ng-if="checkType(step.workflowType,'WORKFLOW')"></td>
@@ -44,17 +60,6 @@
 					<button ng-if="$index != 0" class="btn btn-sm btn-info" ng-click="moveUp($index)" title="move up"><span class="glyphicon glyphicon-arrow-up"></span></button>
 					<button ng-if="$index != (workflow.steps.length-1)" class="btn btn-sm btn-info" ng-click="moveDown($index)" title="move down"><span class="glyphicon glyphicon-arrow-down"></span></button>
 				</td><br>
-				
-				<td ng-if="checkType(step.workflowType,'WORKFLOW')">
-					<div class="paramDefinition well">
-						input mapping:
-						<div class="connectionParameter input-group" ng-repeat="input in workflow.inputParameterMapping[step.name] track by $index">
-							<label>{{input}}</label>
-							<input class="form-control" type="text" placeholder="relation name" ng-model="workflow.inputParameterMapping[step.name][input]">
-							<span class="input-group-btn"><button class="btn btn-success" ng-click="changeInputParameter(input,$index)">ok</button></span>
-						</div><br>
-					</div>
-				</td>
 				
 				<!-- "basic" workflow line -->
 				<form editable-form name="rowform" shown="inserted == step"> 

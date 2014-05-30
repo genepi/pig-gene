@@ -49,12 +49,13 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 		$scope.workflow = SharedWfService.workflow;
 	});
 	
-//	$scope.changeInputParameter = function(newInputParameter, index) {
+//	$scope.changeInputParameter = function(wfName, paramName) {
 //		var modWf = $scope.workflow;
-//		modWf.inputParameters[index] = newInputParameter;
+//		modWf.inputParameterMapping[wfName] = {};
+//		modWf.inputParameterMapping[wfName][paramName] = this.inParamVal;
 //		SharedWfService.prepForBroadcast(modWf);
 //	};
-//	
+	
 //	$scope.changeOutputParameter = function(newOutputParameter, index) {
 //		var modWf = $scope.workflow;
 //		modWf.outputParameters[index] = newOutputParameter;
@@ -192,14 +193,21 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 				workflowType: refWf.workflowType,
 				steps: refWf.steps
 		}
-		modWf.steps.push(inserted);
+		if(modWf.steps.length == 0) {
+			modWf.steps[0] = inserted;
+		} else {
+			modWf.steps.push(inserted);
+		}
 		
 		modWf.inputParameterMapping[refWf.name] = {};
 		inserted.inputParameters.forEach(function(entry) {
 			modWf.inputParameterMapping[refWf.name][entry] = "";
 		});
 		
-		//TODO: output is missing
+		modWf.outputParameterMapping[refWf.name] = {};
+		inserted.outputParameters.forEach(function(entry) {
+			modWf.outputParameterMapping[refWf.name][entry] = "";
+		});
 		
 		SharedWfService.prepForBroadcast(modWf);
 		$('#myModal').modal('toggle');
