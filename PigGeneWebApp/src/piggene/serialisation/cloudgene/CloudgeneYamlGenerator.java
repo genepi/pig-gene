@@ -68,27 +68,27 @@ public class CloudgeneYamlGenerator {
 	}
 
 	private static void retrieveInAndOutputParameters(final Workflow workflow) {
-		ArrayList<String> inputParams = workflow.getInputParameters();
-		ArrayList<String> outputParams = workflow.getOutputParameters();
-
-		int inIdx = 0;
-		int outIdx = 0;
-		for (Workflow step : workflow.getSteps()) {
-
-			// TODO mapping: inputs fuer subworkflow
-
-			if (step.getWorkflowType().equals(WorkflowType.WORKFLOW_SINGLE_ELEM)) {
-				if (step.getClass().equals(LoadOperation.class)) {
-					String inputParamName = ((LoadOperation) step).getInput();
-					parameters = appendParameter(parameters, inputParamName, inputParams.get(inIdx++));
-					inputs.add(createInputParameter(inputParamName));
-				} else if (step.getClass().equals(StoreOperation.class)) {
-					String outputParamName = ((StoreOperation) step).getRelation();
-					parameters = appendParameter(parameters, outputParamName, outputParams.get(outIdx++));
-					outputs.add(createOutputParameter(outputParamName));
-				}
-			}
-		}
+//		ArrayList<String> inputParams = workflow.getInputParameters();
+//		ArrayList<String> outputParams = workflow.getOutputParameters();
+//
+//		int inIdx = 0;
+//		int outIdx = 0;
+//		for (Workflow step : workflow.getSteps()) {
+//
+//			// TODO mapping: inputs fuer subworkflow
+//
+//			if (step.getWorkflowType().equals(WorkflowType.WORKFLOW_SINGLE_ELEM)) {
+//				if (step.getClass().equals(LoadOperation.class)) {
+//					String inputParamName = ((LoadOperation) step).getInput();
+//					parameters = appendParameter(parameters, inputParamName, inputParams.get(inIdx++));
+//					inputs.add(createInputParameter(inputParamName));
+//				} else if (step.getClass().equals(StoreOperation.class)) {
+//					String outputParamName = ((StoreOperation) step).getRelation();
+//					parameters = appendParameter(parameters, outputParamName, outputParams.get(outIdx++));
+//					outputs.add(createOutputParameter(outputParamName));
+//				}
+//			}
+//		}
 	}
 
 	private static StringBuilder appendParameter(final StringBuilder parameters, final String parameterValue,

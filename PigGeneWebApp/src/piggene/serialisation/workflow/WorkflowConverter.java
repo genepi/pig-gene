@@ -1,6 +1,9 @@
 package piggene.serialisation.workflow;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,6 +11,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 public class WorkflowConverter {
 	private static Gson gson = new Gson();
@@ -16,9 +20,9 @@ public class WorkflowConverter {
 		String name = data.getString("name");
 		String description = data.getString("description");
 		ArrayList<Workflow> steps = convertJSONSteps(data.getJSONArray("steps"));
-		ArrayList<String> inputParameters = convertJSONParams(data.getJSONArray("inputParameters"));
-		ArrayList<String> outputParameters = convertJSONParams(data.getJSONArray("outputParameters"));
-		return new Workflow(name, description, steps, inputParameters, outputParameters);
+		Map<String, Map<String, String>> inputParameterMapping = convertJSONParams(data.getString("inputParameterMapping"));
+		Map<String, Map<String, String>> outputParameterMapping = convertJSONParams(data.getString("outputParameterMapping"));
+		return new Workflow(name, description, steps, inputParameterMapping, outputParameterMapping);
 	}
 
 	/**
@@ -76,14 +80,11 @@ public class WorkflowConverter {
 		return steps;
 	}
 
-	private static ArrayList<String> convertJSONParams(final JSONArray jsonArray) throws JsonSyntaxException,
+	private static Map<String, Map<String, String>> convertJSONParams(final String json) throws JsonSyntaxException,
 			JSONException {
-		ArrayList<String> params = new ArrayList<String>();
-
-		for (int i = 0; i < jsonArray.length(); i++) {
-			params.add(gson.fromJson(jsonArray.get(i).toString(), String.class));
-		}
-		return params;
+		Type stringStringMap = new TypeToken<Map<String, Map<String, String>>>(){}.getType();
+		Map<String, Map<String, String>> map = gson.fromJson(json, stringStringMap);
+		return map;
 	}
 
 }

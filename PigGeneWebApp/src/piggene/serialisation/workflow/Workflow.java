@@ -2,6 +2,7 @@ package piggene.serialisation.workflow;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Workflow implements IWorkflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW;
@@ -10,20 +11,20 @@ public class Workflow implements IWorkflow {
 	private String description;
 	private ArrayList<Workflow> steps;
 
-	private ArrayList<String> inputParameters;
-	private ArrayList<String> outputParameters;
+	private Map<String, Map<String, String>> inputParameterMapping;
+	private Map<String, Map<String, String>> outputParameterMapping;
 
 	public Workflow() {
 
 	}
 
 	public Workflow(final String name, final String description, final ArrayList<Workflow> steps,
-			final ArrayList<String> inputParameters, final ArrayList<String> outputParameters) {
+			final Map<String, Map<String, String>> inputParameterMapping, final Map<String, Map<String, String>> outputParameterMapping) {
 		this.name = name;
 		this.description = description;
 		this.steps = steps;
-		this.inputParameters = inputParameters;
-		this.outputParameters = outputParameters;
+		this.inputParameterMapping = inputParameterMapping;
+		this.outputParameterMapping = outputParameterMapping;
 	}
 
 	public WorkflowType getWorkflowType() {
@@ -57,21 +58,23 @@ public class Workflow implements IWorkflow {
 	public void setSteps(final ArrayList<Workflow> steps) {
 		this.steps = steps;
 	}
-
-	public ArrayList<String> getInputParameters() {
-		return inputParameters;
+	
+	public Map<String, Map<String, String>> getInputParameterMapping() {
+		return inputParameterMapping;
 	}
 
-	public void setInputParameters(final ArrayList<String> inputParameters) {
-		this.inputParameters = inputParameters;
+	public void setInputParameterMapping(
+			Map<String, Map<String, String>> inputParameterMapping) {
+		this.inputParameterMapping = inputParameterMapping;
 	}
 
-	public ArrayList<String> getOutputParameters() {
-		return outputParameters;
+	public Map<String, Map<String, String>> getOutputParameterMapping() {
+		return outputParameterMapping;
 	}
 
-	public void setOutputParameters(final ArrayList<String> outputParameters) {
-		this.outputParameters = outputParameters;
+	public void setOutputParameterMapping(
+			Map<String, Map<String, String>> outputParameterMapping) {
+		this.outputParameterMapping = outputParameterMapping;
 	}
 
 	protected String parseComment(final String comment) {
