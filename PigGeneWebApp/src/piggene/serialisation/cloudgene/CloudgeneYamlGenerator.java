@@ -4,12 +4,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
-import piggene.serialisation.workflow.LoadOperation;
-import piggene.serialisation.workflow.StoreOperation;
 import piggene.serialisation.workflow.Workflow;
-import piggene.serialisation.workflow.WorkflowType;
 
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
@@ -17,8 +15,8 @@ public class CloudgeneYamlGenerator {
 	private static Properties prop = new Properties();
 	private static String pigFiles = "apps/piggene/";
 	private static StringBuilder parameters;
-	private static ArrayList<Parameter> inputs;
-	private static ArrayList<Parameter> outputs;
+	private static List<Parameter> inputs;
+	private static List<Parameter> outputs;
 
 	static {
 		try {
@@ -43,7 +41,7 @@ public class CloudgeneYamlGenerator {
 		step.setPig(workflow.getName().concat(".pig"));
 		step.setParams(parameters.toString().trim());
 
-		final ArrayList<Step> steps = new ArrayList<Step>();
+		final List<Step> steps = new ArrayList<Step>();
 		steps.add(step);
 
 		final MapReduceConfig mapred = new MapReduceConfig();
@@ -57,8 +55,7 @@ public class CloudgeneYamlGenerator {
 		app.setCategory("Piggene");
 		app.setMapred(mapred);
 
-		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(pigFiles.concat(workflow
-				.getName().concat(".yaml")))));
+		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(pigFiles.concat(workflow.getName().concat(".yaml")))));
 		writer.getConfig().setClassTag("cloudgene.mapred.apps.App", App.class);
 		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "steps", Step.class);
 		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "inputs", InputParameter.class);
@@ -68,31 +65,33 @@ public class CloudgeneYamlGenerator {
 	}
 
 	private static void retrieveInAndOutputParameters(final Workflow workflow) {
-//		ArrayList<String> inputParams = workflow.getInputParameters();
-//		ArrayList<String> outputParams = workflow.getOutputParameters();
-//
-//		int inIdx = 0;
-//		int outIdx = 0;
-//		for (Workflow step : workflow.getSteps()) {
-//
-//			// TODO mapping: inputs fuer subworkflow
-//
-//			if (step.getWorkflowType().equals(WorkflowType.WORKFLOW_SINGLE_ELEM)) {
-//				if (step.getClass().equals(LoadOperation.class)) {
-//					String inputParamName = ((LoadOperation) step).getInput();
-//					parameters = appendParameter(parameters, inputParamName, inputParams.get(inIdx++));
-//					inputs.add(createInputParameter(inputParamName));
-//				} else if (step.getClass().equals(StoreOperation.class)) {
-//					String outputParamName = ((StoreOperation) step).getRelation();
-//					parameters = appendParameter(parameters, outputParamName, outputParams.get(outIdx++));
-//					outputs.add(createOutputParameter(outputParamName));
-//				}
-//			}
-//		}
+		// List<String> inputParams = workflow.getInputParameters();
+		// List<String> outputParams = workflow.getOutputParameters();
+		//
+		// int inIdx = 0;
+		// int outIdx = 0;
+		// for (Workflow step : workflow.getSteps()) {
+		//
+		// // TODO mapping: inputs fuer subworkflow
+		//
+		// if (step.getWorkflowType().equals(WorkflowType.WORKFLOW_SINGLE_ELEM))
+		// {
+		// if (step.getClass().equals(LoadOperation.class)) {
+		// String inputParamName = ((LoadOperation) step).getInput();
+		// parameters = appendParameter(parameters, inputParamName,
+		// inputParams.get(inIdx++));
+		// inputs.add(createInputParameter(inputParamName));
+		// } else if (step.getClass().equals(StoreOperation.class)) {
+		// String outputParamName = ((StoreOperation) step).getRelation();
+		// parameters = appendParameter(parameters, outputParamName,
+		// outputParams.get(outIdx++));
+		// outputs.add(createOutputParameter(outputParamName));
+		// }
+		// }
+		// }
 	}
 
-	private static StringBuilder appendParameter(final StringBuilder parameters, final String parameterValue,
-			final String parameterName) {
+	private static StringBuilder appendParameter(final StringBuilder parameters, final String parameterValue, final String parameterName) {
 		return parameters.append("-param ").append(parameterName).append("=$").append(parameterValue).append(" ");
 	}
 

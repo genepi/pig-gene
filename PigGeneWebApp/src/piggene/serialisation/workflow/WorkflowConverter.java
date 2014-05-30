@@ -2,7 +2,7 @@ package piggene.serialisation.workflow;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -19,10 +19,12 @@ public class WorkflowConverter {
 	public static Workflow processClientJSONData(final JSONObject data) throws JSONException {
 		String name = data.getString("name");
 		String description = data.getString("description");
-		ArrayList<Workflow> steps = convertJSONSteps(data.getJSONArray("steps"));
-		Map<String, Map<String, String>> inputParameterMapping = convertJSONParams(data.getString("inputParameterMapping"));
-		Map<String, Map<String, String>> outputParameterMapping = convertJSONParams(data.getString("outputParameterMapping"));
-		return new Workflow(name, description, steps, inputParameterMapping, outputParameterMapping);
+		List<Workflow> steps = convertJSONSteps(data.getJSONArray("steps"));
+		List<String> inputParameters = convertWfSpecificParameters(data.getString("inputParameters"));
+		List<String> outputParameters = convertWfSpecificParameters(data.getString("outputParameters"));
+		Map<String, Map<String, String>> inputParameterMapping = convertParameterMapping(data.getString("inputParameterMapping"));
+		Map<String, Map<String, String>> outputParameterMapping = convertParameterMapping(data.getString("outputParameterMapping"));
+		return new Workflow(name, description, steps, inputParameters, outputParameters, inputParameterMapping, outputParameterMapping);
 	}
 
 	/**
@@ -35,11 +37,11 @@ public class WorkflowConverter {
 	 * done not before the script and the yaml-files are persisted.
 	 * 
 	 * @param jsonArray
-	 * @return ArrayList<Workflow>
+	 * @return <Workflow>
 	 * @throws JSONException
 	 */
-	private static ArrayList<Workflow> convertJSONSteps(final JSONArray jsonArray) throws JSONException {
-		ArrayList<Workflow> steps = new ArrayList<Workflow>();
+	private static List<Workflow> convertJSONSteps(final JSONArray jsonArray) throws JSONException {
+		List<Workflow> steps = new ArrayList<Workflow>();
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject step = jsonArray.getJSONObject(i);
@@ -80,9 +82,16 @@ public class WorkflowConverter {
 		return steps;
 	}
 
-	private static Map<String, Map<String, String>> convertJSONParams(final String json) throws JsonSyntaxException,
-			JSONException {
-		Type stringStringMap = new TypeToken<Map<String, Map<String, String>>>(){}.getType();
+	private static List<String> convertWfSpecificParameters(final String json) {
+		Type stringList = new TypeToken<List<String>>() {
+		}.getType();
+		List<String> list = gson.fromJson(json, stringList);
+		return list;
+	}
+
+	private static Map<String, Map<String, String>> convertParameterMapping(final String json) throws JsonSyntaxException, JSONException {
+		Type stringStringMap = new TypeToken<Map<String, Map<String, String>>>() {
+		}.getType();
 		Map<String, Map<String, String>> map = gson.fromJson(json, stringStringMap);
 		return map;
 	}

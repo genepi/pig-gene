@@ -1,6 +1,6 @@
 package piggene.resources;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -17,7 +17,7 @@ public class WorkflowOverviewLoaderService extends ServerResource {
 	@Override
 	public Representation get() {
 		ServerResponseObject obj = new ServerResponseObject();
-		ArrayList<String> filenames = PersistentFilesHelper.getAllWorkflowFileNamesWithoutExtension();
+		List<String> filenames = PersistentFilesHelper.getAllWorkflowFileNamesWithoutExtension();
 
 		if (filenames == null) {
 			obj.setSuccess(false);

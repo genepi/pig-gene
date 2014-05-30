@@ -3,6 +3,7 @@ package server;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -19,7 +20,7 @@ public class Main {
 	private static Properties prop = new Properties();
 
 	public static void initializeFolders() {
-		ArrayList<String> paths = new ArrayList<String>();
+		List<String> paths = new ArrayList<String>();
 		paths.add(prop.getProperty("workflowDefs"));
 		paths.add(prop.getProperty("cloudgeneYamls"));
 		paths.add(prop.getProperty("pigFiles"));

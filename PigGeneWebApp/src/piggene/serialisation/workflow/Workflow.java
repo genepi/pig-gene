@@ -1,7 +1,7 @@
 package piggene.serialisation.workflow;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Workflow implements IWorkflow {
@@ -9,7 +9,10 @@ public class Workflow implements IWorkflow {
 
 	private String name;
 	private String description;
-	private ArrayList<Workflow> steps;
+	private List<Workflow> steps;
+
+	private List<String> inputParameters;
+	private List<String> outputParameters;
 
 	private Map<String, Map<String, String>> inputParameterMapping;
 	private Map<String, Map<String, String>> outputParameterMapping;
@@ -18,11 +21,14 @@ public class Workflow implements IWorkflow {
 
 	}
 
-	public Workflow(final String name, final String description, final ArrayList<Workflow> steps,
-			final Map<String, Map<String, String>> inputParameterMapping, final Map<String, Map<String, String>> outputParameterMapping) {
+	public Workflow(final String name, final String description, final List<Workflow> steps, final List<String> inputParameters,
+			final List<String> outputParameters, final Map<String, Map<String, String>> inputParameterMapping,
+			final Map<String, Map<String, String>> outputParameterMapping) {
 		this.name = name;
 		this.description = description;
 		this.steps = steps;
+		this.inputParameters = inputParameters;
+		this.outputParameters = outputParameters;
 		this.inputParameterMapping = inputParameterMapping;
 		this.outputParameterMapping = outputParameterMapping;
 	}
@@ -51,20 +57,35 @@ public class Workflow implements IWorkflow {
 		this.description = description;
 	}
 
-	public ArrayList<Workflow> getSteps() {
+	public List<Workflow> getSteps() {
 		return steps;
 	}
 
-	public void setSteps(final ArrayList<Workflow> steps) {
+	public void setSteps(final List<Workflow> steps) {
 		this.steps = steps;
 	}
-	
+
 	public Map<String, Map<String, String>> getInputParameterMapping() {
 		return inputParameterMapping;
 	}
 
-	public void setInputParameterMapping(
-			Map<String, Map<String, String>> inputParameterMapping) {
+	public List<String> getInputParameters() {
+		return inputParameters;
+	}
+
+	public void setInputParameters(final List<String> inputParameters) {
+		this.inputParameters = inputParameters;
+	}
+
+	public List<String> getOutputParameters() {
+		return outputParameters;
+	}
+
+	public void setOutputParameters(final List<String> outputParameters) {
+		this.outputParameters = outputParameters;
+	}
+
+	public void setInputParameterMapping(final Map<String, Map<String, String>> inputParameterMapping) {
 		this.inputParameterMapping = inputParameterMapping;
 	}
 
@@ -72,8 +93,7 @@ public class Workflow implements IWorkflow {
 		return outputParameterMapping;
 	}
 
-	public void setOutputParameterMapping(
-			Map<String, Map<String, String>> outputParameterMapping) {
+	public void setOutputParameterMapping(final Map<String, Map<String, String>> outputParameterMapping) {
 		this.outputParameterMapping = outputParameterMapping;
 	}
 

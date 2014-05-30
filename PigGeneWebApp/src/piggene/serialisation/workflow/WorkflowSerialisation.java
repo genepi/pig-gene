@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -27,8 +28,8 @@ public class WorkflowSerialisation {
 	}
 
 	public static void store(final Workflow workflow) throws IOException {
-		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(
-				workflowDefsPath.concat(workflow.getName().concat(fileExtension)))));
+		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(workflow.getName().concat(
+				fileExtension)))));
 		writer.getConfig().setPropertyElementType(Workflow.class, "steps", Workflow.class);
 		writer.write(workflow);
 		writer.close();
@@ -44,7 +45,7 @@ public class WorkflowSerialisation {
 	}
 
 	private static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException {
-		ArrayList<Workflow> resolvedSteps = new ArrayList<Workflow>();
+		List<Workflow> resolvedSteps = new ArrayList<Workflow>();
 		for (Workflow wf : workflow.getSteps()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
 				Workflow referencedWorkflow = WorkflowSerialisation.load(wf.getName());
@@ -54,11 +55,11 @@ public class WorkflowSerialisation {
 				resolvedSteps.add(wf);
 			}
 		}
-		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps,
-				workflow.getInputParameterMapping(), workflow.getOutputParameterMapping());
+		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getInputParameters(),
+				workflow.getOutputParameters(), workflow.getInputParameterMapping(), workflow.getOutputParameterMapping());
 	}
-	
-	public static boolean remove(String name) {
+
+	public static boolean remove(final String name) {
 		File file = new File(workflowDefsPath.concat(name).concat(fileExtension));
 		return file.delete();
 	}

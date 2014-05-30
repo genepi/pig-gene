@@ -3,6 +3,7 @@ package piggene.serialisation.helper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class PersistentFilesHelper {
@@ -34,26 +35,26 @@ public class PersistentFilesHelper {
 		return false;
 	}
 
-	public static ArrayList<String> getAllWorkflowFileNames() {
+	public static List<String> getAllWorkflowFileNames() {
 		final File file = new File(workflowDefs);
 		final File[] files = file.listFiles();
 		if (files == null || files.length == 0) {
 			return null;
 		}
-		final ArrayList<String> fileNames = new ArrayList<String>();
+		final List<String> fileNames = new ArrayList<String>();
 		for (final File f : files) {
 			fileNames.add(f.getName());
 		}
 		return fileNames;
 	}
 
-	public static ArrayList<String> getAllWorkflowFileNamesWithoutExtension() {
+	public static List<String> getAllWorkflowFileNamesWithoutExtension() {
 		final File file = new File(workflowDefs);
 		final File[] files = file.listFiles();
 		if (files == null || files.length == 0) {
 			return null;
 		}
-		final ArrayList<String> fileNames = new ArrayList<String>();
+		final List<String> fileNames = new ArrayList<String>();
 		for (final File f : files) {
 			fileNames.add(f.getName().replaceAll(YAML_EXTENSION, ""));
 		}
