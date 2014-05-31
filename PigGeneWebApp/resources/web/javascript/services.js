@@ -29,7 +29,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				steps: [],
 				inputParameters: [],
 				outputParameters: [],
-				inputParameterMapping: {}
+				inputParameterMapping: {},
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
 		sharedWorkflow.broadcastWfChange();

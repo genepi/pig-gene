@@ -3,7 +3,6 @@ package piggene.serialisation.pig;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Properties;
 
 import piggene.serialisation.workflow.Workflow;
@@ -25,7 +24,7 @@ public class PigScriptGenerator {
 	public static void generateAndStoreScript(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(insertHeader());
-		sb.append(workflow.getPigScriptRepresentation(new HashSet<Workflow>()));
+		sb.append(workflow.getPigScriptRepresentation(false, workflow.getName()));
 		PigScriptGenerator.write(sb.toString(), workflow.getName());
 	}
 

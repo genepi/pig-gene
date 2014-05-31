@@ -40,11 +40,10 @@ public class WorkflowSerialisation {
 		reader.getConfig().setPropertyElementType(Workflow.class, "steps", Workflow.class);
 		final Workflow workflow = (Workflow) reader.read();
 		reader.close();
-		Workflow resolveWorkflow = resolveWorkflowReferences(workflow);
-		return resolveWorkflow;
+		return workflow;
 	}
 
-	private static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException {
+	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException {
 		List<Workflow> resolvedSteps = new ArrayList<Workflow>();
 		for (Workflow wf : workflow.getSteps()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {

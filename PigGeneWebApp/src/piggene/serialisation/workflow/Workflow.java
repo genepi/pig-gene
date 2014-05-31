@@ -3,7 +3,8 @@ package piggene.serialisation.workflow;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import piggene.serialisation.pig.DynamicParameterMapper;
 
 public class Workflow implements IWorkflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW;
@@ -87,7 +88,7 @@ public class Workflow implements IWorkflow {
 		this.inputParameterMapping = inputParameterMapping;
 	}
 
-	protected String parseInformation(final String info) {
+	protected String parseInfo(final String info) {
 		final StringBuilder sb = new StringBuilder();
 		if (!(info.equals("-") || info.equals(""))) {
 			sb.append("--");
@@ -98,16 +99,16 @@ public class Workflow implements IWorkflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final Set<Workflow> parentWfs) throws IOException {
-		parentWfs.add(this);
+	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException {
+		DynamicParameterMapper.setParamMapping(inputParameterMapping);
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));
-		sb.append(parseInformation(getName()));
-		sb.append(parseInformation(getDescription()));
+		sb.append(parseInfo(getName()));
+		sb.append(parseInfo(getDescription()));
 
 		for (Workflow wf : steps) {
 			sb.append(System.getProperty("line.separator"));
-			sb.append(wf.getPigScriptRepresentation(parentWfs));
+			sb.append(wf.getPigScriptRepresentation(false, wfName));
 		}
 		return sb.toString();
 	}

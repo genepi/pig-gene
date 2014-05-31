@@ -1,8 +1,8 @@
 package piggene.serialisation.workflow;
 
-import java.util.Set;
+import piggene.serialisation.pig.DynamicParameterMapper;
 
-public class LoadOperation extends Workflow {
+public class LoadOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
 	private String relation;
@@ -85,22 +85,41 @@ public class LoadOperation extends Workflow {
 
 	// TODO extend to enable different txt-options...
 	@Override
-	public String getPigScriptRepresentation(final Set<Workflow> parentWfs) {
+	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(parseInformation(getComment()));
-		sb.append(getRelation());
-		sb.append(EQUAL_SYMBOL);
-		sb.append("LOAD");
-		sb.append(" '$");
-		sb.append(getInput());
-		sb.append("' ");
+		sb.append(parseInfo(getComment()));
 
-		// TODO
-		sb.append("USING");
-		sb.append(" ");
-		sb.append("pigGene.storage.merged.PigGeneStorage()");
+		String mappedValue = DynamicParameterMapper.getMappedValue(wfName, input);
+		if (mappedValue != null) {
+			sb.append(getRelation());
+			sb.append(renameParameters(renameParam, wfName));
+			sb.append(EQUAL_SYMBOL);
+			sb.append(mappedValue);
+		} else {
+			sb.append(getRelation());
+			sb.append(renameParameters(renameParam, wfName));
+			sb.append(EQUAL_SYMBOL);
+			sb.append("LOAD");
+			sb.append(" '$");
+			sb.append(getInput());
+			sb.append("' ");
+
+			// TODO
+			sb.append("USING");
+			sb.append(" ");
+			sb.append("pigGene.storage.merged.PigGeneStorage()");
+		}
+
 		sb.append(";");
 		return sb.toString();
+	}
+
+	@Override
+	public String renameParameters(final boolean renameParam, final String wfName) {
+		if (renameParam) {
+			return wfName;
+		}
+		return "";
 	}
 
 }

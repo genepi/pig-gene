@@ -1,8 +1,6 @@
 package piggene.serialisation.workflow;
 
-import java.util.Set;
-
-public class StoreOperation extends Workflow {
+public class StoreOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
 	private String relation;
@@ -64,17 +62,27 @@ public class StoreOperation extends Workflow {
 
 	// TODO extend to different storage possibilities...
 	@Override
-	public String getPigScriptRepresentation(final Set<Workflow> parentWfs) {
+	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(parseInformation(getComment()));
+		sb.append(parseInfo(getComment()));
 		sb.append("STORE");
 		sb.append(" ");
 		sb.append(getInput());
+		sb.append(renameParameters(renameParam, wfName));
 		sb.append(" INTO '$");
 		sb.append(getRelation());
+		sb.append(renameParameters(renameParam, wfName));
 		sb.append("'");
 		sb.append(";");
 		return sb.toString();
+	}
+
+	@Override
+	public String renameParameters(final boolean renameParam, final String wfName) {
+		if (renameParam) {
+			return wfName;
+		}
+		return "";
 	}
 
 }

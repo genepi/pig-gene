@@ -1,8 +1,6 @@
 package piggene.serialisation.workflow;
 
-import java.util.Set;
-
-public class RegisterOperation extends Workflow {
+public class RegisterOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
 	private String input;
@@ -53,14 +51,22 @@ public class RegisterOperation extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final Set<Workflow> parentWfs) {
+	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(parseInformation(getComment()));
+		sb.append(parseInfo(getComment()));
 		sb.append("REGISTER");
 		sb.append(" ");
 		sb.append(getInput());
 		sb.append(";");
 		return sb.toString();
+	}
+
+	@Override
+	public String renameParameters(final boolean renameParam, final String wfName) {
+		if (renameParam) {
+			return wfName;
+		}
+		return "";
 	}
 
 }

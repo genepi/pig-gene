@@ -76,7 +76,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	
 	$scope.removeStep = function(index) {
 		var modWf = $scope.workflow;
-		if(modWf.steps[index].workflowType === "WORKFLOW_REFERENCE") {
+		if(modWf.steps[index].workflowType === "WORKFLOW") {
 			var wfName = modWf.steps[index].name
 			delete modWf.inputParameterMapping[wfName];
 		}
@@ -189,7 +189,7 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 				description: refWf.description,
 				inputParameters: refWf.inputParameters,
 				outputParameters: refWf.outputParameters,
-				workflowType: "WORKFLOW_REFERENCE",
+				workflowType: refWf.workflowType,
 				steps: refWf.steps
 		}
 		if(modWf.steps.length == 0) {

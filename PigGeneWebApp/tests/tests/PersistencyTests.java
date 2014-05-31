@@ -172,7 +172,7 @@ public class PersistencyTests {
 		try {
 			wf = WorkflowConverter.processClientJSONData(wfJSON);
 			assertNotNull(wf);
-			assertEquals(2, wf.getInputParameters().size());
+			assertEquals(2, wf.getInputParameterMapping().size());
 			WorkflowSerialisation.store(wf);
 		} catch (JSONException e) {
 			fail("error: JSON conversion of workflow failed");
