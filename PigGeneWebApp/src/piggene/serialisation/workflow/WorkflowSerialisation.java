@@ -56,7 +56,7 @@ public class WorkflowSerialisation {
 			}
 		}
 		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getInputParameters(),
-				workflow.getOutputParameters(), workflow.getInputParameterMapping(), workflow.getOutputParameterMapping());
+				workflow.getOutputParameters(), workflow.getInputParameterMapping());
 	}
 
 	public static boolean remove(final String name) {

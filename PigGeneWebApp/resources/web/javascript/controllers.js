@@ -76,10 +76,9 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	
 	$scope.removeStep = function(index) {
 		var modWf = $scope.workflow;
-		if(modWf.steps[index].workflowType === "WORKFLOW") {
+		if(modWf.steps[index].workflowType === "WORKFLOW_REFERENCE") {
 			var wfName = modWf.steps[index].name
 			delete modWf.inputParameterMapping[wfName];
-			delete modWf.outputParameterMapping[wfName];
 		}
 		modWf.steps.splice(index, 1);
 		SharedWfService.prepForBroadcast(modWf);
@@ -190,7 +189,7 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 				description: refWf.description,
 				inputParameters: refWf.inputParameters,
 				outputParameters: refWf.outputParameters,
-				workflowType: refWf.workflowType,
+				workflowType: "WORKFLOW_REFERENCE",
 				steps: refWf.steps
 		}
 		if(modWf.steps.length == 0) {
@@ -202,11 +201,6 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		modWf.inputParameterMapping[refWf.name] = {};
 		inserted.inputParameters.forEach(function(entry) {
 			modWf.inputParameterMapping[refWf.name][entry] = "";
-		});
-		
-		modWf.outputParameterMapping[refWf.name] = {};
-		inserted.outputParameters.forEach(function(entry) {
-			modWf.outputParameterMapping[refWf.name][entry] = "";
 		});
 		
 		SharedWfService.prepForBroadcast(modWf);

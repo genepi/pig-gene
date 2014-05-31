@@ -1,5 +1,7 @@
 package piggene.serialisation.workflow;
 
+import java.util.Set;
+
 public class JoinOperation extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
@@ -14,8 +16,8 @@ public class JoinOperation extends Workflow {
 	public JoinOperation() {
 	}
 
-	public JoinOperation(final String relation, final String input, final String operation, final String input2,
-			final String options, final String options2, final String comment) {
+	public JoinOperation(final String relation, final String input, final String operation, final String input2, final String options,
+			final String options2, final String comment) {
 		this.relation = relation;
 		this.input = input;
 		this.operation = operation;
@@ -92,9 +94,9 @@ public class JoinOperation extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation() {
+	public String getPigScriptRepresentation(final Set<Workflow> parentWfs) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(parseComment(getComment()));
+		sb.append(parseInformation(getComment()));
 		sb.append(getRelation());
 		sb.append(EQUAL_SYMBOL);
 		sb.append("JOIN");
@@ -107,6 +109,7 @@ public class JoinOperation extends Workflow {
 		sb.append(" BY (");
 		sb.append(getOptions2());
 		sb.append(')');
+		sb.append(";");
 		return sb.toString();
 	}
 

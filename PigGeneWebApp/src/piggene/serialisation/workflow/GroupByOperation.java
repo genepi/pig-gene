@@ -1,5 +1,7 @@
 package piggene.serialisation.workflow;
 
+import java.util.Set;
+
 public class GroupByOperation extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
@@ -12,8 +14,7 @@ public class GroupByOperation extends Workflow {
 	public GroupByOperation() {
 	}
 
-	public GroupByOperation(final String relation, final String input, final String operation, final String options,
-			final String comment) {
+	public GroupByOperation(final String relation, final String input, final String operation, final String options, final String comment) {
 		this.relation = relation;
 		this.input = input;
 		this.operation = operation;
@@ -72,9 +73,9 @@ public class GroupByOperation extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation() {
+	public String getPigScriptRepresentation(final Set<Workflow> parentWfs) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(parseComment(getComment()));
+		sb.append(parseInformation(getComment()));
 		sb.append(getRelation());
 		sb.append(EQUAL_SYMBOL);
 		sb.append("GROUP");
@@ -82,6 +83,7 @@ public class GroupByOperation extends Workflow {
 		sb.append(getInput());
 		sb.append(" BY ");
 		sb.append(getOptions());
+		sb.append(";");
 		return sb.toString();
 	}
 

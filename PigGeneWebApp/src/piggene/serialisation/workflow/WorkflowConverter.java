@@ -23,8 +23,7 @@ public class WorkflowConverter {
 		List<String> inputParameters = convertWfSpecificParameters(data.getString("inputParameters"));
 		List<String> outputParameters = convertWfSpecificParameters(data.getString("outputParameters"));
 		Map<String, Map<String, String>> inputParameterMapping = convertParameterMapping(data.getString("inputParameterMapping"));
-		Map<String, Map<String, String>> outputParameterMapping = convertParameterMapping(data.getString("outputParameterMapping"));
-		return new Workflow(name, description, steps, inputParameters, outputParameters, inputParameterMapping, outputParameterMapping);
+		return new Workflow(name, description, steps, inputParameters, outputParameters, inputParameterMapping);
 	}
 
 	/**

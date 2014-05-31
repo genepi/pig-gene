@@ -1,5 +1,7 @@
 package piggene.serialisation.workflow;
 
+import java.util.Set;
+
 public class LoadOperation extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
@@ -13,8 +15,8 @@ public class LoadOperation extends Workflow {
 	public LoadOperation() {
 	}
 
-	public LoadOperation(final String relation, final String input, final String operation, final String options,
-			final String options2, final String comment) {
+	public LoadOperation(final String relation, final String input, final String operation, final String options, final String options2,
+			final String comment) {
 		this.relation = relation;
 		this.input = input;
 		this.operation = operation;
@@ -83,9 +85,9 @@ public class LoadOperation extends Workflow {
 
 	// TODO extend to enable different txt-options...
 	@Override
-	public String getPigScriptRepresentation() {
+	public String getPigScriptRepresentation(final Set<Workflow> parentWfs) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(parseComment(getComment()));
+		sb.append(parseInformation(getComment()));
 		sb.append(getRelation());
 		sb.append(EQUAL_SYMBOL);
 		sb.append("LOAD");
@@ -97,6 +99,7 @@ public class LoadOperation extends Workflow {
 		sb.append("USING");
 		sb.append(" ");
 		sb.append("pigGene.storage.merged.PigGeneStorage()");
+		sb.append(";");
 		return sb.toString();
 	}
 

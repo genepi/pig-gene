@@ -1,6 +1,7 @@
 package piggene.serialisation.workflow;
 
 import java.io.IOException;
+import java.util.Set;
 
 public class ReferencedWorkflow extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_REFERENCE;
@@ -35,9 +36,10 @@ public class ReferencedWorkflow extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation() throws IOException {
+	public String getPigScriptRepresentation(final Set<Workflow> parentWfs) throws IOException {
 		Workflow referencedWorkflow = WorkflowSerialisation.load(this.getName());
-		return referencedWorkflow.getPigScriptRepresentation();
+		parentWfs.add(referencedWorkflow);
+		return referencedWorkflow.getPigScriptRepresentation(parentWfs);
 	}
 
 }

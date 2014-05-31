@@ -3,6 +3,7 @@ package piggene.serialisation.pig;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Properties;
 
 import piggene.serialisation.workflow.Workflow;
@@ -24,13 +25,13 @@ public class PigScriptGenerator {
 	public static void generateAndStoreScript(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(insertHeader());
-		sb.append(workflow.getPigScriptRepresentation());
+		sb.append(workflow.getPigScriptRepresentation(new HashSet<Workflow>()));
 		PigScriptGenerator.write(sb.toString(), workflow.getName());
 	}
 
 	private static String insertHeader() {
-		String[] jarFilenames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-6.0.jar", "sam-1.93.jar",
-				"picard-1.93.jar", "variant-1.93.jar", "tribble-1.93.jar", "commons-jexl-2.1.1.jar" };
+		String[] jarFilenames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-6.0.jar", "sam-1.93.jar", "picard-1.93.jar",
+				"variant-1.93.jar", "tribble-1.93.jar", "commons-jexl-2.1.1.jar" };
 		final StringBuilder sb = new StringBuilder();
 		for (final String name : jarFilenames) {
 			sb.append("REGISTER ");
