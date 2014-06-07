@@ -92,6 +92,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 					sharedWorkflow.checkRegexAndPushData("in",entry.input);
 					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				} else if(entry.operation === "STORE") {
+					sharedWorkflow.checkRegexAndPushData("in",entry.input);
 					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				}
 			}
