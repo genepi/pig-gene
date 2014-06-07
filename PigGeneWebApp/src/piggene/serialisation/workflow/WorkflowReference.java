@@ -2,17 +2,18 @@ package piggene.serialisation.workflow;
 
 import java.io.IOException;
 
-import piggene.serialisation.pig.DynamicParameterMapper;
+import piggene.serialisation.pig.DynamicInputParameterMapper;
+import piggene.serialisation.pig.DynamicOutputParameterMapper;
 
-public class ReferencedWorkflow extends Workflow {
+public class WorkflowReference extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_REFERENCE;
 
 	private String name;
 
-	public ReferencedWorkflow() {
+	public WorkflowReference() {
 	}
 
-	public ReferencedWorkflow(final String name) {
+	public WorkflowReference(final String name) {
 		this.name = name;
 	}
 
@@ -23,7 +24,7 @@ public class ReferencedWorkflow extends Workflow {
 
 	@Override
 	public void setWorkflowType(final WorkflowType workflowType) {
-		ReferencedWorkflow.workflowType = workflowType;
+		WorkflowReference.workflowType = workflowType;
 	}
 
 	@Override
@@ -40,7 +41,8 @@ public class ReferencedWorkflow extends Workflow {
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException {
 		String workflowName = this.name;
 		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
-		DynamicParameterMapper.addParamMapping(referencedWorkflow.getInputParameterMapping());
+		DynamicInputParameterMapper.addParamMapping(referencedWorkflow.getInputParameterMapping());
+		DynamicOutputParameterMapper.addParamMapping(referencedWorkflow.getOutputParameterMapping());
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));

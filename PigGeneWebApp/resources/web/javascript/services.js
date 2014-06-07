@@ -30,6 +30,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				inputParameters: [],
 				outputParameters: [],
 				inputParameterMapping: {},
+				outputParameterMapping: {}
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
 		sharedWorkflow.broadcastWfChange();
@@ -73,26 +74,41 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.updateInOutParams = function() {
-		var regex = /(.*)([$])([A-Za-z0-9]*)(.*)/;
 		this.workflow.inputParameters = [];
 		this.workflow.outputParameters = [];
-		
 		this.workflow.steps.forEach(function(entry) {
-			var arr;
 			if(entry.workflowType === "WORKFLOW_SINGLE_ELEM") {
 				if(entry.operation === "LOAD") {
-					if(regex.test(entry.input)) {
-						arr = regex.exec(entry.input);
-						sharedWorkflow.workflow.inputParameters.push(arr[3]);
-					}
+					sharedWorkflow.checkRegexAndPushData("in",entry.input);
+					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
+				} else if(entry.operation === "FILTER") {
+					sharedWorkflow.checkRegexAndPushData("in",entry.input);
+					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
+				} else if(entry.operation === "JOIN") {
+					sharedWorkflow.checkRegexAndPushData("in",entry.input);
+					sharedWorkflow.checkRegexAndPushData("in",entry.input2);
+					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
+				} else if(entry.operation === "SELECT") {
+					sharedWorkflow.checkRegexAndPushData("in",entry.input);
+					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				} else if(entry.operation === "STORE") {
-					if(regex.test(entry.relation)) {
-						arr = regex.exec(entry.relation);
-						sharedWorkflow.workflow.outputParameters.push(arr[3]);
-					}
+					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				}
 			}
 		});
+	};
+	
+	sharedWorkflow.checkRegexAndPushData = function(opt, data) {
+		var regex = /(.*)([$])([A-Za-z0-9]*)(.*)/;
+		var arr;
+		if(regex.test(data)) {
+			arr = regex.exec(data);
+			if(opt === "in") {
+				sharedWorkflow.workflow.inputParameters.push(arr[3]);
+			} else if (opt === "out") {
+				sharedWorkflow.workflow.outputParameters.push(arr[3]);
+			}
+		}
 	};
 	
 	sharedWorkflow.deleteWfDefinition = function() {

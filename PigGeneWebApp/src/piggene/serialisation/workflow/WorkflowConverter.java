@@ -23,7 +23,8 @@ public class WorkflowConverter {
 		List<String> inputParameters = convertWfSpecificParameters(data.getString("inputParameters"));
 		List<String> outputParameters = convertWfSpecificParameters(data.getString("outputParameters"));
 		Map<String, Map<String, String>> inputParameterMapping = convertParameterMapping(data.getString("inputParameterMapping"));
-		return new Workflow(name, description, steps, inputParameters, outputParameters, inputParameterMapping);
+		Map<String, Map<String, String>> outputParameterMapping = convertParameterMapping(data.getString("outputParameterMapping"));
+		return new Workflow(name, description, steps, inputParameters, outputParameters, inputParameterMapping, outputParameterMapping);
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class WorkflowConverter {
 					break;
 				}
 			} else { // "recursive" workflow definition
-				steps.add(new ReferencedWorkflow(step.getString("name")));
+				steps.add(new WorkflowReference(step.getString("name")));
 			}
 		}
 		return steps;

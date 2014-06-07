@@ -90,7 +90,7 @@ public class OrderByOperation extends Workflow implements IWorkflowOperation {
 	@Override
 	public String renameParameters(final boolean renameParam, final String wfName) {
 		if (renameParam) {
-			return wfName;
+			return "_" + wfName;
 		}
 		return "";
 	}

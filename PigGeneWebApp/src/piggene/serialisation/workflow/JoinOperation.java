@@ -1,5 +1,7 @@
 package piggene.serialisation.workflow;
 
+import piggene.serialisation.pig.DynamicInputParameterMapper;
+
 public class JoinOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
@@ -93,6 +95,19 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
+		String mappedInputValue1;
+		String mappedInputValue2;
+		if (this.input.startsWith("$")) {
+			mappedInputValue1 = DynamicInputParameterMapper.getMappedValue(wfName, input.substring(1));
+		} else {
+			mappedInputValue1 = DynamicInputParameterMapper.getMappedValue(wfName, input);
+		}
+		if (this.input2.startsWith("$")) {
+			mappedInputValue2 = DynamicInputParameterMapper.getMappedValue(wfName, input2.substring(1));
+		} else {
+			mappedInputValue2 = DynamicInputParameterMapper.getMappedValue(wfName, input2);
+		}
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
 		sb.append(getRelation());
@@ -100,13 +115,21 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 		sb.append(EQUAL_SYMBOL);
 		sb.append("JOIN");
 		sb.append(" ");
-		sb.append(getInput());
-		sb.append(renameParameters(renameParam, wfName));
+		if (mappedInputValue1 != null) {
+			sb.append(mappedInputValue1);
+		} else {
+			sb.append(getInput());
+			sb.append(renameParameters(renameParam, wfName));
+		}
 		sb.append(" BY (");
 		sb.append(getOptions());
 		sb.append("), ");
-		sb.append(getInput2());
-		sb.append(renameParameters(renameParam, wfName));
+		if (mappedInputValue2 != null) {
+			sb.append(mappedInputValue2);
+		} else {
+			sb.append(getInput2());
+			sb.append(renameParameters(renameParam, wfName));
+		}
 		sb.append(" BY (");
 		sb.append(getOptions2());
 		sb.append(')');
@@ -117,7 +140,7 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 	@Override
 	public String renameParameters(final boolean renameParam, final String wfName) {
 		if (renameParam) {
-			return wfName;
+			return "_" + wfName;
 		}
 		return "";
 	}

@@ -20,7 +20,7 @@ import piggene.serialisation.workflow.GroupByOperation;
 import piggene.serialisation.workflow.JoinOperation;
 import piggene.serialisation.workflow.LoadOperation;
 import piggene.serialisation.workflow.OrderByOperation;
-import piggene.serialisation.workflow.ReferencedWorkflow;
+import piggene.serialisation.workflow.WorkflowReference;
 import piggene.serialisation.workflow.RegisterOperation;
 import piggene.serialisation.workflow.SelectOperation;
 import piggene.serialisation.workflow.StoreOperation;
@@ -87,7 +87,7 @@ public class PersistencyTests {
 		assertEquals("description of rec-level1 workflow", wf_level1.getDescription());
 		assertNotNull(wf_level1.getSteps());
 		assertEquals(8, wf_level1.getSteps().size());
-		assertEquals(ReferencedWorkflow.class, wf_level1.getSteps().get(0).getClass());
+		assertEquals(WorkflowReference.class, wf_level1.getSteps().get(0).getClass());
 		assertEquals(RegisterOperation.class, wf_level1.getSteps().get(1).getClass());
 		assertEquals(LoadOperation.class, wf_level1.getSteps().get(2).getClass());
 		assertEquals(FilterOperation.class, wf_level1.getSteps().get(3).getClass());
@@ -115,7 +115,7 @@ public class PersistencyTests {
 		assertEquals(LoadOperation.class, wf_level2.getSteps().get(0).getClass());
 		assertEquals(GroupByOperation.class, wf_level2.getSteps().get(1).getClass());
 		assertEquals(StoreOperation.class, wf_level2.getSteps().get(2).getClass());
-		assertEquals(ReferencedWorkflow.class, wf_level2.getSteps().get(3).getClass());
+		assertEquals(WorkflowReference.class, wf_level2.getSteps().get(3).getClass());
 	}
 
 	@Test
@@ -163,7 +163,7 @@ public class PersistencyTests {
 		assertEquals(LoadOperation.class, wf.getSteps().get(1).getClass());
 		assertEquals(GroupByOperation.class, wf.getSteps().get(2).getClass());
 		assertEquals(StoreOperation.class, wf.getSteps().get(3).getClass());
-		assertEquals(ReferencedWorkflow.class, wf.getSteps().get(4).getClass());
+		assertEquals(WorkflowReference.class, wf.getSteps().get(4).getClass());
 	}
 
 	@Test

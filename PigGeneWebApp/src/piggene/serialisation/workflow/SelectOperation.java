@@ -1,5 +1,7 @@
 package piggene.serialisation.workflow;
 
+import piggene.serialisation.pig.DynamicInputParameterMapper;
+
 public class SelectOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
@@ -72,14 +74,25 @@ public class SelectOperation extends Workflow implements IWorkflowOperation {
 
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
+		String mappedInputValue;
+		if (this.input.startsWith("$")) {
+			mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input.substring(1));
+		} else {
+			mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
+		}
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
 		sb.append(getRelation());
 		sb.append(renameParameters(renameParam, wfName));
 		sb.append(EQUAL_SYMBOL);
 		sb.append("FOREACH ");
-		sb.append(getInput());
-		sb.append(renameParameters(renameParam, wfName));
+		if (mappedInputValue != null) {
+			sb.append(mappedInputValue);
+		} else {
+			sb.append(getInput());
+			sb.append(renameParameters(renameParam, wfName));
+		}
 		sb.append(" GENERATE ");
 		sb.append(getOptions());
 		sb.append(";");
@@ -89,7 +102,7 @@ public class SelectOperation extends Workflow implements IWorkflowOperation {
 	@Override
 	public String renameParameters(final boolean renameParam, final String wfName) {
 		if (renameParam) {
-			return wfName;
+			return "_" + wfName;
 		}
 		return "";
 	}
