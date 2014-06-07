@@ -36,7 +36,7 @@
 					<div class="paramDefinition well">
 						input mapping:
 						<div class="connectionParameter input-group" ng-repeat="inParamName in step.inputParameters track by $index">
-							<label>{{inParamName}}</label>
+							<label>${{inParamName}}</label>
 							<input class="form-control" type="text" name="input" placeholder="relation name" ng-model="workflow.inputParameterMapping[step.name][inParamName]">
 						</div><br>
 					</div>

@@ -64,6 +64,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.persistWfDefinition = function() {
 		this.updateInOutParams();
+		//TODO implement
+		//this.updateOptionValues();
 		var myWf = new WfPersistency.Save(this.workflow);
 		myWf.$save(function(u,putResponseHeaders) {
 			$location.path('/wf/' + sharedWorkflow.workflow.name).replace();
@@ -71,14 +73,23 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.updateInOutParams = function() {
+		var regex = /(.*)([$])([A-Za-z0-9]*)(.*)/;
 		this.workflow.inputParameters = [];
 		this.workflow.outputParameters = [];
+		
 		this.workflow.steps.forEach(function(entry) {
+			var arr;
 			if(entry.workflowType === "WORKFLOW_SINGLE_ELEM") {
 				if(entry.operation === "LOAD") {
-					sharedWorkflow.workflow.inputParameters.push(entry.input);
+					if(regex.test(entry.input)) {
+						arr = regex.exec(entry.input);
+						sharedWorkflow.workflow.inputParameters.push(arr[3]);
+					}
 				} else if(entry.operation === "STORE") {
-					sharedWorkflow.workflow.outputParameters.push(entry.relation);
+					if(regex.test(entry.relation)) {
+						arr = regex.exec(entry.relation);
+						sharedWorkflow.workflow.outputParameters.push(arr[3]);
+					}
 				}
 			}
 		});

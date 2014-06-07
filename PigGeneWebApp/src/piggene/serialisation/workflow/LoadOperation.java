@@ -86,10 +86,15 @@ public class LoadOperation extends Workflow implements IWorkflowOperation {
 	// TODO extend to enable different txt-options...
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
+		String mappedValue;
+		if (this.input.startsWith("$")) {
+			mappedValue = DynamicParameterMapper.getMappedValue(wfName, input.substring(1));
+		} else {
+			mappedValue = DynamicParameterMapper.getMappedValue(wfName, input);
+		}
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
-
-		String mappedValue = DynamicParameterMapper.getMappedValue(wfName, input);
 		if (mappedValue != null) {
 			sb.append(getRelation());
 			sb.append(renameParameters(renameParam, wfName));
@@ -117,7 +122,7 @@ public class LoadOperation extends Workflow implements IWorkflowOperation {
 	@Override
 	public String renameParameters(final boolean renameParam, final String wfName) {
 		if (renameParam) {
-			return wfName;
+			return "_" + wfName;
 		}
 		return "";
 	}
