@@ -95,21 +95,20 @@ public class LoadOperation extends Workflow implements IWorkflowOperation {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
-		if (mappedInputValue != null) {
-			sb.append(getRelation());
-			sb.append(renameParameters(renameParam, wfName));
-			sb.append(EQUAL_SYMBOL);
-			sb.append(mappedInputValue);
+		if (getRelation().startsWith("$")) {
+			sb.append(getRelation().substring(1));
 		} else {
 			sb.append(getRelation());
-			sb.append(renameParameters(renameParam, wfName));
-			sb.append(EQUAL_SYMBOL);
+		}
+		sb.append(renameParameters(renameParam, wfName));
+		sb.append(EQUAL_SYMBOL);
+		if (mappedInputValue != null) {
+			sb.append(mappedInputValue);
+		} else {
 			sb.append("LOAD");
 			sb.append(" '$");
 			sb.append(getInput());
 			sb.append("' ");
-
-			// TODO
 			sb.append("USING");
 			sb.append(" ");
 			sb.append("pigGene.storage.merged.PigGeneStorage()");

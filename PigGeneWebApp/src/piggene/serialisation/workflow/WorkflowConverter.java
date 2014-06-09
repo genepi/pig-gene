@@ -63,10 +63,10 @@ public class WorkflowConverter {
 				case "SELECT":
 					steps.add(gson.fromJson(step.toString(), SelectOperation.class));
 					break;
-				case "GROUP":
+				case "GROUP BY":
 					steps.add(gson.fromJson(step.toString(), GroupByOperation.class));
 					break;
-				case "ORDER":
+				case "ORDER BY":
 					steps.add(gson.fromJson(step.toString(), OrderByOperation.class));
 					break;
 				case "STORE":

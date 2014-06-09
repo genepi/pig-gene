@@ -79,7 +79,11 @@ public class StoreOperation extends Workflow implements IWorkflowOperation {
 		if (mappedInputValue != null) {
 			sb.append(mappedInputValue);
 		} else {
-			sb.append(getInput());
+			if (getInput().startsWith("$")) {
+				sb.append(getInput().substring(1));
+			} else {
+				sb.append(getInput());
+			}
 			sb.append(renameParameters(renameParam, wfName));
 		}
 		sb.append(" INTO '$");

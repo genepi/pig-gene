@@ -110,7 +110,11 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
-		sb.append(getRelation());
+		if (getRelation().startsWith("$")) {
+			sb.append(getRelation().substring(1));
+		} else {
+			sb.append(getRelation());
+		}
 		sb.append(renameParameters(renameParam, wfName));
 		sb.append(EQUAL_SYMBOL);
 		sb.append("JOIN");
