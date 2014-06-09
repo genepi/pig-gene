@@ -5,33 +5,33 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class DynamicInputParameterMapper {
-	private static Map<String, Map<String, String>> parmMapping;
+	private static Map<String, Map<String, String>> paramMapping;
 
 	public static void setParamMapping(final Map<String, Map<String, String>> paramMapping) {
-		DynamicInputParameterMapper.parmMapping = paramMapping;
+		DynamicInputParameterMapper.paramMapping = paramMapping;
 	}
 
 	public static void setParamMapping(final Map<String, Map<String, String>> paramMapping, final String wfName) {
 		if (paramMapping != null) {
-			DynamicInputParameterMapper.parmMapping = buildNewMap(paramMapping, wfName);
+			DynamicInputParameterMapper.paramMapping = buildNewMap(paramMapping, wfName);
 		}
 	}
 
 	public static void addParamMapping(final Map<String, Map<String, String>> paramMapping) {
 		if (paramMapping != null) {
-			DynamicInputParameterMapper.parmMapping.putAll(paramMapping);
+			DynamicInputParameterMapper.paramMapping.putAll(paramMapping);
 		}
 	}
 
 	public static void addParamMapping(final Map<String, Map<String, String>> paramMapping, final String wfName) {
 		if (paramMapping != null) {
-			DynamicInputParameterMapper.parmMapping.putAll(buildNewMap(paramMapping, wfName));
+			DynamicInputParameterMapper.paramMapping.putAll(buildNewMap(paramMapping, wfName));
 		}
 	}
 
 	public static String getMappedValue(final String wfName, final String paramName) {
-		if (DynamicInputParameterMapper.parmMapping.containsKey(wfName)) {
-			Map<String, String> map = DynamicInputParameterMapper.parmMapping.get(wfName);
+		if (DynamicInputParameterMapper.paramMapping.containsKey(wfName)) {
+			Map<String, String> map = DynamicInputParameterMapper.paramMapping.get(wfName);
 			if (map != null && map.containsKey(paramName)) {
 				return map.get(paramName);
 			}
@@ -40,7 +40,7 @@ public class DynamicInputParameterMapper {
 	}
 
 	public static String getRepresentation() {
-		return DynamicInputParameterMapper.parmMapping.toString();
+		return DynamicInputParameterMapper.paramMapping.toString();
 	}
 
 	private static Map<String, Map<String, String>> buildNewMap(final Map<String, Map<String, String>> paramMapping, final String wfName) {

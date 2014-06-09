@@ -42,7 +42,7 @@ public class WorkflowReference extends Workflow {
 		String workflowName = this.name;
 		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
 		DynamicInputParameterMapper.addParamMapping(referencedWorkflow.getInputParameterMapping(), workflowName);
-		DynamicOutputParameterMapper.addParamMapping(referencedWorkflow.getOutputParameterMapping());
+		DynamicOutputParameterMapper.addParamMapping(referencedWorkflow.getOutputParameterMapping(), workflowName);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));

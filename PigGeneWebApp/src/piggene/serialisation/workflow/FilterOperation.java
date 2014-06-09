@@ -1,6 +1,7 @@
 package piggene.serialisation.workflow;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
+import piggene.serialisation.pig.DynamicOutputParameterMapper;
 
 public class FilterOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
@@ -74,13 +75,17 @@ public class FilterOperation extends Workflow implements IWorkflowOperation {
 
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
-		System.out.println(DynamicInputParameterMapper.getRepresentation());
-
 		String mappedInputValue;
 		if (this.input.startsWith("$")) {
 			mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input.substring(1));
+			if (mappedInputValue == null) {
+				mappedInputValue = DynamicOutputParameterMapper.getMappedValue(wfName, input.substring(1));
+			}
 		} else {
 			mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
+			if (mappedInputValue == null) {
+				mappedInputValue = DynamicOutputParameterMapper.getMappedValue(wfName, input);
+			}
 		}
 
 		StringBuilder sb = new StringBuilder();
@@ -90,11 +95,7 @@ public class FilterOperation extends Workflow implements IWorkflowOperation {
 		} else {
 			sb.append(getRelation());
 		}
-
-		if (renameParam) {
-			System.out.println(DynamicInputParameterMapper.getRepresentation());
-			sb.append(renameParameters(renameParam, wfName));
-		}
+		sb.append(renameParameters(renameParam, wfName));
 
 		sb.append(EQUAL_SYMBOL);
 		sb.append("FILTER");
@@ -103,7 +104,7 @@ public class FilterOperation extends Workflow implements IWorkflowOperation {
 			sb.append(mappedInputValue);
 		} else {
 			sb.append(getInput());
-			sb.append(renameParameters(renameParam, wfName));
+			// sb.append(renameParameters(renameParam, wfName));
 		}
 		sb.append(" BY ");
 		sb.append(getOptions());
