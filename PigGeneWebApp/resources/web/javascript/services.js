@@ -65,8 +65,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.persistWfDefinition = function() {
 		this.updateInOutParams();
-		//TODO implement
-		//this.updateOptionValues();
 		var myWf = new WfPersistency.Save(this.workflow);
 		myWf.$save(function(u,putResponseHeaders) {
 			$location.path('/wf/' + sharedWorkflow.workflow.name).replace();

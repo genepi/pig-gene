@@ -84,7 +84,7 @@ public class StoreOperation extends Workflow implements IWorkflowOperation {
 			} else {
 				sb.append(getInput());
 			}
-			sb.append(renameParameters(renameParam, wfName));
+			// sb.append(renameParameters(renameParam, wfName));
 		}
 		sb.append(" INTO '$");
 		sb.append(getRelation());

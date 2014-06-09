@@ -41,7 +41,7 @@ public class WorkflowReference extends Workflow {
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException {
 		String workflowName = this.name;
 		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
-		DynamicInputParameterMapper.addParamMapping(referencedWorkflow.getInputParameterMapping());
+		DynamicInputParameterMapper.addParamMapping(referencedWorkflow.getInputParameterMapping(), workflowName);
 		DynamicOutputParameterMapper.addParamMapping(referencedWorkflow.getOutputParameterMapping());
 
 		StringBuilder sb = new StringBuilder();

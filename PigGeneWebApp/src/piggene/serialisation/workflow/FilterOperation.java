@@ -74,6 +74,8 @@ public class FilterOperation extends Workflow implements IWorkflowOperation {
 
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
+		System.out.println(DynamicInputParameterMapper.getRepresentation());
+
 		String mappedInputValue;
 		if (this.input.startsWith("$")) {
 			mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input.substring(1));
@@ -88,7 +90,12 @@ public class FilterOperation extends Workflow implements IWorkflowOperation {
 		} else {
 			sb.append(getRelation());
 		}
-		sb.append(renameParameters(renameParam, wfName));
+
+		if (renameParam) {
+			System.out.println(DynamicInputParameterMapper.getRepresentation());
+			sb.append(renameParameters(renameParam, wfName));
+		}
+
 		sb.append(EQUAL_SYMBOL);
 		sb.append("FILTER");
 		sb.append(" ");

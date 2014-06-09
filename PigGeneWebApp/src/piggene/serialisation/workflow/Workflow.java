@@ -112,7 +112,7 @@ public class Workflow implements IWorkflow {
 
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException {
-		DynamicInputParameterMapper.setParamMapping(inputParameterMapping);
+		DynamicInputParameterMapper.setParamMapping(inputParameterMapping, wfName);
 		DynamicOutputParameterMapper.setParamMapping(outputParameterMapping);
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));
@@ -121,7 +121,7 @@ public class Workflow implements IWorkflow {
 
 		for (Workflow wf : steps) {
 			sb.append(System.getProperty("line.separator"));
-			sb.append(wf.getPigScriptRepresentation(false, wfName));
+			sb.append(wf.getPigScriptRepresentation(true, wfName));
 		}
 		return sb.toString();
 	}
