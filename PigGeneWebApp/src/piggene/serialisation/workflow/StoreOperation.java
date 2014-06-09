@@ -65,12 +65,7 @@ public class StoreOperation extends Workflow implements IWorkflowOperation {
 	// TODO extend to different storage possibilities...
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
-		String mappedInputValue;
-		if (this.input.startsWith("$")) {
-			mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input.substring(1));
-		} else {
-			mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
-		}
+		String mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));

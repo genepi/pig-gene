@@ -32,8 +32,12 @@ public class DynamicInputParameterMapper {
 	public static String getMappedValue(final String wfName, final String paramName) {
 		if (DynamicInputParameterMapper.paramMapping.containsKey(wfName)) {
 			Map<String, String> map = DynamicInputParameterMapper.paramMapping.get(wfName);
-			if (map != null && map.containsKey(paramName)) {
-				return map.get(paramName);
+			String parameterName = paramName;
+			if (parameterName.startsWith("$")) {
+				parameterName = paramName.substring(1);
+			}
+			if (map != null && map.containsKey(parameterName)) {
+				return map.get(parameterName);
 			}
 		}
 		return null;

@@ -96,29 +96,14 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
-		String mappedInputValue1;
-		String mappedInputValue2;
-		if (this.input.startsWith("$")) {
-			mappedInputValue1 = DynamicInputParameterMapper.getMappedValue(wfName, input.substring(1));
-			if (mappedInputValue1 == null) {
-				mappedInputValue1 = DynamicOutputParameterMapper.getMappedValue(wfName, input.substring(1));
-			}
-		} else {
-			mappedInputValue1 = DynamicInputParameterMapper.getMappedValue(wfName, input);
-			if (mappedInputValue1 == null) {
-				mappedInputValue1 = DynamicOutputParameterMapper.getMappedValue(wfName, input);
-			}
+		String mappedInputValue1 = DynamicInputParameterMapper.getMappedValue(wfName, input);
+		String mappedInputValue2 = DynamicInputParameterMapper.getMappedValue(wfName, input2);
+
+		if (mappedInputValue1 == null) {
+			mappedInputValue1 = DynamicOutputParameterMapper.getMappedValue(wfName, input);
 		}
-		if (this.input2.startsWith("$")) {
-			mappedInputValue2 = DynamicInputParameterMapper.getMappedValue(wfName, input2.substring(1));
-			if (mappedInputValue2 == null) {
-				mappedInputValue2 = DynamicOutputParameterMapper.getMappedValue(wfName, input2.substring(1));
-			}
-		} else {
-			mappedInputValue2 = DynamicInputParameterMapper.getMappedValue(wfName, input2);
-			if (mappedInputValue2 == null) {
-				mappedInputValue2 = DynamicOutputParameterMapper.getMappedValue(wfName, input2);
-			}
+		if (mappedInputValue2 == null) {
+			mappedInputValue2 = DynamicOutputParameterMapper.getMappedValue(wfName, input2);
 		}
 
 		StringBuilder sb = new StringBuilder();
