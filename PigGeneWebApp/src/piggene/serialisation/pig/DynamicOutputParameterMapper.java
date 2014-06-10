@@ -32,8 +32,12 @@ public class DynamicOutputParameterMapper {
 	public static String getMappedValue(final String wfName, final String paramName) {
 		if (DynamicOutputParameterMapper.paramMapping.containsKey(wfName)) {
 			Map<String, String> map = DynamicOutputParameterMapper.paramMapping.get(wfName);
-			if (map != null && map.containsKey(paramName)) {
-				return map.get(paramName);
+			String parameterName = paramName;
+			if (parameterName.startsWith("$")) {
+				parameterName = parameterName.substring(1);
+			}
+			if (map != null && map.containsKey(parameterName)) {
+				return map.get(parameterName);
 			}
 		}
 		return null;

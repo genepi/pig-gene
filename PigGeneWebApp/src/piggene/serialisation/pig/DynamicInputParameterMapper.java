@@ -34,7 +34,7 @@ public class DynamicInputParameterMapper {
 			Map<String, String> map = DynamicInputParameterMapper.paramMapping.get(wfName);
 			String parameterName = paramName;
 			if (parameterName.startsWith("$")) {
-				parameterName = paramName.substring(1);
+				parameterName = parameterName.substring(1);
 			}
 			if (map != null && map.containsKey(parameterName)) {
 				return map.get(parameterName);
