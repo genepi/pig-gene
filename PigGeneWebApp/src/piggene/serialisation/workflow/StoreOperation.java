@@ -63,30 +63,23 @@ public class StoreOperation extends Workflow implements IWorkflowOperation {
 		this.comment = comment;
 	}
 
-	// TODO extend to different storage possibilities...
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
 		System.out.println(DynamicInputParameterMapper.getRepresentation());
 		System.out.println(DynamicOutputParameterMapper.getRepresentation());
-		String mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
-		if (mappedInputValue == null) {
-			mappedInputValue = DynamicOutputParameterMapper.getMappedValue(wfName, input);
-		}
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
 		sb.append("STORE");
 		sb.append(" ");
-		if (mappedInputValue != null) {
-			sb.append(mappedInputValue);
-		} else {
-			if (getInput().startsWith("$")) {
-				sb.append(getInput().substring(1));
-			} else {
-				sb.append(getInput());
-				sb.append(renameParameters(renameParam, wfName));
-			}
+
+		if (getInput().startsWith("$")) { // manual mapping
+			sb.append(getInput().substring(1));
+		} else { // relation from same wf
+			sb.append(getInput());
+			sb.append(renameParameters(renameParam, wfName));
 		}
+
 		sb.append(" INTO '$");
 		if (getRelation().startsWith("$")) {
 			sb.append(getRelation().substring(1));
