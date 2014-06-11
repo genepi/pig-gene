@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import piggene.serialisation.cloudgene.CloudgeneYamlGenerator;
+import piggene.serialisation.pig.MissingParameterException;
 import piggene.serialisation.pig.PigScriptGenerator;
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.WorkflowSerialisation;
@@ -22,6 +23,9 @@ public class ScriptCreationTests {
 			PigScriptGenerator.generateAndStoreScript(wf);
 		} catch (IOException e) {
 			fail("error: serialized (standard) workflow could not be loaded - was it created??");
+		} catch (MissingParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		assertNotNull(wf);
 		// TODO !manually! check generated PigScript!!
@@ -35,6 +39,9 @@ public class ScriptCreationTests {
 			PigScriptGenerator.generateAndStoreScript(wf);
 		} catch (IOException e) {
 			fail("error: serialized (standard) workflow could not be loaded - was it created??");
+		} catch (MissingParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		assertNotNull(wf);
 		// TODO !manually! check generated PigScript!!

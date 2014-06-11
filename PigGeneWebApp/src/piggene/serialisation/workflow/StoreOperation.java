@@ -1,7 +1,6 @@
 package piggene.serialisation.workflow;
 
-
-public class StoreOperation extends Workflow implements IWorkflowOperation {
+public class StoreOperation extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
 	private String relation;
@@ -77,14 +76,6 @@ public class StoreOperation extends Workflow implements IWorkflowOperation {
 		sb.append("'");
 		sb.append(";");
 		return sb.toString();
-	}
-
-	@Override
-	public String renameParameters(final boolean renameParam, final String wfName) {
-		if (renameParam) {
-			return "_" + wfName;
-		}
-		return "";
 	}
 
 }

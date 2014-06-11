@@ -1,8 +1,9 @@
 package piggene.serialisation.workflow;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
+import piggene.serialisation.pig.MissingParameterException;
 
-public class OrderByOperation extends Workflow implements IWorkflowOperation {
+public class OrderByOperation extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
 	private String relation;
@@ -73,36 +74,22 @@ public class OrderByOperation extends Workflow implements IWorkflowOperation {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
+	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws MissingParameterException {
 		String mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
 		sb.append(removeLeadingDollarSign(getRelation()));
+		addOutputParamToIndex(getRelation(), wfName);
 		sb.append(renameParameters(renameParam, wfName));
 		sb.append(EQUAL_SYMBOL);
 		sb.append("ORDER");
 		sb.append(" ");
-		if (mappedInputValue != null) {
-			sb.append(mappedInputValue);
-		} else {
-			sb.append(removeLeadingDollarSign(getInput()));
-			if (!getInput().startsWith("$")) { // relation from same wf
-				sb.append(renameParameters(renameParam, wfName));
-			}
-		}
+		sb.append(resolveInputParameterValue(mappedInputValue, getInput(), wfName, renameParam));
 		sb.append(" BY ");
 		sb.append(getOptions());
 		sb.append(";");
 		return sb.toString();
-	}
-
-	@Override
-	public String renameParameters(final boolean renameParam, final String wfName) {
-		if (renameParam) {
-			return "_" + wfName;
-		}
-		return "";
 	}
 
 }

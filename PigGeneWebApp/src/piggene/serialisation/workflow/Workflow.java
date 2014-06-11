@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
+import piggene.serialisation.pig.ExistingOutputParameters;
+import piggene.serialisation.pig.MissingParameterException;
 
 public class Workflow implements IWorkflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW;
@@ -109,16 +111,44 @@ public class Workflow implements IWorkflow {
 		return sb.toString();
 	}
 
-	protected String removeLeadingDollarSign(final String input) {
-		if (input.startsWith("$")) {
-			return input.substring(1);
+	protected String removeLeadingDollarSign(final String param) {
+		if (param.startsWith("$")) {
+			return param.substring(1);
 		}
-		return input;
+		return param;
+	}
+
+	protected void addOutputParamToIndex(final String param, final String wfName) {
+		ExistingOutputParameters.addOutputParameter(param.concat("_").concat(wfName));
+	}
+
+	protected String resolveInputParameterValue(final String mappedVal, final String input, final String wfName, final boolean renameParam)
+			throws MissingParameterException {
+		StringBuilder sb = new StringBuilder();
+		if (mappedVal != null) {
+			sb.append(mappedVal);
+		} else if (!input.startsWith("$")) { // relation from same wf
+			sb.append(input);
+			sb.append(renameParameters(renameParam, wfName));
+		} else if (ExistingOutputParameters.containsOutputParameter(input)) {
+			sb.append(removeLeadingDollarSign(input));
+		} else {
+			throw new MissingParameterException("ERROR: some input parameter values are not defined correctly");
+		}
+		return sb.toString();
+	}
+
+	protected String renameParameters(final boolean renameParam, final String wfName) {
+		if (renameParam) {
+			return "_" + wfName;
+		}
+		return "";
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException {
+	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException, MissingParameterException {
 		DynamicInputParameterMapper.setParamMapping(inputParameterMapping, wfName);
+		ExistingOutputParameters.initializeArrayList();
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));
 		sb.append(parseInfo(getName()));

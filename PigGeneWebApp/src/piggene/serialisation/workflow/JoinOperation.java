@@ -1,8 +1,9 @@
 package piggene.serialisation.workflow;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
+import piggene.serialisation.pig.MissingParameterException;
 
-public class JoinOperation extends Workflow implements IWorkflowOperation {
+public class JoinOperation extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
 	private String relation;
@@ -94,49 +95,28 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
+	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws MissingParameterException {
 		String mappedInputValue1 = DynamicInputParameterMapper.getMappedValue(wfName, input);
 		String mappedInputValue2 = DynamicInputParameterMapper.getMappedValue(wfName, input2);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
 		sb.append(removeLeadingDollarSign(getRelation()));
+		addOutputParamToIndex(getRelation(), wfName);
 		sb.append(renameParameters(renameParam, wfName));
 		sb.append(EQUAL_SYMBOL);
 		sb.append("JOIN");
 		sb.append(" ");
-		if (mappedInputValue1 != null) {
-			sb.append(mappedInputValue1);
-		} else {
-			sb.append(removeLeadingDollarSign(getInput()));
-			if (!getInput().startsWith("$")) { // relation from same wf
-				sb.append(renameParameters(renameParam, wfName));
-			}
-		}
+		sb.append(resolveInputParameterValue(mappedInputValue1, getInput(), wfName, renameParam));
 		sb.append(" BY (");
 		sb.append(getOptions());
 		sb.append("), ");
-		if (mappedInputValue2 != null) {
-			sb.append(mappedInputValue2);
-		} else {
-			sb.append(removeLeadingDollarSign(getInput2()));
-			if (!getInput2().startsWith("$")) { // relation from same wf
-				sb.append(renameParameters(renameParam, wfName));
-			}
-		}
+		sb.append(resolveInputParameterValue(mappedInputValue2, getInput2(), wfName, renameParam));
 		sb.append(" BY (");
 		sb.append(getOptions2());
 		sb.append(')');
 		sb.append(";");
 		return sb.toString();
-	}
-
-	@Override
-	public String renameParameters(final boolean renameParam, final String wfName) {
-		if (renameParam) {
-			return "_" + wfName;
-		}
-		return "";
 	}
 
 }

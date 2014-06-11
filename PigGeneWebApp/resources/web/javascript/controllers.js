@@ -57,6 +57,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 		if(modWf.steps[index].workflowType === "WORKFLOW") {
 			var wfName = modWf.steps[index].name
 			delete modWf.inputParameterMapping[wfName];
+			delete modWf.outputParameterMapping[wfName];
 		}
 		modWf.steps.splice(index, 1);
 		SharedWfService.prepForBroadcast(modWf);

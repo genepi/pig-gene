@@ -3,6 +3,7 @@ package piggene.serialisation.workflow;
 import java.io.IOException;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
+import piggene.serialisation.pig.MissingParameterException;
 
 public class WorkflowReference extends Workflow {
 	private static int indentation = 0;
@@ -38,7 +39,7 @@ public class WorkflowReference extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException {
+	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException, MissingParameterException {
 		WorkflowReference.indentation++;
 		String workflowName = this.name;
 		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);

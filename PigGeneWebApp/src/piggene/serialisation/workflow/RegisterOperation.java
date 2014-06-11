@@ -1,6 +1,6 @@
 package piggene.serialisation.workflow;
 
-public class RegisterOperation extends Workflow implements IWorkflowOperation {
+public class RegisterOperation extends Workflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
 
 	private String input;
@@ -59,14 +59,6 @@ public class RegisterOperation extends Workflow implements IWorkflowOperation {
 		sb.append(getInput());
 		sb.append(";");
 		return sb.toString();
-	}
-
-	@Override
-	public String renameParameters(final boolean renameParam, final String wfName) {
-		if (renameParam) {
-			return "_" + wfName;
-		}
-		return "";
 	}
 
 }
