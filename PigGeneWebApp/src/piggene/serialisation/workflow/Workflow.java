@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
-import piggene.serialisation.pig.DynamicOutputParameterMapper;
 
 public class Workflow implements IWorkflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW;
@@ -120,7 +119,6 @@ public class Workflow implements IWorkflow {
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException {
 		DynamicInputParameterMapper.setParamMapping(inputParameterMapping, wfName);
-		DynamicOutputParameterMapper.setParamMapping(outputParameterMapping, wfName);
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));
 		sb.append(parseInfo(getName()));

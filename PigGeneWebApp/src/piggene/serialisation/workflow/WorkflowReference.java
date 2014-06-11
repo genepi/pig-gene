@@ -3,7 +3,6 @@ package piggene.serialisation.workflow;
 import java.io.IOException;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
-import piggene.serialisation.pig.DynamicOutputParameterMapper;
 
 public class WorkflowReference extends Workflow {
 	private static int indentation = 0;
@@ -44,7 +43,6 @@ public class WorkflowReference extends Workflow {
 		String workflowName = this.name;
 		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
 		DynamicInputParameterMapper.addParamMapping(referencedWorkflow.getInputParameterMapping(), workflowName);
-		DynamicOutputParameterMapper.addParamMapping(referencedWorkflow.getOutputParameterMapping(), workflowName);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));

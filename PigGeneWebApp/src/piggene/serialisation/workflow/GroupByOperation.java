@@ -1,7 +1,6 @@
 package piggene.serialisation.workflow;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
-import piggene.serialisation.pig.DynamicOutputParameterMapper;
 
 public class GroupByOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
@@ -76,9 +75,6 @@ public class GroupByOperation extends Workflow implements IWorkflowOperation {
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
 		String mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
-		if (mappedInputValue == null) {
-			mappedInputValue = DynamicOutputParameterMapper.getMappedValue(wfName, input);
-		}
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
