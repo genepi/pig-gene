@@ -110,6 +110,13 @@ public class Workflow implements IWorkflow {
 		return sb.toString();
 	}
 
+	protected String removeLeadingDollarSign(final String input) {
+		if (input.startsWith("$")) {
+			return input.substring(1);
+		}
+		return input;
+	}
+
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException {
 		DynamicInputParameterMapper.setParamMapping(inputParameterMapping, wfName);

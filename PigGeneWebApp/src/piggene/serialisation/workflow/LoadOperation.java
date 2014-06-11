@@ -83,22 +83,13 @@ public class LoadOperation extends Workflow implements IWorkflowOperation {
 		this.comment = comment;
 	}
 
-	// TODO extend to enable different txt-options...
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
 		String mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
-		// if (mappedInputValue == null) {
-		// mappedInputValue =
-		// DynamicOutputParameterMapper.getMappedValue(wfName, input);
-		// }
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
-		if (getRelation().startsWith("$")) {
-			sb.append(getRelation().substring(1));
-		} else {
-			sb.append(getRelation());
-		}
+		sb.append(removeLeadingDollarSign(getRelation()));
 		sb.append(renameParameters(renameParam, wfName));
 		sb.append(EQUAL_SYMBOL);
 		if (mappedInputValue != null) {
@@ -106,7 +97,7 @@ public class LoadOperation extends Workflow implements IWorkflowOperation {
 		} else {
 			sb.append("LOAD");
 			sb.append(" '$");
-			sb.append(getInput());
+			sb.append(removeLeadingDollarSign(getInput()));
 			sb.append("' ");
 			sb.append("USING");
 			sb.append(" ");

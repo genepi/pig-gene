@@ -1,7 +1,6 @@
 package piggene.serialisation.workflow;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
-import piggene.serialisation.pig.DynamicOutputParameterMapper;
 
 public class JoinOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
@@ -99,20 +98,9 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 		String mappedInputValue1 = DynamicInputParameterMapper.getMappedValue(wfName, input);
 		String mappedInputValue2 = DynamicInputParameterMapper.getMappedValue(wfName, input2);
 
-		if (mappedInputValue1 == null) {
-			mappedInputValue1 = DynamicOutputParameterMapper.getMappedValue(wfName, input);
-		}
-		if (mappedInputValue2 == null) {
-			mappedInputValue2 = DynamicOutputParameterMapper.getMappedValue(wfName, input2);
-		}
-
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
-		if (getRelation().startsWith("$")) {
-			sb.append(getRelation().substring(1));
-		} else {
-			sb.append(getRelation());
-		}
+		sb.append(removeLeadingDollarSign(getRelation()));
 		sb.append(renameParameters(renameParam, wfName));
 		sb.append(EQUAL_SYMBOL);
 		sb.append("JOIN");
@@ -120,8 +108,10 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 		if (mappedInputValue1 != null) {
 			sb.append(mappedInputValue1);
 		} else {
-			sb.append(getInput());
-			sb.append(renameParameters(renameParam, wfName));
+			sb.append(removeLeadingDollarSign(getInput()));
+			if (!getInput().startsWith("$")) { // relation from same wf
+				sb.append(renameParameters(renameParam, wfName));
+			}
 		}
 		sb.append(" BY (");
 		sb.append(getOptions());
@@ -129,8 +119,10 @@ public class JoinOperation extends Workflow implements IWorkflowOperation {
 		if (mappedInputValue2 != null) {
 			sb.append(mappedInputValue2);
 		} else {
-			sb.append(getInput2());
-			sb.append(renameParameters(renameParam, wfName));
+			sb.append(removeLeadingDollarSign(getInput2()));
+			if (!getInput2().startsWith("$")) { // relation from same wf
+				sb.append(renameParameters(renameParam, wfName));
+			}
 		}
 		sb.append(" BY (");
 		sb.append(getOptions2());

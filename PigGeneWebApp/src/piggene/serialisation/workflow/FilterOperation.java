@@ -1,7 +1,6 @@
 package piggene.serialisation.workflow;
 
 import piggene.serialisation.pig.DynamicInputParameterMapper;
-import piggene.serialisation.pig.DynamicOutputParameterMapper;
 
 public class FilterOperation extends Workflow implements IWorkflowOperation {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW_SINGLE_ELEM;
@@ -76,17 +75,10 @@ public class FilterOperation extends Workflow implements IWorkflowOperation {
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
 		String mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
-		if (mappedInputValue == null) {
-			mappedInputValue = DynamicOutputParameterMapper.getMappedValue(wfName, input);
-		}
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
-		if (getRelation().startsWith("$")) {
-			sb.append(getRelation().substring(1));
-		} else {
-			sb.append(getRelation());
-		}
+		sb.append(removeLeadingDollarSign(getRelation()));
 		sb.append(renameParameters(renameParam, wfName));
 
 		sb.append(EQUAL_SYMBOL);
@@ -95,10 +87,9 @@ public class FilterOperation extends Workflow implements IWorkflowOperation {
 		if (mappedInputValue != null) {
 			sb.append(mappedInputValue);
 		} else {
-			if (getInput().startsWith("$")) {
-				sb.append(getInput().substring(1));
-			} else {
-				sb.append(getInput());
+			sb.append(removeLeadingDollarSign(getInput()));
+			if (!getInput().startsWith("$")) { // relation from same wf
+				sb.append(renameParameters(renameParam, wfName));
 			}
 		}
 		sb.append(" BY ");

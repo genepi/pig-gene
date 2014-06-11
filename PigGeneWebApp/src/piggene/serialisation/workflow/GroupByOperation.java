@@ -82,11 +82,7 @@ public class GroupByOperation extends Workflow implements IWorkflowOperation {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(parseInfo(getComment()));
-		if (getRelation().startsWith("$")) {
-			sb.append(getRelation().substring(1));
-		} else {
-			sb.append(getRelation());
-		}
+		sb.append(removeLeadingDollarSign(getRelation()));
 		sb.append(renameParameters(renameParam, wfName));
 		sb.append(EQUAL_SYMBOL);
 		sb.append("GROUP");
@@ -94,8 +90,10 @@ public class GroupByOperation extends Workflow implements IWorkflowOperation {
 		if (mappedInputValue != null) {
 			sb.append(mappedInputValue);
 		} else {
-			sb.append(getInput());
-			sb.append(renameParameters(renameParam, wfName));
+			sb.append(removeLeadingDollarSign(getInput()));
+			if (!getInput().startsWith("$")) { // relation from same wf
+				sb.append(renameParameters(renameParam, wfName));
+			}
 		}
 		sb.append(" BY ");
 		sb.append(getOptions());
