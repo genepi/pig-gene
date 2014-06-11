@@ -66,6 +66,8 @@ public class StoreOperation extends Workflow implements IWorkflowOperation {
 	// TODO extend to different storage possibilities...
 	@Override
 	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) {
+		System.out.println(DynamicInputParameterMapper.getRepresentation());
+		System.out.println(DynamicOutputParameterMapper.getRepresentation());
 		String mappedInputValue = DynamicInputParameterMapper.getMappedValue(wfName, input);
 		if (mappedInputValue == null) {
 			mappedInputValue = DynamicOutputParameterMapper.getMappedValue(wfName, input);
@@ -82,10 +84,15 @@ public class StoreOperation extends Workflow implements IWorkflowOperation {
 				sb.append(getInput().substring(1));
 			} else {
 				sb.append(getInput());
+				sb.append(renameParameters(renameParam, wfName));
 			}
 		}
 		sb.append(" INTO '$");
-		sb.append(getRelation());
+		if (getRelation().startsWith("$")) {
+			sb.append(getRelation().substring(1));
+		} else {
+			sb.append(getRelation());
+		}
 		sb.append(renameParameters(renameParam, wfName));
 		sb.append("'");
 		sb.append(";");
