@@ -88,8 +88,8 @@
     </target>
 	
 	<target name="zip" depends="create_jar,create_pigGene_jar">
-		<zip zipfile="dist/pigGene-0.1.0.zip" basedir="dist/jar" whenempty="create" />
-		<zip zipfile="dist/pigGene-src-0.1.0.zip" basedir="dist/src" whenempty="create" />
+		<zip zipfile="dist/pigGene-0.2.0.zip" basedir="dist/jar" whenempty="create" />
+		<zip zipfile="dist/pigGene-src-0.2.0.zip" basedir="dist/src" whenempty="create" />
 	</target>
 	
 </project>
