@@ -25,6 +25,9 @@
 		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" failonerror="false" command="cd ${cloud.dir}; sh stop_server.sh"></sshexec>
 		
 		<echo>copying jar files required for pig script execution</echo>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.dir}; mkdir -p ${cloud.script.dir}"></sshexec>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp pigGene.jar ${cloud.script.dir}"></sshexec>
+		
 		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp pigGene.jar ${cloud.script.dir}"></sshexec>
 		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp SeqPig.jar ${cloud.script.dir}"></sshexec>
 		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp hadoop-bam-6.0.jar ${cloud.script.dir}"></sshexec>
