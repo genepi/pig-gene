@@ -35,9 +35,6 @@
     	<copy todir="dist/src/lib">
     		<fileset dir="lib" />
     	</copy>   
-		<copy todir="dist/jar">
-		     <fileset dir="files" />
-		</copy>		
     	<copy todir="dist/jar/lib">
     		<fileset dir="lib" />
     	</copy>    

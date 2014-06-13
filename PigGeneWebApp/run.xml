@@ -4,6 +4,9 @@
 	<property name="cloud.host" value="genepi-calc.uibk.ac.at" />
 	<property name="cloud.username" value="clemens" />
 	<property name="cloud.dir" value="/home/clemens/pigGeneApp" />
+	<property name="cloud.lib.dir" value="/home/clemens/pigGeneApp/lib" />
+	<property name="cloud.script.dir" value="/home/clemens/pigGeneApp/apps/piggene" />
+	
 	<property name="pigGene.jar" value="pigGene_server.jar" />
 	
 	<target name="copy_file">
@@ -20,6 +23,16 @@
 	<target name="run_server" depends="unzip_files">
 		<echo>kill old pigGene instances...</echo>
 		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" failonerror="false" command="cd ${cloud.dir}; sh stop_server.sh"></sshexec>
+		
+		<echo>copying jar files required for pig script execution</echo>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp pigGene.jar ${cloud.script.dir}"></sshexec>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp SeqPig.jar ${cloud.script.dir}"></sshexec>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp hadoop-bam-6.0.jar ${cloud.script.dir}"></sshexec>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp sam-1.93.jar ${cloud.script.dir}"></sshexec>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp picard-1.93.jar ${cloud.script.dir}"></sshexec>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp variant-1.93.jar ${cloud.script.dir}"></sshexec>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp tribble-1.93.jar ${cloud.script.dir}"></sshexec>
+		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.lib.dir}; cp commons-jexl-2.1.1.jar ${cloud.script.dir}"></sshexec>
 		
 		<echo>starting pigGene server application</echo>
 		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.dir}; java -jar pigGene_server.jar"></sshexec>
