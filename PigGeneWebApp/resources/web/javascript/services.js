@@ -74,35 +74,40 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.updateInOutParams = function() {
 		this.workflow.inputParameters = [];
 		this.workflow.outputParameters = [];
+		var referencedInputParameters = [];
 		this.workflow.steps.forEach(function(entry) {
 			if(entry.workflowType === "WORKFLOW_SINGLE_ELEM") {
 				if(entry.operation === "LOAD") {
-					sharedWorkflow.checkRegexAndPushData("in",entry.input);
+					sharedWorkflow.checkRegexAndPushData("in",entry.input,referencedInputParameters);
 					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				} else if(entry.operation === "FILTER") {
-					sharedWorkflow.checkRegexAndPushData("in",entry.input);
+					sharedWorkflow.checkRegexAndPushData("in",entry.input,referencedInputParameters);
 					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				} else if(entry.operation === "JOIN") {
-					sharedWorkflow.checkRegexAndPushData("in",entry.input);
-					sharedWorkflow.checkRegexAndPushData("in",entry.input2);
+					sharedWorkflow.checkRegexAndPushData("in",entry.input,referencedInputParameters);
+					sharedWorkflow.checkRegexAndPushData("in",entry.input2,referencedInputParameters);
 					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				} else if(entry.operation === "SELECT") {
-					sharedWorkflow.checkRegexAndPushData("in",entry.input);
+					sharedWorkflow.checkRegexAndPushData("in",entry.input,referencedInputParameters);
 					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				} else if(entry.operation === "STORE") {
-					sharedWorkflow.checkRegexAndPushData("in",entry.input);
+					sharedWorkflow.checkRegexAndPushData("in",entry.input,referencedInputParameters);
 					sharedWorkflow.checkRegexAndPushData("out",entry.relation);
 				}
+			} else {
+				entry.outputParameters.forEach(function(param) {
+					referencedInputParameters.push(param + "_" + entry.name);
+				});
 			}
 		});
 	};
 	
-	sharedWorkflow.checkRegexAndPushData = function(opt, data) {
-		var regex = /(.*)([$])([A-Za-z0-9]*)(.*)/;
+	sharedWorkflow.checkRegexAndPushData = function(opt, data, referencedInputParameters) {
+		var regex = /(.*)([$])([A-Za-z0-9_]*)(.*)/;
 		var arr;
 		if(regex.test(data)) {
 			arr = regex.exec(data);
-			if(opt === "in") {
+			if(opt === "in" && ($.inArray(arr[3],referencedInputParameters) === -1)) {
 				sharedWorkflow.workflow.inputParameters.push(arr[3]);
 			} else if (opt === "out") {
 				sharedWorkflow.workflow.outputParameters.push(arr[3]);
