@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry kind="src" path="src"/>
+	<buildpathentry kind="src" path="resources"/>
+	<buildpathentry kind="con" path="org.eclipse.dltk.mod.launching.INTERPRETER_CONTAINER"/>
+	<buildpathentry kind="con" path="org.eclipse.vjet.eclipse.core.JSNATIVE_CONTAINER/JS Native Types"/>
+	<buildpathentry kind="con" path="org.eclipse.vjet.eclipse.core.BROWSER_CONTAINER/Browser SDK"/>
+	<buildpathentry kind="lib" path="/PigGene-Scripts/lib/pig-0.12.0.jar"/>
+	<buildpathentry external="true" kind="lib" path="/Users/clemens/git/pig-gene/PigGeneWebApp/lib/hadoop-core-0.20.2-cdh3u6.jar"/>
+</buildpath>
