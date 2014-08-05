@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class Workflow implements IWorkflow {
-	private static WorkflowType workflowType = WorkflowType.WORKFLOW;
+	private WorkflowType workflowType = WorkflowType.WORKFLOW;
 
 	private String name;
 	private String description;
@@ -14,7 +14,7 @@ public class Workflow implements IWorkflow {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Workflow(final String name, final String description, final List<Workflow> components) {
+	public Workflow(String name, String description, List<Workflow> components) {
 		this.name = name;
 		this.description = description;
 		this.components = components;
@@ -24,15 +24,15 @@ public class Workflow implements IWorkflow {
 		return workflowType;
 	}
 
-	public void setWorkflowType(final WorkflowType workflowType) {
-		Workflow.workflowType = workflowType;
+	public void setWorkflowType(WorkflowType workflowType) {
+		this.workflowType = workflowType;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(final String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -40,7 +40,7 @@ public class Workflow implements IWorkflow {
 		return description;
 	}
 
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -48,12 +48,12 @@ public class Workflow implements IWorkflow {
 		return components;
 	}
 
-	public void setComponents(final List<Workflow> components) {
+	public void setComponents(List<Workflow> components) {
 		this.components = components;
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final String wfName) throws IOException {
+	public String getPigScriptRepresentation(String wfName) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));
 		sb.append(name);

@@ -19,7 +19,8 @@ public class WorkflowSerialisation {
 
 	static {
 		try {
-			prop.load(WorkflowSerialisation.class.getClassLoader().getResourceAsStream("config.properties"));
+			prop.load(WorkflowSerialisation.class.getClassLoader()
+					.getResourceAsStream("config.properties"));
 			workflowDefsPath = prop.getProperty("workflowDefs");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -28,37 +29,45 @@ public class WorkflowSerialisation {
 	}
 
 	public static void store(final Workflow workflow) throws IOException {
-		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(workflow.getName().concat(
-				fileExtension)))));
-		writer.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
+		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(
+				new FileOutputStream(workflowDefsPath.concat(workflow.getName()
+						.concat(fileExtension)))));
+		writer.getConfig().setPropertyElementType(Workflow.class, "components",
+				Workflow.class);
 		writer.write(workflow);
 		writer.close();
 	}
 
 	public static Workflow load(final String name) throws IOException {
-		final YamlReader reader = new YamlReader(new FileReader(workflowDefsPath.concat(name.concat(fileExtension))));
-		reader.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
+		final YamlReader reader = new YamlReader(new FileReader(
+				workflowDefsPath.concat(name.concat(fileExtension))));
+		reader.getConfig().setPropertyElementType(Workflow.class, "components",
+				Workflow.class);
 		final Workflow workflow = (Workflow) reader.read();
 		reader.close();
 		return workflow;
 	}
 
-	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException {
+	public static Workflow resolveWorkflowReferences(final Workflow workflow)
+			throws IOException {
 		List<Workflow> resolvedSteps = new ArrayList<Workflow>();
 		for (Workflow wf : workflow.getComponents()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
-				Workflow referencedWorkflow = WorkflowSerialisation.load(wf.getName());
+				Workflow referencedWorkflow = WorkflowSerialisation.load(wf
+						.getName());
 				resolvedSteps.add(referencedWorkflow);
 				resolveWorkflowReferences(referencedWorkflow);
 			} else {
 				resolvedSteps.add(wf);
 			}
 		}
-		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps);
+		return new Workflow(workflow.getName(), workflow.getDescription(),
+				resolvedSteps);
 	}
 
 	public static boolean remove(final String name) {
-		File file = new File(workflowDefsPath.concat(name).concat(fileExtension));
+		File file = new File(workflowDefsPath.concat(name)
+				.concat(fileExtension));
 		return file.delete();
 	}
 

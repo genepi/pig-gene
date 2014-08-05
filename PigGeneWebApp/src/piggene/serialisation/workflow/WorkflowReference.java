@@ -3,14 +3,14 @@ package piggene.serialisation.workflow;
 import java.io.IOException;
 
 public class WorkflowReference extends Workflow {
-	private static WorkflowType workflowType = WorkflowType.WORKFLOW_REFERENCE;
+	private WorkflowType workflowType = WorkflowType.WORKFLOW_REFERENCE;
 
 	private String name;
 
 	public WorkflowReference() {
 	}
 
-	public WorkflowReference(final String name) {
+	public WorkflowReference(String name) {
 		this.name = name;
 	}
 
@@ -20,8 +20,8 @@ public class WorkflowReference extends Workflow {
 	}
 
 	@Override
-	public void setWorkflowType(final WorkflowType workflowType) {
-		WorkflowReference.workflowType = workflowType;
+	public void setWorkflowType(WorkflowType workflowType) {
+		this.workflowType = workflowType;
 	}
 
 	@Override
@@ -30,12 +30,12 @@ public class WorkflowReference extends Workflow {
 	}
 
 	@Override
-	public void setName(final String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final String wfName) throws IOException {
+	public String getPigScriptRepresentation(String wfName) throws IOException {
 		// WorkflowReference.indentation++;
 		// String workflowName = this.name;
 		// Workflow referencedWorkflow =

@@ -3,10 +3,14 @@ package piggene.serialisation.workflow;
 import java.io.IOException;
 
 public class WorkflowComponent extends Workflow {
-	private static WorkflowType workflowType = WorkflowType.WORKFLOW_COMPONENT;
+	private  WorkflowType workflowType = WorkflowType.WORKFLOW_COMPONENT;
 	private String content;
 
-	public WorkflowComponent(final String content) {
+	public WorkflowComponent(){
+		
+	}
+	
+	public WorkflowComponent(String content) {
 		this.content = content;
 	}
 
@@ -16,20 +20,20 @@ public class WorkflowComponent extends Workflow {
 	}
 
 	@Override
-	public void setWorkflowType(final WorkflowType workflowType) {
-		WorkflowComponent.workflowType = workflowType;
+	public void setWorkflowType(WorkflowType workflowType) {
+		this.workflowType = workflowType;
 	}
 
 	public String getContent() {
 		return content;
 	}
 
-	public void setContent(final String content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final String wfName) throws IOException {
+	public String getPigScriptRepresentation(String wfName) throws IOException {
 		// TODO Auto-generated method stub
 		return "";
 	}
