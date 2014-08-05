@@ -8,13 +8,15 @@
 	<div>
 		<div ng-repeat="component in workflow.components">
 		
-			<!-- wenn component ein geladener workflow ist: Anzeige von Name, Beschreibung, Input-Felder -->
+			<!-- wenn component ein geladener workflow ist: (kleine) Anzeige von Name, Beschreibung, Input-Felder -->
 		
-			<a href="#" editable-textarea="component.content" e-rows="7" e-cols="100">
-				<pre>{{ component.content || 'please type your desired pig-operations' }}</pre>
+			<a href="#" editable-textarea="component.content" e-rows="5">
+				<pre class="component">{{ component.content }}</pre>
 			</a>
 		</div>
-			
+		<br>
+		<br>
+		
 		<button class="btn btn-sm btn-success" ng-click="addNewComponent()"><span class="glyphicon glyphicon-plus"></span> add new component</button>
 		<button class="btn btn-sm btn-warning" ng-click="addExistingComponent()"><span class="glyphicon glyphicon-plus"></span> add existing component</button>
 	</div>

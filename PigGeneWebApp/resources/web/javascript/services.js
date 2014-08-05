@@ -23,7 +23,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				name: "newWf",
 				description: "description of the new workflow",
 				workflowType: "WORKFLOW",
-				components: [],
+				components: []
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
 		sharedWorkflow.broadcastWfChange();
@@ -37,6 +37,10 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.persistWfDefinition = function() {
+		var myWf = new WfPersistency.Save(this.workflow);
+		myWf.$save(function(u,putResponseHeaders) {
+			$location.path('/wf/' + sharedWorkflow.workflow.name).replace();
+		});
 	};
 	
 	sharedWorkflow.updateInOutParams = function() {
@@ -55,6 +59,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.prepForBroadcast = function(modWf) {
+		this.workflow = modWf;
+		this.broadcastWfChange();
 	};
 	
 	sharedWorkflow.broadcastWfChange = function() {

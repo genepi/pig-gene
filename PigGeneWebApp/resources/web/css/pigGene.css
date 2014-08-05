@@ -18,6 +18,10 @@
 	background-color: #f4f4f4;
 }
 
+.component {
+	background-color: white;
+}
+
 .wfTab, .paramDefinition {
 	background-color: #f9f9f9;
 }

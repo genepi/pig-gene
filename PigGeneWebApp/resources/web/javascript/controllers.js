@@ -47,7 +47,12 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	};
 
 	$scope.addNewComponent = function() {
-		alert("new comp clicked");
+		var newComp = {
+			content: "please type your desired pig-operations"
+		};
+		var modWf = $scope.workflow;
+		modWf.components.push(newComp);
+		SharedWfService.prepForBroadcast(modWf);
 	};
 	
 	$scope.addExistingComponent = function() {
