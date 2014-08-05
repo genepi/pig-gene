@@ -21,10 +21,10 @@ public class PigScriptGenerator {
 		}
 	}
 
-	public static void generateAndStoreScript(final Workflow workflow) throws IOException, MissingParameterException {
+	public static void generateAndStoreScript(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(insertHeader());
-		sb.append(workflow.getPigScriptRepresentation(false, workflow.getName()));
+		sb.append(workflow.getPigScriptRepresentation(workflow.getName()));
 		PigScriptGenerator.write(sb.toString(), workflow.getName());
 	}
 

@@ -33,10 +33,6 @@ public class ScriptDownloadService extends ServerResource {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while generating the script.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
-		} catch (MissingParameterException e) {
-			obj.setSuccess(false);
-			obj.setMessage(e.getMessage());
-			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
 		obj.setSuccess(true);

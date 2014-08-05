@@ -2,39 +2,22 @@ package piggene.serialisation.workflow;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-
-import piggene.serialisation.pig.DynamicInputParameterMapper;
-import piggene.serialisation.pig.ExistingOutputParameters;
-import piggene.serialisation.pig.MissingParameterException;
 
 public class Workflow implements IWorkflow {
 	private static WorkflowType workflowType = WorkflowType.WORKFLOW;
 
 	private String name;
 	private String description;
-	private List<Workflow> steps;
-
-	private List<String> inputParameters;
-	private List<String> outputParameters;
-
-	private Map<String, Map<String, String>> inputParameterMapping;
-	private Map<String, Map<String, String>> outputParameterMapping;
+	private List<Workflow> components;
 
 	public Workflow() {
-
+		// TODO Auto-generated constructor stub
 	}
 
-	public Workflow(final String name, final String description, final List<Workflow> steps, final List<String> inputParameters,
-			final List<String> outputParameters, final Map<String, Map<String, String>> inputParameterMapping,
-			final Map<String, Map<String, String>> outputParameterMapping) {
+	public Workflow(final String name, final String description, final List<Workflow> components) {
 		this.name = name;
 		this.description = description;
-		this.steps = steps;
-		this.inputParameters = inputParameters;
-		this.outputParameters = outputParameters;
-		this.inputParameterMapping = inputParameterMapping;
-		this.outputParameterMapping = outputParameterMapping;
+		this.components = components;
 	}
 
 	public WorkflowType getWorkflowType() {
@@ -61,102 +44,24 @@ public class Workflow implements IWorkflow {
 		this.description = description;
 	}
 
-	public List<Workflow> getSteps() {
-		return steps;
+	public List<Workflow> getComponents() {
+		return components;
 	}
 
-	public void setSteps(final List<Workflow> steps) {
-		this.steps = steps;
-	}
-
-	public Map<String, Map<String, String>> getInputParameterMapping() {
-		return inputParameterMapping;
-	}
-
-	public List<String> getInputParameters() {
-		return inputParameters;
-	}
-
-	public void setInputParameters(final List<String> inputParameters) {
-		this.inputParameters = inputParameters;
-	}
-
-	public List<String> getOutputParameters() {
-		return outputParameters;
-	}
-
-	public void setOutputParameters(final List<String> outputParameters) {
-		this.outputParameters = outputParameters;
-	}
-
-	public void setInputParameterMapping(final Map<String, Map<String, String>> inputParameterMapping) {
-		this.inputParameterMapping = inputParameterMapping;
-	}
-
-	public Map<String, Map<String, String>> getOutputParameterMapping() {
-		return outputParameterMapping;
-	}
-
-	public void setOutputParameterMapping(final Map<String, Map<String, String>> outputParameterMapping) {
-		this.outputParameterMapping = outputParameterMapping;
-	}
-
-	protected String parseInfo(final String info) {
-		final StringBuilder sb = new StringBuilder();
-		if (!(info.equals("-") || info.equals(""))) {
-			sb.append("--");
-			sb.append(info);
-			sb.append(System.getProperty("line.separator"));
-		}
-		return sb.toString();
-	}
-
-	protected String removeLeadingDollarSign(final String param) {
-		if (param.startsWith("$")) {
-			return param.substring(1);
-		}
-		return param;
-	}
-
-	protected void addOutputParamToIndex(final String param, final String wfName) {
-		ExistingOutputParameters.addOutputParameter(param.concat("_").concat(wfName));
-	}
-
-	protected String resolveInputParameterValue(final String mappedVal, final String input, final String wfName, final boolean renameParam)
-			throws MissingParameterException {
-		StringBuilder sb = new StringBuilder();
-		if (mappedVal != null) {
-			sb.append(mappedVal);
-		} else if (!input.startsWith("$")) { // relation from same wf
-			sb.append(input);
-			sb.append(renameParameters(renameParam, wfName));
-		} else if (ExistingOutputParameters.containsOutputParameter(input)) {
-			sb.append(removeLeadingDollarSign(input));
-		} else {
-			throw new MissingParameterException("ERROR: some input parameter values are not defined correctly");
-		}
-		return sb.toString();
-	}
-
-	protected String renameParameters(final boolean renameParam, final String wfName) {
-		if (renameParam) {
-			return "_" + wfName;
-		}
-		return "";
+	public void setComponents(final List<Workflow> components) {
+		this.components = components;
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final boolean renameParam, final String wfName) throws IOException, MissingParameterException {
-		DynamicInputParameterMapper.setParamMapping(inputParameterMapping, wfName);
-		ExistingOutputParameters.initializeArrayList();
+	public String getPigScriptRepresentation(final String wfName) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(System.getProperty("line.separator"));
-		sb.append(parseInfo(getName()));
-		sb.append(parseInfo(getDescription()));
+		sb.append(name);
+		sb.append(description);
 
-		for (Workflow wf : steps) {
+		for (Workflow wf : components) {
 			sb.append(System.getProperty("line.separator"));
-			sb.append(wf.getPigScriptRepresentation(true, wfName));
+			sb.append(wf.getPigScriptRepresentation(wfName));
 		}
 		return sb.toString();
 	}
