@@ -48,30 +48,6 @@ public class WorkflowConverter {
 
 			if (step.has("operation")) { //
 				switch (step.getString("operation")) {
-				case "REGISTER":
-					steps.add(gson.fromJson(step.toString(), RegisterOperation.class));
-					break;
-				case "LOAD":
-					steps.add(gson.fromJson(step.toString(), LoadOperation.class));
-					break;
-				case "FILTER":
-					steps.add(gson.fromJson(step.toString(), FilterOperation.class));
-					break;
-				case "JOIN":
-					steps.add(gson.fromJson(step.toString(), JoinOperation.class));
-					break;
-				case "SELECT":
-					steps.add(gson.fromJson(step.toString(), SelectOperation.class));
-					break;
-				case "GROUP BY":
-					steps.add(gson.fromJson(step.toString(), GroupByOperation.class));
-					break;
-				case "ORDER BY":
-					steps.add(gson.fromJson(step.toString(), OrderByOperation.class));
-					break;
-				case "STORE":
-					steps.add(gson.fromJson(step.toString(), StoreOperation.class));
-					break;
 				default:
 					break;
 				}
