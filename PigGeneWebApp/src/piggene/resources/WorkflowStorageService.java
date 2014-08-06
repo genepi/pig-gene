@@ -40,9 +40,6 @@ public class WorkflowStorageService extends ServerResource {
 		try {
 			WorkflowSerialisation.store(workflow);
 		} catch (IOException e) {
-			
-			e.printStackTrace();
-			
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while saving the submitted workflow data.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);

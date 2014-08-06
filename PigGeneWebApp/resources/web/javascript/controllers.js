@@ -74,9 +74,18 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 	$scope.openDef = true;
 	
 	$scope.$on("handleExWfNamesChange", function() {
+		$scope.existingWorkflows = SharedWfService.existingWorkflows;
+		$scope.openDef = SharedWfService.openDef;
+		$('#myModal').modal('toggle');
 	});
 	
 	$scope.openSelectedWorkflow = function() {
+		var selection = $scope.radioSelection;
+		if(!(selection == null || selection == "")) {
+			SharedWfService.loadWfDefinition(selection);
+			$location.path("/wf/" + $scope.radioSelection);
+			$('#myModal').modal('toggle');
+		}
 	};
 	
 	$scope.addSelectedWorkflow = function() {

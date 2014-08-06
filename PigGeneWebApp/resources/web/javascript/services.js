@@ -31,6 +31,16 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.loadWfDefinition = function(id) {
+		WfPersistency.Load.get({"id":id}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			sharedWorkflow.workflow = response.data;
+			sharedWorkflow.broadcastWfChange();
+		});
 	};
 	
 	sharedWorkflow.loadReferencedWfDefinition = function(id) {
@@ -53,9 +63,48 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	}
 	
 	sharedWorkflow.loadExistingWorkflowNames = function() {
+		WfPersistency.Load.get({}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			sharedWorkflow.existingWorkflows = response.data;
+			sharedWorkflow.broadcastExWfNamesChange();
+		});
 	};
 	
 	sharedWorkflow.downloadScript = function() {
+		WfPersistency.Download.get({"id":sharedWorkflow.workflow.name}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			
+		    var element = angular.element("<a/>");
+		    element.attr({
+		    	href: "data:attachment/plain;charset=utf-8," + encodeURI(response.data),
+		    	target: "_blank",
+		        download: sharedWorkflow.workflow.name + ".pig"
+		     });
+		    
+		    var elem = element[0];
+		    if(document.dispatchEvent) {
+		    	var oEvent = document.createEvent( "MouseEvents" );
+		    	oEvent.initMouseEvent("click", true, true, window, 1, 1, 1, 1, 1, false, false, false, false, 0, elem);
+		    	elem.dispatchEvent(oEvent);
+		    } else if (elem.click) {
+		    	return elem.click();
+		    } else if(elem.onclick) { 
+		    	var result = elem.onclick(); 
+		    	if (!result) {
+		    		return result; 
+	    		}
+		    }
+		});
 	};
 	
 	sharedWorkflow.prepForBroadcast = function(modWf) {
@@ -71,6 +120,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.broadcastExWfNamesChange = function() {
+		$rootScope.$broadcast("handleExWfNamesChange");
 	}
 	
 	return sharedWorkflow;
