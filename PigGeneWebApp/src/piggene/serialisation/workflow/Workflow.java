@@ -10,11 +10,13 @@ public class Workflow implements IWorkflow {
 	private String description;
 	private List<Workflow> components;
 
+	protected String lineSeparator = System.getProperty("line.separator");
+
 	public Workflow() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Workflow(String name, String description, List<Workflow> components) {
+	public Workflow(final String name, final String description, final List<Workflow> components) {
 		this.name = name;
 		this.description = description;
 		this.components = components;
@@ -24,7 +26,7 @@ public class Workflow implements IWorkflow {
 		return workflowType;
 	}
 
-	public void setWorkflowType(WorkflowType workflowType) {
+	public void setWorkflowType(final WorkflowType workflowType) {
 		this.workflowType = workflowType;
 	}
 
@@ -32,7 +34,7 @@ public class Workflow implements IWorkflow {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -40,7 +42,7 @@ public class Workflow implements IWorkflow {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -48,20 +50,30 @@ public class Workflow implements IWorkflow {
 		return components;
 	}
 
-	public void setComponents(List<Workflow> components) {
+	public void setComponents(final List<Workflow> components) {
 		this.components = components;
 	}
 
 	@Override
-	public String getPigScriptRepresentation(String wfName) throws IOException {
+	public String getPigScriptRepresentation(final String wfName) throws IOException {
 		StringBuilder sb = new StringBuilder();
-		sb.append(System.getProperty("line.separator"));
-		sb.append(name);
-		sb.append(description);
+		sb.append(lineSeparator);
+		sb.append(preparePigScriptCommand(name));
+		sb.append(preparePigScriptCommand(description));
 
 		for (Workflow wf : components) {
-			sb.append(System.getProperty("line.separator"));
+			sb.append(lineSeparator);
 			sb.append(wf.getPigScriptRepresentation(wfName));
+		}
+		return sb.toString();
+	}
+
+	protected String preparePigScriptCommand(final String info) {
+		final StringBuilder sb = new StringBuilder();
+		if (!(info.equals("-") || info.equals(""))) {
+			sb.append("--");
+			sb.append(info);
+			sb.append(lineSeparator);
 		}
 		return sb.toString();
 	}
