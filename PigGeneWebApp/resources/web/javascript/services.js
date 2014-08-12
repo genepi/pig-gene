@@ -7,6 +7,7 @@ pigGeneApp.run(function(editableOptions) {
 pigGeneApp.factory("WfPersistency", function($resource) {
 	return {
 		Load: $resource("/wf/:id", {id: "@id"}),
+		Ref: $resource("/ref/:id", {id: "@id"}),
 		Save: $resource("/save/wf/"),
 		Delete: $resource("/del/:id", {id: "@id"}),
 		Download: $resource("/dwnld/:id", {id: "@id"})
@@ -17,6 +18,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	var sharedWorkflow = {};
 	
 	sharedWorkflow.workflow = {};
+	sharedWorkflow.existingWorkflows = {};
 	
 	sharedWorkflow.initializeNewWorkflow = function() {
 		var emptyWorkflow = {
@@ -44,6 +46,16 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.loadReferencedWfDefinition = function(id) {
+		WfPersistency.Ref.get({"id":id}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			sharedWorkflow.refWorkflow = response.data;
+			sharedWorkflow.broadcastRefWfChange();
+		});
 	};
 	
 	sharedWorkflow.persistWfDefinition = function() {
@@ -60,7 +72,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.deleteWfDefinition = function() {
-	}
+	};
 	
 	sharedWorkflow.loadExistingWorkflowNames = function() {
 		WfPersistency.Load.get({}).$promise.then(function(response) {
@@ -117,6 +129,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.broadcastRefWfChange = function() {
+		$rootScope.$broadcast("handleRefWfChange");
 	};
 	
 	sharedWorkflow.broadcastExWfNamesChange = function() {

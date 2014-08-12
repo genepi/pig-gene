@@ -7,7 +7,6 @@ public class WorkflowComponent extends Workflow {
 	private String content;
 
 	public WorkflowComponent() {
-
 	}
 
 	public WorkflowComponent(final String content) {

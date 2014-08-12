@@ -7,10 +7,14 @@
 	
 	<div>
 		<div ng-repeat="component in workflow.components">
+			<br ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
+			<h4 ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.name}}</h4>
+			<i ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.description}}</i><br>
+			<a href="#" editable-textarea="component.content" e-rows="5" e-cols="150" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
+				<pre class="component" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{ component.components[0].content }}</pre>
+			</a>
 		
-			<!-- wenn component ein geladener workflow ist: (kleine) Anzeige von Name, Beschreibung, Input-Felder -->
-		
-			<a href="#" editable-textarea="component.content" e-rows="5" e-cols="150">
+			<a href="#" editable-textarea="component.content" e-rows="5" e-cols="150" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
 				<pre class="component">{{ component.content }}</pre>
 			</a>
 		</div>

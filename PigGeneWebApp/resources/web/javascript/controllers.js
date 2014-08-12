@@ -36,18 +36,10 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;
 	});
-	
-	$scope.removeStep = function(index) {
-	}
-	
-	$scope.moveUp = function(index) {
-	};
-	
-	$scope.moveDown = function(index) {
-	};
 
 	$scope.addNewComponent = function() {
 		var newComp = {
+			workflowType: "WORKFLOW_COMPONENT",
 			content: "please type your desired pig-operations"
 		};
 		var modWf = $scope.workflow;
@@ -56,17 +48,12 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	};
 	
 	$scope.addExistingComponent = function() {
-		alert("existing comp clicked - TODO!");
-	};
-	
-	$scope.changeWfOperation = function(operation, index) {
+		SharedWfService.loadExistingWorkflowNames();
 	};
 	
 	$scope.checkType = function(type, checkVal) {
+		return (type == checkVal);
 	};
-
-	$scope.editReferencedWf = function(id) {
-	}
 };
 
 pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
@@ -89,9 +76,22 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 	};
 	
 	$scope.addSelectedWorkflow = function() {
+		var selection = $scope.radioSelection;
+		if(!(selection == null || selection == "")) {
+			//AJAX call to get important wf data
+			SharedWfService.loadReferencedWfDefinition(selection);
+		}
 	};
 	
 	$scope.$on("handleRefWfChange", function() {
-	})
-	
+		var modWf = SharedWfService.workflow;
+		var refWf = SharedWfService.refWorkflow;
+		if(modWf.components.length == 0) {
+			modWf.components[0] = refWf;
+		} else {
+			modWf.components.push(refWf);
+		}
+		SharedWfService.prepForBroadcast(modWf);
+		$('#myModal').modal('toggle');
+	});
 }]);

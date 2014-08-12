@@ -12,6 +12,7 @@ import org.restlet.routing.TemplateRoute;
 import piggene.resources.WorkflowDeletionService;
 import piggene.resources.WorkflowLoaderService;
 import piggene.resources.WorkflowOverviewLoaderService;
+import piggene.resources.WorkflowReferenceLoaderService;
 import piggene.resources.WorkflowStorageService;
 import piggene.serialisation.pig.ScriptDownloadService;
 
@@ -39,6 +40,7 @@ public class WebApp extends Application {
 		// routes
 		router.attach("/wf", WorkflowOverviewLoaderService.class);
 		router.attach("/wf/{id}", WorkflowLoaderService.class);
+		router.attach("/ref/{id}", WorkflowReferenceLoaderService.class);
 		router.attach("/save/wf", WorkflowStorageService.class);
 		router.attach("/del/{id}", WorkflowDeletionService.class);
 		router.attach("/dwnld/{id}", ScriptDownloadService.class);

@@ -13,7 +13,6 @@ public class Workflow implements IWorkflow {
 	protected String lineSeparator = System.getProperty("line.separator");
 
 	public Workflow() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Workflow(final String name, final String description, final List<Workflow> components) {
