@@ -19,6 +19,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.workflow = {};
 	sharedWorkflow.existingWorkflows = {};
+	sharedWorkflow.openDef = true;
 	
 	sharedWorkflow.initializeNewWorkflow = function() {
 		var emptyWorkflow = {
@@ -74,7 +75,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.deleteWfDefinition = function() {
 	};
 	
-	sharedWorkflow.loadExistingWorkflowNames = function() {
+	sharedWorkflow.loadExistingWorkflowNames = function(openWfDefinition) {
 		WfPersistency.Load.get({}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
@@ -82,6 +83,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				console.log(response.message);
 				return;
 			}
+			sharedWorkflow.openDef = openWfDefinition;
 			sharedWorkflow.existingWorkflows = response.data;
 			sharedWorkflow.broadcastExWfNamesChange();
 		});

@@ -8,7 +8,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 						break;
 			case "openWfBtn":
 						SharedWfService.openDef = true;
-						SharedWfService.loadExistingWorkflowNames();
+						SharedWfService.loadExistingWorkflowNames(true);
 						break;
 			case "saveWfBtn": 
 						SharedWfService.persistWfDefinition();
@@ -48,7 +48,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	};
 	
 	$scope.addExistingComponent = function() {
-		SharedWfService.loadExistingWorkflowNames();
+		SharedWfService.loadExistingWorkflowNames(false);
 	};
 	
 	$scope.checkType = function(type, checkVal) {
