@@ -19,8 +19,7 @@ public class WorkflowSerialisation {
 
 	static {
 		try {
-			prop.load(WorkflowSerialisation.class.getClassLoader()
-					.getResourceAsStream("config.properties"));
+			prop.load(WorkflowSerialisation.class.getClassLoader().getResourceAsStream("config.properties"));
 			workflowDefsPath = prop.getProperty("workflowDefs");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -29,45 +28,66 @@ public class WorkflowSerialisation {
 	}
 
 	public static void store(final Workflow workflow) throws IOException {
-		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(
-				new FileOutputStream(workflowDefsPath.concat(workflow.getName()
-						.concat(fileExtension)))));
-		writer.getConfig().setPropertyElementType(Workflow.class, "components",
-				Workflow.class);
+		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(workflow.getName().concat(
+				fileExtension)))));
+		writer.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
 		writer.write(workflow);
 		writer.close();
 	}
 
 	public static Workflow load(final String name) throws IOException {
-		final YamlReader reader = new YamlReader(new FileReader(
-				workflowDefsPath.concat(name.concat(fileExtension))));
-		reader.getConfig().setPropertyElementType(Workflow.class, "components",
-				Workflow.class);
+		final YamlReader reader = new YamlReader(new FileReader(workflowDefsPath.concat(name.concat(fileExtension))));
+		reader.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
 		final Workflow workflow = (Workflow) reader.read();
 		reader.close();
 		return workflow;
 	}
 
-	public static Workflow resolveWorkflowReferences(final Workflow workflow)
-			throws IOException {
+	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException {
 		List<Workflow> resolvedSteps = new ArrayList<Workflow>();
 		for (Workflow wf : workflow.getComponents()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
-				Workflow referencedWorkflow = WorkflowSerialisation.load(wf
-						.getName());
-				resolvedSteps.add(referencedWorkflow);
-				resolveWorkflowReferences(referencedWorkflow);
+				resolvedSteps.add(getAllDependingReferencedWorkflowSteps(wf.getName()));
 			} else {
 				resolvedSteps.add(wf);
 			}
 		}
-		return new Workflow(workflow.getName(), workflow.getDescription(),
-				resolvedSteps);
+		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps);
+	}
+
+	private static Workflow getAllDependingReferencedWorkflowSteps(final String workflowName) throws IOException {
+		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
+		// change type because it is a RESOLVED REFERENCED wf
+		referencedWorkflow.setWorkflowType(WorkflowType.WORKFLOW_REFERENCE);
+
+		// combine content of all recursively used components
+		// within one single WORKFLOW_COMPONENT
+		WorkflowComponent resolvedWfComp = new WorkflowComponent();
+		resolvedWfComp.setContent(mergeContentOfReferencedWorkflow(referencedWorkflow.getComponents()));
+
+		List<Workflow> componentList = new ArrayList<Workflow>();
+		componentList.add(resolvedWfComp);
+		referencedWorkflow.setComponents(componentList);
+		return referencedWorkflow;
+	}
+
+	private static String mergeContentOfReferencedWorkflow(final List<Workflow> components) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		if (!(components == null)) {
+			for (Workflow wf : components) {
+				if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
+					sb.append(System.getProperty("line.separator"));
+					sb.append(mergeContentOfReferencedWorkflow(WorkflowSerialisation.load(wf.getName()).getComponents()));
+				} else if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_COMPONENT)) {
+					sb.append(((WorkflowComponent) wf).getContent());
+				}
+			}
+		}
+		return sb.toString();
 	}
 
 	public static boolean remove(final String name) {
-		File file = new File(workflowDefsPath.concat(name)
-				.concat(fileExtension));
+		File file = new File(workflowDefsPath.concat(name).concat(fileExtension));
 		return file.delete();
 	}
 

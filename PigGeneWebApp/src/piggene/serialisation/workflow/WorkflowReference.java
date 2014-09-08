@@ -18,7 +18,7 @@ public class WorkflowReference extends Workflow {
 
 	@Override
 	public WorkflowType getWorkflowType() {
-		return workflowType;
+		return this.workflowType;
 	}
 
 	@Override
