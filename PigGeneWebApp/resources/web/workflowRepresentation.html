@@ -6,14 +6,14 @@
 	<div>
 		<div ng-repeat="component in workflow.components">
 			<br ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
-			<h4 ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.name}}</h4>
+			<h4 ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')"><a ng-click="editReferencedWf(component.name)">{{component.name}}</a></h4>
 			<i ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.description}}</i><br>
 			<a href="#" editable-textarea="component.content" e-rows="5" e-cols="150" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
-				<pre class="component" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{ component.components[0].content }}</pre>
+				<pre class="component" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.components[0].content}}</pre>
 			</a>
 		
 			<a href="#" editable-textarea="component.content" e-rows="5" e-cols="150" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
-				<pre class="component">{{ component.content }}</pre>
+				<pre class="component">{{component.content}}</pre>
 			</a>
 		</div>
 		<br>

@@ -54,6 +54,10 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	$scope.checkType = function(type, checkVal) {
 		return (type == checkVal);
 	};
+	
+	$scope.editReferencedWf = function(id) {
+		$location.path("/wf/" + id);
+	};
 };
 
 pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
@@ -94,4 +98,5 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		SharedWfService.prepForBroadcast(modWf);
 		$('#myModal').modal('toggle');
 	});
+	
 }]);
