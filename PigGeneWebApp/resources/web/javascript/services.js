@@ -74,7 +74,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				sharedWorkflow.openDef = true;
 				sharedWorkflow.loadWfDefinition(refWfName);
 				$location.path("/wf/" + refWfName);
-			},100);
+			},1);
 		});
 	};
 	

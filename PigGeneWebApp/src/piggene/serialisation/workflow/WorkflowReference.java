@@ -55,7 +55,7 @@ public class WorkflowReference extends Workflow {
 			sb.append(wf.getPigScriptRepresentation(workflowName));
 		}
 		sb.append(lineSeparator);
-		WorkflowReference.indentation = 0;
+		WorkflowReference.indentation--;
 		return sb.toString();
 	}
 
