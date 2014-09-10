@@ -66,13 +66,16 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
-	sharedWorkflow.updateInOutParams = function() {
-	};
-	
-	sharedWorkflow.checkRegexAndPushData = function(opt, data, referencedInputParameters) {
-	};
-	
-	sharedWorkflow.deleteWfDefinition = function() {
+	sharedWorkflow.persistWfDefinitionAndRedirectToReferencedWf = function(refWfName) {
+		var myWf = new WfPersistency.Save(this.workflow);
+		myWf.$save(function(u,putResponseHeaders) {
+			$location.path('/wf/' + sharedWorkflow.workflow.name).replace();
+			setTimeout(function() {
+				sharedWorkflow.openDef = true;
+				sharedWorkflow.loadWfDefinition(refWfName);
+				$location.path("/wf/" + refWfName);
+			},100);
+		});
 	};
 	
 	sharedWorkflow.loadExistingWorkflowNames = function(openWfDefinition) {

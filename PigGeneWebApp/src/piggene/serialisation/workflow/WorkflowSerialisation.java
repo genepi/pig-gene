@@ -73,10 +73,14 @@ public class WorkflowSerialisation {
 
 	private static String mergeContentOfReferencedWorkflow(final List<Workflow> components) throws IOException {
 		StringBuilder sb = new StringBuilder();
+		boolean appendLineBreak = false;
 		if (!(components == null)) {
 			for (Workflow wf : components) {
-				if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
+				if (appendLineBreak) {
 					sb.append(System.getProperty("line.separator"));
+				}
+				appendLineBreak = true;
+				if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
 					sb.append(mergeContentOfReferencedWorkflow(WorkflowSerialisation.load(wf.getName()).getComponents()));
 				} else if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_COMPONENT)) {
 					sb.append(((WorkflowComponent) wf).getContent());

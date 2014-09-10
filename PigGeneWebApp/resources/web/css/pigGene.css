@@ -22,6 +22,14 @@
 	background-color: white;
 }
 
+.componentRef {
+	background-color: #fafaff;
+}
+
+a.wfRefContainer:hover {
+	text-decoration: none;
+}
+
 .wfTab, .paramDefinition {
 	background-color: #f9f9f9;
 }
