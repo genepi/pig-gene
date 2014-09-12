@@ -8,13 +8,14 @@
 			<br ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 			<h4 ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')"><a ng-click="editReferencedWf(component.name)">{{component.name}}</a></h4>
 			<i ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.description}}</i><br>
-			<a class="wfRefContainer" textarea="component.content" e-rows="5" e-cols="150" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
-				<pre class="componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.components[0].content}}</pre>
-			</a>
+			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
+				<div class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.components[0].content}}</div>
+			</div>
+			
+			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
+				<div class="scriptContent component" contenteditable ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">{{component.content}}</div>
+			</div>
 		
-			<a href="#" editable-textarea="component.content" e-rows="5" e-cols="150" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
-				<pre class="component">{{component.content}}</pre>
-			</a>
 		</div>
 		<br>
 		<br>

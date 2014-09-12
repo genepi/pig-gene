@@ -57,7 +57,6 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	
 	$scope.editReferencedWf = function(id) {
 		SharedWfService.persistWfDefinitionAndRedirectToReferencedWf(id);
-//		$location.path("/wf/" + id);
 	};
 };
 
