@@ -18,18 +18,6 @@
 	background-color: #f4f4f4;
 }
 
-.component {
-	background-color: white;
-}
-
-.componentRef {
-	background-color: #fafaff;
-}
-
-a.wfRefContainer:hover {
-	text-decoration: none;
-}
-
 .wfTab, .paramDefinition {
 	background-color: #f9f9f9;
 }
@@ -52,6 +40,50 @@ h1 {
 	margin-top: 0px;
 }
 
+.scriptContentBlock {
+	display: block;
+}
+
+.scriptContent {
+	padding: 9.5px;
+	font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+	font-size: 13px;
+	word-wrap: break-word;
+	color: #333;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	resize: none;
+}
+
+.component {
+	background-color: white;
+}
+
+.component:hover {
+	cursor: pointer;
+}
+
+.component:focus {
+	cursor: text;
+}
+
+.componentRef {
+	background-color: #fafaff;
+	cursor: default;
+}
+
+.optionBtns1, .optionBtns2 {
+	margin-top: 8px;
+}
+
+.optionBtns2 {
+	margin-left: 8px;
+}
+
+
+
+
+/* TODO delete when framework got removed */
 h1.editable-click, h4.editable-click {
 	color: black;
 	border: 0px;

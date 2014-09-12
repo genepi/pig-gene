@@ -27,7 +27,8 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	}
 }]);
 
-function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService) {
+
+function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, SharedWfService) {
 	$scope.workflow = SharedWfService.workflow;
 	if($routeParams.id != "newWf") {
 		SharedWfService.loadWfDefinition($routeParams.id);
@@ -57,9 +58,94 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, SharedWfService)
 	
 	$scope.editReferencedWf = function(id) {
 		SharedWfService.persistWfDefinitionAndRedirectToReferencedWf(id);
-//		$location.path("/wf/" + id);
+	};
+	
+	$scope.renderOptionBtns = function(event, index) {
+		var targetElement = event.currentTarget;
+		var options = "options"
+		
+		if(!$(targetElement).hasClass(options)) {
+			var buttonGroup1 = $("<div class='btn-group optionBtns1'></div>");
+			var buttonGroup2 = $("<div class='btn-group optionBtns2'></div>");
+
+			var upBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentUp($event)'><span class='glyphicon glyphicon-arrow-up'></span></button>")($scope);
+			var downBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentDown($event)'><span class='glyphicon glyphicon-arrow-down'></span></button>")($scope);
+			var acceptBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-success' ng-click='saveComponentModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
+			var cancelBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-warning' ng-click='cancelComponentModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
+			var deleteBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-danger' ng-click='deleteComponent($event)'><span class='glyphicon glyphicon-trash'></span></button>")($scope);
+
+			$(buttonGroup1).append(upBtn);
+			$(buttonGroup1).append(downBtn);
+			
+			$(buttonGroup2).append(acceptBtn);
+			$(buttonGroup2).append(cancelBtn);
+			$(buttonGroup2).append(deleteBtn);
+			
+			$(targetElement.parentNode).append(buttonGroup1);
+			$(targetElement.parentNode).append(buttonGroup2);
+			$(targetElement).addClass(options);
+		}
+		
+	};
+	
+	$scope.removeOptionBtns = function(btnGroupElement, operation) {
+		$(btnGroupElement.parentNode.children[0]).removeClass("options");
+		if(operation === "up" || operation === "down") {
+			$(btnGroupElement.nextSibling).remove();
+		} else if(operation === "save" || operation === "cancel" || operation === "delete") {
+			$(btnGroupElement.previousSibling).remove();
+		}
+		$(btnGroupElement).remove();
+	};
+	
+	$scope.moveComponentUp = function(event) {
+		var index = parseInt(event.currentTarget.name);
+		if(index >= 1) {
+			var modWf = $scope.workflow;
+			var prevElement = modWf.components[index-1];
+			modWf.components[index-1] = modWf.components[index];
+			modWf.components[index] = prevElement;
+			SharedWfService.prepForBroadcast(modWf);
+			$scope.removeOptionBtns(event.currentTarget.parentNode, "up");
+		}
+	};
+	
+	$scope.moveComponentDown = function(event) {
+		var index = parseInt(event.currentTarget.name);
+		if(index < $scope.workflow.components.length-2) {
+			var modWf = $scope.workflow;
+			var followingElement = modWf.components[index+1];
+			modWf.components[index+1] = modWf.components[index];
+			modWf.components[index] = followingElement;
+			SharedWfService.prepForBroadcast(modWf);
+			$scope.removeOptionBtns(event.currentTarget.parentNode, "down");
+		}
+	};
+	
+	$scope.saveComponentModification = function(event) {
+		var index = parseInt(event.currentTarget.name);
+		var modWf = $scope.workflow;
+		modWf.components[index].content = $(event.currentTarget.parentElement.parentElement.children[0]).text();
+		SharedWfService.prepForBroadcast(modWf);
+		$scope.removeOptionBtns(event.currentTarget.parentNode, "save");
+	};
+	
+	$scope.cancelComponentModification = function(event) {
+		var index = parseInt(event.currentTarget.name);
+		var modWf = $scope.workflow;
+		$(event.currentTarget.parentElement.parentElement.children[0]).text(modWf.components[index].content);
+		SharedWfService.prepForBroadcast(modWf);
+		$scope.removeOptionBtns(event.currentTarget.parentNode, "cancel");
+	};
+	
+	$scope.deleteComponent = function(event) {
+		var index = parseInt(event.currentTarget.name);
+		var modWf = $scope.workflow;
+		modWf.components.splice(index, 1);
+		SharedWfService.prepForBroadcast(modWf);
 	};
 };
+
 
 pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
 	$scope.radioSelection = "";
