@@ -9,11 +9,11 @@
 			<h4 ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')"><a ng-click="editReferencedWf(component.name)">{{component.name}}</a></h4>
 			<i ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.description}}</i><br>
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
-				<div class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.components[0].content}}</div>
+				<div class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" ng-click="renderOptionBtns($event,$index,'ref')">{{component.components[0].content}}</div>
 			</div>
 			
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
-				<div class="scriptContent component" contenteditable ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')" ng-click="renderOptionBtns($event,$index)">{{component.content}}</div>
+				<div class="scriptContent component" contenteditable ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')" ng-click="renderOptionBtns($event,$index,'std')">{{component.content}}</div>
 			</div>
 		
 		</div>

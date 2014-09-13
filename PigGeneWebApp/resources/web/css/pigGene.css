@@ -69,7 +69,10 @@ h1 {
 
 .componentRef {
 	background-color: #fafaff;
-	cursor: default;
+}
+
+.componentRef:hover {
+	cursor: pointer;
 }
 
 .optionBtns1, .optionBtns2 {

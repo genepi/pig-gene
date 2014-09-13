@@ -60,7 +60,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		SharedWfService.persistWfDefinitionAndRedirectToReferencedWf(id);
 	};
 	
-	$scope.renderOptionBtns = function(event, index) {
+	$scope.renderOptionBtns = function(event, index, mode) {
 		var targetElement = event.currentTarget;
 		var options = "options"
 		
@@ -70,15 +70,17 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 
 			var upBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentUp($event)'><span class='glyphicon glyphicon-arrow-up'></span></button>")($scope);
 			var downBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentDown($event)'><span class='glyphicon glyphicon-arrow-down'></span></button>")($scope);
-			var acceptBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-success' ng-click='saveComponentModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
-			var cancelBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-warning' ng-click='cancelComponentModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
-			var deleteBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-danger' ng-click='deleteComponent($event)'><span class='glyphicon glyphicon-trash'></span></button>")($scope);
-
 			$(buttonGroup1).append(upBtn);
 			$(buttonGroup1).append(downBtn);
 			
-			$(buttonGroup2).append(acceptBtn);
-			$(buttonGroup2).append(cancelBtn);
+			if(mode === 'std') {
+				var acceptBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-success' ng-click='saveComponentModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
+				var cancelBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-warning' ng-click='cancelComponentModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
+				$(buttonGroup2).append(acceptBtn);
+				$(buttonGroup2).append(cancelBtn);
+			}
+			
+			var deleteBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-danger' ng-click='deleteComponent($event)'><span class='glyphicon glyphicon-trash'></span></button>")($scope);
 			$(buttonGroup2).append(deleteBtn);
 			
 			$(targetElement.parentNode).append(buttonGroup1);
