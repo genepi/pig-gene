@@ -218,6 +218,11 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		} else {
 			modWf.components.push(refWf);
 		}
+		var mappingObj = {};
+		for(var i = 0; i<refWf.inputParams.length; i++) {
+			mappingObj[refWf.inputParams[i]] = "";
+		}
+		modWf.inputParamMapping[refWf.name] = mappingObj;
 		SharedWfService.prepForBroadcast(modWf);
 		$('#myModal').modal('toggle');
 	});

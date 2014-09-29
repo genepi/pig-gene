@@ -1,7 +1,10 @@
 package piggene.serialisation.workflow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,8 +15,9 @@ public class WorkflowConverter {
 		String name = data.getString("name");
 		String description = data.getString("description");
 		List<String> inputParameters = convertJSONParameters(data.getJSONArray("inputParams"));
+		Map<String, Map<String, String>> inputParamMapping = convertJSONMapping(data.getJSONObject("inputParamMapping"));
 		List<Workflow> components = convertJSONComponents(data.getJSONArray("components"));
-		return new Workflow(name, description, components, inputParameters);
+		return new Workflow(name, description, components, inputParameters, inputParamMapping);
 	}
 
 	private static List<Workflow> convertJSONComponents(final JSONArray jsonArray) throws JSONException {
@@ -36,6 +40,25 @@ public class WorkflowConverter {
 			parameters.add(param);
 		}
 		return parameters;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Map<String, Map<String, String>> convertJSONMapping(final JSONObject jsonObject) throws JSONException {
+		Map<String, Map<String, String>> inputParamMapping = new HashMap<String, Map<String, String>>();
+		Iterator<String> keys = jsonObject.keys();
+		Iterator<String> innerKeys;
+		while (keys.hasNext()) {
+			String key = keys.next();
+			Map<String, String> map = new HashMap<String, String>();
+			JSONObject object = jsonObject.getJSONObject(key);
+			innerKeys = object.keys();
+			while (innerKeys.hasNext()) {
+				String innerKey = innerKeys.next();
+				map.put(innerKey, object.getString(innerKey));
+			}
+			inputParamMapping.put(key, map);
+		}
+		return inputParamMapping;
 	}
 
 }

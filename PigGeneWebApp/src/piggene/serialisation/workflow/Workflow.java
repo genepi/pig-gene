@@ -2,25 +2,34 @@ package piggene.serialisation.workflow;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * @author clemens
+ *
+ */
 public class Workflow implements IWorkflow {
 	private WorkflowType workflowType = WorkflowType.WORKFLOW;
 
 	private String name;
 	private String description;
 	private List<Workflow> components;
+
 	private List<String> inputParams;
+	private Map<String, Map<String, String>> inputParamMapping;
 
 	protected String lineSeparator = System.getProperty("line.separator");
 
 	public Workflow() {
 	}
 
-	public Workflow(final String name, final String description, final List<Workflow> components, final List<String> inputParams) {
+	public Workflow(final String name, final String description, final List<Workflow> components, final List<String> inputParams,
+			final Map<String, Map<String, String>> inputParamMapping) {
 		this.name = name;
 		this.description = description;
 		this.components = components;
 		this.inputParams = inputParams;
+		this.inputParamMapping = inputParamMapping;
 	}
 
 	public WorkflowType getWorkflowType() {
@@ -69,6 +78,14 @@ public class Workflow implements IWorkflow {
 
 	public void setLineSeparator(final String lineSeparator) {
 		this.lineSeparator = lineSeparator;
+	}
+
+	public Map<String, Map<String, String>> getInputParamMapping() {
+		return inputParamMapping;
+	}
+
+	public void setInputParamMapping(final Map<String, Map<String, String>> inputParamMapping) {
+		this.inputParamMapping = inputParamMapping;
 	}
 
 	@Override

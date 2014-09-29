@@ -10,6 +10,13 @@
 			<br ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 			<h4 ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')"><a ng-click="editReferencedWf(component.name)">{{component.name}}</a></h4>
 			<i ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.description}}</i><br>
+			<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
+				input parameter mapping:
+				<div ng-repeat="input in component.inputParams track by $index">
+					<span class="parameterElementPrefix">${{input}}</span>
+					<input class="parameterElement" ng-model="workflow.inputParamMapping[component.name][input]"></input>
+				</div>
+			</div>
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 				<textarea elastic class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" ng-click="renderOptionBtns($event,$index,'ref')" ng-model="component.components[0].content">{{component.components[0].content}}</textarea>
 			</div>
