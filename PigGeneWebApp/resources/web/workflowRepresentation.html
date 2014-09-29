@@ -1,7 +1,9 @@
 <div class="workflowContainer well">
 
-	<h1 editable-text="workflow.name">{{workflow.name}}</h1>
-	<h4 editable-text="workflow.description">{{workflow.description}}</h4>
+	<div class="headlineContainer">
+		<div contenteditable id="workflowName" ng-click="renderChangeHeadlineBtns($event)">{{workflow.name}}</div>
+		<div contenteditable id="workflowDescription" ng-click="renderChangeHeadlineBtns($event)">{{workflow.description}}</div>
+	</div>
 	
 	<div>
 		<div ng-repeat="component in workflow.components track by $index">
@@ -9,11 +11,11 @@
 			<h4 ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')"><a ng-click="editReferencedWf(component.name)">{{component.name}}</a></h4>
 			<i ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.description}}</i><br>
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
-				<div class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" ng-click="renderOptionBtns($event,$index,'ref')">{{component.components[0].content}}</div>
+				<textarea elastic class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" ng-click="renderOptionBtns($event,$index,'ref')" ng-model="component.components[0].content">{{component.components[0].content}}</textarea>
 			</div>
 			
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
-				<div class="scriptContent component" contenteditable ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')" ng-click="renderOptionBtns($event,$index,'std')">{{component.content}}</div>
+				<textarea elastic class="scriptContent component" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')" ng-click="renderOptionBtns($event,$index,'std')" ng-model="component.content">{{component.content}}</textarea>
 			</div>
 		
 		</div>

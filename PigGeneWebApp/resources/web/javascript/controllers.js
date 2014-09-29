@@ -27,7 +27,6 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	}
 }]);
 
-
 function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, SharedWfService) {
 	$scope.workflow = SharedWfService.workflow;
 	if($routeParams.id != "newWf") {
@@ -60,6 +59,37 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		SharedWfService.persistWfDefinitionAndRedirectToReferencedWf(id);
 	};
 	
+	$scope.renderChangeHeadlineBtns = function(event) {
+		var targetElement = event.currentTarget.parentElement;
+		var options = "options"
+			
+		if(!$(targetElement).hasClass(options)) {
+			var buttonGroup = $("<div class='btn-group textOptionBtns'></div>");
+			var acceptBtn = $compile("<button type='button' class='btn btn-sm btn-success' ng-click='saveHeadlineModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
+			var cancelBtn = $compile("<button type='button' class='btn btn-sm btn-warning' ng-click='cancelHeadlineModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
+			$(buttonGroup).append(acceptBtn);
+			$(buttonGroup).append(cancelBtn);
+		}
+		$(targetElement).append(buttonGroup);
+		$(targetElement).addClass(options);
+	};
+	
+	$scope.saveHeadlineModification = function(event) {
+		var modWf = $scope.workflow;
+		modWf.name = $(event.currentTarget.parentElement.parentElement.children[0]).text();
+		modWf.description = $(event.currentTarget.parentElement.parentElement.children[1]).text();
+		SharedWfService.prepForBroadcast(modWf);
+		$scope.removeOptionBtns(event.currentTarget.parentElement, "textSave");
+	};
+	
+	$scope.cancelHeadlineModification = function(event) {
+		var modWf = $scope.workflow;
+		$(event.currentTarget.parentElement.parentElement.children[0]).text(modWf.name);
+		$(event.currentTarget.parentElement.parentElement.children[1]).text(modWf.description);
+		SharedWfService.prepForBroadcast(modWf);
+		$scope.removeOptionBtns(event.currentTarget.parentElement, "textCancel");
+	};
+	
 	$scope.renderOptionBtns = function(event, index, mode) {
 		var targetElement = event.currentTarget;
 		var options = "options"
@@ -75,11 +105,11 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 			
 			if(mode === 'std') {
 				var acceptBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-success' ng-click='saveComponentModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
-				var cancelBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-warning' ng-click='cancelComponentModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
 				$(buttonGroup2).append(acceptBtn);
-				$(buttonGroup2).append(cancelBtn);
 			}
 			
+			var cancelBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-warning' ng-click='cancelComponentModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
+			$(buttonGroup2).append(cancelBtn);
 			var deleteBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-danger' ng-click='deleteComponent($event)'><span class='glyphicon glyphicon-trash'></span></button>")($scope);
 			$(buttonGroup2).append(deleteBtn);
 			
@@ -87,11 +117,14 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 			$(targetElement.parentNode).append(buttonGroup2);
 			$(targetElement).addClass(options);
 		}
-		
 	};
 	
 	$scope.removeOptionBtns = function(btnGroupElement, operation) {
-		$(btnGroupElement.parentNode.children[0]).removeClass("options");
+		if(operation === 'textSave' || operation === 'textCancel') {
+			$(btnGroupElement.parentNode).removeClass("options");
+		} else {
+			$(btnGroupElement.parentNode.children[0]).removeClass("options");
+		}
 		if(operation === "up" || operation === "down") {
 			$(btnGroupElement.nextSibling).remove();
 		} else if(operation === "save" || operation === "cancel" || operation === "delete") {
@@ -145,6 +178,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		var modWf = $scope.workflow;
 		modWf.components.splice(index, 1);
 		SharedWfService.prepForBroadcast(modWf);
+		$scope.removeOptionBtns(event.currentTarget.parentNode, "delete");
 	};
 };
 

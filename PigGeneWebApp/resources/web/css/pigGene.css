@@ -1,3 +1,8 @@
+textarea {
+	width: 100%;
+	overflow: hidden;
+}
+
 .windowGap {
 	margin: 15px;
 }
@@ -36,8 +41,20 @@
 	margin: 0px;
 }
 
-h1 {
+#workflowName, #workflowDescription {
+	font-weight: 500;
 	margin-top: 0px;
+	color: black;
+	border: 0px;
+	width: 100%;
+}
+
+#workflowName {
+	font-size: 40px;
+}
+
+#workflowDescription {
+	font-size: 18px;
 }
 
 .scriptContentBlock {
@@ -75,19 +92,15 @@ h1 {
 	cursor: pointer;
 }
 
+.textOptionBtns {
+	margin-top: 8px;
+	margin-bottom: 15px;
+}
+
 .optionBtns1, .optionBtns2 {
 	margin-top: 8px;
 }
 
 .optionBtns2 {
 	margin-left: 8px;
-}
-
-
-
-
-/* TODO delete when framework got removed */
-h1.editable-click, h4.editable-click {
-	color: black;
-	border: 0px;
 }
