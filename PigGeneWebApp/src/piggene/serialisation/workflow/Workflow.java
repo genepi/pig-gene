@@ -9,16 +9,18 @@ public class Workflow implements IWorkflow {
 	private String name;
 	private String description;
 	private List<Workflow> components;
+	private List<String> inputParams;
 
 	protected String lineSeparator = System.getProperty("line.separator");
 
 	public Workflow() {
 	}
 
-	public Workflow(final String name, final String description, final List<Workflow> components) {
+	public Workflow(final String name, final String description, final List<Workflow> components, final List<String> inputParams) {
 		this.name = name;
 		this.description = description;
 		this.components = components;
+		this.inputParams = inputParams;
 	}
 
 	public WorkflowType getWorkflowType() {
@@ -51,6 +53,22 @@ public class Workflow implements IWorkflow {
 
 	public void setComponents(final List<Workflow> components) {
 		this.components = components;
+	}
+
+	public List<String> getInputParams() {
+		return inputParams;
+	}
+
+	public void setInputParams(final List<String> inputParams) {
+		this.inputParams = inputParams;
+	}
+
+	public String getLineSeparator() {
+		return lineSeparator;
+	}
+
+	public void setLineSeparator(final String lineSeparator) {
+		this.lineSeparator = lineSeparator;
 	}
 
 	@Override

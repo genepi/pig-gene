@@ -3,6 +3,11 @@ textarea {
 	overflow: hidden;
 }
 
+.btn-xs {
+	font-size: 10px;
+	margin-top: 4px;
+}
+
 .windowGap {
 	margin: 15px;
 }
@@ -19,7 +24,7 @@ textarea {
 	margin-top: 10px;
 }
 
-.workflowContainer {
+.workflowContainer, .inOutputParamContainer {
 	background-color: #f4f4f4;
 }
 
@@ -103,4 +108,12 @@ textarea {
 
 .optionBtns2 {
 	margin-left: 8px;
+}
+
+.parameterElement {
+	margin-top: 4px;
+}
+
+.parameterElementPrefix {
+	margin-right: 3px;
 }

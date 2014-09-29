@@ -223,3 +223,31 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 	});
 	
 }]);
+
+pigGeneApp.controller("InOutputParamCtrl", ["$scope", "$routeParams", "SharedWfService", function($scope, $routeParams, SharedWfService) {
+	$scope.workflow = SharedWfService.workflow;
+	$scope.visible = false;
+	
+	$scope.$on("handleWfChange", function() {
+		$scope.workflow = SharedWfService.workflow;
+	});
+	
+	$scope.addInput = function() {
+		var modWf = SharedWfService.workflow;
+		modWf.inputParams.push("");
+		SharedWfService.prepForBroadcast(modWf);
+	};
+	
+	$scope.isVisible = function() {
+		return $scope.visible;
+	};
+	
+	$scope.$on("showParameterElements", function() {
+		$scope.visible = true;
+	});
+	
+	$scope.$on("hideParameterElements", function() {
+		$scope.visible = false;
+	});
+	
+}]);

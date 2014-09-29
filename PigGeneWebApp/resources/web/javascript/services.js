@@ -26,9 +26,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				name: "newWf",
 				description: "description of the new workflow",
 				workflowType: "WORKFLOW",
-				components: []
+				components: [],
+				inputParams: []
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
+		sharedWorkflow.showParameterElements();
 		sharedWorkflow.broadcastWfChange();
 		$location.path('/wf/' + "newWf").replace();
 	};
@@ -42,6 +44,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				return;
 			}
 			sharedWorkflow.workflow = response.data;
+			sharedWorkflow.showParameterElements();
 			sharedWorkflow.broadcastWfChange();
 		});
 	};
@@ -139,7 +142,15 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.broadcastExWfNamesChange = function() {
 		$rootScope.$broadcast("handleExWfNamesChange");
-	}
+	};
+	
+	sharedWorkflow.showParameterElements = function() {
+		$rootScope.$broadcast("showParameterElements");
+	};
+	
+	sharedWorkflow.hideParameterElements = function() {
+		$rootScope.$broadcast("hideParameterElements");
+	};
 	
 	return sharedWorkflow;
 }]);

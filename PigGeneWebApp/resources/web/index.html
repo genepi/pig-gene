@@ -38,6 +38,21 @@
 		</div>
 	</nav>
 
+	<div id="inOutputParamContainer" class="windowGap" ng-controller="InOutputParamCtrl">
+		<div class="well" ng-if="isVisible()">
+			<div class="inputParameters">
+				input elements:<br>
+				<div ng-repeat="input in workflow.inputParams track by $index">
+					<span class="parameterElementPrefix">$</span><input class="parameterElement" ng-model="workflow.inputParams[$index]"></input>
+				</div>
+				<button class="btn btn-xs btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
+			</div>
+			
+			<div class="outputParameters">
+			</div>
+		</div>
+	</div>
+
 	<div id="workflowContainer" class="windowGap" ng-view>
 	</div>
 	
