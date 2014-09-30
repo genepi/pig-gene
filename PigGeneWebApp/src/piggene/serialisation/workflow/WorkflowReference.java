@@ -55,8 +55,9 @@ public class WorkflowReference extends Workflow {
 		for (Workflow wf : referencedWorkflow.getComponents()) {
 			sb.append(lineSeparator);
 			sb.append(insertIndentationTabs());
-			String pigScriptRepresentation = applyInputParameterMapping(wf.getPigScriptRepresentation(workflowName),
-					WorkflowSerialisation.load(surroundingWorkflowName).getInputParamMapping().get(workflowName));
+			Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName);
+			String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName), surroundingWorkflow
+					.getInputParamMapping().get(workflowName), surroundingWorkflow.getOutputParamMapping().get(workflowName));
 			sb.append(adjustIndentation(pigScriptRepresentation));
 			sb.append(lineSeparator);
 		}
@@ -77,13 +78,20 @@ public class WorkflowReference extends Workflow {
 		return pigScriptRepresentation.replaceAll("[\\r\\n]+", lineSeparator.concat(insertIndentationTabs()));
 	}
 
-	private String applyInputParameterMapping(final String pigScriptRepresentation, final Map<String, String> parameterMapping) {
+	private String applyParameterMapping(final String pigScriptRepresentation, final Map<String, String> inputParameterMapping,
+			final Map<String, String> outputParameterMapping) {
 		String regex = "(\\$)(\\w+)(\\b)";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(pigScriptRepresentation);
 
 		if (m.find()) {
-			String replacementName = parameterMapping.get(m.group(2));
+			String key = m.group(2);
+			String replacementName;
+			if (inputParameterMapping.containsKey(key)) { // inputParam
+				replacementName = inputParameterMapping.get(key);
+			} else { // outputParam
+				replacementName = outputParameterMapping.get(key);
+			}
 			return m.replaceAll("$1" + replacementName);
 		}
 		return pigScriptRepresentation;

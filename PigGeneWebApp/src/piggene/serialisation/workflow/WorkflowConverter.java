@@ -15,14 +15,11 @@ public class WorkflowConverter {
 		String name = data.getString("name");
 		String description = data.getString("description");
 		List<Workflow> components = convertJSONComponents(data.getJSONArray("components"));
-		List<String> inputParameters = convertJSONParameters(data.getJSONArray("inputParams"));
+		List<String> inputParams = convertJSONParameters(data.getJSONArray("inputParams"));
 		Map<String, Map<String, String>> inputParamMapping = convertJSONMapping(data.getJSONObject("inputParamMapping"));
-
-		// TODO add outputParam method calls
-		List<String> outputParameters;
-		Map<String, Map<String, String>> outputParamMapping;
-
-		return new Workflow(name, description, components, inputParameters, inputParamMapping);
+		List<String> outputParams = convertJSONParameters(data.getJSONArray("outputParams"));
+		Map<String, Map<String, String>> outputParamMapping = convertJSONMapping(data.getJSONObject("outputParamMapping"));
+		return new Workflow(name, description, components, inputParams, outputParams, inputParamMapping, outputParamMapping);
 	}
 
 	private static List<Workflow> convertJSONComponents(final JSONArray jsonArray) throws JSONException {

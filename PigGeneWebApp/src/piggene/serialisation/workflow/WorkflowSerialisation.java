@@ -52,7 +52,8 @@ public class WorkflowSerialisation {
 				resolvedSteps.add(wf);
 			}
 		}
-		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getInputParams(), workflow.getInputParamMapping());
+		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getInputParams(), workflow.getOutputParams(),
+				workflow.getInputParamMapping(), workflow.getOutputParamMapping());
 	}
 
 	private static Workflow getAllDependingReferencedWorkflowSteps(final String workflowName) throws IOException {

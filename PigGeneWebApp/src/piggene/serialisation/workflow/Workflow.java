@@ -16,7 +16,9 @@ public class Workflow implements IWorkflow {
 	private List<Workflow> components;
 
 	private List<String> inputParams;
+	private List<String> outputParams;
 	private Map<String, Map<String, String>> inputParamMapping;
+	private Map<String, Map<String, String>> outputParamMapping;
 
 	protected String lineSeparator = System.getProperty("line.separator");
 
@@ -24,12 +26,15 @@ public class Workflow implements IWorkflow {
 	}
 
 	public Workflow(final String name, final String description, final List<Workflow> components, final List<String> inputParams,
-			final Map<String, Map<String, String>> inputParamMapping) {
+			final List<String> outputParams, final Map<String, Map<String, String>> inputParamMapping,
+			final Map<String, Map<String, String>> outputParamMapping) {
 		this.name = name;
 		this.description = description;
 		this.components = components;
 		this.inputParams = inputParams;
+		this.outputParams = outputParams;
 		this.inputParamMapping = inputParamMapping;
+		this.outputParamMapping = outputParamMapping;
 	}
 
 	public WorkflowType getWorkflowType() {
@@ -86,6 +91,22 @@ public class Workflow implements IWorkflow {
 
 	public void setInputParamMapping(final Map<String, Map<String, String>> inputParamMapping) {
 		this.inputParamMapping = inputParamMapping;
+	}
+
+	public List<String> getOutputParams() {
+		return outputParams;
+	}
+
+	public void setOutputParams(final List<String> outputParams) {
+		this.outputParams = outputParams;
+	}
+
+	public Map<String, Map<String, String>> getOutputParamMapping() {
+		return outputParamMapping;
+	}
+
+	public void setOutputParamMapping(final Map<String, Map<String, String>> outputParamMapping) {
+		this.outputParamMapping = outputParamMapping;
 	}
 
 	@Override
