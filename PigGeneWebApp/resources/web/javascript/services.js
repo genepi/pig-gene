@@ -28,7 +28,9 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				workflowType: "WORKFLOW",
 				components: [],
 				inputParams: [],
-				inputParamMapping: {}
+				outputParams: [],
+				inputParamMapping: {},
+				outputParamMapping: {}
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
 		sharedWorkflow.showParameterElements();
