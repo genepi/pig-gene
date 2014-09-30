@@ -47,10 +47,15 @@ public class WorkflowReferenceLoaderService extends ServerResource {
 
 	private String mergeComponents(final List<Workflow> components) {
 		StringBuilder sb = new StringBuilder();
-		for (Workflow wf : components) {
+		Workflow wf;
+		for (int i = 0; i < components.size(); i++) {
+			wf = components.get(i);
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW)) {
 				sb.append(mergeComponents(wf.getComponents()));
 			} else if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_COMPONENT)) {
+				if (i > 0) {
+					sb.append(System.getProperty("line.separator"));
+				}
 				sb.append(((WorkflowComponent) wf).getContent());
 			}
 		}

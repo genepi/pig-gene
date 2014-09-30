@@ -81,6 +81,10 @@ textarea {
 	background-color: white;
 }
 
+.componentRef {
+	background-color: #fafaff;
+}
+
 .component:hover {
 	cursor: pointer;
 }
@@ -89,12 +93,12 @@ textarea {
 	cursor: text;
 }
 
-.componentRef {
-	background-color: #fafaff;
-}
-
 .componentRef:hover {
 	cursor: pointer;
+}
+
+.componentRef:focus {
+	cursor: text;
 }
 
 .textOptionBtns {
