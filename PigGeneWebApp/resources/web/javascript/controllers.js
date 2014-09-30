@@ -24,7 +24,12 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 						break;
 			default: break;
 		}
-	}
+	};
+	
+	$scope.hideEverything = function() {
+		SharedWfService.hideParameterElements();
+	};
+	
 }]);
 
 function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, SharedWfService) {

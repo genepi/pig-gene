@@ -1,6 +1,9 @@
 package piggene.serialisation.workflow;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WorkflowReference extends Workflow {
 	private static int indentation = 0;
@@ -37,7 +40,7 @@ public class WorkflowReference extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final String wfName) throws IOException {
+	public String getPigScriptRepresentation(final String surroundingWorkflowName) throws IOException {
 		WorkflowReference.indentation++;
 		String workflowName = this.name;
 		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
@@ -52,7 +55,10 @@ public class WorkflowReference extends Workflow {
 		for (Workflow wf : referencedWorkflow.getComponents()) {
 			sb.append(lineSeparator);
 			sb.append(insertIndentationTabs());
-			sb.append(wf.getPigScriptRepresentation(workflowName));
+			String pigScriptRepresentation = applyInputParameterMapping(wf.getPigScriptRepresentation(workflowName),
+					WorkflowSerialisation.load(surroundingWorkflowName).getInputParamMapping().get(workflowName));
+			sb.append(adjustIndentation(pigScriptRepresentation));
+			sb.append(lineSeparator);
 		}
 		sb.append(lineSeparator);
 		WorkflowReference.indentation--;
@@ -65,6 +71,22 @@ public class WorkflowReference extends Workflow {
 			sb.append("\t");
 		}
 		return sb.toString();
+	}
+
+	private String adjustIndentation(final String pigScriptRepresentation) {
+		return pigScriptRepresentation.replaceAll("[\\r\\n]+", lineSeparator.concat(insertIndentationTabs()));
+	}
+
+	private String applyInputParameterMapping(final String pigScriptRepresentation, final Map<String, String> parameterMapping) {
+		String regex = "(\\$)(\\w+)(\\b)";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(pigScriptRepresentation);
+
+		if (m.find()) {
+			String replacementName = parameterMapping.get(m.group(2));
+			return m.replaceAll("$1" + replacementName);
+		}
+		return pigScriptRepresentation;
 	}
 
 }

@@ -33,7 +33,7 @@ public class WorkflowComponent extends Workflow {
 
 	@Override
 	public String getPigScriptRepresentation(final String wfName) throws IOException {
-		return content + lineSeparator;
+		return content;
 	}
 
 }
