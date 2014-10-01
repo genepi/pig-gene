@@ -9,6 +9,7 @@ import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 import piggene.serialisation.workflow.parameter.InputLinkParameter;
 import piggene.serialisation.workflow.parameter.LinkParameter;
 import piggene.serialisation.workflow.parameter.OutputLinkParameter;
+import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 public class WorkflowReference extends Workflow {
 	private static int indentation = 0;
@@ -61,8 +62,8 @@ public class WorkflowReference extends Workflow {
 			sb.append(lineSeparator);
 			sb.append(insertIndentationTabs());
 			Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName);
-			String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName), surroundingWorkflow
-					.getInputParameterMapping().getMapByKey(workflowName), surroundingWorkflow.getOutputParameterMapping().getMapByKey(workflowName));
+			String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName),
+					surroundingWorkflow.getParameterMapping(), workflowName);
 			sb.append(adjustIndentation(pigScriptRepresentation));
 			sb.append(lineSeparator);
 		}
@@ -83,8 +84,11 @@ public class WorkflowReference extends Workflow {
 		return pigScriptRepresentation.replaceAll("[\\r\\n]+", lineSeparator.concat(insertIndentationTabs()));
 	}
 
-	private String applyParameterMapping(final String pigScriptRepresentation, final Map<LinkParameter, LinkParameter> inputParameterMap,
-			final Map<LinkParameter, LinkParameter> outputParameterMap) {
+	private String applyParameterMapping(final String pigScriptRepresentation, final WorkflowParameterMapping parameterMapping,
+			final String workflowName) {
+		Map<LinkParameter, LinkParameter> inputParameterMap = parameterMapping.getInputParameterMapping().getMapByKey(workflowName);
+		Map<LinkParameter, LinkParameter> outputParameterMap = parameterMapping.getOutputParameterMapping().getMapByKey(workflowName);
+
 		String regex = "(\\$)(\\w+)(\\b)";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(pigScriptRepresentation);

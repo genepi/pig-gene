@@ -13,21 +13,18 @@
 			
 			<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 				input parameter mapping:
-				<div ng-repeat="input in component.parameterMapping.inputParameterMapping track by $index">
-					<span class="parameterElementPrefix">${{input}}</span>
+				<div ng-repeat="input in component.parameter.inputParameter track by $index">
+					<span class="parameterElementPrefix">${{input.name}}</span>
 					<input class="parameterElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.name][input]"></input>
 				</div>
 			</div>
-			
-			<!-- 
 			<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 				output parameter mapping:
-				<div ng-repeat="output in component.outputParams track by $index">
-					<span class="parameterElementPrefix">${{output}}</span>
-					<input class="parameterElement" ng-model="workflow.outputParamMapping[component.name][output]"></input>
+				<div ng-repeat="output in component.parameter.outputParameter track by $index">
+					<span class="parameterElementPrefix">${{output.name}}</span>
+					<input class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output]"></input>
 				</div>
 			</div>
-			 -->
 			 
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 				<textarea readonly elastic class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" ng-click="renderOptionBtns($event,$index,'ref')" ng-model="component.components[0].content">{{component.components[0].content}}</textarea>

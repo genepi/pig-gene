@@ -3,8 +3,8 @@ package piggene.serialisation.workflow;
 import java.io.IOException;
 import java.util.List;
 
-import piggene.serialisation.workflow.parameter.LinkParameterMapping;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
+import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 /**
  * @author clemens
@@ -18,9 +18,7 @@ public class Workflow implements IWorkflow {
 	private List<Workflow> components;
 
 	private WorkflowParameter parameter;
-
-	private LinkParameterMapping inputParameterMapping;
-	private LinkParameterMapping outputParameterMapping;
+	private WorkflowParameterMapping parameterMapping;
 
 	protected String lineSeparator = System.getProperty("line.separator");
 
@@ -28,13 +26,12 @@ public class Workflow implements IWorkflow {
 	}
 
 	public Workflow(final String name, final String description, final List<Workflow> components, final WorkflowParameter parameter,
-			final LinkParameterMapping inputParameterMapping, final LinkParameterMapping outputParameterMapping) {
+			final WorkflowParameterMapping parameterMapping) {
 		this.name = name;
 		this.description = description;
 		this.components = components;
 		this.parameter = parameter;
-		this.inputParameterMapping = inputParameterMapping;
-		this.outputParameterMapping = outputParameterMapping;
+		this.parameterMapping = parameterMapping;
 	}
 
 	public WorkflowType getWorkflowType() {
@@ -77,20 +74,12 @@ public class Workflow implements IWorkflow {
 		this.parameter = parameter;
 	}
 
-	public LinkParameterMapping getInputParameterMapping() {
-		return inputParameterMapping;
+	public WorkflowParameterMapping getParameterMapping() {
+		return parameterMapping;
 	}
 
-	public void setInputParameterMapping(final LinkParameterMapping inputParameterMapping) {
-		this.inputParameterMapping = inputParameterMapping;
-	}
-
-	public LinkParameterMapping getOutputParameterMapping() {
-		return outputParameterMapping;
-	}
-
-	public void setOutputParameterMapping(final LinkParameterMapping outputParameterMapping) {
-		this.outputParameterMapping = outputParameterMapping;
+	public void setParameterMapping(final WorkflowParameterMapping parameterMapping) {
+		this.parameterMapping = parameterMapping;
 	}
 
 	public String getLineSeparator() {

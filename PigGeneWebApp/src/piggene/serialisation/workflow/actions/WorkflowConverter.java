@@ -18,21 +18,25 @@ import piggene.serialisation.workflow.parameter.LinkParameter;
 import piggene.serialisation.workflow.parameter.LinkParameterMapping;
 import piggene.serialisation.workflow.parameter.OutputLinkParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
+import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 public class WorkflowConverter {
+
 	public static Workflow processClientJSONData(final JSONObject data) throws JSONException {
 		String name = data.getString("name");
 		String description = data.getString("description");
 		List<Workflow> components = convertJSONComponents(data.getJSONArray("components"));
+
 		List<LinkParameter> inputParameter = convertJSONParameters("input", data.getJSONObject("parameter").getJSONArray("inputParameter"));
 		List<LinkParameter> outputParameter = convertJSONParameters("output", data.getJSONObject("parameter").getJSONArray("outputParameter"));
-		WorkflowParameter parameter = new WorkflowParameter(inputParameter, outputParameter);
-
 		LinkParameterMapping inputParameterMapping = convertJSONMapping("input",
 				data.getJSONObject("parameterMapping").getJSONObject("inputParameterMapping"));
 		LinkParameterMapping outputParameterMapping = convertJSONMapping("output",
 				data.getJSONObject("parameterMapping").getJSONObject("outputParameterMapping"));
-		return new Workflow(name, description, components, parameter, inputParameterMapping, outputParameterMapping);
+
+		WorkflowParameter parameter = new WorkflowParameter(inputParameter, outputParameter);
+		WorkflowParameterMapping parameterMapping = new WorkflowParameterMapping(inputParameterMapping, outputParameterMapping);
+		return new Workflow(name, description, components, parameter, parameterMapping);
 	}
 
 	private static List<Workflow> convertJSONComponents(final JSONArray jsonArray) throws JSONException {

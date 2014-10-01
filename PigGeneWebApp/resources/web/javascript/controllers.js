@@ -215,7 +215,6 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		}
 	};
 	
-	//TODO fix method
 	$scope.$on("handleRefWfChange", function() {
 		var modWf = SharedWfService.workflow;
 		var refWf = SharedWfService.refWorkflow;
@@ -225,17 +224,15 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 			modWf.components.push(refWf);
 		}
 		
-		//input param mapping
-		var inputParameterMappingObj = {};
+		var inputParameterMappingObj = {}; //input param mapping
 		for(var i = 0; i < refWf.parameter.inputParameter.length; i++) {
-			inputParameterMappingObj[refWf.parameter.inputParameter[i]] = "";
+			inputParameterMappingObj[refWf.parameter.inputParameter[i].name] = "";
 		}
 		modWf.parameterMapping.inputParameterMapping[refWf.name] = inputParameterMappingObj;
 		
-		//output param mapping
-		var outputParameterMappingObj = {};
+		var outputParameterMappingObj = {}; //output param mapping
 		for(var i = 0; i < refWf.parameter.outputParameter.length; i++) {
-			outputParameterMappingObj[refWf.parameter.outputParameter[i]] = "";
+			outputParameterMappingObj[refWf.parameter.outputParameter[i].name] = "";
 		}
 		modWf.parameterMapping.outputParameterMapping[refWf.name] = outputParameterMappingObj;
 		
@@ -262,7 +259,7 @@ pigGeneApp.controller("InOutputParamCtrl", ["$scope", "$routeParams", "SharedWfS
 		SharedWfService.prepForBroadcast(modWf);
 	};
 	
-	//TODO type richtig implementieren
+	//TODO implement type function...
 	$scope.addOutput = function() {
 		var modWf = SharedWfService.workflow;
 		var outputObj = {
