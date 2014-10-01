@@ -2,7 +2,9 @@ package piggene.serialisation.workflow;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+
+import piggene.serialisation.workflow.parameter.LinkParameterMapping;
+import piggene.serialisation.workflow.parameter.WorkflowParameter;
 
 /**
  * @author clemens
@@ -15,26 +17,24 @@ public class Workflow implements IWorkflow {
 	private String description;
 	private List<Workflow> components;
 
-	private List<String> inputParams;
-	private List<String> outputParams;
-	private Map<String, Map<String, String>> inputParamMapping;
-	private Map<String, Map<String, String>> outputParamMapping;
+	private WorkflowParameter parameter;
+
+	private LinkParameterMapping inputParameterMapping;
+	private LinkParameterMapping outputParameterMapping;
 
 	protected String lineSeparator = System.getProperty("line.separator");
 
 	public Workflow() {
 	}
 
-	public Workflow(final String name, final String description, final List<Workflow> components, final List<String> inputParams,
-			final List<String> outputParams, final Map<String, Map<String, String>> inputParamMapping,
-			final Map<String, Map<String, String>> outputParamMapping) {
+	public Workflow(final String name, final String description, final List<Workflow> components, final WorkflowParameter parameter,
+			final LinkParameterMapping inputParameterMapping, final LinkParameterMapping outputParameterMapping) {
 		this.name = name;
 		this.description = description;
 		this.components = components;
-		this.inputParams = inputParams;
-		this.outputParams = outputParams;
-		this.inputParamMapping = inputParamMapping;
-		this.outputParamMapping = outputParamMapping;
+		this.parameter = parameter;
+		this.inputParameterMapping = inputParameterMapping;
+		this.outputParameterMapping = outputParameterMapping;
 	}
 
 	public WorkflowType getWorkflowType() {
@@ -69,12 +69,28 @@ public class Workflow implements IWorkflow {
 		this.components = components;
 	}
 
-	public List<String> getInputParams() {
-		return inputParams;
+	public WorkflowParameter getParameter() {
+		return parameter;
 	}
 
-	public void setInputParams(final List<String> inputParams) {
-		this.inputParams = inputParams;
+	public void setParameter(final WorkflowParameter parameter) {
+		this.parameter = parameter;
+	}
+
+	public LinkParameterMapping getInputParameterMapping() {
+		return inputParameterMapping;
+	}
+
+	public void setInputParameterMapping(final LinkParameterMapping inputParameterMapping) {
+		this.inputParameterMapping = inputParameterMapping;
+	}
+
+	public LinkParameterMapping getOutputParameterMapping() {
+		return outputParameterMapping;
+	}
+
+	public void setOutputParameterMapping(final LinkParameterMapping outputParameterMapping) {
+		this.outputParameterMapping = outputParameterMapping;
 	}
 
 	public String getLineSeparator() {
@@ -85,28 +101,14 @@ public class Workflow implements IWorkflow {
 		this.lineSeparator = lineSeparator;
 	}
 
-	public Map<String, Map<String, String>> getInputParamMapping() {
-		return inputParamMapping;
-	}
-
-	public void setInputParamMapping(final Map<String, Map<String, String>> inputParamMapping) {
-		this.inputParamMapping = inputParamMapping;
-	}
-
-	public List<String> getOutputParams() {
-		return outputParams;
-	}
-
-	public void setOutputParams(final List<String> outputParams) {
-		this.outputParams = outputParams;
-	}
-
-	public Map<String, Map<String, String>> getOutputParamMapping() {
-		return outputParamMapping;
-	}
-
-	public void setOutputParamMapping(final Map<String, Map<String, String>> outputParamMapping) {
-		this.outputParamMapping = outputParamMapping;
+	protected String preparePigScriptCommand(final String info) {
+		final StringBuilder sb = new StringBuilder();
+		if (!(info.equals("-") || info.equals(""))) {
+			sb.append("--");
+			sb.append(info);
+			sb.append(lineSeparator);
+		}
+		return sb.toString();
 	}
 
 	@Override
@@ -119,16 +121,6 @@ public class Workflow implements IWorkflow {
 		for (Workflow wf : components) {
 			sb.append(lineSeparator);
 			sb.append(wf.getPigScriptRepresentation(wfName));
-		}
-		return sb.toString();
-	}
-
-	protected String preparePigScriptCommand(final String info) {
-		final StringBuilder sb = new StringBuilder();
-		if (!(info.equals("-") || info.equals(""))) {
-			sb.append("--");
-			sb.append(info);
-			sb.append(lineSeparator);
 		}
 		return sb.toString();
 	}

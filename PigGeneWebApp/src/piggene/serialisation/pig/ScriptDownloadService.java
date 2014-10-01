@@ -12,7 +12,7 @@ import org.restlet.resource.ServerResource;
 
 import piggene.resources.ServerResponseObject;
 import piggene.serialisation.workflow.Workflow;
-import piggene.serialisation.workflow.WorkflowSerialisation;
+import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 
 public class ScriptDownloadService extends ServerResource {
 

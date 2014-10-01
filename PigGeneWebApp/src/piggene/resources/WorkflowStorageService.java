@@ -13,8 +13,8 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import piggene.serialisation.workflow.Workflow;
-import piggene.serialisation.workflow.WorkflowConverter;
-import piggene.serialisation.workflow.WorkflowSerialisation;
+import piggene.serialisation.workflow.actions.WorkflowConverter;
+import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 
 public class WorkflowStorageService extends ServerResource {
 
@@ -40,6 +40,7 @@ public class WorkflowStorageService extends ServerResource {
 		try {
 			WorkflowSerialisation.store(workflow);
 		} catch (IOException e) {
+			e.printStackTrace();
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while saving the submitted workflow data.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
@@ -49,5 +50,4 @@ public class WorkflowStorageService extends ServerResource {
 		obj.setMessage("success");
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
-
 }

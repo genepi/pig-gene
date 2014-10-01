@@ -14,8 +14,8 @@ import org.restlet.resource.ServerResource;
 
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.WorkflowComponent;
-import piggene.serialisation.workflow.WorkflowSerialisation;
 import piggene.serialisation.workflow.WorkflowType;
+import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 
 public class WorkflowReferenceLoaderService extends ServerResource {
 

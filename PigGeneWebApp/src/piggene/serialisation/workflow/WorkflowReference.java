@@ -5,6 +5,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import piggene.serialisation.workflow.actions.WorkflowSerialisation;
+import piggene.serialisation.workflow.parameter.InputLinkParameter;
+import piggene.serialisation.workflow.parameter.LinkParameter;
+import piggene.serialisation.workflow.parameter.OutputLinkParameter;
+
 public class WorkflowReference extends Workflow {
 	private static int indentation = 0;
 
@@ -57,7 +62,7 @@ public class WorkflowReference extends Workflow {
 			sb.append(insertIndentationTabs());
 			Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName);
 			String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName), surroundingWorkflow
-					.getInputParamMapping().get(workflowName), surroundingWorkflow.getOutputParamMapping().get(workflowName));
+					.getInputParameterMapping().getMapByKey(workflowName), surroundingWorkflow.getOutputParameterMapping().getMapByKey(workflowName));
 			sb.append(adjustIndentation(pigScriptRepresentation));
 			sb.append(lineSeparator);
 		}
@@ -78,19 +83,19 @@ public class WorkflowReference extends Workflow {
 		return pigScriptRepresentation.replaceAll("[\\r\\n]+", lineSeparator.concat(insertIndentationTabs()));
 	}
 
-	private String applyParameterMapping(final String pigScriptRepresentation, final Map<String, String> inputParameterMapping,
-			final Map<String, String> outputParameterMapping) {
+	private String applyParameterMapping(final String pigScriptRepresentation, final Map<LinkParameter, LinkParameter> inputParameterMap,
+			final Map<LinkParameter, LinkParameter> outputParameterMap) {
 		String regex = "(\\$)(\\w+)(\\b)";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(pigScriptRepresentation);
 
 		if (m.find()) {
 			String key = m.group(2);
-			String replacementName;
-			if (inputParameterMapping.containsKey(key)) { // inputParam
-				replacementName = inputParameterMapping.get(key);
+			LinkParameter replacementName;
+			if (inputParameterMap.containsKey(key)) { // inputParam
+				replacementName = inputParameterMap.get(new InputLinkParameter(key));
 			} else { // outputParam
-				replacementName = outputParameterMapping.get(key);
+				replacementName = outputParameterMap.get(new OutputLinkParameter(key));
 			}
 			return m.replaceAll("$1" + replacementName);
 		}

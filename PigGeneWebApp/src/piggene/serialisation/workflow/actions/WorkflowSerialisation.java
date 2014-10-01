@@ -1,4 +1,4 @@
-package piggene.serialisation.workflow;
+package piggene.serialisation.workflow.actions;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,6 +8,10 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import piggene.serialisation.workflow.Workflow;
+import piggene.serialisation.workflow.WorkflowComponent;
+import piggene.serialisation.workflow.WorkflowType;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
@@ -52,8 +56,8 @@ public class WorkflowSerialisation {
 				resolvedSteps.add(wf);
 			}
 		}
-		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getInputParams(), workflow.getOutputParams(),
-				workflow.getInputParamMapping(), workflow.getOutputParamMapping());
+		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getParameter(),
+				workflow.getInputParameterMapping(), workflow.getOutputParameterMapping());
 	}
 
 	private static Workflow getAllDependingReferencedWorkflowSteps(final String workflowName) throws IOException {

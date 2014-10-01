@@ -11,7 +11,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import piggene.serialisation.workflow.Workflow;
-import piggene.serialisation.workflow.WorkflowSerialisation;
+import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 
 public class WorkflowLoaderService extends ServerResource {
 

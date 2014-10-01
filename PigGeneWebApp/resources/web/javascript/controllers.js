@@ -215,6 +215,7 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		}
 	};
 	
+	//TODO fix method
 	$scope.$on("handleRefWfChange", function() {
 		var modWf = SharedWfService.workflow;
 		var refWf = SharedWfService.refWorkflow;
@@ -225,18 +226,18 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		}
 		
 		//input param mapping
-		var inputParamMappingObj = {};
-		for(var i = 0; i < refWf.inputParams.length; i++) {
-			inputParamMappingObj[refWf.inputParams[i]] = "";
+		var inputParameterMappingObj = {};
+		for(var i = 0; i < refWf.parameter.inputParameter.length; i++) {
+			inputParameterMappingObj[refWf.parameter.inputParameter[i]] = "";
 		}
-		modWf.inputParamMapping[refWf.name] = inputParamMappingObj;
+		modWf.parameterMapping.inputParameterMapping[refWf.name] = inputParameterMappingObj;
 		
 		//output param mapping
-		var outputParamMappingObj = {};
-		for(var i = 0; i < refWf.outputParams.length; i++) {
-			outputParamMappingObj[refWf.outputParams[i]] = "";
+		var outputParameterMappingObj = {};
+		for(var i = 0; i < refWf.parameter.outputParameter.length; i++) {
+			outputParameterMappingObj[refWf.parameter.outputParameter[i]] = "";
 		}
-		modWf.outputParamMapping[refWf.name] = outputParamMappingObj;
+		modWf.parameterMapping.outputParameterMapping[refWf.name] = outputParameterMappingObj;
 		
 		SharedWfService.prepForBroadcast(modWf);
 		$('#myModal').modal('toggle');
@@ -254,13 +255,21 @@ pigGeneApp.controller("InOutputParamCtrl", ["$scope", "$routeParams", "SharedWfS
 	
 	$scope.addInput = function() {
 		var modWf = SharedWfService.workflow;
-		modWf.inputParams.push("");
+		var inputObj = {
+				name: ""
+		};
+		modWf.parameter.inputParameter.push(inputObj);
 		SharedWfService.prepForBroadcast(modWf);
 	};
 	
+	//TODO type richtig implementieren
 	$scope.addOutput = function() {
 		var modWf = SharedWfService.workflow;
-		modWf.outputParams.push("");
+		var outputObj = {
+				name: "",
+				type: ""
+		};
+		modWf.parameter.outputParameter.push(outputObj);
 		SharedWfService.prepForBroadcast(modWf);
 	}
 	
