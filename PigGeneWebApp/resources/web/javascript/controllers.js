@@ -165,7 +165,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 	$scope.saveComponentModification = function(event) {
 		var index = parseInt(event.currentTarget.name);
 		var modWf = $scope.workflow;
-		modWf.components[index].content = $(event.currentTarget.parentElement.parentElement.children[0]).text();
+		modWf.components[index].content = $(event.currentTarget.parentElement.parentElement.children[0]).val();
 		SharedWfService.prepForBroadcast(modWf);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "save");
 	};
@@ -173,7 +173,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 	$scope.cancelComponentModification = function(event) {
 		var index = parseInt(event.currentTarget.name);
 		var modWf = $scope.workflow;
-		$(event.currentTarget.parentElement.parentElement.children[0]).text(modWf.components[index].content);
+		$(event.currentTarget.parentElement.parentElement.children[0]).val(modWf.components[index].content);
 		SharedWfService.prepForBroadcast(modWf);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "cancel");
 	};

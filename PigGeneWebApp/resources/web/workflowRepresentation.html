@@ -15,14 +15,14 @@
 				input parameter mapping:
 				<div ng-repeat="input in component.parameter.inputParameter track by $index">
 					<span class="parameterElementPrefix">${{input.name}}</span>
-					<input class="parameterElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.name][input]"></input>
+					<input class="parameterElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.name][input.name]"></input>
 				</div>
 			</div>
 			<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 				output parameter mapping:
 				<div ng-repeat="output in component.parameter.outputParameter track by $index">
 					<span class="parameterElementPrefix">${{output.name}}</span>
-					<input class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output]"></input>
+					<input class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.name]"></input>
 				</div>
 			</div>
 			 
