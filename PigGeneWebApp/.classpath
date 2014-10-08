@@ -13,7 +13,7 @@
 	<classpathentry kind="lib" path="lib/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-beanutils-1.8.0.jar"/>
-	<classpathentry kind="lib" path="lib/yamlbeans-1.06.jar"/>
+	<classpathentry kind="lib" path="/Users/clemens/git/pig-gene/PigGeneWebApp/lib/yamlbeans-1.08.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.2.2.jar" sourcepath="/home/clemens/Dropbox/Universitaet/BA/google-gson-2.2.2/gson-2.2.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.jetty.ajp.jar"/>

@@ -32,11 +32,15 @@ public class WorkflowSerialisation {
 	}
 
 	public static void store(final Workflow workflow) throws IOException {
-		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(workflow.getName().concat(
-				fileExtension)))));
-		writer.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
-		writer.write(workflow);
-		writer.close();
+		try {
+			final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(workflow.getName().concat(
+					fileExtension)))));
+			writer.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
+			writer.write(workflow);
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static Workflow load(final String name) throws IOException {

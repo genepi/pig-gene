@@ -15,7 +15,6 @@ import piggene.serialisation.workflow.WorkflowComponent;
 import piggene.serialisation.workflow.WorkflowReference;
 import piggene.serialisation.workflow.parameter.InputLinkParameter;
 import piggene.serialisation.workflow.parameter.LinkParameter;
-import piggene.serialisation.workflow.parameter.LinkParameterMapping;
 import piggene.serialisation.workflow.parameter.OutputLinkParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
@@ -29,9 +28,9 @@ public class WorkflowConverter {
 
 		List<LinkParameter> inputParameter = convertJSONParameters("input", data.getJSONObject("parameter").getJSONArray("inputParameter"));
 		List<LinkParameter> outputParameter = convertJSONParameters("output", data.getJSONObject("parameter").getJSONArray("outputParameter"));
-		LinkParameterMapping inputParameterMapping = convertJSONMapping("input",
+		Map<String, Map<String, String>> inputParameterMapping = convertJSONMapping("input",
 				data.getJSONObject("parameterMapping").getJSONObject("inputParameterMapping"));
-		LinkParameterMapping outputParameterMapping = convertJSONMapping("output",
+		Map<String, Map<String, String>> outputParameterMapping = convertJSONMapping("output",
 				data.getJSONObject("parameterMapping").getJSONObject("outputParameterMapping"));
 
 		WorkflowParameter parameter = new WorkflowParameter(inputParameter, outputParameter);
@@ -67,31 +66,31 @@ public class WorkflowConverter {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static LinkParameterMapping convertJSONMapping(final String type, final JSONObject jsonObject) throws JSONException {
-		Map<String, Map<LinkParameter, LinkParameter>> map = new HashMap<String, Map<LinkParameter, LinkParameter>>();
+	private static Map<String, Map<String, String>> convertJSONMapping(final String type, final JSONObject jsonObject) throws JSONException {
+		Map<String, Map<String, String>> map = new HashMap<String, Map<String, String>>();
 
 		Iterator<String> keys = jsonObject.keys();
 		Iterator<String> innerKeys;
 		while (keys.hasNext()) {
 			String key = keys.next();
-			Map<LinkParameter, LinkParameter> innerMap = new HashMap<LinkParameter, LinkParameter>();
+			Map<String, String> innerMap = new HashMap<String, String>();
 			JSONObject object = jsonObject.getJSONObject(key);
 			innerKeys = object.keys();
 			while (innerKeys.hasNext()) {
 				String innerKey = innerKeys.next();
 				if (type.equals("input")) {
-					innerMap.put(new InputLinkParameter(innerKey), new InputLinkParameter(object.getString(innerKey)));
+					innerMap.put(innerKey, object.getString(innerKey));
 				} else if (type.equals("output")) {
 					System.out.println(object);
 					System.out.println(object.getString(innerKey));
 
 					// TODO type...
-					innerMap.put(new OutputLinkParameter(innerKey), new OutputLinkParameter(object.getString(innerKey)));
+					innerMap.put(innerKey, object.getString(innerKey));
 				}
 			}
 			map.put(key, innerMap);
 		}
-		return new LinkParameterMapping(map);
+		return map;
 	}
 
 }

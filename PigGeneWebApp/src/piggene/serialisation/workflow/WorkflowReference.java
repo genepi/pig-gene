@@ -6,9 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import piggene.serialisation.workflow.actions.WorkflowSerialisation;
-import piggene.serialisation.workflow.parameter.InputLinkParameter;
-import piggene.serialisation.workflow.parameter.LinkParameter;
-import piggene.serialisation.workflow.parameter.OutputLinkParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 public class WorkflowReference extends Workflow {
@@ -86,8 +83,8 @@ public class WorkflowReference extends Workflow {
 
 	private String applyParameterMapping(final String pigScriptRepresentation, final WorkflowParameterMapping parameterMapping,
 			final String workflowName) {
-		Map<LinkParameter, LinkParameter> inputParameterMap = parameterMapping.getInputParameterMapping().getMapByKey(workflowName);
-		Map<LinkParameter, LinkParameter> outputParameterMap = parameterMapping.getOutputParameterMapping().getMapByKey(workflowName);
+		Map<String, String> inputParameterMap = parameterMapping.retrieveInputMapByKey(workflowName);
+		Map<String, String> outputParameterMap = parameterMapping.retrieveOutputMapByKey(workflowName);
 
 		String regex = "(\\$)(\\w+)(\\b)";
 		Pattern p = Pattern.compile(regex);
@@ -95,11 +92,11 @@ public class WorkflowReference extends Workflow {
 
 		if (m.find()) {
 			String key = m.group(2);
-			LinkParameter replacementName;
+			String replacementName;
 			if (inputParameterMap.containsKey(key)) { // inputParam
-				replacementName = inputParameterMap.get(new InputLinkParameter(key));
+				replacementName = inputParameterMap.get(key);
 			} else { // outputParam
-				replacementName = outputParameterMap.get(new OutputLinkParameter(key));
+				replacementName = outputParameterMap.get(key);
 			}
 			return m.replaceAll("$1" + replacementName);
 		}
