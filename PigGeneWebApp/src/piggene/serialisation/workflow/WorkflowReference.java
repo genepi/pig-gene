@@ -89,8 +89,9 @@ public class WorkflowReference extends Workflow {
 		String regex = "(\\$)(\\w+)(\\b)";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(pigScriptRepresentation);
+		StringBuffer sb = new StringBuffer();
 
-		if (m.find()) {
+		while (m.find()) {
 			String key = m.group(2);
 			String replacementName;
 			if (inputParameterMap.containsKey(key)) { // inputParam
@@ -98,9 +99,11 @@ public class WorkflowReference extends Workflow {
 			} else { // outputParam
 				replacementName = outputParameterMap.get(key);
 			}
-			return m.replaceAll("$1" + replacementName);
+			m.appendReplacement(sb, replacementName);
 		}
-		return pigScriptRepresentation;
+
+		m.appendTail(sb);
+		return sb.toString();
 	}
 
 }

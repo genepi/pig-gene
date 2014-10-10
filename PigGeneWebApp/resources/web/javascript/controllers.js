@@ -33,6 +33,8 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 }]);
 
 function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, SharedWfService) {
+	$scope.visible = false;
+	
 	$scope.workflow = SharedWfService.workflow;
 	if($routeParams.id != "newWf") {
 		SharedWfService.loadWfDefinition($routeParams.id);
@@ -58,6 +60,15 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 	
 	$scope.checkType = function(type, checkVal) {
 		return (type == checkVal);
+	};
+	
+	$scope.parametersExisting = function(param) {
+		if(param) {
+			if(param.length > 0) {
+				return true;
+			}
+		}
+		return false;
 	};
 	
 	$scope.editReferencedWf = function(id) {
@@ -185,6 +196,39 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		SharedWfService.prepForBroadcast(modWf);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "delete");
 	};
+	
+	$scope.isVisible = function() {
+		return true;
+		return $scope.visible;
+	};
+	
+	$scope.addInput = function() {
+		var modWf = SharedWfService.workflow;
+		var inputObj = {
+				name: ""
+		};
+		modWf.parameter.inputParameter.push(inputObj);
+		SharedWfService.prepForBroadcast(modWf);
+	};
+	
+	//TODO implement type function...
+	$scope.addOutput = function() {
+		var modWf = SharedWfService.workflow;
+		var outputObj = {
+				name: "",
+				type: ""
+		};
+		modWf.parameter.outputParameter.push(outputObj);
+		SharedWfService.prepForBroadcast(modWf);
+	};
+	
+	$scope.$on("showParameterElements", function() {
+		$scope.visible = true;
+	});
+	
+	$scope.$on("hideParameterElements", function() {
+		$scope.visible = false;
+	});
 };
 
 
@@ -238,48 +282,6 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		
 		SharedWfService.prepForBroadcast(modWf);
 		$('#myModal').modal('toggle');
-	});
-	
-}]);
-
-pigGeneApp.controller("InOutputParamCtrl", ["$scope", "$routeParams", "SharedWfService", function($scope, $routeParams, SharedWfService) {
-	$scope.workflow = SharedWfService.workflow;
-	$scope.visible = false;
-	
-	$scope.$on("handleWfChange", function() {
-		$scope.workflow = SharedWfService.workflow;
-	});
-	
-	$scope.addInput = function() {
-		var modWf = SharedWfService.workflow;
-		var inputObj = {
-				name: ""
-		};
-		modWf.parameter.inputParameter.push(inputObj);
-		SharedWfService.prepForBroadcast(modWf);
-	};
-	
-	//TODO implement type function...
-	$scope.addOutput = function() {
-		var modWf = SharedWfService.workflow;
-		var outputObj = {
-				name: "",
-				type: ""
-		};
-		modWf.parameter.outputParameter.push(outputObj);
-		SharedWfService.prepForBroadcast(modWf);
-	}
-	
-	$scope.isVisible = function() {
-		return $scope.visible;
-	};
-	
-	$scope.$on("showParameterElements", function() {
-		$scope.visible = true;
-	});
-	
-	$scope.$on("hideParameterElements", function() {
-		$scope.visible = false;
 	});
 	
 }]);
