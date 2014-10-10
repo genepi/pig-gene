@@ -3,6 +3,10 @@ textarea {
 	overflow: hidden;
 }
 
+h4 {
+	margin-bottom: 4px;
+}
+
 .btn-xs {
 	font-size: 10px;
 	margin-top: 4px;
@@ -24,8 +28,18 @@ textarea {
 	margin-top: 10px;
 }
 
-.workflowContainer, .inOutputParamContainer {
+.workflowContainer, {
 	background-color: #f4f4f4;
+}
+
+.paramContainer {
+	margin-left: 0px;
+	margin-top: 15px;
+}
+
+.refParamContainer {
+	margin-top: 10px;
+	margin-bottom: 15px;
 }
 
 .wfTab, .paramDefinition {
@@ -121,3 +135,7 @@ textarea {
 .parameterElementPrefix {
 	margin-right: 3px;
 }
+
+.refIndentation {
+	margin-left: 20px;
+} 
