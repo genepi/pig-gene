@@ -37,7 +37,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				}
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
-		sharedWorkflow.showParameterElements();
 		sharedWorkflow.broadcastWfChange();
 		$location.path('/wf/' + "newWf").replace();
 	};
@@ -66,6 +65,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 			}
 			sharedWorkflow.refWorkflow = response.data;
 			sharedWorkflow.broadcastRefWfChange();
+			sharedWorkflow.showParameterElements();
 		});
 	};
 	

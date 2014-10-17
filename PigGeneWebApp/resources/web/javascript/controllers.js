@@ -52,6 +52,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		var modWf = $scope.workflow;
 		modWf.components.push(newComp);
 		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.showParameterElements();
 	};
 	
 	$scope.addExistingComponent = function() {
@@ -193,12 +194,16 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		var index = parseInt(event.currentTarget.name);
 		var modWf = $scope.workflow;
 		modWf.components.splice(index, 1);
+		if(modWf.components.length === 0) {
+			modWf.parameter.inputParameter = [];
+			modWf.parameter.outputParameter = [];
+			SharedWfService.hideParameterElements();
+		}
 		SharedWfService.prepForBroadcast(modWf);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "delete");
 	};
 	
 	$scope.isVisible = function() {
-		return true;
 		return $scope.visible;
 	};
 	
