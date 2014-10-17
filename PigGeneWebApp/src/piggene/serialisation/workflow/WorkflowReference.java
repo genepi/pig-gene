@@ -43,7 +43,8 @@ public class WorkflowReference extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final String surroundingWorkflowName) throws IOException {
+	public String getPigScriptRepresentation(final String surroundingWorkflowName)
+			throws IOException {
 		WorkflowReference.indentation++;
 		String workflowName = this.name;
 		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
@@ -59,7 +60,8 @@ public class WorkflowReference extends Workflow {
 			sb.append(lineSeparator);
 			sb.append(insertIndentationTabs());
 			Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName);
-			String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName),
+			String pigScriptRepresentation = applyParameterMapping(
+					wf.getPigScriptRepresentation(workflowName),
 					surroundingWorkflow.getParameterMapping(), workflowName);
 			sb.append(adjustIndentation(pigScriptRepresentation));
 			sb.append(lineSeparator);
@@ -78,13 +80,16 @@ public class WorkflowReference extends Workflow {
 	}
 
 	private String adjustIndentation(final String pigScriptRepresentation) {
-		return pigScriptRepresentation.replaceAll("[\\r\\n]+", lineSeparator.concat(insertIndentationTabs()));
+		return pigScriptRepresentation.replaceAll("[\\r\\n]+",
+				lineSeparator.concat(insertIndentationTabs()));
 	}
 
-	private String applyParameterMapping(final String pigScriptRepresentation, final WorkflowParameterMapping parameterMapping,
-			final String workflowName) {
-		Map<String, String> inputParameterMap = parameterMapping.retrieveInputMapByKey(workflowName);
-		Map<String, String> outputParameterMap = parameterMapping.retrieveOutputMapByKey(workflowName);
+	private String applyParameterMapping(final String pigScriptRepresentation,
+			final WorkflowParameterMapping parameterMapping, final String workflowName) {
+		Map<String, String> inputParameterMap = parameterMapping
+				.retrieveInputMapByKey(workflowName);
+		Map<String, String> outputParameterMap = parameterMapping
+				.retrieveOutputMapByKey(workflowName);
 
 		String regex = "(\\$)(\\w+)(\\b)";
 		Pattern p = Pattern.compile(regex);
@@ -99,7 +104,8 @@ public class WorkflowReference extends Workflow {
 			} else { // outputParam
 				replacementName = outputParameterMap.get(key);
 			}
-			m.appendReplacement(sb, replacementName);
+			// TODO implement "$".append(key)
+			m.appendReplacement(sb, (replacementName != null) ? replacementName : key);
 		}
 
 		m.appendTail(sb);
