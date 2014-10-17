@@ -63,7 +63,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		return (type == checkVal);
 	};
 	
-	$scope.parametersExisting = function(param) {
+	$scope.parametersExist = function(param) {
 		if(param) {
 			if(param.length > 0) {
 				return true;

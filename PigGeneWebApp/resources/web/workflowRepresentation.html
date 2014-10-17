@@ -21,7 +21,7 @@
 			<h4 class="refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')"><a ng-click="editReferencedWf(component.name)">{{component.name}}</a></h4>
 			<i class="refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.description}}</i><br>
 			
-			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExisting(component.parameter.inputParameter)">
+			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.inputParameter)">
 				input parameter mapping:
 				<div ng-repeat="input in component.parameter.inputParameter track by $index">
 					<span class="parameterElementPrefix">${{input.name}}</span>
@@ -33,7 +33,7 @@
 				<textarea readonly elastic class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" ng-click="renderOptionBtns($event,$index,'ref')" ng-model="component.components[0].content">{{component.components[0].content}}</textarea>
 			</div>
 
-			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExisting(component.parameter.outputParameter)">
+			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.outputParameter)">
 				output parameter mapping:
 				<div ng-repeat="output in component.parameter.outputParameter track by $index">
 					<span class="parameterElementPrefix">${{output.name}}</span>
