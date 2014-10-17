@@ -216,12 +216,11 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		SharedWfService.prepForBroadcast(modWf);
 	};
 	
-	//TODO implement type function...
 	$scope.addOutput = function() {
 		var modWf = SharedWfService.workflow;
 		var outputObj = {
 				name: "",
-				type: ""
+				persistent: true
 		};
 		modWf.parameter.outputParameter.push(outputObj);
 		SharedWfService.prepForBroadcast(modWf);

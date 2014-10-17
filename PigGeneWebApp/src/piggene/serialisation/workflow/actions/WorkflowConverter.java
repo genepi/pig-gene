@@ -26,19 +26,23 @@ public class WorkflowConverter {
 		String description = data.getString("description");
 		List<Workflow> components = convertJSONComponents(data.getJSONArray("components"));
 
-		List<LinkParameter> inputParameter = convertJSONParameters("input", data.getJSONObject("parameter").getJSONArray("inputParameter"));
-		List<LinkParameter> outputParameter = convertJSONParameters("output", data.getJSONObject("parameter").getJSONArray("outputParameter"));
-		Map<String, Map<String, String>> inputParameterMapping = convertJSONMapping("input",
-				data.getJSONObject("parameterMapping").getJSONObject("inputParameterMapping"));
-		Map<String, Map<String, String>> outputParameterMapping = convertJSONMapping("output",
-				data.getJSONObject("parameterMapping").getJSONObject("outputParameterMapping"));
+		List<LinkParameter> inputParameter = convertJSONParameters("input",
+				data.getJSONObject("parameter").getJSONArray("inputParameter"));
+		List<LinkParameter> outputParameter = convertJSONParameters("output",
+				data.getJSONObject("parameter").getJSONArray("outputParameter"));
+		Map<String, Map<String, String>> inputParameterMapping = convertJSONMapping("input", data
+				.getJSONObject("parameterMapping").getJSONObject("inputParameterMapping"));
+		Map<String, Map<String, String>> outputParameterMapping = convertJSONMapping("output", data
+				.getJSONObject("parameterMapping").getJSONObject("outputParameterMapping"));
 
 		WorkflowParameter parameter = new WorkflowParameter(inputParameter, outputParameter);
-		WorkflowParameterMapping parameterMapping = new WorkflowParameterMapping(inputParameterMapping, outputParameterMapping);
+		WorkflowParameterMapping parameterMapping = new WorkflowParameterMapping(
+				inputParameterMapping, outputParameterMapping);
 		return new Workflow(name, description, components, parameter, parameterMapping);
 	}
 
-	private static List<Workflow> convertJSONComponents(final JSONArray jsonArray) throws JSONException {
+	private static List<Workflow> convertJSONComponents(final JSONArray jsonArray)
+			throws JSONException {
 		List<Workflow> components = new ArrayList<Workflow>();
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject component = jsonArray.getJSONObject(i);
@@ -51,22 +55,26 @@ public class WorkflowConverter {
 		return components;
 	}
 
-	private static List<LinkParameter> convertJSONParameters(final String type, final JSONArray jsonArray) throws JSONException {
+	private static List<LinkParameter> convertJSONParameters(final String type,
+			final JSONArray jsonArray) throws JSONException {
 		List<LinkParameter> parameters = new ArrayList<LinkParameter>();
 		String name;
+		String persistent;
 		for (int i = 0; i < jsonArray.length(); i++) {
 			name = jsonArray.getJSONObject(i).getString("name");
 			if (type.equals("input")) {
 				parameters.add(new InputLinkParameter(name));
 			} else if (type.equals("output")) {
-				parameters.add(new OutputLinkParameter(name));
+				persistent = jsonArray.getJSONObject(i).getString("persistent");
+				parameters.add(new OutputLinkParameter(name, persistent));
 			}
 		}
 		return parameters;
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Map<String, Map<String, String>> convertJSONMapping(final String type, final JSONObject jsonObject) throws JSONException {
+	private static Map<String, Map<String, String>> convertJSONMapping(final String type,
+			final JSONObject jsonObject) throws JSONException {
 		Map<String, Map<String, String>> map = new HashMap<String, Map<String, String>>();
 
 		Iterator<String> keys = jsonObject.keys();

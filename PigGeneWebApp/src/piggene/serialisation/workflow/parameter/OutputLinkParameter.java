@@ -1,7 +1,7 @@
 package piggene.serialisation.workflow.parameter;
 
 public class OutputLinkParameter extends LinkParameter {
-	private LinkType type;
+	private boolean persistent;
 
 	public OutputLinkParameter() {
 	}
@@ -10,17 +10,17 @@ public class OutputLinkParameter extends LinkParameter {
 		super.setName(name);
 	}
 
-	public OutputLinkParameter(final String name, final LinkType type) {
+	public OutputLinkParameter(final String name, final String persistent) {
 		super.setName(name);
-		this.type = type;
+		this.persistent = ((persistent.toLowerCase()).equals("true") ? true : false);
 	}
 
-	public LinkType getType() {
-		return type;
+	public boolean isPersistent() {
+		return persistent;
 	}
 
-	public void setType(final LinkType type) {
-		this.type = type;
+	public void setPersistent(final boolean persistent) {
+		this.persistent = persistent;
 	}
 
 }
