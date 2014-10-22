@@ -1,0 +1,16 @@
+!piggene.serialisation.workflow.Workflow
+name: UnmappedFilter
+components: 
+- !piggene.serialisation.workflow.WorkflowComponent
+   content: $R3 = FILTER $R2 BY not ReadUnmapped(flags) and not IsDuplicate(flags);
+description: description of the new workflow
+parameter: 
+   inputParameter: 
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: R2
+   outputParameter: 
+   - !piggene.serialisation.workflow.parameter.OutputLinkParameter
+      name: R3
+parameterMapping: 
+   inputParameterMapping: {}
+   outputParameterMapping: {}

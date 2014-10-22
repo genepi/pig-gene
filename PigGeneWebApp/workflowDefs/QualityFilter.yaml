@@ -1,0 +1,18 @@
+!piggene.serialisation.workflow.Workflow
+name: QualityFilter
+components: 
+- !piggene.serialisation.workflow.WorkflowComponent
+   content: $R2 = FILTER $R1 BY mapqual > $min_quality;
+description: this workflow performs a filtering
+parameter: 
+   inputParameter: 
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: min_quality
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: R1
+   outputParameter: 
+   - !piggene.serialisation.workflow.parameter.OutputLinkParameter
+      name: R2
+parameterMapping: 
+   inputParameterMapping: {}
+   outputParameterMapping: {}

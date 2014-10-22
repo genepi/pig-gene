@@ -72,6 +72,15 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		return false;
 	};
 	
+	$scope.onlyPersistedParamsExist = function(param) {
+		for(entry in param) {
+			if(!entry.persistent) {
+				return true;
+			}
+		}
+		return false;
+	};
+	
 	$scope.editReferencedWf = function(id) {
 		SharedWfService.persistWfDefinitionAndRedirectToReferencedWf(id);
 	};

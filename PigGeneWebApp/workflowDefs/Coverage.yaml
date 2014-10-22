@@ -1,0 +1,18 @@
+!piggene.serialisation.workflow.Workflow
+name: Coverage
+components: 
+- !piggene.serialisation.workflow.WorkflowComponent
+   content: "R4_1 = GROUP $R3 BY start/200; \nR4 = FOREACH R4_1 GENERATE group, COUNT($R3); \nSTORE R\
+      4 into $output_coverage;"
+description: description of the new workflow
+parameter: 
+   inputParameter: 
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: R3
+   outputParameter: 
+   - !piggene.serialisation.workflow.parameter.OutputLinkParameter
+      name: output_coverage
+      persistent: true
+parameterMapping: 
+   inputParameterMapping: {}
+   outputParameterMapping: {}

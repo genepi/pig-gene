@@ -1,0 +1,43 @@
+!piggene.serialisation.workflow.Workflow
+name: CombinedWorkflow
+components: 
+- !piggene.serialisation.workflow.WorkflowReference
+   name: LoadBam
+- !piggene.serialisation.workflow.WorkflowReference
+   name: QualityFilter
+- !piggene.serialisation.workflow.WorkflowReference
+   name: UnmappedFilter
+- !piggene.serialisation.workflow.WorkflowReference
+   name: Coverage
+- !piggene.serialisation.workflow.WorkflowReference
+   name: ReadMappingQuality
+description: description of the new workflow
+parameter: 
+   inputParameter: 
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: myInput
+   outputParameter: []
+parameterMapping: 
+   inputParameterMapping: 
+      LoadBam: 
+         input_bam: $myInput
+      ReadMappingQuality: 
+         R3: ThirdRel
+      QualityFilter: 
+         min_quality: 80
+         R1: FirstRel
+      UnmappedFilter: 
+         R2: SecondRel
+      Coverage: 
+         R3: ThirdRel
+   outputParameterMapping: 
+      LoadBam: 
+         R1: FirstRel
+      ReadMappingQuality: 
+         output_mapqual_dist: $output_mapqual_dist
+      QualityFilter: 
+         R2: SecondRel
+      UnmappedFilter: 
+         R3: ThirdRel
+      Coverage: 
+         output_coverage: $output_coverage

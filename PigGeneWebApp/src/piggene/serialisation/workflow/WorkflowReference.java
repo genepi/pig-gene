@@ -104,7 +104,9 @@ public class WorkflowReference extends Workflow {
 			} else { // outputParam
 				replacementName = outputParameterMap.get(key);
 			}
-			// TODO implement "$".append(key)
+			if(replacementName != null && replacementName.startsWith("$")) {
+				replacementName = "\\".concat(replacementName);
+			}
 			m.appendReplacement(sb, (replacementName != null) ? replacementName : key);
 		}
 

@@ -36,10 +36,20 @@
 			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.outputParameter)">
 				output parameter mapping:
 				<div ng-repeat="output in component.parameter.outputParameter track by $index">
+					<span class="parameterElementPrefix" >${{output.name}}</span>
+					<input class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.name]" ></input>
+				</div>
+			</div>
+
+			<!-- 
+			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.outputParameter)">
+				<span ng-if="!onlyPersistedParamsExist(component.parameter.outputParameter)">output parameter mapping:</span>
+				<div ng-repeat="output in component.parameter.outputParameter track by $index">
 					<span class="parameterElementPrefix" ng-if="!output.persistent">${{output.name}}</span>
 					<input class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.name]" ng-if="!output.persistent"></input>
 				</div>
 			</div>
+			 -->
 			
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
 				<textarea elastic class="scriptContent component" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')" ng-click="renderOptionBtns($event,$index,'std')" ng-model="component.content">{{component.content}}</textarea>
