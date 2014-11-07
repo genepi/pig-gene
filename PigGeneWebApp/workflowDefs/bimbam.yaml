@@ -1,0 +1,12 @@
+!piggene.serialisation.workflow.Workflow
+name: bimbam
+components: 
+- !piggene.serialisation.workflow.WorkflowComponent
+   content: 
+description: description of the new workflow
+parameter: 
+   inputParameter: []
+   outputParameter: []
+parameterMapping: 
+   inputParameterMapping: {}
+   outputParameterMapping: {}
