@@ -21,6 +21,14 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.existingWorkflows = {};
 	sharedWorkflow.openDef = true;
 	
+	sharedWorkflow.changeWfName = function(newName) {
+		var oldName = this.workflow.name;
+		var modWf = this.workflow;
+		modWf.name = newName;
+		this.prepForBroadcast(modWf);
+		//TODO delete call for oldName WF
+	};
+	
 	sharedWorkflow.initializeNewWorkflow = function() {
 		var emptyWorkflow = {
 				name: "newWf",
@@ -143,6 +151,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.broadcastWfChange = function() {
 		$rootScope.$broadcast("handleWfChange");
+		this.persistWfDefinition(); //autosave
 	};
 	
 	sharedWorkflow.broadcastRefWfChange = function() {
@@ -189,3 +198,27 @@ pigGeneApp.directive('elastic', ['$timeout',
 	    };
 	  }
 ]);
+
+pigGeneApp.directive('easedInput', function($timeout, SharedWfService) {
+    return {
+        restrict: 'E',
+        template: '<div><input id="workflowName" class="my-eased-input" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/></div>',
+        scope: {
+            value: '=',
+            timeout: '@',
+            placeholder: '@'
+        },
+        transclude: true,
+        link: function ($scope) {
+            $scope.timeout = parseInt($scope.timeout);
+            $scope.update = function() {
+                if ($scope.pendingPromise) { 
+                	$timeout.cancel($scope.pendingPromise); 
+                }
+            	$scope.pendingPromise = $timeout(function () { 
+            		SharedWfService.changeWfName($scope.workflowName);
+                }, $scope.timeout);
+            };
+        }
+    }
+});

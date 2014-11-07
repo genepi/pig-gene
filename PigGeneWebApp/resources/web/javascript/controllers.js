@@ -10,9 +10,6 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 						SharedWfService.openDef = true;
 						SharedWfService.loadExistingWorkflowNames(true);
 						break;
-			case "saveWfBtn": 
-						SharedWfService.persistWfDefinition();
-						break;
 			case "deleteWfBtn": 	
 						SharedWfService.deleteWfDefinition();
 						break;
@@ -40,6 +37,8 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		SharedWfService.loadWfDefinition($routeParams.id);
 	}
 	
+	$scope.workflowName = SharedWfService.workflow.name;
+	
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;
 	});
@@ -47,7 +46,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 	$scope.addNewComponent = function() {
 		var newComp = {
 			workflowType: "WORKFLOW_COMPONENT",
-			content: "please type your desired pig-operations"
+			content: ""
 		};
 		var modWf = $scope.workflow;
 		modWf.components.push(newComp);
@@ -83,37 +82,6 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 	
 	$scope.editReferencedWf = function(id) {
 		SharedWfService.persistWfDefinitionAndRedirectToReferencedWf(id);
-	};
-	
-	$scope.renderChangeHeadlineBtns = function(event) {
-		var targetElement = event.currentTarget.parentElement;
-		var options = "options"
-			
-		if(!$(targetElement).hasClass(options)) {
-			var buttonGroup = $("<div class='btn-group textOptionBtns'></div>");
-			var acceptBtn = $compile("<button type='button' class='btn btn-sm btn-success' ng-click='saveHeadlineModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
-			var cancelBtn = $compile("<button type='button' class='btn btn-sm btn-warning' ng-click='cancelHeadlineModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
-			$(buttonGroup).append(acceptBtn);
-			$(buttonGroup).append(cancelBtn);
-		}
-		$(targetElement).append(buttonGroup);
-		$(targetElement).addClass(options);
-	};
-	
-	$scope.saveHeadlineModification = function(event) {
-		var modWf = $scope.workflow;
-		modWf.name = $(event.currentTarget.parentElement.parentElement.children[0]).text();
-		modWf.description = $(event.currentTarget.parentElement.parentElement.children[1]).text();
-		SharedWfService.prepForBroadcast(modWf);
-		$scope.removeOptionBtns(event.currentTarget.parentElement, "textSave");
-	};
-	
-	$scope.cancelHeadlineModification = function(event) {
-		var modWf = $scope.workflow;
-		$(event.currentTarget.parentElement.parentElement.children[0]).text(modWf.name);
-		$(event.currentTarget.parentElement.parentElement.children[1]).text(modWf.description);
-		SharedWfService.prepForBroadcast(modWf);
-		$scope.removeOptionBtns(event.currentTarget.parentElement, "textCancel");
 	};
 	
 	$scope.renderOptionBtns = function(event, index, mode) {
@@ -173,7 +141,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 	
 	$scope.moveComponentDown = function(event) {
 		var index = parseInt(event.currentTarget.name);
-		if(index < $scope.workflow.components.length-2) {
+		if(index < $scope.workflow.components.length-1) {
 			var modWf = $scope.workflow;
 			var followingElement = modWf.components[index+1];
 			modWf.components[index+1] = modWf.components[index];

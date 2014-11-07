@@ -1,8 +1,9 @@
 <div class="workflowContainer well">
 
 	<div class="headlineContainer">
-		<div contenteditable id="workflowName" ng-click="renderChangeHeadlineBtns($event)">{{workflow.name}}</div>
-		<div contenteditable id="workflowDescription" ng-click="renderChangeHeadlineBtns($event)">{{workflow.description}}</div>
+		<eased-input value="myValue" timeout="2000" placeholder="todo: inject workflow name here" />
+		
+		<div contenteditable id="workflowDescription" >{{workflow.description}}</div>
 	</div>
 	
 	<div class="paramContainer" ng-if="isVisible()">
@@ -41,18 +42,8 @@
 				</div>
 			</div>
 
-			<!-- 
-			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.outputParameter)">
-				<span ng-if="!onlyPersistedParamsExist(component.parameter.outputParameter)">output parameter mapping:</span>
-				<div ng-repeat="output in component.parameter.outputParameter track by $index">
-					<span class="parameterElementPrefix" ng-if="!output.persistent">${{output.name}}</span>
-					<input class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.name]" ng-if="!output.persistent"></input>
-				</div>
-			</div>
-			 -->
-			
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
-				<textarea elastic class="scriptContent component" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')" ng-click="renderOptionBtns($event,$index,'std')" ng-model="component.content">{{component.content}}</textarea>
+				<textarea elastic class="scriptContent component" placeholder="please type your desired pig-operations" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')" ng-click="renderOptionBtns($event,$index,'std')" ng-model="component.content">{{component.content}}</textarea>
 			</div>
 		</div>
 		
