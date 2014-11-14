@@ -38,26 +38,35 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 	}
 	
 	$scope.workflowName = "";
+	$scope.workflowDescription = "";
 	
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;
+		
 		$scope.workflowName = SharedWfService.workflow.name;
 		$('#workflowName').val($scope.workflowName);
+		
+		$scope.workflowDescription = SharedWfService.workflow.description;
+		$('#workflowDescription').val($scope.workflowDescription);
 	});
 
 	$scope.addNewComponent = function() {
-		var newComp = {
-			workflowType: "WORKFLOW_COMPONENT",
-			content: ""
-		};
-		var modWf = $scope.workflow;
-		modWf.components.push(newComp);
-		SharedWfService.prepForBroadcast(modWf);
-		SharedWfService.showParameterElements();
+		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
+			var newComp = {
+					workflowType: "WORKFLOW_COMPONENT",
+					content: ""
+			};
+			var modWf = $scope.workflow;
+			modWf.components.push(newComp);
+			SharedWfService.prepForBroadcast(modWf);
+			SharedWfService.showParameterElements();
+		}
 	};
 	
 	$scope.addExistingComponent = function() {
-		SharedWfService.loadExistingWorkflowNames(false);
+		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
+			SharedWfService.loadExistingWorkflowNames(false);
+		}
 	};
 	
 	$scope.checkType = function(type, checkVal) {
@@ -265,6 +274,14 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		
 		SharedWfService.prepForBroadcast(modWf);
 		$('#myModal').modal('toggle');
+	});
+	
+}]);
+
+pigGeneApp.controller("MissingInputCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	
+	$scope.$on("missingWfNameDefinition", function() {
+		$('#missingInputModal').modal('toggle');
 	});
 	
 }]);

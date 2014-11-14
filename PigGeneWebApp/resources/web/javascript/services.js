@@ -21,20 +21,10 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.existingWorkflows = {};
 	sharedWorkflow.openDef = true;
 	
-	sharedWorkflow.changeWfName = function(newName) {
-		var oldName = this.workflow.name;
-		var modWf = this.workflow;
-		modWf.name = newName;
-		this.prepForBroadcast(modWf);
-		
-		//delete call for oldName WF
-		this.deleteWfDefinition(oldName);
-	};
-	
 	sharedWorkflow.initializeNewWorkflow = function() {
 		var emptyWorkflow = {
 				name: "newWf",
-				description: "description of the new workflow",
+				description: "workflow description",
 				workflowType: "WORKFLOW",
 				components: [],
 				parameter: {
@@ -49,6 +39,23 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		sharedWorkflow.workflow = emptyWorkflow;
 		sharedWorkflow.broadcastWfChange();
 		$location.path('/wf/' + "newWf").replace();
+	};
+	
+	sharedWorkflow.changeWfMetaInfo = function(newWfName, newWfDescription) {
+		var modWf = this.workflow;
+		if(newWfName !== undefined) {
+			modWf.name = newWfName;
+		}
+		if(newWfDescription !== undefined) {
+			modWf.description = newWfDescription;
+		}
+		this.prepForBroadcast(modWf);
+		
+		var oldWfName = this.workflow.name;
+		if(!oldWfName && oldWfName != newWfName) {
+			//delete call for oldName WF
+			this.deleteWfDefinition(oldName);
+		}
 	};
 	
 	sharedWorkflow.loadWfDefinition = function(id) {
@@ -196,6 +203,14 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		$rootScope.$broadcast("hideParameterElements");
 	};
 	
+	sharedWorkflow.checkWorkflowNameDefinitionExists = function() {
+		if(this.workflow.name === "newWf") {
+			$rootScope.$broadcast("missingWfNameDefinition");
+			return false;
+		}
+		return true;
+	};
+	
 	return sharedWorkflow;
 }]);
 
@@ -225,10 +240,10 @@ pigGeneApp.directive('elastic', ['$timeout',
 	  }
 ]);
 
-pigGeneApp.directive('easedInput', function($timeout, SharedWfService) {
+pigGeneApp.directive('wfmetaInput', function($timeout, SharedWfService) {
     return {
         restrict: 'E',
-        template: '<div><input id="workflowName" class="easedInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/></div>',
+        template: '<div><input id="workflowName" class="wfmetaInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/><br><input id="workflowDescription" class="wfmetaInput" type="text" ng-model="workflowDescription" ng-change="update()" placeholder="workflow description"/></div>',
         scope: {
             value: '=',
             timeout: '@',
@@ -242,7 +257,7 @@ pigGeneApp.directive('easedInput', function($timeout, SharedWfService) {
                 	$timeout.cancel($scope.pendingPromise); 
                 }
             	$scope.pendingPromise = $timeout(function () { 
-            		SharedWfService.changeWfName($scope.workflowName);
+            		SharedWfService.changeWfMetaInfo($scope.workflowName, $scope.workflowDescription);
                 }, $scope.timeout);
             };
         }
