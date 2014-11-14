@@ -1,5 +1,7 @@
 package piggene.resources;
 
+import java.io.FileNotFoundException;
+
 import net.sf.json.JSONObject;
 
 import org.restlet.data.MediaType;
@@ -17,12 +19,17 @@ public class WorkflowDeletionService extends ServerResource {
 		ServerResponseObject obj = new ServerResponseObject();
 
 		String workflowName = getRequest().getAttributes().get("id").toString();
-		if(WorkflowSerialisation.remove(workflowName)) {
+		try {
+			if(WorkflowSerialisation.remove(workflowName)) {
+				obj.setSuccess(true);
+				obj.setMessage("success");
+			} else {
+				obj.setSuccess(false);
+				obj.setMessage("An error occured while deleting the workflow data.");
+			}
+		} catch (FileNotFoundException e) {
 			obj.setSuccess(true);
-			obj.setMessage("success");
-		} else {
-			obj.setSuccess(false);
-			obj.setMessage("An error occured while deleting the workflow data.");
+			obj.setMessage(e.getMessage());
 		}
 
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);

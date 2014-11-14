@@ -1,6 +1,7 @@
 package piggene.serialisation.workflow.actions;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -98,8 +99,11 @@ public class WorkflowSerialisation {
 		return sb.toString();
 	}
 
-	public static boolean remove(final String name) {
+	public static boolean remove(final String name) throws FileNotFoundException {
 		File file = new File(workflowDefsPath.concat(name).concat(fileExtension));
+		if(!file.exists()) {
+			throw new FileNotFoundException("file does not exist");
+		}
 		return file.delete();
 	}
 
