@@ -11,7 +11,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 						SharedWfService.loadExistingWorkflowNames(true);
 						break;
 			case "deleteWfBtn": 	
-						SharedWfService.deleteWfDefinition();
+						SharedWfService.deleteCurrentWfDefinition();
 						break;
 			case "downloadScriptBtn": 
 						SharedWfService.downloadScript();
@@ -37,10 +37,12 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 		SharedWfService.loadWfDefinition($routeParams.id);
 	}
 	
-	$scope.workflowName = SharedWfService.workflow.name;
+	$scope.workflowName = "";
 	
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;
+		$scope.workflowName = SharedWfService.workflow.name;
+		$('#workflowName').val($scope.workflowName);
 	});
 
 	$scope.addNewComponent = function() {

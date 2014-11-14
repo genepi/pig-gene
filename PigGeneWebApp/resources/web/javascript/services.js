@@ -26,7 +26,9 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		var modWf = this.workflow;
 		modWf.name = newName;
 		this.prepForBroadcast(modWf);
-		//TODO delete call for oldName WF
+		
+		//delete call for oldName WF
+		this.deleteWfDefinition(oldName);
 	};
 	
 	sharedWorkflow.initializeNewWorkflow = function() {
@@ -60,6 +62,30 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 			sharedWorkflow.workflow = response.data;
 			sharedWorkflow.showParameterElements();
 			sharedWorkflow.broadcastWfChange();
+		});
+	};
+	
+	sharedWorkflow.deleteWfDefinition = function(id) {
+		WfPersistency.Delete.remove({"id":id}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			$location.path("").replace();
+		});
+	};
+	
+	sharedWorkflow.deleteCurrentWfDefinition = function() {
+		WfPersistency.Delete.remove({"id":this.workflow.name}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
+			$location.path("").replace();
 		});
 	};
 	
@@ -202,7 +228,7 @@ pigGeneApp.directive('elastic', ['$timeout',
 pigGeneApp.directive('easedInput', function($timeout, SharedWfService) {
     return {
         restrict: 'E',
-        template: '<div><input id="workflowName" class="my-eased-input" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/></div>',
+        template: '<div><input id="workflowName" class="easedInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/></div>',
         scope: {
             value: '=',
             timeout: '@',
