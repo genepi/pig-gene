@@ -42,6 +42,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.changeWfMetaInfo = function(newWfName, newWfDescription) {
+		var oldWfName = this.workflow.name;
 		var modWf = this.workflow;
 		if(newWfName !== undefined) {
 			modWf.name = newWfName;
@@ -51,10 +52,9 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		}
 		this.prepForBroadcast(modWf);
 		
-		var oldWfName = this.workflow.name;
-		if(!oldWfName && oldWfName != newWfName) {
+		if(oldWfName != undefined && oldWfName != newWfName) {
 			//delete call for oldName WF
-			this.deleteWfDefinition(oldName);
+			this.deleteWfDefinition(oldWfName);
 		}
 	};
 	
