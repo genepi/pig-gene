@@ -19,7 +19,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 			case "runJobBtn": 		
 						//TODO: implement functionality
 						break;
-			default: break;
+			default: break;	
 		}
 	};
 	
@@ -29,7 +29,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	
 }]);
 
-function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, SharedWfService) {
+function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeout, SharedWfService) {
 	$scope.visible = false;
 	
 	$scope.workflow = SharedWfService.workflow;
@@ -89,6 +89,16 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, Shared
 			}
 		}
 		return false;
+	};
+	
+	$scope.updateWfDefinition = function() {
+		$scope.timeout = 2000
+		if ($scope.pendingPromise) { 
+        	$timeout.cancel($scope.pendingPromise); 
+        }
+    	$scope.pendingPromise = $timeout(function () { 
+    		SharedWfService.changeWfMetaInfo($scope.workflowName, $scope.workflowDescription);
+        }, $scope.timeout);
 	};
 	
 	$scope.editReferencedWf = function(id) {
