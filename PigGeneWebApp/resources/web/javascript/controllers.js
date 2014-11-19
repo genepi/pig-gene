@@ -82,15 +82,6 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 		return false;
 	};
 	
-	$scope.onlyPersistedParamsExist = function(param) {
-		for(entry in param) {
-			if(!entry.persistent) {
-				return true;
-			}
-		}
-		return false;
-	};
-	
 	$scope.updateWfDefinition = function() {
 		$scope.timeout = 2000
 		if ($scope.pendingPromise) { 
@@ -218,7 +209,6 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 		var modWf = SharedWfService.workflow;
 		var outputObj = {
 				name: "",
-				persistent: true
 		};
 		modWf.parameter.outputParameter.push(outputObj);
 		SharedWfService.prepForBroadcast(modWf);
