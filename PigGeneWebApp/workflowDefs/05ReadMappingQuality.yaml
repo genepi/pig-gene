@@ -1,0 +1,17 @@
+!piggene.serialisation.workflow.Workflow
+name: 05ReadMappingQuality
+components: 
+- !piggene.serialisation.workflow.WorkflowComponent
+   content: "R5_1 = FOREACH $R3 GENERATE mapqual; \nR5_2 = GROUP R5_1 BY mapqual; \nR5_3 = FOREACH R5\
+      _2 GENERATE group, COUNT($1); \nR5 = ORDER R5_3 BY group; \nSTORE R5 into $output_mapqual_dist;"
+description: read mapping quality
+parameter: 
+   inputParameter: 
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: R3
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: output_mapqual_dist
+   outputParameter: []
+parameterMapping: 
+   inputParameterMapping: {}
+   outputParameterMapping: {}

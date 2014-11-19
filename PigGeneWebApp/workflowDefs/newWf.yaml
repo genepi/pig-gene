@@ -1,9 +1,7 @@
 !piggene.serialisation.workflow.Workflow
-name: bimbam
-components: 
-- !piggene.serialisation.workflow.WorkflowComponent
-   content: 
-description: description of the new workflow
+name: newWf
+components: []
+description: workflow description
 parameter: 
    inputParameter: []
    outputParameter: []

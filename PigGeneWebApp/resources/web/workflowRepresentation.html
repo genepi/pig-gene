@@ -11,6 +11,7 @@
 			input elements:<br>
 			<div ng-repeat="input in workflow.parameter.inputParameter track by $index">
 				<span class="parameterElementPrefix">$</span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].name" ng-change="updateWfDefinition()"></input>
+				<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($index)"></a>
 			</div>
 			<button class="btn btn-xs btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
 		</div>
@@ -52,6 +53,7 @@
 				output elements:<br>
 				<div ng-repeat="output in workflow.parameter.outputParameter track by $index">
 					<span class="parameterElementPrefix">$</span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].name" ng-change="updateWfDefinition()"></input>
+					<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($index)"></a>
 				</div>
 				<button class="btn btn-xs btn-default" ng-click="addOutput()"><span class="glyphicon glyphicon-plus"></span> add output</button>
 			</div>

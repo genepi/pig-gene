@@ -2,42 +2,46 @@
 name: CombinedWorkflow
 components: 
 - !piggene.serialisation.workflow.WorkflowReference
-   name: LoadBam
+   name: 01LoadBam
 - !piggene.serialisation.workflow.WorkflowReference
-   name: QualityFilter
+   name: 02QualityFilter
 - !piggene.serialisation.workflow.WorkflowReference
-   name: UnmappedFilter
+   name: 03UnmappedFilter
 - !piggene.serialisation.workflow.WorkflowReference
-   name: Coverage
+   name: 04Coverage
 - !piggene.serialisation.workflow.WorkflowReference
-   name: ReadMappingQuality
-description: description of the new workflow
+   name: 05ReadMappingQuality
+description: combined wf description hallossse
 parameter: 
    inputParameter: 
    - !piggene.serialisation.workflow.parameter.InputLinkParameter
-      name: myInput
-   outputParameter: []
+      name: inputPath
+   outputParameter: 
+   - !piggene.serialisation.workflow.parameter.OutputLinkParameter
+      name: blub
+   - !piggene.serialisation.workflow.parameter.OutputLinkParameter
+      name: outputPath
 parameterMapping: 
    inputParameterMapping: 
-      LoadBam: 
-         input_bam: $myInput
-      ReadMappingQuality: 
-         R3: ThirdRel
-      QualityFilter: 
-         min_quality: 80
-         R1: FirstRel
-      UnmappedFilter: 
-         R2: SecondRel
-      Coverage: 
-         R3: ThirdRel
+      01LoadBam: 
+         input_bam: inputPath
+      02QualityFilter: 
+         min_quality: 70
+         R1: R01
+      04Coverage: 
+         R3: R03
+         output_coverage: output_folder1
+      03UnmappedFilter: 
+         R2: R02
+      05ReadMappingQuality: 
+         R3: R03
+         output_mapqual_dist: $outputPath
    outputParameterMapping: 
-      LoadBam: 
-         R1: FirstRel
-      ReadMappingQuality: 
-         output_mapqual_dist: $output_mapqual_dist
-      QualityFilter: 
-         R2: SecondRel
-      UnmappedFilter: 
-         R3: ThirdRel
-      Coverage: 
-         output_coverage: $output_coverage
+      01LoadBam: 
+         R1: R01
+      02QualityFilter: 
+         R2: R02
+      04Coverage: {}
+      03UnmappedFilter: 
+         R3: R03
+      05ReadMappingQuality: {}

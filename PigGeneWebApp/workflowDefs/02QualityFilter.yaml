@@ -1,18 +1,18 @@
 !piggene.serialisation.workflow.Workflow
-name: Coverage
+name: 02QualityFilter
 components: 
 - !piggene.serialisation.workflow.WorkflowComponent
-   content: "R4_1 = GROUP $R3 BY start/200; \nR4 = FOREACH R4_1 GENERATE group, COUNT($R3); \nSTORE R\
-      4 into $output_coverage;"
-description: description of the new workflow
+   content: $R2 = FILTER $R1 BY mapqual > $min_quality;
+description: quality filter
 parameter: 
    inputParameter: 
    - !piggene.serialisation.workflow.parameter.InputLinkParameter
-      name: R3
+      name: R1
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: min_quality
    outputParameter: 
    - !piggene.serialisation.workflow.parameter.OutputLinkParameter
-      name: output_coverage
-      persistent: true
+      name: R2
 parameterMapping: 
    inputParameterMapping: {}
    outputParameterMapping: {}

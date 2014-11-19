@@ -205,6 +205,12 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 		SharedWfService.prepForBroadcast(modWf);
 	};
 	
+	$scope.removeInput = function(index) {
+		var modWf = SharedWfService.workflow;
+		modWf.parameter.inputParameter.splice(index,1);
+		SharedWfService.prepForBroadcast(modWf);
+	}
+	
 	$scope.addOutput = function() {
 		var modWf = SharedWfService.workflow;
 		var outputObj = {
@@ -213,6 +219,12 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 		modWf.parameter.outputParameter.push(outputObj);
 		SharedWfService.prepForBroadcast(modWf);
 	};
+	
+	$scope.removeOutput = function(index) {
+		var modWf = SharedWfService.workflow;
+		modWf.parameter.outputParameter.splice(index,1);
+		SharedWfService.prepForBroadcast(modWf);
+	}
 	
 	$scope.$on("showParameterElements", function() {
 		$scope.visible = true;

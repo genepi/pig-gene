@@ -1,18 +1,16 @@
 !piggene.serialisation.workflow.Workflow
-name: ReadMappingQuality
+name: 01LoadBam
 components: 
 - !piggene.serialisation.workflow.WorkflowComponent
-   content: "R5_1 = FOREACH $R3 GENERATE mapqual; \nR5_2 = GROUP R5_1 BY mapqual; \nR5_3 = FOREACH R5\
-      _2 GENERATE group, COUNT($1); \nR5 = ORDER R5_3 BY group; \nSTORE R5 into $output_mapqual_dist;"
-description: description of the new workflow
+   content: '$R1 = load $input_bam using BamLoader(''yes''); '
+description: load bam
 parameter: 
    inputParameter: 
    - !piggene.serialisation.workflow.parameter.InputLinkParameter
-      name: R3
+      name: input_bam
    outputParameter: 
    - !piggene.serialisation.workflow.parameter.OutputLinkParameter
-      name: output_mapqual_dist
-      persistent: true
+      name: R1
 parameterMapping: 
    inputParameterMapping: {}
    outputParameterMapping: {}

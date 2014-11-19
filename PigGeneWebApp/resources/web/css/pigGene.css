@@ -139,3 +139,16 @@ h4 {
 .refIndentation {
 	margin-left: 20px;
 } 
+
+.pigGeneGlyphicon {
+	color: grey;
+}
+
+.pigGeneGlyphicon:hover {
+	color: black;
+	text-decoration: none;
+}
+
+.pigGeneGlyphicon:active {
+	color: grey;
+}
