@@ -26,7 +26,7 @@
 				input parameter mapping:
 				<div ng-repeat="input in component.parameter.inputParameter track by $index">
 					<span class="parameterElementPrefix">${{input.name}}</span>
-					<input class="parameterElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.name][input.name]"></input>
+					<input class="parameterElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.name][input.name]" ng-change="updateWfDefinition()"></input>
 				</div>
 			</div>
 			 
@@ -38,7 +38,7 @@
 				output parameter mapping:
 				<div ng-repeat="output in component.parameter.outputParameter track by $index">
 					<span class="parameterElementPrefix" >${{output.name}}</span>
-					<input class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.name]" ></input>
+					<input class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.name]" ng-change="updateWfDefinition()"></input>
 				</div>
 			</div>
 
