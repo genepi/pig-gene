@@ -8,20 +8,23 @@ import java.util.List;
 import java.util.Properties;
 
 import piggene.serialisation.workflow.Workflow;
+import piggene.serialisation.workflow.parameter.InputLinkParameter;
+import piggene.serialisation.workflow.parameter.LinkParameter;
+import piggene.serialisation.workflow.parameter.WorkflowParameter;
 
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
 public class CloudgeneYamlGenerator {
 	private static Properties prop = new Properties();
-	private static String pigFiles = "apps/piggene/";
+	private static String cloudgeneYamls = "";
 	private static StringBuilder parameters;
-	private static List<Parameter> inputs;
-	private static List<Parameter> outputs;
+	private static List<WdlParameter> inputs;
+	private static List<WdlParameter> outputs;
 
 	static {
 		try {
 			prop.load(CloudgeneYamlGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
-			pigFiles = prop.getProperty("pigFiles");
+			cloudgeneYamls = prop.getProperty("cloudgeneYamls");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,83 +33,69 @@ public class CloudgeneYamlGenerator {
 
 	public static void generateAndStoreFile(final Workflow workflow) throws IOException {
 		parameters = new StringBuilder();
-		inputs = new ArrayList<Parameter>();
-		outputs = new ArrayList<Parameter>();
-		App app = new App();
+		inputs = new ArrayList<WdlParameter>();
+		outputs = new ArrayList<WdlParameter>();
 
-		retrieveInAndOutputParameters(workflow);
+		retrieveAndSetParameters(workflow.getParameter());
 
-		final Step step = new Step();
+		final WdlStep step = new WdlStep();
 		step.setName("PigScript");
 		step.setPig(workflow.getName().concat(".pig"));
 		step.setParams(parameters.toString().trim());
 
-		final List<Step> steps = new ArrayList<Step>();
+		final List<WdlStep> steps = new ArrayList<WdlStep>();
 		steps.add(step);
 
-		final MapReduceConfig mapred = new MapReduceConfig();
+		final WdlMapReduce mapred = new WdlMapReduce();
 		mapred.setSteps(steps);
 		mapred.setInputs(inputs);
 		mapred.setOutputs(outputs);
 
+		WdlApp app = new WdlApp();
 		app.setName(workflow.getName());
 		app.setDescription(workflow.getDescription());
-		app.setVersion("0.1.0");
+		app.setVersion("0.2.0");
 		app.setCategory("Piggene");
 		app.setMapred(mapred);
 
-		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(pigFiles.concat(workflow.getName().concat(".yaml")))));
-		writer.getConfig().setClassTag("cloudgene.mapred.apps.App", App.class);
-		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "steps", Step.class);
-		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "inputs", InputParameter.class);
-		writer.getConfig().setPropertyElementType(MapReduceConfig.class, "outputs", OutputParameter.class);
+		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(cloudgeneYamls.concat(workflow.getName().concat(".yaml")))));
+		writer.getConfig().setClassTag("cloudgene.mapred.apps.App", WdlApp.class);
+		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "steps", WdlStep.class);
+		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "inputs", WdlParameterInput.class);
+		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "outputs", WdlParameterOutput.class);
 		writer.write(app);
 		writer.close();
 	}
 
-	private static void retrieveInAndOutputParameters(final Workflow workflow) {
-		// List<String> inputParams = workflow.getInputParameters();
-		// List<String> outputParams = workflow.getOutputParameters();
-		//
-		// int inIdx = 0;
-		// int outIdx = 0;
-		// for (Workflow step : workflow.getSteps()) {
-		//
-		// // TODO mapping: inputs fuer subworkflow
-		//
-		// if (step.getWorkflowType().equals(WorkflowType.WORKFLOW_SINGLE_ELEM))
-		// {
-		// if (step.getClass().equals(LoadOperation.class)) {
-		// String inputParamName = ((LoadOperation) step).getInput();
-		// parameters = appendParameter(parameters, inputParamName,
-		// inputParams.get(inIdx++));
-		// inputs.add(createInputParameter(inputParamName));
-		// } else if (step.getClass().equals(StoreOperation.class)) {
-		// String outputParamName = ((StoreOperation) step).getRelation();
-		// parameters = appendParameter(parameters, outputParamName,
-		// outputParams.get(outIdx++));
-		// outputs.add(createOutputParameter(outputParamName));
-		// }
-		// }
-		// }
+	private static void retrieveAndSetParameters(final WorkflowParameter workflowParameter) {
+		List<LinkParameter> inputParameters = workflowParameter.getInputParameter();
+		List<LinkParameter> outputParameters = workflowParameter.getOutputParameter();
+		for(LinkParameter in : inputParameters) {
+			appendParameter(parameters, in.getName());
+			inputs.add(createInputParameter(in.getName()));
+		}
+		for(LinkParameter out : outputParameters) {
+			appendParameter(parameters, out.getName());
+			outputs.add(createOutputParameter(out.getName()));
+		}
 	}
 
-	private static StringBuilder appendParameter(final StringBuilder parameters, final String parameterValue, final String parameterName) {
-		return parameters.append("-param ").append(parameterName).append("=$").append(parameterValue).append(" ");
+	private static StringBuilder appendParameter(final StringBuilder parameters, final String parameterName) {
+		return parameters.append("-param ").append(parameterName).append("=$").append(parameterName).append(" ");
 	}
 
-	private static Parameter createInputParameter(final String parameterName) {
-		final InputParameter param = new InputParameter();
+	private static WdlParameter createInputParameter(final String parameterName) {
+		final WdlParameterInput param = new WdlParameterInput();
 		param.setId(parameterName);
-		param.setDescription(parameterName);
+		param.setDescription("input paramter");
 		param.setType("hdfs-file");
 		return param;
 	}
 
-	private static Parameter createOutputParameter(final String parameterName) {
-		final OutputParameter param = new OutputParameter();
+	private static WdlParameter createOutputParameter(final String parameterName) {
+		final WdlParameterOutput param = new WdlParameterOutput();
 		param.setId(parameterName);
-		param.setDescription(parameterName);
+		param.setDescription("output parameter");
 		param.setType("hdfs-folder");
 		param.setDownload(true);
 		param.setTemp(false);

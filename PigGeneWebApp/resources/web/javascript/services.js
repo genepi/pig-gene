@@ -52,7 +52,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		}
 		this.prepForBroadcast(modWf);
 		
-		if(oldWfName != undefined && oldWfName != newWfName) {
+		if(oldWfName != undefined && newWfName != undefined && oldWfName != newWfName) {
 			//delete call for oldName WF
 			this.deleteWfDefinition(oldWfName);
 		}

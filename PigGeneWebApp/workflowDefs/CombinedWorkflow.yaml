@@ -11,16 +11,16 @@ components:
    name: 04Coverage
 - !piggene.serialisation.workflow.WorkflowReference
    name: 05ReadMappingQuality
-description: combined wf description hallossse
+description: combined wf description
 parameter: 
    inputParameter: 
    - !piggene.serialisation.workflow.parameter.InputLinkParameter
       name: inputPath
    outputParameter: 
    - !piggene.serialisation.workflow.parameter.OutputLinkParameter
-      name: blub
+      name: outputPath1
    - !piggene.serialisation.workflow.parameter.OutputLinkParameter
-      name: outputPath
+      name: outputPath2
 parameterMapping: 
    inputParameterMapping: 
       01LoadBam: 

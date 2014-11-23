@@ -9,12 +9,12 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
+import piggene.resources.ScriptDownloadService;
 import piggene.resources.WorkflowDeletionService;
 import piggene.resources.WorkflowLoaderService;
 import piggene.resources.WorkflowOverviewLoaderService;
 import piggene.resources.WorkflowReferenceLoaderService;
 import piggene.resources.WorkflowStorageService;
-import piggene.serialisation.pig.ScriptDownloadService;
 
 /**
  * WebApp class.
