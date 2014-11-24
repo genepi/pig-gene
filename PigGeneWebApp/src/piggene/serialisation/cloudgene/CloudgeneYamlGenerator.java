@@ -59,7 +59,7 @@ public class CloudgeneYamlGenerator {
 		app.setMapred(mapred);
 
 		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(cloudgeneYamls.concat(workflow.getName().concat(".yaml")))));
-		writer.getConfig().setClassTag("cloudgene.mapred.apps.App", WdlApp.class);
+		writer.getConfig().setClassTag("cloudgene.mapred.apps.WdlApp", WdlApp.class);
 		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "steps", WdlStep.class);
 		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "inputs", WdlParameterInput.class);
 		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "outputs", WdlParameterOutput.class);
