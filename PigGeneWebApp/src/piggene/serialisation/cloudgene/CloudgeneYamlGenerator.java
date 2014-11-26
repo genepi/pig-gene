@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Properties;
 
 import piggene.serialisation.workflow.Workflow;
-import piggene.serialisation.workflow.parameter.InputLinkParameter;
 import piggene.serialisation.workflow.parameter.LinkParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
 
@@ -58,7 +57,7 @@ public class CloudgeneYamlGenerator {
 		app.setCategory("Piggene");
 		app.setMapred(mapred);
 
-		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(cloudgeneYamls.concat(workflow.getName().concat(".yaml")))));
+		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(cloudgeneYamls.concat(workflow.getName()).concat("/").concat("cloudgene.yaml"))));
 		writer.getConfig().setClassTag("cloudgene.mapred.apps.WdlApp", WdlApp.class);
 		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "steps", WdlStep.class);
 		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "inputs", WdlParameterInput.class);
@@ -100,7 +99,8 @@ public class CloudgeneYamlGenerator {
 		param.setDownload(true);
 		param.setTemp(false);
 		param.setZip(false);
-		param.setMergeOutput(false);
+		param.setRemoveHeader(false);
+		param.setMergeOutput(true);
 		return param;
 	}
 

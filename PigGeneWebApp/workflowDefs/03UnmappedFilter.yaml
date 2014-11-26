@@ -8,12 +8,6 @@ parameter:
    inputParameter: 
    - !piggene.serialisation.workflow.parameter.InputLinkParameter
       name: R2
-   - !piggene.serialisation.workflow.parameter.InputLinkParameter
-      name: 
-   - !piggene.serialisation.workflow.parameter.InputLinkParameter
-      name: 
-   - !piggene.serialisation.workflow.parameter.InputLinkParameter
-      name: 
    outputParameter: 
    - !piggene.serialisation.workflow.parameter.OutputLinkParameter
       name: R3

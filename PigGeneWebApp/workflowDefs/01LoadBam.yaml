@@ -2,7 +2,7 @@
 name: 01LoadBam
 components: 
 - !piggene.serialisation.workflow.WorkflowComponent
-   content: '$R1 = load $input_bam using BamLoader(''yes''); '
+   content: '$R1 = load $input_bam using fi.aalto.seqpig.io.BamLoader(''yes''); '
 description: load bam
 parameter: 
    inputParameter: 

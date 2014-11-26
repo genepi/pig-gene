@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import piggene.serialisation.workflow.actions.WorkflowSerialisation;
+import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 public class WorkflowReference extends Workflow {
@@ -62,7 +63,7 @@ public class WorkflowReference extends Workflow {
 			Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName);
 			String pigScriptRepresentation = applyParameterMapping(
 					wf.getPigScriptRepresentation(workflowName),
-					surroundingWorkflow.getParameterMapping(), workflowName);
+					surroundingWorkflow.getParameterMapping(), surroundingWorkflow.getParameter(), workflowName);
 			sb.append(adjustIndentation(pigScriptRepresentation));
 			sb.append(lineSeparator);
 		}
@@ -85,7 +86,7 @@ public class WorkflowReference extends Workflow {
 	}
 
 	private String applyParameterMapping(final String pigScriptRepresentation,
-			final WorkflowParameterMapping parameterMapping, final String workflowName) {
+			final WorkflowParameterMapping parameterMapping, WorkflowParameter wfParameter, final String workflowName) {
 		Map<String, String> inputParameterMap = parameterMapping
 				.retrieveInputMapByKey(workflowName);
 		Map<String, String> outputParameterMap = parameterMapping
@@ -98,14 +99,22 @@ public class WorkflowReference extends Workflow {
 
 		while (m.find()) {
 			String key = m.group(2);
-			String replacementName;
+			String replacementName = null;
 			if (inputParameterMap.containsKey(key)) { // inputParam
 				replacementName = inputParameterMap.get(key);
-			} else { // outputParam
+				if(replacementName != null && !wfParameter.isContainedWithinOuterWfParams(replacementName)) {
+					replacementName = replacementName.substring(1);
+				}
+			} else if(outputParameterMap.containsKey(key)) { // outputParam
 				replacementName = outputParameterMap.get(key);
+				if(replacementName != null && !wfParameter.isContainedWithinOuterWfParams(replacementName)) {
+					replacementName = replacementName.substring(1);
+				}
 			}
 			if(replacementName != null && replacementName.startsWith("$")) {
-				replacementName = "\\".concat(replacementName);
+				replacementName = "'\\".concat(replacementName).concat("'");
+			} else if (replacementName == null) {
+				replacementName = "\\$" + key;
 			}
 			m.appendReplacement(sb, (replacementName != null) ? replacementName : key);
 		}

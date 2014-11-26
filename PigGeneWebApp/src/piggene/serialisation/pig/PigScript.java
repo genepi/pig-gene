@@ -23,7 +23,7 @@ public class PigScript {
 	}
 
 	public static String load(String scriptName) {
-		Path path = FileSystems.getDefault().getPath(pigFilesPath, scriptName.concat(fileExtension));
+		Path path = FileSystems.getDefault().getPath(pigFilesPath, "/", scriptName, scriptName.concat(fileExtension));
 		String script = null;
 		try {
 			byte[] bytes = Files.readAllBytes(path);
