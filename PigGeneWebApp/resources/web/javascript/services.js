@@ -195,6 +195,12 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		$rootScope.$broadcast("handleExWfNamesChange");
 	};
 	
+	sharedWorkflow.broadcastWfDeletionCheckNotification = function() {
+		if(this.workflow != undefined && !jQuery.isEmptyObject(this.workflow)) {
+			$rootScope.$broadcast("deletionCheckNotification");
+		}
+	};
+	
 	sharedWorkflow.showParameterElements = function() {
 		$rootScope.$broadcast("showParameterElements");
 	};

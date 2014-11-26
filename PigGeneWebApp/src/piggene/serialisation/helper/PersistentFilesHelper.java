@@ -3,6 +3,8 @@ package piggene.serialisation.helper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -58,6 +60,12 @@ public class PersistentFilesHelper {
 		for (final File f : files) {
 			fileNames.add(f.getName().replaceAll(YAML_EXTENSION, ""));
 		}
+		Collections.sort(fileNames, new Comparator<String>() {
+			@Override
+			public int compare(String name1, String name2) {
+				return name1.compareTo(name2);
+			}
+		});
 		return fileNames;
 	}
 

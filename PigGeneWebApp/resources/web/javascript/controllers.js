@@ -11,13 +11,10 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 						SharedWfService.loadExistingWorkflowNames(true);
 						break;
 			case "deleteWfBtn": 	
-						SharedWfService.deleteCurrentWfDefinition();
+						SharedWfService.broadcastWfDeletionCheckNotification();
 						break;
 			case "downloadScriptBtn": 
 						SharedWfService.downloadScript();
-						break;
-			case "runJobBtn": 		
-						//TODO: implement functionality
 						break;
 			default: break;	
 		}
@@ -295,5 +292,17 @@ pigGeneApp.controller("MissingInputCtrl", ["$scope", "SharedWfService", function
 	$scope.$on("missingWfNameDefinition", function() {
 		$('#missingInputModal').modal('toggle');
 	});
+	
+}]);
+
+pigGeneApp.controller("DeletionCheckCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	
+	$scope.$on("deletionCheckNotification", function() {
+		$('#deletionCheckModal').modal('toggle');
+	});
+	
+	$scope.deleteWf = function() {
+		SharedWfService.deleteCurrentWfDefinition();
+	}
 	
 }]);
