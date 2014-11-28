@@ -19,8 +19,8 @@ public class WorkflowLoaderService extends ServerResource {
 	public Representation get() throws ResourceException {
 		ServerResponseObject obj = new ServerResponseObject();
 
-		String workflowName = getRequest().getAttributes().get("id").toString();
 		try {
+			String workflowName = getRequest().getAttributes().get("id").toString();
 			Workflow workflow = WorkflowSerialisation.resolveWorkflowReferences(WorkflowSerialisation.load(workflowName));
 			obj.setData(workflow);
 		} catch (IOException e) {

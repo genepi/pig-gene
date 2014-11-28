@@ -21,7 +21,9 @@ import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 public class WorkflowConverter {
 
-	public static Workflow processClientJSONData(final JSONObject data) throws JSONException {
+	public static Workflow processClientJSONData(final JSONObject wfToStore) throws JSONException {
+		final JSONObject data = wfToStore.getJSONObject("data");
+		
 		String name = data.getString("name");
 		String description = data.getString("description");
 		List<Workflow> components = convertJSONComponents(data.getJSONArray("components"));

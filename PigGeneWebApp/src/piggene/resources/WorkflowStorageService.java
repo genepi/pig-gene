@@ -22,11 +22,13 @@ public class WorkflowStorageService extends ServerResource {
 	protected Representation post(final Representation entity) throws ResourceException {
 		ServerResponseObject obj = new ServerResponseObject();
 		Workflow workflow = null;
+		String encodedWfName = null;
 
 		try {
 			JsonRepresentation representation = new JsonRepresentation(entity);
 			org.json.JSONObject data = representation.getJsonObject();
 			workflow = WorkflowConverter.processClientJSONData(data);
+			encodedWfName = data.getString("encodedName");
 		} catch (IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error ocurred while parsing the input data");
@@ -38,7 +40,7 @@ public class WorkflowStorageService extends ServerResource {
 		}
 
 		try {
-			WorkflowSerialisation.store(workflow);
+			WorkflowSerialisation.store(workflow, encodedWfName);
 		} catch (IOException e) {
 			e.printStackTrace();
 			obj.setSuccess(false);

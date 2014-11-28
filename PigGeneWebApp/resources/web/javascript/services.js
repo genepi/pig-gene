@@ -112,8 +112,17 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.persistWfDefinition = function() {
 		if(!$.isEmptyObject(this.workflow)) {
-			var myWf = new WfPersistency.Save(this.workflow);
-			myWf.$save(function(u,putResponseHeaders) {
+			var wfToStore = {
+					encodedName: encodeURI(this.workflow.name),
+					data: this.workflow
+			}
+			var myWf = new WfPersistency.Save.save(wfToStore).$promise.then(function(response) {
+				if(!response.success) {
+					//TODO fix error message
+					alert(response.message);
+					console.log(response.message);
+					return;
+				}
 				$location.path('/wf/' + sharedWorkflow.workflow.name).replace();
 			});
 		}

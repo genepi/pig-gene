@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -32,10 +34,9 @@ public class WorkflowSerialisation {
 		}
 	}
 
-	public static void store(final Workflow workflow) throws IOException {
+	public static void store(final Workflow workflow, final String encodedWfName) throws IOException {
 		try {
-			final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(workflow.getName().concat(
-					fileExtension)))));
+			final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(encodedWfName.concat(fileExtension)))));
 			writer.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
 			writer.write(workflow);
 			writer.close();
@@ -105,6 +106,27 @@ public class WorkflowSerialisation {
 			throw new FileNotFoundException("file does not exist");
 		}
 		return file.delete();
+	}
+	
+	public static List<String> getListOfWorkflowNames() throws IOException {
+		final File file = new File(workflowDefsPath);
+		final File[] files = file.listFiles();
+		if (files == null || files.length == 0) {
+			return null;
+		}
+		final List<String> fileNames = new ArrayList<String>();
+		Workflow workflow = null;
+		for (final File f : files) {
+			workflow = WorkflowSerialisation.load(f.getName().replaceAll(fileExtension, ""));
+			fileNames.add(workflow.getName());
+		}
+		Collections.sort(fileNames, new Comparator<String>() {
+			@Override
+			public int compare(String name1, String name2) {
+				return name1.compareTo(name2);
+			}
+		});
+		return fileNames;
 	}
 
 }

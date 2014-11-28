@@ -18,8 +18,8 @@ public class WorkflowDeletionService extends ServerResource {
 	protected Representation delete() throws ResourceException {
 		ServerResponseObject obj = new ServerResponseObject();
 
-		String workflowName = getRequest().getAttributes().get("id").toString();
 		try {
+			String workflowName = getRequest().getAttributes().get("id").toString();
 			if(WorkflowSerialisation.remove(workflowName)) {
 				obj.setSuccess(true);
 				obj.setMessage("success");
