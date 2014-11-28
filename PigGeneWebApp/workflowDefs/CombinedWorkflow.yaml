@@ -11,11 +11,17 @@ components:
    name: 04Coverage
 - !piggene.serialisation.workflow.WorkflowReference
    name: 05ReadMappingQuality
+- !piggene.serialisation.workflow.WorkflowReference
+   name: 04Coverage
+- !piggene.serialisation.workflow.WorkflowReference
+   name: CombinedWorkflow
 description: combined workflow description
 parameter: 
    inputParameter: 
    - !piggene.serialisation.workflow.parameter.InputLinkParameter
       name: $inputPath
+   - !piggene.serialisation.workflow.parameter.InputLinkParameter
+      name: 30
    outputParameter: 
    - !piggene.serialisation.workflow.parameter.OutputLinkParameter
       name: $outputPath1
@@ -23,25 +29,31 @@ parameter:
       name: $outputPath2
 parameterMapping: 
    inputParameterMapping: 
-      01LoadBam: 
-         input_bam: $inputPath
+      03UnmappedFilter: 
+         R2: $R02
+      CombinedWorkflow: 
+         $inputPath: 
+         30: 
       02QualityFilter: 
          min_quality: 70
          R1: $R01
-      04Coverage: 
-         R3: $R03
-         output_coverage: $outputPath1
-      03UnmappedFilter: 
-         R2: $R02
       05ReadMappingQuality: 
          R3: $R03
          output_mapqual_dist: $outputPath2
-   outputParameterMapping: 
       01LoadBam: 
-         R1: $R01
-      02QualityFilter: 
-         R2: $R02
-      04Coverage: {}
+         input_bam: $inputPath
+      04Coverage: 
+         R3: 
+         output_coverage: 
+   outputParameterMapping: 
       03UnmappedFilter: 
          R3: $R03
+      CombinedWorkflow: 
+         $outputPath1: 
+         $outputPath2: 
+      02QualityFilter: 
+         R2: $R02
       05ReadMappingQuality: {}
+      01LoadBam: 
+         R1: $R01
+      04Coverage: {}
