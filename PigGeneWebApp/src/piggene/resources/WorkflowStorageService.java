@@ -26,9 +26,9 @@ public class WorkflowStorageService extends ServerResource {
 
 		try {
 			JsonRepresentation representation = new JsonRepresentation(entity);
-			org.json.JSONObject data = representation.getJsonObject();
-			workflow = WorkflowConverter.processClientJSONData(data);
-			encodedWfName = data.getString("encodedName");
+			org.json.JSONObject transferedData = representation.getJsonObject();
+			workflow = WorkflowConverter.processClientJSONData(transferedData.getJSONObject("workflow"));
+			encodedWfName = transferedData.getString("encodedName");
 		} catch (IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error ocurred while parsing the input data");
@@ -36,6 +36,7 @@ public class WorkflowStorageService extends ServerResource {
 		} catch (JSONException e) {
 			obj.setSuccess(false);
 			obj.setMessage("The data could not be parsed because of a syntax error.");
+			e.printStackTrace();
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
@@ -52,5 +53,4 @@ public class WorkflowStorageService extends ServerResource {
 		obj.setMessage("success");
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
-	
 }

@@ -3,6 +3,7 @@ package piggene.resources;
 import java.io.IOException;
 
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
@@ -17,13 +18,13 @@ public class WorkflowLoaderService extends ServerResource {
 
 	@Override
 	public Representation get() throws ResourceException {
-		ServerResponseObject obj = new ServerResponseObject();
+		final ServerResponseObject obj = new ServerResponseObject();
 
 		try {
-			String workflowName = getRequest().getAttributes().get("id").toString();
-			Workflow workflow = WorkflowSerialisation.resolveWorkflowReferences(WorkflowSerialisation.load(workflowName));
+			final String workflowName = getRequest().getAttributes().get("id").toString();
+			final Workflow workflow = WorkflowSerialisation.resolveWorkflowReferences(WorkflowSerialisation.load(workflowName));
 			obj.setData(workflow);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while loading the workflow data.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
@@ -31,7 +32,10 @@ public class WorkflowLoaderService extends ServerResource {
 
 		obj.setSuccess(true);
 		obj.setMessage("success");
-		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+
+		final JsonConfig config = new JsonConfig();
+		config.setExcludes(new String[] { "RMarkDownScriptRepresentations", "lineSeparator" });
+		return new StringRepresentation(JSONObject.fromObject(obj, config).toString(), MediaType.APPLICATION_JSON);
 	}
 
 }

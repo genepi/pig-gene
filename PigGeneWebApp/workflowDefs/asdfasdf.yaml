@@ -1,0 +1,18 @@
+!piggene.serialisation.workflow.Workflow
+name: asdfasdf
+components: 
+- !piggene.serialisation.workflow.WorkflowComponent
+   content: asdf
+   scriptType: 
+      name: Apache Pig Script
+- !piggene.serialisation.workflow.WorkflowReference
+   name: innermostWf
+description: workflow description
+parameter: 
+   inputParameter: []
+   outputParameter: []
+parameterMapping: 
+   inputParameterMapping: 
+      innermostWf: {}
+   outputParameterMapping: 
+      innermostWf: {}

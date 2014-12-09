@@ -1,0 +1,10 @@
+!piggene.serialisation.workflow.Workflow
+name: adsfas
+components: []
+description: workflow description
+parameter: 
+   inputParameter: []
+   outputParameter: []
+parameterMapping: 
+   inputParameterMapping: {}
+   outputParameterMapping: {}

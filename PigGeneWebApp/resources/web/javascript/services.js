@@ -114,7 +114,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		if(!$.isEmptyObject(this.workflow)) {
 			var wfToStore = {
 					encodedName: encodeURI(this.workflow.name),
-					data: this.workflow
+					workflow: this.workflow
 			}
 			var myWf = new WfPersistency.Save.save(wfToStore).$promise.then(function(response) {
 				if(!response.success) {

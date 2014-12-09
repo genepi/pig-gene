@@ -4,3 +4,8 @@ var buttons =  [
 		{name:"deleteWfBtn", title:"delete workflow", showState:true, active:"", text:"delete", logo:"trash"},
 		{name:"downloadScriptBtn", title:"download pig script", showState:true, active:"", text:"download", logo:"cloud-download"}
 	];
+
+var scriptType = [
+        {id:0, name:"Apache Pig Script"},
+        {id:1, name:"R Markdown Script"}
+    ];

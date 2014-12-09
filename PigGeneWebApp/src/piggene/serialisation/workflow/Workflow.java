@@ -1,6 +1,7 @@
 package piggene.serialisation.workflow;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
@@ -107,11 +108,28 @@ public class Workflow implements IWorkflow {
 		sb.append(preparePigScriptCommand(name));
 		sb.append(preparePigScriptCommand(description));
 
+		String content;
 		for (Workflow wf : components) {
-			sb.append(lineSeparator);
-			sb.append(wf.getPigScriptRepresentation(wfName));
+			content = wf.getPigScriptRepresentation(wfName);
+			if (content != null) {
+				sb.append(content);
+				sb.append(lineSeparator);
+			}
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public List<String> getRMarkDownScriptRepresentations() throws IOException {
+		ArrayList<String> rmdScripts = new ArrayList<String>();
+		List<String> content;
+		for (Workflow wf : components) {
+			content = wf.getRMarkDownScriptRepresentations();
+			if (content != null) {
+				rmdScripts.addAll(content);
+			}
+		}
+		return rmdScripts;
 	}
 
 }

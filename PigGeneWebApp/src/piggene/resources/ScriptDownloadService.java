@@ -10,6 +10,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import piggene.serialisation.RMarkDown.RMarkDownGenerator;
 import piggene.serialisation.cloudgene.CloudgeneYamlGenerator;
 import piggene.serialisation.pig.PigScript;
 import piggene.serialisation.pig.PigScriptGenerator;
@@ -26,6 +27,7 @@ public class ScriptDownloadService extends ServerResource {
 		try {
 			Workflow workflow = WorkflowSerialisation.load(workflowName);
 			PigScriptGenerator.generateAndStoreScript(workflow);
+			RMarkDownGenerator.generateAndStoreScripts(workflow);
 			CloudgeneYamlGenerator.generateAndStoreFile(workflow);
 			String script = PigScript.load(workflowName);
 			if (script == null) {

@@ -1,5 +1,6 @@
 pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
 	$scope.buttons = buttons;
+	$scope.scriptType = scriptType;
 	
 	$scope.performNavBarAction = function(index) {
 		switch(buttons[index].name) {
@@ -51,6 +52,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
 			var newComp = {
 					workflowType: "WORKFLOW_COMPONENT",
+					scriptType: scriptType[0],
 					content: ""
 			};
 			var modWf = $scope.workflow;
@@ -118,6 +120,12 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 			
 			$(targetElement.parentNode).append(buttonGroup1);
 			$(targetElement.parentNode).append(buttonGroup2);
+
+			if(mode === 'std') {
+				var scriptSelector = $compile('<span class="dropdown"><button class="btn btn-default dropdown-toggle scriptMenu" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"><span id="scriptType">'+ $scope.workflow.components[index].scriptType.name + ' ' + '</span><span class="caret"></span></button><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><li role="presentation"><a name='+index+' role="menuitem" ng-click="setScriptType($event,0)">'+scriptType[0].name+' </a></li><li role="presentation"><a name='+index+' role="menuitem" ng-click="setScriptType($event,1)">'+scriptType[1].name+' </a></li></ul></span>')($scope);
+				$(targetElement.parentNode).append(scriptSelector);
+			}
+				
 			$(targetElement).addClass(options);
 		}
 	};
@@ -129,8 +137,13 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 			$(btnGroupElement.parentNode.children[0]).removeClass("options");
 		}
 		if(operation === "up" || operation === "down") {
+			$(btnGroupElement.nextSibling.nextSibling).remove();
 			$(btnGroupElement.nextSibling).remove();
 		} else if(operation === "save" || operation === "cancel" || operation === "delete") {
+			$(btnGroupElement.previousSibling).remove();
+			$(btnGroupElement.nextSibling).remove();
+		} else if(operation == "changeScript") {
+			$(btnGroupElement.previousSibling.previousSibling).remove();
 			$(btnGroupElement.previousSibling).remove();
 		}
 		$(btnGroupElement).remove();
@@ -187,6 +200,15 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 		}
 		SharedWfService.prepForBroadcast(modWf);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "delete");
+	};
+	
+	$scope.setScriptType = function(event, scriptTypeID) {
+		var index = parseInt(event.currentTarget.name);
+		var modWf = $scope.workflow;
+		modWf.components[index].scriptType = scriptType[scriptTypeID];
+		SharedWfService.prepForBroadcast(modWf);
+		$('#scriptType').html(scriptType[scriptTypeID].name + " ");
+		$scope.removeOptionBtns(event.currentTarget.parentElement.parentElement.parentElement, "changeScript");
 	};
 	
 	$scope.isVisible = function() {

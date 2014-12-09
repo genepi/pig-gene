@@ -11,7 +11,7 @@ import piggene.serialisation.workflow.Workflow;
 
 public class PigScriptGenerator {
 	private static Properties prop = new Properties();
-	private static String pigFilesPath;
+	private static String scriptFilesPath;
 	private static String libFilesPath;
 	private static String jarPath = "libs/";
 	private static String[] jarLibNames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-6.2.jar", "samtools-1.107.jar", "picard-1.107.jar", "commons-jexl-2.1.1.jar"};
@@ -19,7 +19,7 @@ public class PigScriptGenerator {
 	static {
 		try {
 			prop.load(PigScriptGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
-			pigFilesPath = prop.getProperty("pigFiles");
+			scriptFilesPath = prop.getProperty("scriptFiles");
 			libFilesPath = prop.getProperty("libFiles");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -36,7 +36,7 @@ public class PigScriptGenerator {
 	}
 	
 	private static void createNeededFolders(String folderName) throws IOException {
-		File destinationFolder = new File(pigFilesPath + folderName + "/");
+		File destinationFolder = new File(scriptFilesPath + folderName + "/");
 		File libs = null;
 		if(!destinationFolder.exists()) {
 			destinationFolder.mkdir();
@@ -71,7 +71,7 @@ public class PigScriptGenerator {
 	private static void write(final String pigScript, final String name) throws IOException {
 		BufferedWriter out = null;
 		try {
-			out = new BufferedWriter(new FileWriter(pigFilesPath.concat(name).concat("/").concat(name.concat(".pig"))));
+			out = new BufferedWriter(new FileWriter(scriptFilesPath.concat(name).concat("/").concat(name.concat(".pig"))));
 			out.write(pigScript);
 		} finally {
 			try {

@@ -23,7 +23,7 @@ public class Main {
 		List<String> paths = new ArrayList<String>();
 		paths.add(prop.getProperty("workflowDefs"));
 		paths.add(prop.getProperty("cloudgeneYamls"));
-		paths.add(prop.getProperty("pigFiles"));
+		paths.add(prop.getProperty("scriptFiles"));
 		for (String path : paths) {
 			File f = new File(path);
 			if (!(f.exists() && f.isDirectory())) {

@@ -1,0 +1,19 @@
+!piggene.serialisation.workflow.Workflow
+name: innermostWf
+components: 
+- !piggene.serialisation.workflow.WorkflowComponent
+   content: R_innermost_1
+   scriptType: 
+      id: 1
+      name: R Markdown Script
+- !piggene.serialisation.workflow.WorkflowComponent
+   content: pig_innermost_1
+   scriptType: 
+      name: Apache Pig Script
+description: 'descr: innermost'
+parameter: 
+   inputParameter: []
+   outputParameter: []
+parameterMapping: 
+   inputParameterMapping: {}
+   outputParameterMapping: {}

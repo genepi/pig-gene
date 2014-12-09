@@ -1,0 +1,14 @@
+!piggene.serialisation.workflow.Workflow
+name: weq4
+components: 
+- !piggene.serialisation.workflow.WorkflowReference
+   name: innermostWf
+description: workflow description
+parameter: 
+   inputParameter: []
+   outputParameter: []
+parameterMapping: 
+   inputParameterMapping: 
+      innermostWf: {}
+   outputParameterMapping: 
+      innermostWf: {}

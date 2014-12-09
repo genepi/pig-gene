@@ -120,11 +120,11 @@ h4 {
 	margin-bottom: 15px;
 }
 
-.optionBtns1, .optionBtns2 {
+.optionBtns1, .optionBtns2, .scriptMenu {
 	margin-top: 8px;
 }
 
-.optionBtns2 {
+.optionBtns2, .scriptMenu {
 	margin-left: 8px;
 }
 
