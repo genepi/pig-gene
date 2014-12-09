@@ -17,7 +17,7 @@ public class RMarkDownGenerator {
 		try {
 			prop.load(RMarkDownGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
 			scriptFilesPath = prop.getProperty("scriptFiles");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -25,7 +25,7 @@ public class RMarkDownGenerator {
 
 	public static void generateAndStoreScripts(final Workflow workflow) throws IOException {
 		createNeededFolders(workflow.getName());
-		List<String> rmdScripts = workflow.getRMarkDownScriptRepresentations();
+		final List<String> rmdScripts = workflow.getRMarkDownScriptRepresentations();
 		if (rmdScripts.size() == 1) {
 			RMarkDownGenerator.write(rmdScripts.get(0), workflow.getName(), workflow.getName());
 		} else if (rmdScripts.size() > 1) {
@@ -35,8 +35,8 @@ public class RMarkDownGenerator {
 		}
 	}
 
-	private static void createNeededFolders(String folderName) throws IOException {
-		File destinationFolder = new File(scriptFilesPath + folderName + "/");
+	private static void createNeededFolders(final String folderName) throws IOException {
+		final File destinationFolder = new File(scriptFilesPath + folderName + "/");
 		if (!destinationFolder.exists()) {
 			destinationFolder.mkdir();
 		}
@@ -45,10 +45,9 @@ public class RMarkDownGenerator {
 	private static void write(final String script, final String folder, final String name) throws IOException {
 		BufferedWriter out = null;
 		try {
-			System.out.println(scriptFilesPath);
 			out = new BufferedWriter(new FileWriter(scriptFilesPath.concat(folder).concat("/").concat(name.concat(".Rmd"))));
 			out.write(script);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// TODO change catch clause
 			e.printStackTrace();
 		} finally {
