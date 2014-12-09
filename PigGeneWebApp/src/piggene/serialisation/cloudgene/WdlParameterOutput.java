@@ -1,6 +1,5 @@
 package piggene.serialisation.cloudgene;
 
-
 public class WdlParameterOutput extends WdlParameter {
 
 	@Override

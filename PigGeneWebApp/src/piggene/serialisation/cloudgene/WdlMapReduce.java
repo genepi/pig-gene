@@ -35,7 +35,7 @@ public class WdlMapReduce {
 		return jar;
 	}
 
-	public void setJar(String jar) {
+	public void setJar(final String jar) {
 		this.jar = jar;
 	}
 
@@ -43,7 +43,7 @@ public class WdlMapReduce {
 		return mapper;
 	}
 
-	public void setMapper(String mapper) {
+	public void setMapper(final String mapper) {
 		this.mapper = mapper;
 	}
 
@@ -51,7 +51,7 @@ public class WdlMapReduce {
 		return reducer;
 	}
 
-	public void setReducer(String reducer) {
+	public void setReducer(final String reducer) {
 		this.reducer = reducer;
 	}
 
@@ -59,7 +59,7 @@ public class WdlMapReduce {
 		return params;
 	}
 
-	public void setParams(String params) {
+	public void setParams(final String params) {
 		this.params = params;
 	}
 
@@ -67,7 +67,7 @@ public class WdlMapReduce {
 		return inputs;
 	}
 
-	public void setInputs(List<WdlParameter> inputs) {
+	public void setInputs(final List<WdlParameter> inputs) {
 		this.inputs = inputs;
 	}
 
@@ -75,7 +75,7 @@ public class WdlMapReduce {
 		return outputs;
 	}
 
-	public void setOutputs(List<WdlParameter> outputs) {
+	public void setOutputs(final List<WdlParameter> outputs) {
 		this.outputs = outputs;
 	}
 
@@ -83,7 +83,7 @@ public class WdlMapReduce {
 		return steps;
 	}
 
-	public void setSteps(List<WdlStep> steps) {
+	public void setSteps(final List<WdlStep> steps) {
 		this.steps = steps;
 	}
 
@@ -91,11 +91,11 @@ public class WdlMapReduce {
 		return path;
 	}
 
-	public void setPath(String path) {
+	public void setPath(final String path) {
 		this.path = path;
 	}
 
-	public void setExec(String exec) {
+	public void setExec(final String exec) {
 		this.exec = exec;
 	}
 
@@ -103,7 +103,7 @@ public class WdlMapReduce {
 		return exec;
 	}
 
-	public void setPig(String pig) {
+	public void setPig(final String pig) {
 		this.pig = pig;
 	}
 
@@ -111,7 +111,7 @@ public class WdlMapReduce {
 		return pig;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -119,7 +119,7 @@ public class WdlMapReduce {
 		return type;
 	}
 
-	public void setManifestFile(String manifestFile) {
+	public void setManifestFile(final String manifestFile) {
 		this.manifestFile = manifestFile;
 	}
 
@@ -127,7 +127,7 @@ public class WdlMapReduce {
 		return manifestFile;
 	}
 
-	public void setSetup(WdlStep setup) {
+	public void setSetup(final WdlStep setup) {
 		this.setup = setup;
 	}
 

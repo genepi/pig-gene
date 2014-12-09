@@ -52,7 +52,7 @@ public abstract class WdlParameter {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -60,7 +60,7 @@ public abstract class WdlParameter {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -68,7 +68,7 @@ public abstract class WdlParameter {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(final String value) {
 		this.value = value;
 	}
 
@@ -76,7 +76,7 @@ public abstract class WdlParameter {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -84,7 +84,7 @@ public abstract class WdlParameter {
 		return mergeOutput;
 	}
 
-	public void setMergeOutput(boolean mergeOutput) {
+	public void setMergeOutput(final boolean mergeOutput) {
 		this.mergeOutput = mergeOutput;
 	}
 
@@ -92,7 +92,7 @@ public abstract class WdlParameter {
 		return input;
 	}
 
-	public void setInput(boolean input) {
+	public void setInput(final boolean input) {
 		this.input = input;
 	}
 
@@ -100,7 +100,7 @@ public abstract class WdlParameter {
 		return values;
 	}
 
-	public void setValues(Map<String, String> values) {
+	public void setValues(final Map<String, String> values) {
 		this.values = values;
 	}
 
@@ -108,7 +108,7 @@ public abstract class WdlParameter {
 		return download;
 	}
 
-	public void setDownload(boolean download) {
+	public void setDownload(final boolean download) {
 		this.download = download;
 	}
 
@@ -116,7 +116,7 @@ public abstract class WdlParameter {
 		return makeAbsolute;
 	}
 
-	public void setMakeAbsolute(boolean absolute) {
+	public void setMakeAbsolute(final boolean absolute) {
 		this.makeAbsolute = absolute;
 	}
 
@@ -124,11 +124,11 @@ public abstract class WdlParameter {
 		return temp;
 	}
 
-	public void setTemp(boolean temp) {
+	public void setTemp(final boolean temp) {
 		this.temp = temp;
 	}
 
-	public void setZip(boolean zip) {
+	public void setZip(final boolean zip) {
 		this.zip = zip;
 	}
 
@@ -136,7 +136,7 @@ public abstract class WdlParameter {
 		return zip;
 	}
 
-	public void setRemoveHeader(boolean removeHeader) {
+	public void setRemoveHeader(final boolean removeHeader) {
 		this.removeHeader = removeHeader;
 	}
 
@@ -144,7 +144,7 @@ public abstract class WdlParameter {
 		return removeHeader;
 	}
 
-	public void setRequired(boolean required) {
+	public void setRequired(final boolean required) {
 		this.required = required;
 	}
 
@@ -156,11 +156,11 @@ public abstract class WdlParameter {
 		return format;
 	}
 
-	public void setFormat(String format) {
+	public void setFormat(final String format) {
 		this.format = format;
 	}
 
-	public void setVisible(boolean visible) {
+	public void setVisible(final boolean visible) {
 		this.visible = visible;
 	}
 
@@ -168,7 +168,7 @@ public abstract class WdlParameter {
 		return visible;
 	}
 
-	public void setAutoExport(boolean autoExport) {
+	public void setAutoExport(final boolean autoExport) {
 		this.autoExport = autoExport;
 	}
 
@@ -176,7 +176,7 @@ public abstract class WdlParameter {
 		return autoExport;
 	}
 
-	public void setAdminOnly(boolean adminOnly) {
+	public void setAdminOnly(final boolean adminOnly) {
 		this.adminOnly = adminOnly;
 	}
 

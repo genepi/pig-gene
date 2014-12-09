@@ -2,6 +2,7 @@ package piggene.serialisation.cloudgene;
 
 public class WdlHeader {
 
+	private boolean installed = false;
 	private String source = "";
 	private String description;
 	private String version;
@@ -10,11 +11,31 @@ public class WdlHeader {
 	private String category;
 	private String author;
 
+	public boolean isExpanded() {
+		return false;
+	}
+
+	public boolean isLeaf() {
+		return true;
+	}
+
+	public WdlHeader[] getChildren() {
+		return null;
+	}
+
+	public boolean isInstalled() {
+		return installed;
+	}
+
+	public void setInstalled(final boolean installed) {
+		this.installed = installed;
+	}
+
 	public String getSource() {
 		return source;
 	}
 
-	public void setSource(String source) {
+	public void setSource(final String source) {
 		this.source = source;
 	}
 
@@ -22,7 +43,7 @@ public class WdlHeader {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -30,7 +51,7 @@ public class WdlHeader {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 
@@ -38,7 +59,7 @@ public class WdlHeader {
 		return website;
 	}
 
-	public void setWebsite(String website) {
+	public void setWebsite(final String website) {
 		this.website = website;
 	}
 
@@ -46,7 +67,7 @@ public class WdlHeader {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -54,7 +75,7 @@ public class WdlHeader {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(final String category) {
 		this.category = category;
 	}
 
@@ -62,7 +83,7 @@ public class WdlHeader {
 		return author;
 	}
 
-	public void setAuthor(String author) {
+	public void setAuthor(final String author) {
 		this.author = author;
 	}
 

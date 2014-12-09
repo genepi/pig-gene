@@ -2,7 +2,7 @@ package piggene.serialisation.cloudgene;
 
 import java.util.Map;
 
-public class WdlApp extends WdlHeader implements Comparable<WdlApp>{
+public class WdlApp extends WdlHeader implements Comparable<WdlApp> {
 
 	private WdlMapReduce mapred;
 
@@ -12,7 +12,7 @@ public class WdlApp extends WdlHeader implements Comparable<WdlApp>{
 		return mapred;
 	}
 
-	public void setMapred(WdlMapReduce mapred) {
+	public void setMapred(final WdlMapReduce mapred) {
 		this.mapred = mapred;
 	}
 
@@ -20,12 +20,12 @@ public class WdlApp extends WdlHeader implements Comparable<WdlApp>{
 		return cluster;
 	}
 
-	public void setCluster(Map<String, String> cluster) {
+	public void setCluster(final Map<String, String> cluster) {
 		this.cluster = cluster;
 	}
 
 	@Override
-	public int compareTo(WdlApp o) {
+	public int compareTo(final WdlApp o) {
 		return getName().compareTo(o.getName());
 	}
 

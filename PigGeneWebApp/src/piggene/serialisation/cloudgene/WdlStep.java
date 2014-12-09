@@ -41,7 +41,7 @@ public class WdlStep {
 		return jar;
 	}
 
-	public void setJar(String jar) {
+	public void setJar(final String jar) {
 		this.jar = jar;
 	}
 
@@ -49,7 +49,7 @@ public class WdlStep {
 		return mapper;
 	}
 
-	public void setMapper(String mapper) {
+	public void setMapper(final String mapper) {
 		this.mapper = mapper;
 	}
 
@@ -57,7 +57,7 @@ public class WdlStep {
 		return reducer;
 	}
 
-	public void setReducer(String reducer) {
+	public void setReducer(final String reducer) {
 		this.reducer = reducer;
 	}
 
@@ -65,7 +65,7 @@ public class WdlStep {
 		return params;
 	}
 
-	public void setParams(String params) {
+	public void setParams(final String params) {
 		this.params = params;
 	}
 
@@ -73,11 +73,11 @@ public class WdlStep {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public void setExec(String exec) {
+	public void setExec(final String exec) {
 		this.exec = exec;
 	}
 
@@ -85,7 +85,7 @@ public class WdlStep {
 		return exec;
 	}
 
-	public void setPig(String pig) {
+	public void setPig(final String pig) {
 		this.pig = pig;
 	}
 
@@ -97,7 +97,7 @@ public class WdlStep {
 		return rmd;
 	}
 
-	public void setRmd(String rmd) {
+	public void setRmd(final String rmd) {
 		this.rmd = rmd;
 	}
 
@@ -105,11 +105,11 @@ public class WdlStep {
 		return output;
 	}
 
-	public void setOutput(String output) {
+	public void setOutput(final String output) {
 		this.output = output;
 	}
 
-	public void setJob(String job) {
+	public void setJob(final String job) {
 		this.job = job;
 	}
 
@@ -121,7 +121,7 @@ public class WdlStep {
 		return classname;
 	}
 
-	public void setClassname(String classname) {
+	public void setClassname(final String classname) {
 		this.classname = classname;
 	}
 
@@ -129,7 +129,7 @@ public class WdlStep {
 		return cache;
 	}
 
-	public void setCache(boolean cache) {
+	public void setCache(final boolean cache) {
 		this.cache = cache;
 	}
 
@@ -137,11 +137,11 @@ public class WdlStep {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(final int id) {
 		this.id = id;
 	}
 
-	public void setGenerates(String generates) {
+	public void setGenerates(final String generates) {
 		this.generates = generates;
 	}
 
@@ -149,7 +149,7 @@ public class WdlStep {
 		return generates;
 	}
 
-	public void setTemplate(String template) {
+	public void setTemplate(final String template) {
 		this.template = template;
 	}
 
@@ -157,7 +157,7 @@ public class WdlStep {
 		return template;
 	}
 
-	public void setMapping(Map<String, String> mapping) {
+	public void setMapping(final Map<String, String> mapping) {
 		this.mapping = mapping;
 	}
 
