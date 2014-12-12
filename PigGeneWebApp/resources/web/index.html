@@ -35,6 +35,7 @@
      			<ul class="nav navbar-nav">
         			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons" ng-click="performNavBarAction($index)"><a><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
        			</ul>
+			</div>
 		</div>
 	</nav>
 
@@ -96,6 +97,24 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
 					<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="deleteWf()">delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="scriptChangeCheckModal" class="modal fade" ng-controller="ScriptCheckCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">vorbidden</h4>
+				</div>
+				<div class="modal-body">
+					it is not possible to specify a Rmd Script along other scripts. Rmd Scripts have to be specified 
+					within their own component and can afterwards be combined with Pig- and other Rmd-Scripts.
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal">ok</button>
 				</div>
 			</div>
 		</div>

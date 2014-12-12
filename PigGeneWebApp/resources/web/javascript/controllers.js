@@ -17,6 +17,9 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 			case "downloadScriptBtn": 
 						SharedWfService.downloadScript();
 						break;
+			case "expertModeBtn":
+						SharedWfService.broadcastExpertModeToggle();
+						break;
 			default: break;	
 		}
 	};
@@ -50,17 +53,21 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 
 	$scope.addNewComponent = function() {
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
-			var newComp = {
-					workflowType: "WORKFLOW_COMPONENT",
-					scriptType: scriptType[0],
-					content: ""
-			};
-			var modWf = $scope.workflow;
-			modWf.components.push(newComp);
-			SharedWfService.prepForBroadcast(modWf);
-			SharedWfService.showParameterElements();
+			if(!$scope.pigScriptOnly) {
+				SharedWfService.broadcastIllegalScriptCombination();
+			} else {
+				var newComp = {
+						workflowType: "WORKFLOW_COMPONENT",
+						scriptType: scriptType[0],
+						content: ""
+				};
+				var modWf = $scope.workflow;
+				modWf.components.push(newComp);
+				SharedWfService.prepForBroadcast(modWf);
+				SharedWfService.showParameterElements();
+			}
 		}
-	};
+	}
 	
 	$scope.addExistingComponent = function() {
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
@@ -192,6 +199,11 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 	$scope.deleteComponent = function(event) {
 		var index = parseInt(event.currentTarget.name);
 		var modWf = $scope.workflow;
+
+		if(!$scope.pigScriptOnly && modWf.components[index].scriptType.id != 0) {
+			$scope.pigScriptOnly = true;
+		}
+		
 		modWf.components.splice(index, 1);
 		if(modWf.components.length === 0) {
 			modWf.parameter.inputParameter = [];
@@ -202,14 +214,37 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "delete");
 	};
 	
+	$scope.pigScriptOnly = true;
+	
 	$scope.setScriptType = function(event, scriptTypeID) {
-		var index = parseInt(event.currentTarget.name);
-		var modWf = $scope.workflow;
-		modWf.components[index].scriptType = scriptType[scriptTypeID];
-		SharedWfService.prepForBroadcast(modWf);
-		$('#scriptType').html(scriptType[scriptTypeID].name + " ");
-		$scope.removeOptionBtns(event.currentTarget.parentElement.parentElement.parentElement, "changeScript");
+		if(scriptTypeID != 0 && $scope.workflow.components.length > 1) {
+			SharedWfService.broadcastIllegalScriptCombination();
+		} else {
+			var index = parseInt(event.currentTarget.name);
+			var modWf = $scope.workflow;
+			modWf.components[index].scriptType = scriptType[scriptTypeID];
+
+			if(scriptTypeID != 0) {
+				$scope.pigScriptOnly = false;
+			} else if (scriptTypeID == 0 && $scope.noRmdScriptExists()) {
+				$scope.pigScriptOnly = true;
+			}
+			
+			SharedWfService.prepForBroadcast(modWf);
+			$('#scriptType').html(scriptType[scriptTypeID].name + " ");
+			$scope.removeOptionBtns(event.currentTarget.parentElement.parentElement.parentElement, "changeScript");
+		}
 	};
+	
+	$scope.noRmdScriptExists = function() {
+		var comps = $scope.workflow.components;
+		for(var i=0; i<comps.length; i++) {
+			if(comps[i].scriptType.id != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	$scope.isVisible = function() {
 		return $scope.visible;
@@ -325,6 +360,14 @@ pigGeneApp.controller("DeletionCheckCtrl", ["$scope", "SharedWfService", functio
 	
 	$scope.deleteWf = function() {
 		SharedWfService.deleteCurrentWfDefinition();
-	}
+	};
+	
+}]);
+
+pigGeneApp.controller("ScriptCheckCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	
+	$scope.$on("illegalScriptCombination", function() {
+		$('#scriptChangeCheckModal').modal('toggle');
+	});
 	
 }]);

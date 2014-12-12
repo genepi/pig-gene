@@ -20,6 +20,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.workflow = {};
 	sharedWorkflow.existingWorkflows = {};
 	sharedWorkflow.openDef = true;
+	sharedWorkflow.expertMode = false;
 	
 	sharedWorkflow.initializeNewWorkflow = function() {
 		var emptyWorkflow = {
@@ -208,6 +209,19 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		if(this.workflow != undefined && !jQuery.isEmptyObject(this.workflow)) {
 			$rootScope.$broadcast("deletionCheckNotification");
 		}
+	};
+	
+	sharedWorkflow.broadcastIllegalScriptCombination = function() {
+		$rootScope.$broadcast("illegalScriptCombination");
+	};
+	
+	sharedWorkflow.broadcastExpertModeToggle = function() {
+		if(this.expertMode) {
+			this.expertMode = false;
+		} else {
+			this.expertMode = true;
+		}
+		$rootScope.$broadcast("expertModeChange");
 	};
 	
 	sharedWorkflow.showParameterElements = function() {
