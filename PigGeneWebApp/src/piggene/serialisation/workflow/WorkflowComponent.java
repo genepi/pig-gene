@@ -1,18 +1,20 @@
 package piggene.serialisation.workflow;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WorkflowComponent extends Workflow {
-	private WorkflowType workflowType = WorkflowType.WORKFLOW_COMPONENT;
 	private ScriptType scriptType;
+	private String name;
+	private WorkflowType workflowType = WorkflowType.WORKFLOW_COMPONENT;
 	private String content;
 
 	public WorkflowComponent() {
 	}
 
-	public WorkflowComponent(final String content, final ScriptType scriptType) {
+	public WorkflowComponent(final String name, final String content, final ScriptType scriptType) {
+		this.name = name;
 		this.content = content;
 		this.scriptType = scriptType;
 	}
@@ -52,10 +54,20 @@ public class WorkflowComponent extends Workflow {
 	}
 
 	@Override
-	public List<String> getRMarkDownScriptRepresentations() throws IOException {
-		final List<String> rMdContent = new ArrayList<String>();
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	@Override
+	public Map<String, String> getRMarkDownScriptRepresentations() throws IOException {
+		final Map<String, String> rMdContent = new HashMap<String, String>();
 		if (scriptType.getName().equals("R Markdown Script")) {
-			rMdContent.add(content);
+			rMdContent.put(this.getName(), content);
 			return rMdContent;
 		}
 		return null;

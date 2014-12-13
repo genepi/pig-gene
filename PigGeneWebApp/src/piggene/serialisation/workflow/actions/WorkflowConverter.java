@@ -25,7 +25,7 @@ public class WorkflowConverter {
 	public static Workflow processClientJSONData(final JSONObject data) throws JSONException {
 		final String name = data.getString("name");
 		final String description = data.getString("description");
-		final List<Workflow> components = convertJSONComponents(data.getJSONArray("components"));
+		final List<Workflow> components = convertJSONComponents(name, data.getJSONArray("components"));
 
 		final List<LinkParameter> inputParameter = convertJSONParameters("input", data.getJSONObject("parameter").getJSONArray("inputParameter"));
 		final List<LinkParameter> outputParameter = convertJSONParameters("output", data.getJSONObject("parameter").getJSONArray("outputParameter"));
@@ -39,13 +39,13 @@ public class WorkflowConverter {
 		return new Workflow(name, description, components, parameter, parameterMapping);
 	}
 
-	private static List<Workflow> convertJSONComponents(final JSONArray jsonArray) throws JSONException {
+	private static List<Workflow> convertJSONComponents(final String name, final JSONArray jsonArray) throws JSONException {
 		final List<Workflow> components = new ArrayList<Workflow>();
 		for (int i = 0; i < jsonArray.length(); i++) {
 			final JSONObject component = jsonArray.getJSONObject(i);
 			if (component.has("content")) { // simple text-content
 				final JSONObject scriptType = component.getJSONObject("scriptType");
-				components.add(new WorkflowComponent(component.getString("content"), new ScriptType(scriptType.getInt("id"), scriptType
+				components.add(new WorkflowComponent(name, component.getString("content"), new ScriptType(scriptType.getInt("id"), scriptType
 						.getString("name"))));
 			} else { // referenced workflow element
 				components.add(new WorkflowReference(component.getString("name")));

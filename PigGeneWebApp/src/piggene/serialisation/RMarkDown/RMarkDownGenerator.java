@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import piggene.serialisation.workflow.Workflow;
@@ -25,13 +25,12 @@ public class RMarkDownGenerator {
 
 	public static void generateAndStoreScripts(final Workflow workflow) throws IOException {
 		createNeededFolders(workflow.getName());
-		final List<String> rmdScripts = workflow.getRMarkDownScriptRepresentations();
-		if (rmdScripts.size() == 1) {
-			RMarkDownGenerator.write(rmdScripts.get(0), workflow.getName(), workflow.getName());
-		} else if (rmdScripts.size() > 1) {
-			for (int i = 0; i < rmdScripts.size(); i++) {
-				RMarkDownGenerator.write(rmdScripts.get(i), workflow.getName(), workflow.getName().concat("_").concat(String.valueOf(i)));
-			}
+		final Map<String, String> rmdScripts = workflow.getRMarkDownScriptRepresentations();
+
+		for (final Map.Entry<String, String> entry : rmdScripts.entrySet()) {
+			final String name = entry.getKey();
+			final String content = entry.getValue();
+			RMarkDownGenerator.write(workflow.getName(), name, content);
 		}
 	}
 
@@ -42,7 +41,7 @@ public class RMarkDownGenerator {
 		}
 	}
 
-	private static void write(final String script, final String folder, final String name) throws IOException {
+	private static void write(final String folder, final String name, final String script) throws IOException {
 		BufferedWriter out = null;
 		try {
 			out = new BufferedWriter(new FileWriter(scriptFilesPath.concat(folder).concat("/").concat(name.concat(".Rmd"))));

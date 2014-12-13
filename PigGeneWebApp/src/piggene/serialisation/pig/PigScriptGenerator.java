@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
+
 import piggene.serialisation.workflow.Workflow;
 
 public class PigScriptGenerator {
@@ -14,14 +16,15 @@ public class PigScriptGenerator {
 	private static String scriptFilesPath;
 	private static String libFilesPath;
 	private static String jarPath = "libs/";
-	private static String[] jarLibNames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-6.2.jar", "samtools-1.107.jar", "picard-1.107.jar", "commons-jexl-2.1.1.jar"};
+	private static String[] jarLibNames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-6.2.jar", "samtools-1.107.jar", "picard-1.107.jar",
+			"commons-jexl-2.1.1.jar" };
 
 	static {
 		try {
 			prop.load(PigScriptGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
 			scriptFilesPath = prop.getProperty("scriptFiles");
 			libFilesPath = prop.getProperty("libFiles");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -34,22 +37,23 @@ public class PigScriptGenerator {
 		createNeededFolders(workflow.getName());
 		PigScriptGenerator.write(sb.toString(), workflow.getName());
 	}
-	
-	private static void createNeededFolders(String folderName) throws IOException {
-		File destinationFolder = new File(scriptFilesPath + folderName + "/");
+
+	private static void createNeededFolders(final String folderName) throws IOException {
+		final File destinationFolder = new File(scriptFilesPath + folderName + "/");
 		File libs = null;
-		if(!destinationFolder.exists()) {
-			destinationFolder.mkdir();
-			libs = new File(destinationFolder.getPath() + "/libs");
-			libs.mkdir();
-			copyLibFiles(libFilesPath.concat("/"), libs.toString().concat("/"));
+		if (destinationFolder.exists()) {
+			FileUtils.deleteDirectory(destinationFolder);
 		}
+		destinationFolder.mkdir();
+		libs = new File(destinationFolder.getPath() + "/libs");
+		libs.mkdir();
+		copyLibFiles(libFilesPath.concat("/"), libs.toString().concat("/"));
 	}
-	
-	private static void copyLibFiles(String sourceFolderPath, String destinationFolderPath) throws IOException {
+
+	private static void copyLibFiles(final String sourceFolderPath, final String destinationFolderPath) throws IOException {
 		File source = null;
 		File destination = null;
-		for(String fileName : jarLibNames) {
+		for (final String fileName : jarLibNames) {
 			source = new File(sourceFolderPath.concat(fileName));
 			destination = new File(destinationFolderPath.concat(fileName));
 			Files.copy(source.toPath(), destination.toPath());

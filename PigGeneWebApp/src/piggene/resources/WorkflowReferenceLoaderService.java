@@ -32,7 +32,7 @@ public class WorkflowReferenceLoaderService extends ServerResource {
 			workflow.setWorkflowType(WorkflowType.WORKFLOW_REFERENCE);
 			final String mergedContent = mergeComponents(workflow.getComponents());
 			final List<Workflow> components = new ArrayList<Workflow>();
-			components.add(new WorkflowComponent(mergedContent, new ScriptType(0, "Apache Pig Script")));
+			components.add(new WorkflowComponent(workflow.getName(), mergedContent, new ScriptType(0, "Apache Pig Script")));
 			workflow.setComponents(components);
 
 			obj.setData(workflow);

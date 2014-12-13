@@ -1,8 +1,7 @@
 package piggene.serialisation.workflow;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,16 +74,16 @@ public class WorkflowReference extends Workflow {
 	}
 
 	@Override
-	public List<String> getRMarkDownScriptRepresentations() throws IOException {
+	public Map<String, String> getRMarkDownScriptRepresentations() throws IOException {
 		final String workflowName = this.name;
 		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
-		final List<String> rmdScripts = new ArrayList<String>();
+		final Map<String, String> rmdScripts = new HashMap<String, String>();
 
-		List<String> content;
+		Map<String, String> content;
 		for (final Workflow wf : referencedWorkflow.getComponents()) {
 			content = wf.getRMarkDownScriptRepresentations();
 			if (content != null) {
-				rmdScripts.addAll(content);
+				rmdScripts.putAll(content);
 			}
 		}
 		return rmdScripts;
@@ -107,13 +106,13 @@ public class WorkflowReference extends Workflow {
 		final Map<String, String> inputParameterMap = parameterMapping.retrieveInputMapByKey(workflowName);
 		final Map<String, String> outputParameterMap = parameterMapping.retrieveOutputMapByKey(workflowName);
 
-		final String regex = "(\\$)(\\w+)(\\b)";
+		final String regex = "(\\$\\w+)(\\b)";
 		final Pattern p = Pattern.compile(regex);
 		final Matcher m = p.matcher(pigScriptRepresentation);
 		final StringBuffer sb = new StringBuffer();
 
 		while (m.find()) {
-			final String key = m.group(2);
+			final String key = m.group(1);
 			String replacementName = null;
 			if (inputParameterMap.containsKey(key)) { // inputParam
 				replacementName = inputParameterMap.get(key);

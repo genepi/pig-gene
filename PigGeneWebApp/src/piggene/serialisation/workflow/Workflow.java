@@ -1,8 +1,9 @@
 package piggene.serialisation.workflow;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
@@ -103,13 +104,13 @@ public class Workflow implements IWorkflow {
 
 	@Override
 	public String getPigScriptRepresentation(final String wfName) throws IOException {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append(lineSeparator);
 		sb.append(preparePigScriptCommand(name));
 		sb.append(preparePigScriptCommand(description));
 
 		String content;
-		for (Workflow wf : components) {
+		for (final Workflow wf : components) {
 			content = wf.getPigScriptRepresentation(wfName);
 			if (content != null) {
 				sb.append(content);
@@ -120,13 +121,13 @@ public class Workflow implements IWorkflow {
 	}
 
 	@Override
-	public List<String> getRMarkDownScriptRepresentations() throws IOException {
-		ArrayList<String> rmdScripts = new ArrayList<String>();
-		List<String> content;
-		for (Workflow wf : components) {
+	public Map<String, String> getRMarkDownScriptRepresentations() throws IOException {
+		final Map<String, String> rmdScripts = new HashMap<String, String>();
+		Map<String, String> content;
+		for (final Workflow wf : components) {
 			content = wf.getRMarkDownScriptRepresentations();
 			if (content != null) {
-				rmdScripts.addAll(content);
+				rmdScripts.putAll(content);
 			}
 		}
 		return rmdScripts;
