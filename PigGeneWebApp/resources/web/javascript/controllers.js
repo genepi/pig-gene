@@ -17,8 +17,8 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 			case "downloadScriptBtn": 
 						SharedWfService.downloadScript();
 						break;
-			case "expertModeBtn":
-						SharedWfService.broadcastExpertModeToggle();
+			case "adminModeBtn":
+						SharedWfService.broadcastAdminModeToggle();
 						break;
 			default: break;	
 		}
@@ -30,15 +30,33 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	
 }]);
 
-function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeout, SharedWfService) {
+pigGeneApp.controller('RouteCtrl', function($scope) {
+	$scope.adminMode = true;
+	
+	$scope.template = {
+		"admin": "adminView.html",
+		"standard": "standardView.html"
+	};
+	
+	$scope.$on("toggleAdminMode", function() {
+		if($scope.adminMode) {
+			$scope.adminMode = false;
+		} else {
+			$scope.adminMode = true;
+		}
+	});
+	
+});
+
+pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$filter", "$compile", "$timeout", "SharedWfService", function($scope, $routeParams, $location, $filter, $compile, $timeout, SharedWfService) {
 	$scope.visible = false;
 	
 	$scope.workflow = SharedWfService.workflow;
 	if($routeParams.id != "newWf") {
 		SharedWfService.loadWfDefinition($routeParams.id);
-	}
+	};
 	
-	$scope.workflowName = "";
+	$scope.workflowName = "abc";
 	$scope.workflowDescription = "";
 	
 	$scope.$on("handleWfChange", function() {
@@ -50,7 +68,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 		$scope.workflowDescription = SharedWfService.workflow.description;
 		$('#workflowDescription').val($scope.workflowDescription);
 	});
-
+	
 	$scope.addNewComponent = function() {
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
 			if(!$scope.pigScriptOnly) {
@@ -91,11 +109,11 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 	$scope.updateWfDefinition = function() {
 		$scope.timeout = 2000
 		if ($scope.pendingPromise) { 
-        	$timeout.cancel($scope.pendingPromise); 
-        }
-    	$scope.pendingPromise = $timeout(function () { 
-    		SharedWfService.changeWfMetaInfo($scope.workflowName, $scope.workflowDescription);
-        }, $scope.timeout);
+			$timeout.cancel($scope.pendingPromise); 
+		}
+		$scope.pendingPromise = $timeout(function () { 
+			SharedWfService.changeWfMetaInfo($scope.workflowName, $scope.workflowDescription);
+		}, $scope.timeout);
 	};
 	
 	$scope.editReferencedWf = function(id) {
@@ -105,36 +123,36 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 	$scope.renderOptionBtns = function(event, index, mode) {
 		var targetElement = event.currentTarget;
 		var options = "options"
-		
-		if(!$(targetElement).hasClass(options)) {
-			var buttonGroup1 = $("<div class='btn-group optionBtns1'></div>");
-			var buttonGroup2 = $("<div class='btn-group optionBtns2'></div>");
-
-			var upBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentUp($event)'><span class='glyphicon glyphicon-arrow-up'></span></button>")($scope);
-			var downBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentDown($event)'><span class='glyphicon glyphicon-arrow-down'></span></button>")($scope);
-			$(buttonGroup1).append(upBtn);
-			$(buttonGroup1).append(downBtn);
 			
-			if(mode === 'std') {
-				var acceptBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-success' ng-click='saveComponentModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
-				$(buttonGroup2).append(acceptBtn);
-			}
-			
-			var cancelBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-warning' ng-click='cancelComponentModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
-			$(buttonGroup2).append(cancelBtn);
-			var deleteBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-danger' ng-click='deleteComponent($event)'><span class='glyphicon glyphicon-trash'></span></button>")($scope);
-			$(buttonGroup2).append(deleteBtn);
-			
-			$(targetElement.parentNode).append(buttonGroup1);
-			$(targetElement.parentNode).append(buttonGroup2);
-
-			if(mode === 'std') {
-				var scriptSelector = $compile('<span class="dropdown"><button class="btn btn-default dropdown-toggle scriptMenu" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"><span id="scriptType">'+ $scope.workflow.components[index].scriptType.name + ' ' + '</span><span class="caret"></span></button><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><li role="presentation"><a name='+index+' role="menuitem" ng-click="setScriptType($event,0)">'+scriptType[0].name+' </a></li><li role="presentation"><a name='+index+' role="menuitem" ng-click="setScriptType($event,1)">'+scriptType[1].name+' </a></li></ul></span>')($scope);
-				$(targetElement.parentNode).append(scriptSelector);
-			}
+			if(!$(targetElement).hasClass(options)) {
+				var buttonGroup1 = $("<div class='btn-group optionBtns1'></div>");
+				var buttonGroup2 = $("<div class='btn-group optionBtns2'></div>");
 				
-			$(targetElement).addClass(options);
-		}
+				var upBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentUp($event)'><span class='glyphicon glyphicon-arrow-up'></span></button>")($scope);
+				var downBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentDown($event)'><span class='glyphicon glyphicon-arrow-down'></span></button>")($scope);
+				$(buttonGroup1).append(upBtn);
+				$(buttonGroup1).append(downBtn);
+				
+				if(mode === 'std') {
+					var acceptBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-success' ng-click='saveComponentModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
+					$(buttonGroup2).append(acceptBtn);
+				}
+				
+				var cancelBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-warning' ng-click='cancelComponentModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
+				$(buttonGroup2).append(cancelBtn);
+				var deleteBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-danger' ng-click='deleteComponent($event)'><span class='glyphicon glyphicon-trash'></span></button>")($scope);
+				$(buttonGroup2).append(deleteBtn);
+				
+				$(targetElement.parentNode).append(buttonGroup1);
+				$(targetElement.parentNode).append(buttonGroup2);
+				
+				if(mode === 'std') {
+					var scriptSelector = $compile('<span class="dropdown"><button class="btn btn-default dropdown-toggle scriptMenu" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"><span id="scriptType">'+ $scope.workflow.components[index].scriptType.name + ' ' + '</span><span class="caret"></span></button><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><li role="presentation"><a name='+index+' role="menuitem" ng-click="setScriptType($event,0)">'+scriptType[0].name+' </a></li><li role="presentation"><a name='+index+' role="menuitem" ng-click="setScriptType($event,1)">'+scriptType[1].name+' </a></li></ul></span>')($scope);
+					$(targetElement.parentNode).append(scriptSelector);
+				}
+				
+				$(targetElement).addClass(options);
+			}
 	};
 	
 	$scope.removeOptionBtns = function(btnGroupElement, operation) {
@@ -199,7 +217,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 	$scope.deleteComponent = function(event) {
 		var index = parseInt(event.currentTarget.name);
 		var modWf = $scope.workflow;
-
+		
 		if(!$scope.pigScriptOnly && modWf.components[index].scriptType.id != 0) {
 			$scope.pigScriptOnly = true;
 		}
@@ -223,7 +241,7 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 			var index = parseInt(event.currentTarget.name);
 			var modWf = $scope.workflow;
 			modWf.components[index].scriptType = scriptType[scriptTypeID];
-
+			
 			if(scriptTypeID != 0) {
 				$scope.pigScriptOnly = false;
 			} else if (scriptTypeID == 0 && $scope.noRmdScriptExists()) {
@@ -287,9 +305,9 @@ function WorkflowCtrl($scope, $routeParams, $location, $filter, $compile, $timeo
 	$scope.$on("hideParameterElements", function() {
 		$scope.visible = false;
 	});
-};
 
-
+}]);
+	
 pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
 	$scope.radioSelection = "";
 	$scope.openDef = true;

@@ -1,11 +1,5 @@
-<div class="workflowContainer well">
+<div ng-controller="WorkflowCtrl">
 
-
-	<div class="headlineContainer">
-		<wfmeta-input value="myValue" timeout="2000" placeholder="please type a workflow name" />
-		<br>
-	</div>
-	
 	<div class="paramContainer" ng-if="isVisible()">
 		<div class="inputParameters">
 			input elements:<br>
@@ -16,7 +10,7 @@
 			<button class="btn btn-xs btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
 		</div>
 	</div>
-	
+		
 	<div>
 		<div ng-repeat="component in workflow.components track by $index">
 			<br ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
@@ -34,7 +28,7 @@
 			<div class="scriptContentBlock refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 				<textarea readonly elastic class="scriptContent componentRef" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" ng-click="renderOptionBtns($event,$index,'ref')" ng-model="component.components[0].content">{{component.components[0].content}}</textarea>
 			</div>
-
+	
 			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.outputParameter)">
 				output parameter mapping:
 				<div ng-repeat="output in component.parameter.outputParameter track by $index">
@@ -42,7 +36,7 @@
 					<span class="parameterElementPrefix" >{{output.name}}</span>
 				</div>
 			</div>
-
+	
 			<div class="scriptContentBlock" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')">
 				<textarea elastic class="scriptContent component" placeholder="please type your desired pig-operations" ng-if="checkType(component.workflowType, 'WORKFLOW_COMPONENT')" ng-click="renderOptionBtns($event,$index,'std')">{{component.content}}</textarea>
 			</div>

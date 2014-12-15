@@ -1,4 +1,4 @@
-pigGeneApp = angular.module("pigGene",["ngResource", "ngRoute", "xeditable"]);
+var pigGeneApp = angular.module("pigGene",["ngResource", "ngRoute", "xeditable"]);
 
 pigGeneApp.run(function(editableOptions) {
 	  editableOptions.theme = "bs3"; // bootstrap3 theme
@@ -20,7 +20,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.workflow = {};
 	sharedWorkflow.existingWorkflows = {};
 	sharedWorkflow.openDef = true;
-	sharedWorkflow.expertMode = false;
 	
 	sharedWorkflow.initializeNewWorkflow = function() {
 		var emptyWorkflow = {
@@ -215,13 +214,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		$rootScope.$broadcast("illegalScriptCombination");
 	};
 	
-	sharedWorkflow.broadcastExpertModeToggle = function() {
-		if(this.expertMode) {
-			this.expertMode = false;
-		} else {
-			this.expertMode = true;
-		}
-		$rootScope.$broadcast("expertModeChange");
+	sharedWorkflow.broadcastAdminModeToggle = function() {
+		$rootScope.$broadcast("toggleAdminMode");
 	};
 	
 	sharedWorkflow.showParameterElements = function() {
@@ -243,15 +237,16 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	return sharedWorkflow;
 }]);
 
-function workflowRouteConfig($routeProvider) {
+pigGeneApp.config(function($routeProvider, $locationProvider) {
 	$routeProvider
-		.when('/wf/:id', {
-			controller: WorkflowCtrl,
-			templateUrl: 'workflowRepresentation.html'
-		});
-}
-	
-pigGeneApp.config(workflowRouteConfig);
+	.when('/wf/:id', {
+		controller: 'RouteCtrl',
+		templateUrl: 'uirouter.html'
+	})
+	.otherwise({
+		redirectTo: '/home'
+	});
+});
 
 pigGeneApp.directive('elastic', ['$timeout',
 	  function($timeout) {
