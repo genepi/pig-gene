@@ -29,10 +29,10 @@ public class WorkflowConverter {
 
 		final List<LinkParameter> inputParameter = convertJSONParameters("input", data.getJSONObject("parameter").getJSONArray("inputParameter"));
 		final List<LinkParameter> outputParameter = convertJSONParameters("output", data.getJSONObject("parameter").getJSONArray("outputParameter"));
-		final Map<String, Map<String, String>> inputParameterMapping = convertJSONMapping("input", data.getJSONObject("parameterMapping")
-				.getJSONObject("inputParameterMapping"));
-		final Map<String, Map<String, String>> outputParameterMapping = convertJSONMapping("output", data.getJSONObject("parameterMapping")
-				.getJSONObject("outputParameterMapping"));
+		final Map<String, Map<String, String>> inputParameterMapping = convertJSONMapping(data.getJSONObject("parameterMapping").getJSONObject(
+				"inputParameterMapping"));
+		final Map<String, Map<String, String>> outputParameterMapping = convertJSONMapping(data.getJSONObject("parameterMapping").getJSONObject(
+				"outputParameterMapping"));
 
 		final WorkflowParameter parameter = new WorkflowParameter(inputParameter, outputParameter);
 		final WorkflowParameterMapping parameterMapping = new WorkflowParameterMapping(inputParameterMapping, outputParameterMapping);
@@ -69,29 +69,21 @@ public class WorkflowConverter {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Map<String, Map<String, String>> convertJSONMapping(final String type, final JSONObject jsonObject) throws JSONException {
+	private static Map<String, Map<String, String>> convertJSONMapping(final JSONObject jsonObject) throws JSONException {
 		final Map<String, Map<String, String>> map = new HashMap<String, Map<String, String>>();
 
 		final Iterator<String> keys = jsonObject.keys();
 		Iterator<String> innerKeys;
 		while (keys.hasNext()) {
 			final String key = keys.next();
-			final Map<String, String> innerMap = new HashMap<String, String>();
+			final Map<String, String> inputMap = new HashMap<String, String>();
 			final JSONObject object = jsonObject.getJSONObject(key);
 			innerKeys = object.keys();
 			while (innerKeys.hasNext()) {
 				final String innerKey = innerKeys.next();
-				if (type.equals("input")) {
-					innerMap.put(innerKey, object.getString(innerKey));
-				} else if (type.equals("output")) {
-					System.out.println(object);
-					System.out.println(object.getString(innerKey));
-
-					// TODO type...
-					innerMap.put(innerKey, object.getString(innerKey));
-				}
+				inputMap.put(innerKey, object.getString(innerKey));
 			}
-			map.put(key, innerMap);
+			map.put(key, inputMap);
 		}
 		return map;
 	}

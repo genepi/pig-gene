@@ -124,11 +124,12 @@ public class WorkflowReference extends Workflow {
 				if (replacementName != null && !wfParameter.isContainedWithinOuterWfParams(replacementName)) {
 					replacementName = replacementName.substring(1);
 				}
+
 			}
 			if (replacementName != null && replacementName.startsWith("$")) {
-				replacementName = "'\\".concat(replacementName).concat("'");
+				replacementName = "\\".concat(replacementName);
 			} else if (replacementName == null) {
-				replacementName = "\\$" + key;
+				replacementName = "\\" + key;
 			}
 			m.appendReplacement(sb, (replacementName != null) ? replacementName : key);
 		}
