@@ -1,3 +1,55 @@
 <div ng-controller="WorkflowCtrl">
+
+	<div ng-controller="PlumbCtrl">
+		<div id="workflow-graph"class="drop-container" droppable style="width:800px; height:500px;" ng-click="addEvent($event)" >
+		<div class="paramContainer" ng-if="isVisible()">
+			<div ng-repeat="input in workflow.parameter.inputParameter track by $index" plumb-item style="position: absolute; margin-left:0px;" class="item">
+				<div><b>Input</b></div>
+				<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].name" ng-change="updateWfDefinition()"></input>
+				<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($index)"></a> <div plumb-source class="connect">...</div>
+			</div>
+			<button class="btn btn-xs btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
 	
+			<div ng-repeat="output in workflow.parameter.outputParameter track by $index" plumb-item style="position: absolute; margin-left:0px;" class="item">
+				<div><b>Output</b></div>
+				<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].name" ng-change="updateWfDefinition()"></input>
+				<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($index)"></a><div plumb-source class="connect">...</div>
+			</div>
+			<button class="btn btn-xs btn-default" ng-click="addOutput()"><span class="glyphicon glyphicon-plus"></span> add output</button>
+	
+	
+		<div ng-repeat="component in workflow.components track by $index" plumb-item style="position: absolute; margin-left:0px;" class="item">
+			<br ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" data-identifier="{{component.name}}">
+		
+		<div><b>{{component.name}}</b></div>
+		
+			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.inputParameter)">
+				<div ng-repeat="input in component.parameter.inputParameter track by $index">
+					<div plumb-target class="connect2">${{input.name}}</div>
+					<input type="hidden" class="parameterElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.name][input.name]" ng-change="updateWfDefinition()"></input>
+				</div>
+			</div>
+			
+			<div class="refParamContainer refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.outputParameter)">
+				<div ng-repeat="output in component.parameter.outputParameter track by $index" style="margin-left:0px;">
+					<input type="hidden" class="parameterElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.name]" ng-change="updateWfDefinition()"></input> 
+					<div plumb-source class="connect" >${{output.name}}</div>
+					
+				</div>
+			</div>
+						
+						
+						
+		</div>
+	</div>
+	<div post-render></div>
+	<span ng-init="init()"></span>
+	</div>
+	<br>
+	<br>
+	
+	<button class="btn btn-sm btn-success" ng-click="addNewComponent()"><span class="glyphicon glyphicon-plus"></span> add new component</button>
+	<button class="btn btn-sm btn-warning" ng-click="addExistingComponent()"><span class="glyphicon glyphicon-plus"></span> add existing component</button>
+	
+	</div>
 </div>
