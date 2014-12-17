@@ -309,16 +309,10 @@ pigGeneApp.directive('plumbItem', function() {
 		replace: true,
 		controller: 'PlumbCtrl',
 		link: function (scope, element, attrs) {
-			console.log("Add plumbing for the 'item' element");
-
+			console.log("jsPlumb added an element...");
 			jsPlumb.draggable(element, {
 				//containment: element.parent
 			});
-
-
-			
-			console.log(scope.component);
-			
 		}
 	};
 });
@@ -327,8 +321,6 @@ pigGeneApp.directive('plumbSource', function() {
 	return {
 		replace: true,
 		link: function (scope, element, attrs) {
-			console.log("Add plumbing for the 'connect' element");
-
 			jsPlumb.makeSource(element, {
 				//parent: $(element).parent().parent(),
 				anchor: 'RightMiddle',
@@ -343,10 +335,7 @@ pigGeneApp.directive('plumbTarget', function() {
 	return {
 		replace: true,
 		link: function (scope, element, attrs) {
-			console.log("Add plumbing for the 'connect' element");
-
 			jsPlumb.makeTarget(element, {
-				//parent: $(element).parent().parent(),
 				anchor: 'LeftMiddle',
 				container: 'workflow-graph'
 			});
@@ -358,8 +347,6 @@ pigGeneApp.directive('droppable', function($compile) {
 	return {
 		restrict: 'A',
 		link: function(scope, element, attrs) {
-			console.log("Make this element droppable");
-
 			element.droppable({
 				/*drop:function(event,ui) {
 					// angular uses angular.element to get jQuery element, subsequently data() of jQuery is used to get
