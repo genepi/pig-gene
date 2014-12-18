@@ -300,10 +300,6 @@ pigGeneApp.directive('postRender', [ '$timeout', function($timeout) {
 	return def;
 }]);
 
-//directives link user interactions with $scope behaviours
-//now we extend html with <div plumb-item>, we can define a template <> to replace it with "proper" html, or we can 
-//replace it with something more sophisticated, e.g. setting jsPlumb arguments and attach it to a double-click 
-//event
 pigGeneApp.directive('plumbItem', function() {
 	return {
 		replace: true,
@@ -311,22 +307,44 @@ pigGeneApp.directive('plumbItem', function() {
 		link: function (scope, element, attrs) {
 			console.log("jsPlumb added an element...");
 			jsPlumb.draggable(element, {
-				//containment: element.parent
+				stop: function(event) {
+					getElementPosition(event.target);
+				}
 			});
 		}
 	};
 });
+
+function getElementPosition(state) {
+	var elementPosition = {
+			type: $(state).attr('data-type'),
+			name: $(state).attr('data-name'),
+			top: $(state).position().top,
+			left: $(state).position().left
+	};
+	console.log(elementPosition);
+}
 
 pigGeneApp.directive('plumbSource', function() {
 	return {
 		replace: true,
 		link: function (scope, element, attrs) {
 			jsPlumb.makeSource(element, {
-				//parent: $(element).parent().parent(),
 				anchor: 'RightMiddle',
-				container: 'workflow-graph'
-
+				container: 'workflow-graph',
 			});
+
+			if($(element).attr('data-type') === 'input-param') {
+				$(element).parent().parent().attr('data-type', 'input-element');
+				$(element).parent().parent().attr('data-name', 'TODO_INPUTNAME');
+			} else if($(element).attr('data-type') === 'ref-param') {
+				var attr = $(element).parent().parent().parent().parent().attr('data-type');
+				if(typeof attr === typeof undefined || attr === false) {
+					$(element).parent().parent().parent().parent().attr('data-type', 'ref-element');
+					var name = $(element).parent().parent().parent().children()[0].children[0].innerHTML;
+					$(element).parent().parent().parent().parent().attr('data-name', name);
+				}
+			}
 		}
 	};
 });
@@ -337,36 +355,21 @@ pigGeneApp.directive('plumbTarget', function() {
 		link: function (scope, element, attrs) {
 			jsPlumb.makeTarget(element, {
 				anchor: 'LeftMiddle',
-				container: 'workflow-graph'
+				container: 'workflow-graph',
+				maxConnections:1
 			});
-		}
-	};
-});
-
-pigGeneApp.directive('droppable', function($compile) {
-	return {
-		restrict: 'A',
-		link: function(scope, element, attrs) {
-			element.droppable({
-				/*drop:function(event,ui) {
-					// angular uses angular.element to get jQuery element, subsequently data() of jQuery is used to get
-					// the data-identifier attribute
-					var dragIndex = angular.element(ui.draggable).data('identifier'),
-					dragEl = angular.element(ui.draggable),
-					dropEl = angular.element(this);
-
-					// if dragged item has class menu-item and dropped div has class drop-container, add module 
-					if (dragEl.hasClass('menu-item') && dropEl.hasClass('drop-container')) {
-						console.log("Drag event on " + dragIndex);
-						var x = event.pageX - scope.module_css.width / 2;
-						var y = event.pageY - scope.module_css.height / 2;
-
-						scope.addModuleToSchema(dragIndex, x, y);
-					}
-
-					scope.$apply();
-				}*/
-			});
+			
+			if($(element).attr('data-type') === 'output-param') {
+				$(element).parent().parent().attr('data-type', 'output-element');
+				$(element).parent().parent().attr('data-name', 'TODO_OUTPUTNAME');
+			} else if($(element).attr('data-type') === 'ref-param') {
+				var attr = $(element).parent().parent().parent().parent().attr('data-type');
+				if(typeof attr === typeof undefined || attr === false) {
+					$(element).parent().parent().parent().parent().attr('data-type', 'ref-element');
+					var name = $(element).parent().parent().parent().children()[0].children[0].innerHTML;
+					$(element).parent().parent().parent().parent().attr('data-name', name);
+				}
+			}
 		}
 	};
 });

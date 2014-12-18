@@ -400,9 +400,57 @@ pigGeneApp.controller('PlumbCtrl', function($scope) {
 		jsPlumb.bind("ready", function() {
 			jsPlumb.bind("connection", function (info) {
 				$scope.$apply(function () {
-					console.log("jsPlumb established a connection...");
+					console.log("jsPlumb established a connection from: " + info.sourceId + " to: " + info.targetId);
+					$scope.saveConnections();
+					
+					//TODO
+					//we need to call the broadcastEvent on the workflow to persist the changes
 				});
 			});
 		});
-	}
+	};
+	
+	//TODO 
+	/*
+	 * extend the save connection function to save the positions of the Elements
+	 * additionally: apply a mapping between the original workflows and the 
+	 * jsPlumb IDs ...
+	 */
+	$scope.connections = [];
+	$scope.saveConnections = function() {
+		connections = [];
+		
+		$.each(jsPlumb.getConnections(), function (idx, connection) {
+		      connections.push({
+		      connectionId: connection.id,
+		      pageSourceId: connection.sourceId,
+		      pageTargetId: connection.targetId,
+		      anchors: $.map(connection.endpoints, function(endpoint) {
+		    	  return [[endpoint.anchor.x, 
+		    	           endpoint.anchor.y, 
+		    	           endpoint.anchor.getOrientation()[0], 
+		    	           endpoint.anchor.getOrientation()[1],
+		    	           endpoint.anchor.offsets[0],
+		    	           endpoint.anchor.offsets[1]]];
+		      })
+		    });
+		});
+		
+		$scope.connections = connections;
+		console.log(connections);
+	};
+	
+	$scope.loadConnections = function() {
+		var connections = $scope.connections;
+		
+		$.each(connections, function(idx, elem) {
+			var connection1 = jsPlumb.connect({
+				source: elem.pageSourceId,
+				target: elem.pageTargetId,
+				anchors: elem.anchors
+			});
+
+		});
+	};
+	
 });
