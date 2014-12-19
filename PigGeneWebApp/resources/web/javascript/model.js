@@ -10,3 +10,8 @@ var scriptType = [
         {id:0, name:"Apache Pig Script"},
         {id:1, name:"R Markdown Script"}
     ];
+
+var anchors = [
+               [1, 0.5,  1, 0, 0, 0],
+               [0, 0.5, -1, 0, 0, 0]
+    ];

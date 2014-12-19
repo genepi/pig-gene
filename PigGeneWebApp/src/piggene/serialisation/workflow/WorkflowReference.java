@@ -16,12 +16,14 @@ public class WorkflowReference extends Workflow {
 	private WorkflowType workflowType = WorkflowType.WORKFLOW_REFERENCE;
 
 	private String name;
+	private Position position;
 
 	public WorkflowReference() {
 	}
 
-	public WorkflowReference(final String name) {
+	public WorkflowReference(final String name, final Position position) {
 		this.name = name;
+		this.position = position;
 	}
 
 	@Override
@@ -42,6 +44,14 @@ public class WorkflowReference extends Workflow {
 	@Override
 	public void setName(final String name) {
 		this.name = name;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(final Position position) {
+		this.position = position;
 	}
 
 	@Override

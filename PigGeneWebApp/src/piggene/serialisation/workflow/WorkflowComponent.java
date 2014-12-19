@@ -7,10 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WorkflowComponent extends Workflow {
-	private ScriptType scriptType;
-	private String name;
 	private WorkflowType workflowType = WorkflowType.WORKFLOW_COMPONENT;
+	private String name;
 	private String content;
+	private ScriptType scriptType;
 
 	public WorkflowComponent() {
 	}

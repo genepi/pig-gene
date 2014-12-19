@@ -77,7 +77,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 				var newComp = {
 						workflowType: "WORKFLOW_COMPONENT",
 						scriptType: scriptType[0],
-						content: ""
+						content: "",
 				};
 				var modWf = $scope.workflow;
 				modWf.components.push(newComp);
@@ -390,7 +390,7 @@ pigGeneApp.controller("ScriptCheckCtrl", ["$scope", "SharedWfService", function(
 	
 }]);
 
-pigGeneApp.controller('PlumbCtrl', function($scope) {
+pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope, SharedWfService) {
 
 	$scope.redraw = function() {
 		jsPlumb.detachEveryConnection();
@@ -398,59 +398,67 @@ pigGeneApp.controller('PlumbCtrl', function($scope) {
 	
 	$scope.init = function() {
 		jsPlumb.bind("ready", function() {
-			jsPlumb.bind("connection", function (info) {
+			jsPlumb.bind("connection", function (connection) {
 				$scope.$apply(function () {
-					console.log("jsPlumb established a connection from: " + info.sourceId + " to: " + info.targetId);
-					$scope.saveConnections();
-					
-					//TODO
-					//we need to call the broadcastEvent on the workflow to persist the changes
+					$scope.saveConnection(connection);
 				});
 			});
 		});
 	};
 	
-	//TODO 
-	/*
-	 * extend the save connection function to save the positions of the Elements
-	 * additionally: apply a mapping between the original workflows and the 
-	 * jsPlumb IDs ...
-	 */
-	$scope.connections = [];
-	$scope.saveConnections = function() {
-		connections = [];
+	$scope.saveConnection = function(connection) {
+		var srcConnectionPoint = $('#'+connection.sourceId);
+		var targetConnectionPoint = $('#'+connection.targetId);
 		
-		$.each(jsPlumb.getConnections(), function (idx, connection) {
-		      connections.push({
-		      connectionId: connection.id,
-		      pageSourceId: connection.sourceId,
-		      pageTargetId: connection.targetId,
-		      anchors: $.map(connection.endpoints, function(endpoint) {
-		    	  return [[endpoint.anchor.x, 
-		    	           endpoint.anchor.y, 
-		    	           endpoint.anchor.getOrientation()[0], 
-		    	           endpoint.anchor.getOrientation()[1],
-		    	           endpoint.anchor.offsets[0],
-		    	           endpoint.anchor.offsets[1]]];
-		      })
-		    });
-		});
+		var srcDataType = srcConnectionPoint.attr('data-type');
+		var targetDataType = targetConnectionPoint.attr('data-type');
 		
-		$scope.connections = connections;
-		console.log(connections);
+		if(srcDataType === 'input-param' && targetDataType === 'ref-param') {
+			var paramName = $(srcConnectionPoint).parent().parent().children()[1].value;
+			var targetInputElement = $(targetConnectionPoint).parent().children()[3];
+			$(targetInputElement).val(paramName);
+			$(targetInputElement).trigger('input');
+		} else if(srcDataType === 'input-param' && targetDataType === 'output-param') {
+			//TODO
+			//inform user, that this connection doesnt make any sense...
+			
+		} else if(srcDataType === 'ref-param' && targetDataType === 'ref-param') {
+			var srcInputElement = $(srcConnectionPoint).parent().children()[3];
+			var targetInputElement = $(targetConnectionPoint).parent().children()[3];
+			var srcFieldVal = $(srcInputElement).val();
+			var connectionName;
+			if(srcFieldVal === undefined || srcFieldVal === false || srcFieldVal === "") {
+				connectionName = SharedWfService.generateUniqueID();
+				$(srcInputElement).val(connectionName);
+				$(srcInputElement).trigger('input');
+			} else {
+				connectionName = srcFieldVal;
+			}
+			$(targetInputElement).val(connectionName);
+			$(targetInputElement).trigger('input');
+
+			
+		} else if(srcDataType === 'ref-param' && targetDataType === 'output-param') {
+			var paramName = $(targetConnectionPoint).parent().parent().children()[1].value;
+			var srcInputElement = $(srcConnectionPoint).parent().children()[3];
+			$(srcInputElement).val(paramName);
+			$(srcInputElement).trigger('input');
+		}
 	};
 	
 	$scope.loadConnections = function() {
-		var connections = $scope.connections;
+		var connections = $scope.workflow.connections;
 		
 		$.each(connections, function(idx, elem) {
-			var connection1 = jsPlumb.connect({
-				source: elem.pageSourceId,
-				target: elem.pageTargetId,
-				anchors: elem.anchors
+			var sourceElement = $.find('*[data-id="' + elem.source + '"]');
+			var targetElement = $.find('*[data-id="' + elem.target + '"]');
+			var connection = jsPlumb.connect({
+				source: $(sourceElement).attr('id'),
+				target: $(targetElement).attr('id'),
+				container: 'workflow-graph',
+				anchors: anchors
 			});
-
 		});
 	};
 	
-});
+}]);

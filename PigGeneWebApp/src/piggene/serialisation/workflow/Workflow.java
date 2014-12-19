@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import piggene.representation.Connection;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
@@ -21,6 +22,7 @@ public class Workflow implements IWorkflow {
 
 	private WorkflowParameter parameter;
 	private WorkflowParameterMapping parameterMapping;
+	private List<Connection> connections;
 
 	protected String lineSeparator = System.getProperty("line.separator");
 
@@ -90,6 +92,14 @@ public class Workflow implements IWorkflow {
 
 	public void setLineSeparator(final String lineSeparator) {
 		this.lineSeparator = lineSeparator;
+	}
+
+	public List<Connection> getConnections() {
+		return connections;
+	}
+
+	public void setConnections(final List<Connection> connections) {
+		this.connections = connections;
 	}
 
 	protected String preparePigScriptCommand(final String info) {

@@ -15,6 +15,7 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 });
 
 pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency", function($rootScope, $location, WfPersistency) {
+	var uniqueIDCounter = 0;
 	var sharedWorkflow = {};
 	
 	sharedWorkflow.workflow = {};
@@ -104,6 +105,12 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				console.log(response.message);
 				return;
 			}
+			if(response.data.position === undefined) {
+				response.data.position = {
+						top: 0,
+						left: 0
+				};
+			}
 			sharedWorkflow.refWorkflow = response.data;
 			sharedWorkflow.broadcastRefWfChange();
 			sharedWorkflow.showParameterElements();
@@ -186,6 +193,21 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
+	sharedWorkflow.setElementPosition = function(elementPosition) {
+		var elementName = elementPosition.name;
+		var modWf = this.workflow;
+		for(var i=0; i<modWf.components.length; i++) {
+			if(modWf.components[i].name === elementName) {
+				modWf.components[i].position = {
+						top: elementPosition.top,
+						left: elementPosition.left
+				};
+				break;
+			}
+		}
+		this.prepForBroadcast(modWf);
+	};
+	
 	sharedWorkflow.prepForBroadcast = function(modWf) {
 		this.workflow = modWf;
 		this.broadcastWfChange();
@@ -232,6 +254,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 			return false;
 		}
 		return true;
+	};
+	
+	sharedWorkflow.generateUniqueID = function() {
+		//TODO change implementation
+		return ("$uniqueParameterConnection" + uniqueIDCounter++);
 	};
 	
 	return sharedWorkflow;
@@ -300,32 +327,34 @@ pigGeneApp.directive('postRender', [ '$timeout', function($timeout) {
 	return def;
 }]);
 
-pigGeneApp.directive('plumbItem', function() {
+
+
+pigGeneApp.directive('plumbItem', function(SharedWfService) {
 	return {
 		replace: true,
 		controller: 'PlumbCtrl',
 		link: function (scope, element, attrs) {
 			console.log("jsPlumb added an element...");
+			
 			jsPlumb.draggable(element, {
-				stop: function(event) {
-					getElementPosition(event.target);
+				stop: function() {
+					if(($(element).attr('data-type') === 'ref-element')) {
+						SharedWfService.setElementPosition(
+								{
+									type: $(element).attr('data-type'),
+									name: $(element).attr('data-name'),
+									top: $(element).position().top,
+									left: $(element).position().left
+								}
+						);
+					}
 				}
 			});
 		}
 	};
 });
 
-function getElementPosition(state) {
-	var elementPosition = {
-			type: $(state).attr('data-type'),
-			name: $(state).attr('data-name'),
-			top: $(state).position().top,
-			left: $(state).position().left
-	};
-	console.log(elementPosition);
-}
-
-pigGeneApp.directive('plumbSource', function() {
+pigGeneApp.directive('plumbSource', function(SharedWfService) {
 	return {
 		replace: true,
 		link: function (scope, element, attrs) {

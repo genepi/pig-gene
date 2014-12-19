@@ -1,7 +1,5 @@
 package piggene.resources;
 
-import java.io.IOException;
-
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
@@ -24,7 +22,7 @@ public class WorkflowLoaderService extends ServerResource {
 			final String workflowName = getRequest().getAttributes().get("id").toString();
 			final Workflow workflow = WorkflowSerialisation.resolveWorkflowReferences(WorkflowSerialisation.load(workflowName));
 			obj.setData(workflow);
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while loading the workflow data.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);

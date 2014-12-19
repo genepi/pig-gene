@@ -12,6 +12,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
+import org.json.JSONException;
+
+import piggene.representation.WorkflowGraph;
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.WorkflowComponent;
 import piggene.serialisation.workflow.WorkflowType;
@@ -28,7 +31,7 @@ public class WorkflowSerialisation {
 		try {
 			prop.load(WorkflowSerialisation.class.getClassLoader().getResourceAsStream("config.properties"));
 			workflowDefsPath = prop.getProperty("workflowDefs");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -36,11 +39,12 @@ public class WorkflowSerialisation {
 
 	public static void store(final Workflow workflow, final String encodedWfName) throws IOException {
 		try {
-			final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(encodedWfName.concat(fileExtension)))));
+			final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(encodedWfName
+					.concat(fileExtension)))));
 			writer.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
 			writer.write(workflow);
 			writer.close();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -53,39 +57,42 @@ public class WorkflowSerialisation {
 		return workflow;
 	}
 
-	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException {
-		List<Workflow> resolvedSteps = new ArrayList<Workflow>();
-		for (Workflow wf : workflow.getComponents()) {
+	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException, JSONException {
+		final List<Workflow> resolvedSteps = new ArrayList<Workflow>();
+		for (final Workflow wf : workflow.getComponents()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
 				resolvedSteps.add(getAllDependingReferencedWorkflowSteps(wf.getName()));
 			} else {
 				resolvedSteps.add(wf);
 			}
 		}
-		return new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getParameter(), workflow.getParameterMapping());
+		final Workflow wf = new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getParameter(),
+				workflow.getParameterMapping());
+		wf.setConnections(WorkflowGraph.createConnectionList(wf));
+		return wf;
 	}
 
 	private static Workflow getAllDependingReferencedWorkflowSteps(final String workflowName) throws IOException {
-		Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
+		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
 		// change type because it is a RESOLVED REFERENCED wf
 		referencedWorkflow.setWorkflowType(WorkflowType.WORKFLOW_REFERENCE);
 
 		// combine content of all recursively used components
 		// within one single WORKFLOW_COMPONENT
-		WorkflowComponent resolvedWfComp = new WorkflowComponent();
+		final WorkflowComponent resolvedWfComp = new WorkflowComponent();
 		resolvedWfComp.setContent(mergeContentOfReferencedWorkflow(referencedWorkflow.getComponents()));
 
-		List<Workflow> componentList = new ArrayList<Workflow>();
+		final List<Workflow> componentList = new ArrayList<Workflow>();
 		componentList.add(resolvedWfComp);
 		referencedWorkflow.setComponents(componentList);
 		return referencedWorkflow;
 	}
 
 	private static String mergeContentOfReferencedWorkflow(final List<Workflow> components) throws IOException {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		boolean appendLineBreak = false;
 		if (!(components == null)) {
-			for (Workflow wf : components) {
+			for (final Workflow wf : components) {
 				if (appendLineBreak) {
 					sb.append(System.getProperty("line.separator"));
 				}
@@ -101,13 +108,13 @@ public class WorkflowSerialisation {
 	}
 
 	public static boolean remove(final String name) throws FileNotFoundException {
-		File file = new File(workflowDefsPath.concat(name).concat(fileExtension));
-		if(!file.exists()) {
+		final File file = new File(workflowDefsPath.concat(name).concat(fileExtension));
+		if (!file.exists()) {
 			throw new FileNotFoundException("file does not exist");
 		}
 		return file.delete();
 	}
-	
+
 	public static List<String> getListOfWorkflowNames() throws IOException {
 		final File file = new File(workflowDefsPath);
 		final File[] files = file.listFiles();
@@ -122,7 +129,7 @@ public class WorkflowSerialisation {
 		}
 		Collections.sort(fileNames, new Comparator<String>() {
 			@Override
-			public int compare(String name1, String name2) {
+			public int compare(final String name1, final String name2) {
 				return name1.compareTo(name2);
 			}
 		});

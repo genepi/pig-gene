@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import piggene.serialisation.workflow.Position;
 import piggene.serialisation.workflow.ScriptType;
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.WorkflowComponent;
@@ -48,7 +49,14 @@ public class WorkflowConverter {
 				components.add(new WorkflowComponent(name, component.getString("content"), new ScriptType(scriptType.getInt("id"), scriptType
 						.getString("name"))));
 			} else { // referenced workflow element
-				components.add(new WorkflowReference(component.getString("name")));
+				final JSONObject position;
+				if (component.has("position")) {
+					position = component.getJSONObject("position");
+					components.add(new WorkflowReference(component.getString("name"), new Position(position.getInt("top"), position.getInt("left"))));
+
+				} else {
+					components.add(new WorkflowReference(component.getString("name"), new Position(0, 0)));
+				}
 			}
 		}
 		return components;
