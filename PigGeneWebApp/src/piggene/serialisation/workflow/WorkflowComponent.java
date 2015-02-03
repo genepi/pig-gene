@@ -49,13 +49,13 @@ public class WorkflowComponent extends Workflow {
 
 	@Override
 	public String getPigScriptRepresentation(final String wfName) throws IOException {
-		final String regex = "(\\$\\w+)(\\b)";
+		final String regex = "(\\s)(\\$\\w+)(\\b)";
 		final Pattern p = Pattern.compile(regex);
 		final Matcher m = p.matcher(content);
 		final StringBuffer sb = new StringBuffer();
 		while (m.find()) {
-			final String param = m.group(1);
-			m.appendReplacement(sb, "'\\".concat(param).concat("'"));
+			final String param = m.group(2);
+			m.appendReplacement(sb, " '\\".concat(param).concat("'"));
 		}
 		m.appendTail(sb);
 		return sb.toString();

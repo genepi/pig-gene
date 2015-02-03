@@ -126,15 +126,8 @@ public class WorkflowReference extends Workflow {
 			String replacementName = null;
 			if (inputParameterMap.containsKey(key)) { // inputParam
 				replacementName = inputParameterMap.get(key);
-				if (replacementName != null && !wfParameter.isContainedWithinOuterWfParams(replacementName)) {
-					replacementName = replacementName.substring(1);
-				}
 			} else if (outputParameterMap.containsKey(key)) { // outputParam
 				replacementName = outputParameterMap.get(key);
-				if (replacementName != null && !wfParameter.isContainedWithinOuterWfParams(replacementName)) {
-					replacementName = replacementName.substring(1);
-				}
-
 			}
 			if (replacementName != null && replacementName.startsWith("$")) {
 				replacementName = "\\".concat(replacementName);

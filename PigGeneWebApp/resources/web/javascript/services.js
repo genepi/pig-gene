@@ -15,7 +15,7 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 });
 
 pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency", function($rootScope, $location, WfPersistency) {
-	var uniqueIDCounter = 0;
+	var uniqueIDCounter = 1;
 	var sharedWorkflow = {};
 	
 	sharedWorkflow.workflow = {};
@@ -258,7 +258,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.generateUniqueID = function() {
 		//TODO change implementation
-		return ("$uniqueParameterConnection" + uniqueIDCounter++);
+		return ("$connector_" + uniqueIDCounter++);
 	};
 	
 	return sharedWorkflow;
