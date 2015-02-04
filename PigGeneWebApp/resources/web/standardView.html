@@ -1,4 +1,9 @@
-<div ng-controller="WorkflowCtrl">
+<div class="workflowContainer well" ng-controller="WorkflowCtrl">
+
+	<div class="headlineContainer">
+		<wfmeta-input value="myValue" timeout="2000" placeholder="please type a workflow name" />
+		<br>
+	</div>
 
 	<div ng-controller="PlumbCtrl">
 		<button ng-click="loadConnections()">load connections</button>
@@ -7,7 +12,7 @@
 			<div class="paramContainer" ng-if="isVisible()">
 				<div ng-repeat="input in workflow.parameter.inputParameter track by $index" plumb-item style="position: absolute; margin-left:0px;" class="item item-in_out">
 					<div class="paramTitle"><b>Input</b></div>
-					</span><input ng-model="workflow.parameter.inputParameter[$index].name" ng-change="updateWfDefinition()"></input>
+					</span><input ng-model="workflow.parameter.inputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="input description"></input>
 					<div>
 						<a class="input-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($index)"></a>
 						<div data-type="input-param" data-id="{{workflow.parameter.inputParameter[$index].name}}" plumb-source class="circle circle-source connect3">...</div>
@@ -17,7 +22,7 @@
 		
 				<div ng-repeat="output in workflow.parameter.outputParameter track by $index" plumb-item style="position: absolute; margin-left:0px;" class="item item-in_out">
 					<div class="paramTitle"><b>Output</b></div>
-					<input ng-model="workflow.parameter.outputParameter[$index].name" ng-change="updateWfDefinition()"></input>
+					<input ng-model="workflow.parameter.outputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="output description"></input>
 					<div>
 						<a class="output-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($index)"></a>
 						<div data-type="output-param" data-id="{{workflow.parameter.outputParameter[$index].name}}" plumb-target class="circle circle-target connect3">...</div>

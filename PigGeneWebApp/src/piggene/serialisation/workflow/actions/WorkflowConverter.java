@@ -65,12 +65,26 @@ public class WorkflowConverter {
 	private static List<LinkParameter> convertJSONParameters(final String type, final JSONArray jsonArray) throws JSONException {
 		final List<LinkParameter> parameters = new ArrayList<LinkParameter>();
 		String name;
+		String description;
 		for (int i = 0; i < jsonArray.length(); i++) {
 			name = jsonArray.getJSONObject(i).getString("name");
+			description = jsonArray.getJSONObject(i).getString("description");
 			if (type.equals("input")) {
-				parameters.add(new InputLinkParameter(name));
+				InputLinkParameter inputLinkParam;
+				if (description != null) {
+					inputLinkParam = new InputLinkParameter(name, description);
+				} else {
+					inputLinkParam = new InputLinkParameter(name);
+				}
+				parameters.add(inputLinkParam);
 			} else if (type.equals("output")) {
-				parameters.add(new OutputLinkParameter(name));
+				OutputLinkParameter outputLinkParam;
+				if (description != null) {
+					outputLinkParam = new OutputLinkParameter(name, description);
+				} else {
+					outputLinkParam = new OutputLinkParameter(name);
+				}
+				parameters.add(outputLinkParam);
 			}
 		}
 		return parameters;

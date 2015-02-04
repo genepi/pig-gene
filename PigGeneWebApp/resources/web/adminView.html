@@ -1,10 +1,16 @@
-<div ng-controller="WorkflowCtrl">
+<div class="workflowContainer well" ng-controller="WorkflowCtrl">
+
+	<div class="headlineContainer">
+		<wfmeta-input value="myValue" timeout="2000" placeholder="please type a workflow name" />
+		<br>
+	</div>
 
 	<div class="paramContainer" ng-if="isVisible()">
 		<div class="inputParameters">
 			input elements:<br>
 			<div ng-repeat="input in workflow.parameter.inputParameter track by $index">
-				<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].name" ng-change="updateWfDefinition()"></input>
+				<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].name" ng-change="updateWfDefinition()" placeholder="$inputName"></input>
+				<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="input description"></input>
 				<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($index)"></a>
 			</div>
 			<button class="btn btn-xs btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
@@ -12,7 +18,7 @@
 	</div>
 		
 	<div>
-		<div ng-repeat="component in workflow.components track by $index">
+		<div ng-repeat="component in workflow.components track by $index" ng-if="isVisible()">
 			<br ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">
 			<h4 class="refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')"><a ng-click="editReferencedWf(component.name)">{{component.name}}</a></h4>
 			<i class="refIndentation" ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')">{{component.description}}</i><br>
@@ -46,7 +52,8 @@
 			<div class="outputParameters">
 				output elements:<br>
 				<div ng-repeat="output in workflow.parameter.outputParameter track by $index">
-					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].name" ng-change="updateWfDefinition()"></input>
+					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].name" ng-change="updateWfDefinition()" placeholder="$outputName"></input>
+					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="output description"></input>
 					<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($index)"></a>
 				</div>
 				<button class="btn btn-xs btn-default" ng-click="addOutput()"><span class="glyphicon glyphicon-plus"></span> add output</button>

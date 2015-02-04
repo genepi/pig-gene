@@ -22,6 +22,30 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.existingWorkflows = {};
 	sharedWorkflow.openDef = true;
 	
+	sharedWorkflow.initializeNewComponent = function() {
+		var emptyWorkflow = {
+				name: "newWf",
+				description: "workflow description",
+				workflowType: "WORKFLOW",
+				components: [{
+					workflowType: "WORKFLOW_COMPONENT",
+					scriptType: scriptType[0],
+					content: "",
+				}],
+				parameter: {
+					inputParameter: [{name:"",description:""}],
+					outputParameter: [{name:"",description:""}]
+				},
+				parameterMapping: {
+					inputParameterMapping: {},
+					outputParameterMapping: {}
+				}
+		};
+		sharedWorkflow.workflow = emptyWorkflow;
+		sharedWorkflow.broadcastWfChange();
+		sharedWorkflow.redirectLocation("/wf/admin/", "newWf");
+	};
+	
 	sharedWorkflow.initializeNewWorkflow = function() {
 		var emptyWorkflow = {
 				name: "newWf",
@@ -39,7 +63,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
 		sharedWorkflow.broadcastWfChange();
-		$location.path('/wf/' + "newWf").replace();
+		sharedWorkflow.redirectLocation("/wf/", "newWf");
 	};
 	
 	sharedWorkflow.changeWfMetaInfo = function(newWfName, newWfDescription) {
@@ -81,7 +105,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				console.log(response.message);
 				return;
 			}
-			$location.path("").replace();
 		});
 	};
 	
@@ -130,7 +153,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 					console.log(response.message);
 					return;
 				}
-				$location.path('/wf/' + sharedWorkflow.workflow.name).replace();
+				sharedWorkflow.redirectLocation($location.$$path, sharedWorkflow.workflow.name);
 			});
 		}
 	};
@@ -138,13 +161,22 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.persistWfDefinitionAndRedirectToReferencedWf = function(refWfName) {
 		var myWf = new WfPersistency.Save(this.workflow);
 		myWf.$save(function(u,putResponseHeaders) {
-			$location.path('/wf/' + sharedWorkflow.workflow.name).replace();
+			sharedWorkflow.redirectLocation($location.$$path, sharedWorkflow.workflow.name);
 			setTimeout(function() {
 				sharedWorkflow.openDef = true;
 				sharedWorkflow.loadWfDefinition(refWfName);
-				$location.path("/wf/" + refWfName);
+				sharedWorkflow.redirectLocation($location.$$path, refWfName);
 			},1);
 		});
+	};
+	
+	sharedWorkflow.redirectLocation = function(oldPath, wfName) {
+		var patternAdmin = /.*\/wf\/admin\/.*/;
+		if(patternAdmin.test(oldPath)) {
+			$location.path("/wf/admin/" + wfName).replace();
+		} else {
+			$location.path("/wf/" + wfName).replace();
+		}
 	};
 	
 	sharedWorkflow.loadExistingWorkflowNames = function(openWfDefinition) {
@@ -236,10 +268,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		$rootScope.$broadcast("illegalScriptCombination");
 	};
 	
-	sharedWorkflow.broadcastAdminModeToggle = function() {
-		$rootScope.$broadcast("toggleAdminMode");
-	};
-	
 	sharedWorkflow.showParameterElements = function() {
 		$rootScope.$broadcast("showParameterElements");
 	};
@@ -257,7 +285,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.generateUniqueID = function() {
-		//TODO change implementation
 		return ("$connector_" + uniqueIDCounter++);
 	};
 	
@@ -266,9 +293,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 
 pigGeneApp.config(function($routeProvider, $locationProvider) {
 	$routeProvider
+	.when('/wf/admin/:id', {
+		templateUrl: 'adminView.html'
+	})
 	.when('/wf/:id', {
-		controller: 'RouteCtrl',
-		templateUrl: 'uirouter.html'
+		templateUrl: 'standardView.html'
 	})
 	.otherwise({
 		redirectTo: '/home'
@@ -334,7 +363,7 @@ pigGeneApp.directive('plumbItem', function(SharedWfService) {
 		replace: true,
 		controller: 'PlumbCtrl',
 		link: function (scope, element, attrs) {
-			console.log("jsPlumb added an element...");
+			//console.log("jsPlumb added an element...");
 			
 			jsPlumb.draggable(element, {
 				stop: function() {

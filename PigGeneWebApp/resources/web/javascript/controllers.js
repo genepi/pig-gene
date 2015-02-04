@@ -4,6 +4,9 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	
 	$scope.performNavBarAction = function(index) {
 		switch(buttons[index].name) {
+			case "newCompBtn":
+						SharedWfService.initializeNewComponent();
+						break;
 			case "newWfBtn":
 						SharedWfService.initializeNewWorkflow();
 						break;
@@ -17,9 +20,6 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 			case "downloadScriptBtn": 
 						SharedWfService.downloadScript();
 						break;
-			case "adminModeBtn":
-						SharedWfService.broadcastAdminModeToggle();
-						break;
 			default: break;	
 		}
 	};
@@ -29,24 +29,6 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	};
 	
 }]);
-
-pigGeneApp.controller('RouteCtrl', function($scope) {
-	$scope.adminMode = true;
-	
-	$scope.template = {
-		"admin": "adminView.html",
-		"standard": "standardView.html"
-	};
-	
-	$scope.$on("toggleAdminMode", function() {
-		if($scope.adminMode) {
-			$scope.adminMode = false;
-		} else {
-			$scope.adminMode = true;
-		}
-	});
-	
-});
 
 pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$filter", "$compile", "$timeout", "SharedWfService", function($scope, $routeParams, $location, $filter, $compile, $timeout, SharedWfService) {
 	$scope.visible = false;
@@ -271,7 +253,8 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	$scope.addInput = function() {
 		var modWf = SharedWfService.workflow;
 		var inputObj = {
-				name: ""
+				name: "", 
+				description: ""
 		};
 		modWf.parameter.inputParameter.push(inputObj);
 		SharedWfService.prepForBroadcast(modWf);
@@ -287,6 +270,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		var modWf = SharedWfService.workflow;
 		var outputObj = {
 				name: "",
+				description: ""
 		};
 		modWf.parameter.outputParameter.push(outputObj);
 		SharedWfService.prepForBroadcast(modWf);
@@ -414,7 +398,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 		var targetDataType = targetConnectionPoint.attr('data-type');
 		
 		if(srcDataType === 'input-param' && targetDataType === 'ref-param') {
-			var paramName = $(srcConnectionPoint).parent().parent().children()[1].value;
+			var paramName = $(srcConnectionPoint).attr("data-id");
 			var targetInputElement = $(targetConnectionPoint).parent().children()[3];
 			$(targetInputElement).val(paramName);
 			$(targetInputElement).trigger('input');
@@ -439,7 +423,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 
 			
 		} else if(srcDataType === 'ref-param' && targetDataType === 'output-param') {
-			var paramName = $(targetConnectionPoint).parent().parent().children()[1].value;
+			var paramName = $(targetConnectionPoint).attr("data-id");
 			var srcInputElement = $(srcConnectionPoint).parent().children()[3];
 			$(srcInputElement).val(paramName);
 			$(srcInputElement).trigger('input');
@@ -459,6 +443,12 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 				anchors: anchors
 			});
 		});
+	};
+	
+	$scope.deleteExistingComponent = function(event) {
+		var targetElement = event.currentTarget;
+		console.log(targetElement);
+		//TODO implement deletion
 	};
 	
 }]);
