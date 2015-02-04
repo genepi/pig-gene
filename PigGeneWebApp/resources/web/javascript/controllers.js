@@ -398,14 +398,22 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 		var targetDataType = targetConnectionPoint.attr('data-type');
 		
 		if(srcDataType === 'input-param' && targetDataType === 'ref-param') {
-			var paramName = $(srcConnectionPoint).attr("data-id");
+			var srcInputElement = $(srcConnectionPoint).parent().children()[2];
 			var targetInputElement = $(targetConnectionPoint).parent().children()[3];
-			$(targetInputElement).val(paramName);
+			var srcFieldVal = $(srcInputElement).val();
+			var connectionName;
+			if(srcFieldVal === undefined || srcFieldVal === false || srcFieldVal === "") {
+				connectionName = SharedWfService.generateUniqueID();
+				$(srcInputElement).val(connectionName);
+				$(srcInputElement).trigger('input');
+			} else {
+				connectionName = srcFieldVal;
+			}
+			$(targetInputElement).val(connectionName);
 			$(targetInputElement).trigger('input');
 		} else if(srcDataType === 'input-param' && targetDataType === 'output-param') {
 			//TODO
 			//inform user, that this connection doesnt make any sense...
-			
 		} else if(srcDataType === 'ref-param' && targetDataType === 'ref-param') {
 			var srcInputElement = $(srcConnectionPoint).parent().children()[3];
 			var targetInputElement = $(targetConnectionPoint).parent().children()[3];
@@ -420,13 +428,20 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 			}
 			$(targetInputElement).val(connectionName);
 			$(targetInputElement).trigger('input');
-
-			
 		} else if(srcDataType === 'ref-param' && targetDataType === 'output-param') {
-			var paramName = $(targetConnectionPoint).attr("data-id");
 			var srcInputElement = $(srcConnectionPoint).parent().children()[3];
-			$(srcInputElement).val(paramName);
-			$(srcInputElement).trigger('input');
+			var targetInputElement = $(targetConnectionPoint).parent().children()[2];
+			var srcFieldVal = $(srcInputElement).val();
+			var connectionName;
+			if(srcFieldVal === undefined || srcFieldVal === false || srcFieldVal === "") {
+				connectionName = SharedWfService.generateUniqueID();
+				$(srcInputElement).val(connectionName);
+				$(srcInputElement).trigger('input');
+			} else {
+				connectionName = srcFieldVal;
+			}
+			$(targetInputElement).val(connectionName);
+			$(targetInputElement).trigger('input');
 		}
 	};
 	

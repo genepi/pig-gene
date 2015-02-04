@@ -15,7 +15,8 @@
 					</span><input ng-model="workflow.parameter.inputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="input description"></input>
 					<div>
 						<a class="input-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($index)"></a>
-						<div data-type="input-param" data-id="{{workflow.parameter.inputParameter[$index].name}}" plumb-source class="circle circle-source connect3">...</div>
+						<div data-type="input-param" data-id="{{workflow.parameter.inputParameter[$index].description}}" plumb-source class="circle circle-source connect3">...</div>
+						<input type="text" class="hiddenElement" ng-model="workflow.parameter.inputParameter[$index].name" ng-change="updateWfDefinition()"></input>
 					</div>
 				</div>
 				<button class="btn btn-sm btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
@@ -25,7 +26,8 @@
 					<input ng-model="workflow.parameter.outputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="output description"></input>
 					<div>
 						<a class="output-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($index)"></a>
-						<div data-type="output-param" data-id="{{workflow.parameter.outputParameter[$index].name}}" plumb-target class="circle circle-target connect3">...</div>
+						<div data-type="output-param" data-id="{{workflow.parameter.outputParameter[$index].description}}" plumb-target class="circle circle-target connect3">...</div>
+						<input type="text" class="hiddenElement" ng-model="workflow.parameter.outputParameter[$index].name" ng-change="updateWfDefinition()"></input>
 					</div>
 				</div>
 				<button class="btn btn-sm btn-default" ng-click="addOutput()"><span class="glyphicon glyphicon-plus"></span> add output</button>
