@@ -40,14 +40,14 @@
 					
 						<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.inputParameter)">
 							<div class="rectangle rectangle-target" ng-repeat="input in component.parameter.inputParameter track by $index">
-								<div data-type="ref-param" data-id="{{component.name}}.{{input.name}}" plumb-target class="circle circle-target connect2">...</div><span>{{input.name}}</span><br />
+								<div data-type="ref-param" data-id="{{component.name}}.{{input.name}}" plumb-target class="circle circle-target connect2">...</div><span>{{input.description}}</span><br />
 								<input type="text" class="hiddenElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.name][input.name]" ng-change="updateWfDefinition()"></input>
 							</div>
 						</div>
 	
 						<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.outputParameter)">
 							<div class="rectangle rectangle-source" ng-repeat="output in component.parameter.outputParameter track by $index">
-								<div data-type="ref-param" data-id="{{component.name}}.{{output.name}}" plumb-source class="circle circle-source connect">...</div><span>{{output.name}}</span><br />
+								<div data-type="ref-param" data-id="{{component.name}}.{{output.name}}" plumb-source class="circle circle-source connect">...</div><span>{{output.description}}</span><br />
 								<input type="text" class="hiddenElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.name]" ng-change="updateWfDefinition()"></input> 
 							</div>
 						</div>
