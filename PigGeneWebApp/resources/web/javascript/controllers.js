@@ -445,20 +445,22 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 		}
 	};
 	
-	$scope.loadConnections = function() {
-		var connections = $scope.workflow.connections;
-		
-		$.each(connections, function(idx, elem) {
-			var sourceElement = $.find('*[data-id="' + elem.source + '"]');
-			var targetElement = $.find('*[data-id="' + elem.target + '"]');
-			var connection = jsPlumb.connect({
-				source: $(sourceElement).attr('id'),
-				target: $(targetElement).attr('id'),
-				container: 'workflow-graph',
-				anchors: anchors
+	$scope.$on("$routeChangeSuccess", function($currentRoute, $previousRoute) {
+		setTimeout( function() {
+			var connections = $scope.workflow.connections;
+			$.each(connections, function(idx, elem) {
+				var sourceElement = $.find('*[data-id="' + elem.source + '"]');
+				var targetElement = $.find('*[data-id="' + elem.target + '"]');
+				var connection = jsPlumb.connect({
+					source: $(sourceElement).attr('id'),
+					target: $(targetElement).attr('id'),
+					container: 'workflow-graph',
+					anchors: anchors
+				});
 			});
-		});
-	};
+		}, 
+		100);
+	});
 	
 	$scope.deleteExistingComponent = function(event) {
 		var targetElement = event.currentTarget;
