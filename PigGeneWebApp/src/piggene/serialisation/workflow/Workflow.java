@@ -19,6 +19,8 @@ public class Workflow implements IWorkflow {
 	private String name;
 	private String description;
 	private List<Workflow> components;
+	private List<FlowComponent> flowComponents;
+	protected Position position;
 
 	private WorkflowParameter parameter;
 	private WorkflowParameterMapping parameterMapping;
@@ -29,11 +31,12 @@ public class Workflow implements IWorkflow {
 	public Workflow() {
 	}
 
-	public Workflow(final String name, final String description, final List<Workflow> components, final WorkflowParameter parameter,
-			final WorkflowParameterMapping parameterMapping) {
+	public Workflow(final String name, final String description, final List<Workflow> components, final List<FlowComponent> flowComponents,
+			final WorkflowParameter parameter, final WorkflowParameterMapping parameterMapping) {
 		this.name = name;
 		this.description = description;
 		this.components = components;
+		this.flowComponents = flowComponents;
 		this.parameter = parameter;
 		this.parameterMapping = parameterMapping;
 	}
@@ -68,6 +71,14 @@ public class Workflow implements IWorkflow {
 
 	public void setComponents(final List<Workflow> components) {
 		this.components = components;
+	}
+
+	public List<FlowComponent> getFlowComponents() {
+		return flowComponents;
+	}
+
+	public void setFlowComponents(final List<FlowComponent> flowComponents) {
+		this.flowComponents = flowComponents;
 	}
 
 	public WorkflowParameter getParameter() {
@@ -110,6 +121,18 @@ public class Workflow implements IWorkflow {
 			sb.append(lineSeparator);
 		}
 		return sb.toString();
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(final Position position) {
+		if (position == null) {
+			this.position = new Position(0, 0);
+		} else {
+			this.position = position;
+		}
 	}
 
 	@Override

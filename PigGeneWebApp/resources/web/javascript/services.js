@@ -15,7 +15,9 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 });
 
 pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency", function($rootScope, $location, WfPersistency) {
-	var uniqueIDCounter = 1;
+	var uniqueConnectorIDCounter = 1;
+	var uniqueInputIDCounter = 1;
+	var uniqueOutputIDCounter = 1;
 	var sharedWorkflow = {};
 	
 	sharedWorkflow.workflow = {};
@@ -52,6 +54,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				description: "workflow description",
 				workflowType: "WORKFLOW",
 				components: [],
+				flowComponents: [],
 				parameter: {
 					inputParameter: [],
 					outputParameter: []
@@ -227,7 +230,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
-	sharedWorkflow.setElementPosition = function(elementPosition) {
+	sharedWorkflow.saveWorkflowComponentPosition = function(elementPosition) {
 		var elementName = elementPosition.name;
 		var modWf = this.workflow;
 		for(var i=0; i<modWf.components.length; i++) {
@@ -235,6 +238,21 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				modWf.components[i].position = {
 						top: elementPosition.top,
 						left: elementPosition.left
+				};
+				break;
+			}
+		}
+		this.prepForBroadcast(modWf);
+	};
+	
+	sharedWorkflow.saveFlowComponentPosition = function(flowComponent) {
+		var name = flowComponent.name;
+		var modWf = this.workflow;
+		for(var i=0; i<modWf.flowComponents.length; i++) {
+			if(modWf.flowComponents[i].name === name) {
+				modWf.flowComponents[i].position = {
+						top: flowComponent.top,
+						left: flowComponent.left
 				};
 				break;
 			}
@@ -287,7 +305,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.generateUniqueID = function() {
-		return ("$connector_" + uniqueIDCounter++);
+		return ("$connector_" + uniqueConnectorIDCounter++);
+	};
+	
+	sharedWorkflow.generateUniqueInputID = function() {
+		return ("input-element_" + uniqueInputIDCounter++);
 	};
 	
 	return sharedWorkflow;
@@ -365,22 +387,36 @@ pigGeneApp.directive('plumbItem', function(SharedWfService) {
 		replace: true,
 		controller: 'PlumbCtrl',
 		link: function (scope, element, attrs) {
-			//console.log("jsPlumb added an element...");
+			console.log("jsPlumb added an element...");
 			
 			jsPlumb.draggable(element, {
 				stop: function() {
+					var positionInformation = {
+							name: $(element).attr('data-name'),
+							top: $(element).position().top,
+							left: $(element).position().left
+					};
 					if(($(element).attr('data-type') === 'ref-element')) {
-						SharedWfService.setElementPosition(
-								{
-									type: $(element).attr('data-type'),
-									name: $(element).attr('data-name'),
-									top: $(element).position().top,
-									left: $(element).position().left
-								}
-						);
+						SharedWfService.saveWorkflowComponentPosition(positionInformation);
+					} else if(($(element).attr('data-type') === 'input-element')) {
+						SharedWfService.saveFlowComponentPosition(positionInformation);
 					}
 				}
 			});
+			
+			//TODO push if not yet in array!!!
+//			if(($(element).attr('data-type') === 'input-element')) {
+//				var modWf = SharedWfService.workflow;
+//				var comp = {
+//						name: $(element).attr('data-name'), 
+//						position: {
+//							top: 0,
+//							left: 0
+//						} 
+//				};
+//				modWf.flowComponents.push(comp);
+//				SharedWfService.prepForBroadcast(modWf);
+//			}
 		}
 	};
 });
@@ -396,7 +432,7 @@ pigGeneApp.directive('plumbSource', function(SharedWfService) {
 
 			if($(element).attr('data-type') === 'input-param') {
 				$(element).parent().parent().attr('data-type', 'input-element');
-				$(element).parent().parent().attr('data-name', 'TODO_INPUTNAME');
+				$(element).parent().parent().attr('data-name', SharedWfService.generateUniqueInputID());
 			} else if($(element).attr('data-type') === 'ref-param') {
 				var attr = $(element).parent().parent().parent().parent().attr('data-type');
 				if(typeof attr === typeof undefined || attr === false) {

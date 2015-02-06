@@ -412,8 +412,9 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 			$(targetInputElement).val(connectionName);
 			$(targetInputElement).trigger('input');
 		} else if(srcDataType === 'input-param' && targetDataType === 'output-param') {
-			//TODO
 			//inform user, that this connection doesnt make any sense...
+			//TODO implement better solution than alert!
+			alert("please rethink this connection...");
 		} else if(srcDataType === 'ref-param' && targetDataType === 'ref-param') {
 			var srcInputElement = $(srcConnectionPoint).parent().children()[3];
 			var targetInputElement = $(targetConnectionPoint).parent().children()[3];
@@ -447,20 +448,34 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 	
 	$scope.$on("$routeChangeSuccess", function($currentRoute, $previousRoute) {
 		setTimeout( function() {
-			var connections = $scope.workflow.connections;
-			$.each(connections, function(idx, elem) {
-				var sourceElement = $.find('*[data-id="' + elem.source + '"]');
-				var targetElement = $.find('*[data-id="' + elem.target + '"]');
-				var connection = jsPlumb.connect({
-					source: $(sourceElement).attr('id'),
-					target: $(targetElement).attr('id'),
-					container: 'workflow-graph',
-					anchors: anchors
-				});
-			});
+			$scope.loadElementPositions(SharedWfService.workflow.flowComponents);
+			$scope.loadElementPositions(SharedWfService.workflow.components);
+			$scope.loadConnections();
 		}, 
 		100);
 	});
+	
+	$scope.loadElementPositions = function(elements) {
+		for(var i=0; i<elements.length; i++) {
+			var el = elements[i];
+			var HTMLelement = $.find('*[data-name="' + el.name + '"]');
+			$(HTMLelement).css({top: el.position.top, left: el.position.left, position:'absolute'});
+		}
+	};
+	
+	$scope.loadConnections = function() {
+		var connections = $scope.workflow.connections;
+		$.each(connections, function(idx, elem) {
+			var sourceElement = $.find('*[data-id="' + elem.source + '"]');
+			var targetElement = $.find('*[data-id="' + elem.target + '"]');
+			var connection = jsPlumb.connect({
+				source: $(sourceElement).attr('id'),
+				target: $(targetElement).attr('id'),
+				container: 'workflow-graph',
+				anchors: anchors
+			});
+		});
+	};
 	
 	$scope.deleteExistingComponent = function(event) {
 		var targetElement = event.currentTarget;

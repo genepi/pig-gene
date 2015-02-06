@@ -1,8 +1,8 @@
 package piggene.serialisation.workflow.parameter;
 
+
 public class OutputLinkParameter extends LinkParameter {
 	private boolean persistent;
-	private String description;
 
 	public OutputLinkParameter() {
 	}
@@ -13,7 +13,7 @@ public class OutputLinkParameter extends LinkParameter {
 
 	public OutputLinkParameter(final String name, final String description) {
 		super.setName(name);
-		this.description = description;
+		super.setDescription(description);
 	}
 
 	public boolean isPersistent() {
@@ -24,12 +24,14 @@ public class OutputLinkParameter extends LinkParameter {
 		this.persistent = persistent;
 	}
 
+	@Override
 	public String getDescription() {
-		return description;
+		return super.getDescription();
 	}
 
+	@Override
 	public void setDescription(final String description) {
-		this.description = description;
+		super.setDescription(description);
 	}
 
 }

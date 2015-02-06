@@ -1,8 +1,7 @@
 package piggene.serialisation.workflow.parameter;
 
-public class InputLinkParameter extends LinkParameter {
 
-	private String description;
+public class InputLinkParameter extends LinkParameter {
 
 	public InputLinkParameter() {
 	}
@@ -13,15 +12,17 @@ public class InputLinkParameter extends LinkParameter {
 
 	public InputLinkParameter(final String name, final String description) {
 		super.setName(name);
-		this.description = description;
+		super.setDescription(description);
 	}
 
+	@Override
 	public String getDescription() {
-		return description;
+		return super.getDescription();
 	}
 
+	@Override
 	public void setDescription(final String description) {
-		this.description = description;
+		super.setDescription(description);
 	}
 
 }

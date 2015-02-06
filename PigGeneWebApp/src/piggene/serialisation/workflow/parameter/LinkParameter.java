@@ -1,7 +1,9 @@
 package piggene.serialisation.workflow.parameter;
 
+
 public abstract class LinkParameter {
 	private String name;
+	private String description;
 
 	public String getName() {
 		return name;
@@ -9,6 +11,14 @@ public abstract class LinkParameter {
 
 	public void setName(final String name) {
 		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(final String description) {
+		this.description = description;
 	}
 
 	@Override
@@ -27,7 +37,7 @@ public abstract class LinkParameter {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		LinkParameter other = (LinkParameter) obj;
+		final LinkParameter other = (LinkParameter) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

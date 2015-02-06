@@ -15,8 +15,11 @@ import java.util.Properties;
 import org.json.JSONException;
 
 import piggene.representation.WorkflowGraph;
+import piggene.serialisation.workflow.FlowComponent;
+import piggene.serialisation.workflow.Position;
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.WorkflowComponent;
+import piggene.serialisation.workflow.WorkflowReference;
 import piggene.serialisation.workflow.WorkflowType;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -42,6 +45,7 @@ public class WorkflowSerialisation {
 			final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(encodedWfName
 					.concat(fileExtension)))));
 			writer.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
+			writer.getConfig().setPropertyElementType(Workflow.class, "flowComponents", FlowComponent.class);
 			writer.write(workflow);
 			writer.close();
 		} catch (final Exception e) {
@@ -52,6 +56,7 @@ public class WorkflowSerialisation {
 	public static Workflow load(final String name) throws IOException {
 		final YamlReader reader = new YamlReader(new FileReader(workflowDefsPath.concat(name.concat(fileExtension))));
 		reader.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
+		reader.getConfig().setPropertyElementType(Workflow.class, "flowComponents", FlowComponent.class);
 		final Workflow workflow = (Workflow) reader.read();
 		reader.close();
 		return workflow;
@@ -61,21 +66,23 @@ public class WorkflowSerialisation {
 		final List<Workflow> resolvedSteps = new ArrayList<Workflow>();
 		for (final Workflow wf : workflow.getComponents()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
-				resolvedSteps.add(getAllDependingReferencedWorkflowSteps(wf.getName()));
+				resolvedSteps.add(getAllDependingReferencedWorkflowSteps(wf.getName(), ((WorkflowReference) wf).getPosition()));
 			} else {
 				resolvedSteps.add(wf);
 			}
 		}
-		final Workflow wf = new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getParameter(),
-				workflow.getParameterMapping());
+
+		final Workflow wf = new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getFlowComponents(),
+				workflow.getParameter(), workflow.getParameterMapping());
 		wf.setConnections(WorkflowGraph.createConnectionList(wf));
 		return wf;
 	}
 
-	private static Workflow getAllDependingReferencedWorkflowSteps(final String workflowName) throws IOException {
+	private static Workflow getAllDependingReferencedWorkflowSteps(final String workflowName, final Position positionInfo) throws IOException {
 		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
 		// change type because it is a RESOLVED REFERENCED wf
 		referencedWorkflow.setWorkflowType(WorkflowType.WORKFLOW_REFERENCE);
+		referencedWorkflow.setPosition(positionInfo);
 
 		// combine content of all recursively used components
 		// within one single WORKFLOW_COMPONENT

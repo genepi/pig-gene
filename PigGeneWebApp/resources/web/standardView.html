@@ -6,8 +6,6 @@
 	</div>
 
 	<div ng-controller="PlumbCtrl">
-		<button ng-click="loadConnections()">load connections</button>
-
 		<div id="workflow-graph"class="drop-container" droppable style="width:800px; height:500px;" ng-click="addEvent($event)" >
 			<div class="paramContainer" ng-if="isVisible()">
 				<div ng-repeat="input in workflow.parameter.inputParameter track by $index" plumb-item style="position: absolute; margin-left:0px;" class="item item-in_out">
