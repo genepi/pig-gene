@@ -34,6 +34,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 					scriptType: scriptType[0],
 					content: "",
 				}],
+				flowComponents: [],
 				parameter: {
 					inputParameter: [{name:"",description:""}],
 					outputParameter: [{name:"",description:""}]
@@ -245,6 +246,15 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		this.prepForBroadcast(modWf);
 	};
 	
+	sharedWorkflow.flowComponentExits = function(flowComponentName) {
+		for(var i=0; i<this.workflow.flowComponents.length; i++) {
+			if(this.workflow.flowComponents[i].name === flowComponentName) {
+				return true;
+			}
+		}
+		return false;
+	};
+	
 	sharedWorkflow.saveFlowComponentPosition = function(flowComponent) {
 		var name = flowComponent.name;
 		var modWf = this.workflow;
@@ -404,19 +414,18 @@ pigGeneApp.directive('plumbItem', function(SharedWfService) {
 				}
 			});
 			
-			//TODO push if not yet in array!!!
-//			if(($(element).attr('data-type') === 'input-element')) {
-//				var modWf = SharedWfService.workflow;
-//				var comp = {
-//						name: $(element).attr('data-name'), 
-//						position: {
-//							top: 0,
-//							left: 0
-//						} 
-//				};
-//				modWf.flowComponents.push(comp);
-//				SharedWfService.prepForBroadcast(modWf);
-//			}
+			if($(element).attr('data-type') === 'input-element' && !SharedWfService.flowComponentExits($(element).attr('data-name'))) {
+				var modWf = SharedWfService.workflow;
+				var comp = {
+						name: $(element).attr('data-name'), 
+						position: {
+							top: 0,
+							left: 0
+						} 
+				};
+				modWf.flowComponents.push(comp);
+				SharedWfService.prepForBroadcast(modWf);
+			}
 		}
 	};
 });
