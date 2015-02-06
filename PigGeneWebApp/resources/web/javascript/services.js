@@ -322,6 +322,10 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		return ("input-element_" + uniqueInputIDCounter++);
 	};
 	
+	sharedWorkflow.generateUniqueOutputID = function() {
+		return ("output-element_" + uniqueOutputIDCounter++);
+	};
+	
 	return sharedWorkflow;
 }]);
 
@@ -408,13 +412,13 @@ pigGeneApp.directive('plumbItem', function(SharedWfService) {
 					};
 					if(($(element).attr('data-type') === 'ref-element')) {
 						SharedWfService.saveWorkflowComponentPosition(positionInformation);
-					} else if(($(element).attr('data-type') === 'input-element')) {
+					} else if(($(element).attr('data-type') === 'input-element') || ($(element).attr('data-type') === 'output-element')) {
 						SharedWfService.saveFlowComponentPosition(positionInformation);
 					}
 				}
 			});
 			
-			if($(element).attr('data-type') === 'input-element' && !SharedWfService.flowComponentExits($(element).attr('data-name'))) {
+			if(($(element).attr('data-type') === 'input-element' || $(element).attr('data-type') === 'output-element') && !SharedWfService.flowComponentExits($(element).attr('data-name'))) {
 				var modWf = SharedWfService.workflow;
 				var comp = {
 						name: $(element).attr('data-name'), 
@@ -454,7 +458,7 @@ pigGeneApp.directive('plumbSource', function(SharedWfService) {
 	};
 });
 
-pigGeneApp.directive('plumbTarget', function() {
+pigGeneApp.directive('plumbTarget', function(SharedWfService) {
 	return {
 		replace: true,
 		link: function (scope, element, attrs) {
@@ -466,7 +470,7 @@ pigGeneApp.directive('plumbTarget', function() {
 			
 			if($(element).attr('data-type') === 'output-param') {
 				$(element).parent().parent().attr('data-type', 'output-element');
-				$(element).parent().parent().attr('data-name', 'TODO_OUTPUTNAME');
+				$(element).parent().parent().attr('data-name', SharedWfService.generateUniqueOutputID());
 			} else if($(element).attr('data-type') === 'ref-param') {
 				var attr = $(element).parent().parent().parent().parent().attr('data-type');
 				if(typeof attr === typeof undefined || attr === false) {
