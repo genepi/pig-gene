@@ -270,11 +270,24 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
 		
 		var modWf = SharedWfService.workflow;
-		
-		//TODO how to remove the connection from the parameterMapping ???
-		
+		var deleted = $scope.deleteInputParameterMappingEntry(modWf, modWf.parameter.inputParameter[index].connector)
+		if(deleted != null || deleted != undefined) {
+			modWf = deleted;
+		}
 		modWf.parameter.inputParameter.splice(index,1);
 		SharedWfService.prepForBroadcast(modWf);
+	};
+	
+	$scope.deleteInputParameterMappingEntry = function(modWf, connectorName) {
+		for (var key in modWf.parameterMapping.inputParameterMapping) {
+			   var wfObj = modWf.parameterMapping.inputParameterMapping[key];
+			   for (var paramObj in wfObj) {
+				   if(wfObj[paramObj] === connectorName) {
+					  delete modWf.parameterMapping.inputParameterMapping[key][paramObj];
+					  return modWf;
+				   }
+			   }
+		}
 	};
 	
 	$scope.addOutput = function() {
@@ -294,15 +307,29 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.removeOutput = function(event,index) {
-		
-	
-//		jsPlumb.detachAllConnections($(event.currentTarget).parent().children()[1]);
-		var a = $(event.currentTarget).parent();
+		$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
 		
 		var modWf = SharedWfService.workflow;
+		var deleted = $scope.deleteOutputParameterMappingEntry(modWf, modWf.parameter.outputParameter[index].connector)
+		if(deleted != null || deleted != undefined) {
+			modWf = deleted;
+		}
 		modWf.parameter.outputParameter.splice(index,1);
 		SharedWfService.prepForBroadcast(modWf);
 	};
+	
+	$scope.deleteOutputParameterMappingEntry = function(modWf, connectorName) {
+		for (var key in modWf.parameterMapping.outputParameterMapping) {
+			   var wfObj = modWf.parameterMapping.outputParameterMapping[key];
+			   for (var paramObj in wfObj) {
+				   if(wfObj[paramObj] === connectorName) {
+					  delete modWf.parameterMapping.outputParameterMapping[key][paramObj];
+					  return modWf;
+				   }
+			   }
+		}
+	};
+	
 	
 	$scope.detachJSPlumbConnections = function (element) {
 		jsPlumb.detachAllConnections($(element));
@@ -474,7 +501,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 	
 	$scope.$on("$routeChangeSuccess", function($currentRoute, $previousRoute) {
 		setTimeout( function() {
-//			$scope.loadElementPositions(SharedWfService.workflow.components);
+			$scope.loadElementPositions(SharedWfService.workflow.components);
 			$scope.loadConnectorElementPositions(SharedWfService.workflow.parameter.inputParameter);
 			$scope.loadConnectorElementPositions(SharedWfService.workflow.parameter.outputParameter);
 			$scope.loadConnections();
@@ -486,8 +513,8 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 		if(elements != null || elements != undefined) {
 			for(var i=0; i<elements.length; i++) {
 				var el = elements[i];
-				var HTMLelement = $.find('*[data-name="' + el.name + '"]');
-				$(HTMLelement).css({top: el.position.top, left: el.position.left, position:'absolute'});
+				var HTMLelement = $.find('*[data-id="' + el.name + '"]');
+				$(HTMLelement).parent().css({top: el.position.top, left: el.position.left, position:'absolute'});
 			}
 		}
 	};

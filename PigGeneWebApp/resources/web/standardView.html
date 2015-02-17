@@ -33,7 +33,7 @@
 				<button class="btn btn-sm btn-default" ng-click="addExistingComponent()"><span class="glyphicon glyphicon-plus"></span> add existing component</button>
 		
 				<div ng-repeat="component in workflow.components track by component.name" bn-log-dom-creation="With" plumb-item style="position: absolute; margin-left:0px;" class="item">
-					<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" data-identifier="{{component.name}}">
+					<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE')" data-id="{{component.name}}">
 						<div class="paramTitle"><b>{{component.name}}</b></div>
 						<a class="component-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="deleteExistingComponent($event,$index)"></a>
 						

@@ -15,8 +15,6 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 });
 
 pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency", function($rootScope, $location, WfPersistency) {
-	var uniqueConnectorIDCounter = 1;
-	var uniqueOutputIDCounter = 1;
 	var sharedWorkflow = {};
 	
 	sharedWorkflow.workflow = {};
@@ -85,7 +83,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.loadWfDefinition = function(id) {
-//		var oldPath = $location.$$path;
 		WfPersistency.Load.get({"id":id}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
@@ -96,7 +93,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 			sharedWorkflow.workflow = response.data;
 			sharedWorkflow.showParameterElements();
 			sharedWorkflow.broadcastWfChange();
-//			sharedWorkflow.redirectLocation(oldPath, id);
 		});
 	};
 	
@@ -306,7 +302,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.generateUniqueID = function() {
-		return ("$connector_" + uniqueConnectorIDCounter++);
+		return this.getUID();
 	};
 	
 	/**
