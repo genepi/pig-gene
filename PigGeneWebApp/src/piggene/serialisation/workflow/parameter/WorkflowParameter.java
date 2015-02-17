@@ -29,19 +29,5 @@ public class WorkflowParameter {
 	public void setOutputParameter(final List<LinkParameter> outputParameter) {
 		this.outputParameter = outputParameter;
 	}
-	
-	public boolean isContainedWithinOuterWfParams(String paramName) {
-		for(LinkParameter p : inputParameter) {
-			if(p.getName().equals(paramName)) {
-				return true;
-			}
-		}
-		for(LinkParameter p : outputParameter) {
-			if(p.getName().equals(paramName)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 }

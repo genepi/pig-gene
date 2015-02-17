@@ -252,35 +252,61 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	
 	$scope.addInput = function() {
 		var modWf = SharedWfService.workflow;
+		var uid = SharedWfService.getUID();
 		var inputObj = {
-				name: "", 
-				description: ""
+				uid: uid,
+				connector: "",
+				description: "", 
+				position: {
+					top: 0,
+					left: 0
+				}
 		};
 		modWf.parameter.inputParameter.push(inputObj);
 		SharedWfService.prepForBroadcast(modWf);
 	};
 	
-	$scope.removeInput = function(index) {
+	$scope.removeInput = function(event, index) {
+		$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
+		
 		var modWf = SharedWfService.workflow;
+		
+		//TODO how to remove the connection from the parameterMapping ???
+		
 		modWf.parameter.inputParameter.splice(index,1);
 		SharedWfService.prepForBroadcast(modWf);
-	}
+	};
 	
 	$scope.addOutput = function() {
 		var modWf = SharedWfService.workflow;
+		var uid = SharedWfService.getUID();
 		var outputObj = {
-				name: "",
-				description: ""
+				uid: uid,
+				connector: "",
+				description: "",
+				position: {
+					top: 0,
+					left: 0
+				}
 		};
 		modWf.parameter.outputParameter.push(outputObj);
 		SharedWfService.prepForBroadcast(modWf);
 	};
 	
-	$scope.removeOutput = function(index) {
+	$scope.removeOutput = function(event,index) {
+		
+	
+//		jsPlumb.detachAllConnections($(event.currentTarget).parent().children()[1]);
+		var a = $(event.currentTarget).parent();
+		
 		var modWf = SharedWfService.workflow;
 		modWf.parameter.outputParameter.splice(index,1);
 		SharedWfService.prepForBroadcast(modWf);
-	}
+	};
+	
+	$scope.detachJSPlumbConnections = function (element) {
+		jsPlumb.detachAllConnections($(element));
+	};
 	
 	$scope.$on("showParameterElements", function() {
 		$scope.visible = true;
@@ -330,13 +356,13 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		
 		var inputParameterMappingObj = {}; //input param mapping
 		for(var i = 0; i < refWf.parameter.inputParameter.length; i++) {
-			inputParameterMappingObj[refWf.parameter.inputParameter[i].name] = "";
+			inputParameterMappingObj[refWf.parameter.inputParameter[i].connector] = "";
 		}
 		modWf.parameterMapping.inputParameterMapping[refWf.name] = inputParameterMappingObj;
 		
 		var outputParameterMappingObj = {}; //output param mapping
 		for(var i = 0; i < refWf.parameter.outputParameter.length; i++) {
-			outputParameterMappingObj[refWf.parameter.outputParameter[i].name] = "";
+			outputParameterMappingObj[refWf.parameter.outputParameter[i].connector] = "";
 		}
 		modWf.parameterMapping.outputParameterMapping[refWf.name] = outputParameterMappingObj;
 		
@@ -448,18 +474,31 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 	
 	$scope.$on("$routeChangeSuccess", function($currentRoute, $previousRoute) {
 		setTimeout( function() {
-			$scope.loadElementPositions(SharedWfService.workflow.flowComponents);
-			$scope.loadElementPositions(SharedWfService.workflow.components);
+//			$scope.loadElementPositions(SharedWfService.workflow.components);
+			$scope.loadConnectorElementPositions(SharedWfService.workflow.parameter.inputParameter);
+			$scope.loadConnectorElementPositions(SharedWfService.workflow.parameter.outputParameter);
 			$scope.loadConnections();
 		}, 
 		100);
 	});
 	
 	$scope.loadElementPositions = function(elements) {
-		for(var i=0; i<elements.length; i++) {
-			var el = elements[i];
-			var HTMLelement = $.find('*[data-name="' + el.name + '"]');
-			$(HTMLelement).css({top: el.position.top, left: el.position.left, position:'absolute'});
+		if(elements != null || elements != undefined) {
+			for(var i=0; i<elements.length; i++) {
+				var el = elements[i];
+				var HTMLelement = $.find('*[data-name="' + el.name + '"]');
+				$(HTMLelement).css({top: el.position.top, left: el.position.left, position:'absolute'});
+			}
+		}
+	};
+	
+	$scope.loadConnectorElementPositions = function(elements) {
+		if(elements != null || elements != undefined) {
+			for(var i=0; i<elements.length; i++) {
+				var el = elements[i];
+				var HTMLelement = $.find('*[data-id="' + el.uid + '"]');
+				$(HTMLelement).parent().parent().css({top: el.position.top, left: el.position.left, position:'absolute'});
+			}
 		}
 	};
 	
@@ -477,10 +516,19 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 		});
 	};
 	
-	$scope.deleteExistingComponent = function(event) {
-		var targetElement = event.currentTarget;
-		console.log(targetElement);
-		//TODO implement deletion
+	$scope.deleteExistingComponent = function(event, index) {
+		var parentDiv = $(event.currentTarget).parent();
+		var connections = $(parentDiv).find('.circle');
+		for(var i=0; i<connections.length; i++) {
+			$scope.detachJSPlumbConnections($(connections[i]));
+		}
+		
+		var modWf = $scope.workflow;
+		modWf.components.splice(index,1);
+		var componentName = $($(parentDiv).children()[0]).children()[0].innerHTML;
+		delete modWf.parameterMapping.inputParameterMapping[componentName];
+		delete modWf.parameterMapping.outputParameterMapping[componentName];
+		SharedWfService.prepForBroadcast(modWf);
 	};
 	
 }]);

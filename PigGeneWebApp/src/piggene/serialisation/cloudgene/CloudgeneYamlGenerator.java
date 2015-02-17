@@ -92,8 +92,8 @@ public class CloudgeneYamlGenerator {
 		final List<WdlParameter> pigScriptInputs = new ArrayList<WdlParameter>();
 		final List<LinkParameter> inputParameters = workflowParameter.getInputParameter();
 		for (final LinkParameter in : inputParameters) {
-			appendParameter(pigScriptParameters, in.getName());
-			pigScriptInputs.add(createInputParameter(in.getName()));
+			appendParameter(pigScriptParameters, in.getConnector());
+			pigScriptInputs.add(createInputParameter(in.getConnector()));
 		}
 		return pigScriptInputs;
 	}
@@ -102,8 +102,8 @@ public class CloudgeneYamlGenerator {
 		final List<WdlParameter> pigScriptOutputs = new ArrayList<WdlParameter>();
 		final List<LinkParameter> outputParameters = workflowParameter.getOutputParameter();
 		for (final LinkParameter out : outputParameters) {
-			appendParameter(pigScriptParameters, out.getName());
-			pigScriptOutputs.add(createOutputParameter(out.getName()));
+			appendParameter(pigScriptParameters, out.getConnector());
+			pigScriptOutputs.add(createOutputParameter(out.getConnector()));
 		}
 		return pigScriptOutputs;
 	}
@@ -154,22 +154,22 @@ public class CloudgeneYamlGenerator {
 			final Map<String, String> mapping = new HashMap<String, String>();
 			for (final LinkParameter in : workflow.getParameter().getInputParameter()) {
 				String name = "";
-				if (in.getName().startsWith("$")) {
-					name = in.getName().substring(1);
+				if (in.getConnector().startsWith("$")) {
+					name = in.getConnector().substring(1);
 				} else {
-					name = in.getName();
+					name = in.getConnector();
 				}
 				if (surroundingWorkflow != null) {
 					final WorkflowParameterMapping parameterMapping = surroundingWorkflow.getParameterMapping();
 					final Map<String, Map<String, String>> inputParameterMapping = parameterMapping.getInputParameterMapping();
 					final Map<String, Map<String, String>> outputParameterMapping = parameterMapping.getOutputParameterMapping();
-					String value = inputParameterMapping.get(workflow.getName()).get(in.getName());
+					String value = inputParameterMapping.get(workflow.getName()).get(in.getConnector());
 					if (value == null) {
-						value = outputParameterMapping.get(workflow.getName()).get(in.getName());
+						value = outputParameterMapping.get(workflow.getName()).get(in.getConnector());
 					}
 					mapping.put(name, value);
 				} else {
-					mapping.put(name, in.getName());
+					mapping.put(name, in.getConnector());
 				}
 			}
 			mapping.put("title", workflow.getName());

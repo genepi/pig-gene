@@ -19,17 +19,16 @@ public class WorkflowGraph {
 
 		// component connected with input element
 		for (final LinkParameter p : inputParameters) {
-			final String name = p.getName();
-			for (final String s : parameterMapping.getCorrespondingInputParameterValues(name)) {
-				connections.add(new Connection(name, s));
+			for (final String s : parameterMapping.getCorrespondingInputParameterValues(p.getConnector())) {
+				connections.add(new Connection(p.getUid(), s));
 			}
 		}
 
 		// component connected with output element
 		for (final LinkParameter p : outputParameters) {
-			final String name = p.getName();
+			final String name = p.getConnector();
 			for (final String s : parameterMapping.getCorrespondingOutputParameterValues(name)) {
-				connections.add(new Connection(s, name));
+				connections.add(new Connection(s, p.getUid()));
 			}
 		}
 

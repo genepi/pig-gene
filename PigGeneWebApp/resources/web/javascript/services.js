@@ -16,7 +16,6 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 
 pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency", function($rootScope, $location, WfPersistency) {
 	var uniqueConnectorIDCounter = 1;
-	var uniqueInputIDCounter = 1;
 	var uniqueOutputIDCounter = 1;
 	var sharedWorkflow = {};
 	
@@ -34,10 +33,9 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 					scriptType: scriptType[0],
 					content: "",
 				}],
-				flowComponents: [],
 				parameter: {
-					inputParameter: [{name:"",description:""}],
-					outputParameter: [{name:"",description:""}]
+					inputParameter: [],
+					outputParameter: []
 				},
 				parameterMapping: {
 					inputParameterMapping: {},
@@ -55,7 +53,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				description: "workflow description",
 				workflowType: "WORKFLOW",
 				components: [],
-				flowComponents: [],
 				parameter: {
 					inputParameter: [],
 					outputParameter: []
@@ -231,39 +228,33 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
-	sharedWorkflow.saveWorkflowComponentPosition = function(elementPosition) {
-		var elementName = elementPosition.name;
+	sharedWorkflow.saveWorkflowComponentPosition = function(newPosInfo) {
 		var modWf = this.workflow;
-		for(var i=0; i<modWf.components.length; i++) {
-			if(modWf.components[i].name === elementName) {
-				modWf.components[i].position = {
-						top: elementPosition.top,
-						left: elementPosition.left
-				};
+		for (var i=0; i<modWf.components.length; i++) {
+			if(modWf.components[i].name === newPosInfo.name) {
+				modWf.components[i].position = newPosInfo.position;
 				break;
 			}
 		}
 		this.prepForBroadcast(modWf);
 	};
 	
-	sharedWorkflow.flowComponentExits = function(flowComponentName) {
-		for(var i=0; i<this.workflow.flowComponents.length; i++) {
-			if(this.workflow.flowComponents[i].name === flowComponentName) {
-				return true;
+	sharedWorkflow.saveInputParameterPosition = function(newPosInfo) {
+		var modWf = this.workflow;
+		for (var i=0; i<modWf.parameter.inputParameter.length; i++) {
+			if(modWf.parameter.inputParameter[i].uid === newPosInfo.uid) {
+				modWf.parameter.inputParameter[i].position = newPosInfo.position;
+				break;
 			}
 		}
-		return false;
+		this.prepForBroadcast(modWf);
 	};
 	
-	sharedWorkflow.saveFlowComponentPosition = function(flowComponent) {
-		var name = flowComponent.name;
+	sharedWorkflow.saveOutputParameterPosition = function(newPosInfo) {
 		var modWf = this.workflow;
-		for(var i=0; i<modWf.flowComponents.length; i++) {
-			if(modWf.flowComponents[i].name === name) {
-				modWf.flowComponents[i].position = {
-						top: flowComponent.top,
-						left: flowComponent.left
-				};
+		for (var i=0; i<modWf.parameter.outputParameter.length; i++) {
+			if(modWf.parameter.outputParameter[i].uid === newPosInfo.uid) {
+				modWf.parameter.outputParameter[i].position = newPosInfo.position;
 				break;
 			}
 		}
@@ -318,12 +309,19 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		return ("$connector_" + uniqueConnectorIDCounter++);
 	};
 	
-	sharedWorkflow.generateUniqueInputID = function() {
-		return ("input-element_" + uniqueInputIDCounter++);
-	};
-	
-	sharedWorkflow.generateUniqueOutputID = function() {
-		return ("output-element_" + uniqueOutputIDCounter++);
+	/**
+	 * Generates a GUID string.
+	 * @returns {String} The generated GUID.
+	 * @example af8a8416-6e18-a307-bd9c-f2c947bbb3aa
+	 * @author Slavik Meltser (slavik@meltser.info).
+	 * @link http://slavik.meltser.info/?p=142
+	 */
+	sharedWorkflow.getUID = function guid() {
+	    function _p8(s) {
+	        var p = (Math.random().toString(16)+"000000000").substr(2,8);
+	        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+	    }
+	    return _p8() + _p8(true) + _p8(true) + _p8();
 	};
 	
 	return sharedWorkflow;
@@ -401,35 +399,33 @@ pigGeneApp.directive('plumbItem', function(SharedWfService) {
 		replace: true,
 		controller: 'PlumbCtrl',
 		link: function (scope, element, attrs) {
-			console.log("jsPlumb added an element...");
-			
 			jsPlumb.draggable(element, {
 				stop: function() {
-					var positionInformation = {
-							name: $(element).attr('data-name'),
-							top: $(element).position().top,
-							left: $(element).position().left
-					};
+					var position = {
+								top: $(element).position().top,
+								left: $(element).position().left
+					}
 					if(($(element).attr('data-type') === 'ref-element')) {
+						var compName = $($($(element).children()[0]).children()[0]).children()[0].innerHTML;
+						var positionInformation = {
+								name: compName,
+								position: position
+						};
 						SharedWfService.saveWorkflowComponentPosition(positionInformation);
-					} else if(($(element).attr('data-type') === 'input-element') || ($(element).attr('data-type') === 'output-element')) {
-						SharedWfService.saveFlowComponentPosition(positionInformation);
+					} else {
+						var uid = $($((element).children()[2]).children()[1]).attr("data-id");
+						var positionInformation = {
+								uid: uid,
+								position: position
+						};
+						if(($(element).attr('data-type') === 'input-element')) {
+							SharedWfService.saveInputParameterPosition(positionInformation);
+						} else if(($(element).attr('data-type') === 'output-element')) {
+							SharedWfService.saveOutputParameterPosition(positionInformation);
+						}
 					}
 				}
 			});
-			
-			if(($(element).attr('data-type') === 'input-element' || $(element).attr('data-type') === 'output-element') && !SharedWfService.flowComponentExits($(element).attr('data-name'))) {
-				var modWf = SharedWfService.workflow;
-				var comp = {
-						name: $(element).attr('data-name'), 
-						position: {
-							top: 0,
-							left: 0
-						} 
-				};
-				modWf.flowComponents.push(comp);
-				SharedWfService.prepForBroadcast(modWf);
-			}
 		}
 	};
 });
@@ -442,17 +438,10 @@ pigGeneApp.directive('plumbSource', function(SharedWfService) {
 				anchor: 'RightMiddle',
 				container: 'workflow-graph',
 			});
-
 			if($(element).attr('data-type') === 'input-param') {
 				$(element).parent().parent().attr('data-type', 'input-element');
-				$(element).parent().parent().attr('data-name', SharedWfService.generateUniqueInputID());
 			} else if($(element).attr('data-type') === 'ref-param') {
-				var attr = $(element).parent().parent().parent().parent().attr('data-type');
-				if(typeof attr === typeof undefined || attr === false) {
-					$(element).parent().parent().parent().parent().attr('data-type', 'ref-element');
-					var name = $(element).parent().parent().parent().children()[0].children[0].innerHTML;
-					$(element).parent().parent().parent().parent().attr('data-name', name);
-				}
+				$(element).parent().parent().parent().parent().attr('data-type', 'ref-element');
 			}
 		}
 	};
@@ -467,17 +456,10 @@ pigGeneApp.directive('plumbTarget', function(SharedWfService) {
 				container: 'workflow-graph',
 				maxConnections:1
 			});
-			
 			if($(element).attr('data-type') === 'output-param') {
 				$(element).parent().parent().attr('data-type', 'output-element');
-				$(element).parent().parent().attr('data-name', SharedWfService.generateUniqueOutputID());
 			} else if($(element).attr('data-type') === 'ref-param') {
-				var attr = $(element).parent().parent().parent().parent().attr('data-type');
-				if(typeof attr === typeof undefined || attr === false) {
-					$(element).parent().parent().parent().parent().attr('data-type', 'ref-element');
-					var name = $(element).parent().parent().parent().children()[0].children[0].innerHTML;
-					$(element).parent().parent().parent().parent().attr('data-name', name);
-				}
+				$(element).parent().parent().parent().parent().attr('data-type', 'ref-element');
 			}
 		}
 	};

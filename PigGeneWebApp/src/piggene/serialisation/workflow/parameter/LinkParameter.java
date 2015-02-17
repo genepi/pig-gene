@@ -1,16 +1,27 @@
 package piggene.serialisation.workflow.parameter;
 
+import piggene.serialisation.workflow.Position;
 
 public abstract class LinkParameter {
-	private String name;
+	private String uid;
+	private String connector;
 	private String description;
+	private Position position;
 
-	public String getName() {
-		return name;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setName(final String name) {
-		this.name = name;
+	public void setUid(final String uid) {
+		this.uid = uid;
+	}
+
+	public String getConnector() {
+		return connector;
+	}
+
+	public void setConnector(final String connector) {
+		this.connector = connector;
 	}
 
 	public String getDescription() {
@@ -21,11 +32,19 @@ public abstract class LinkParameter {
 		this.description = description;
 	}
 
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(final Position position) {
+		this.position = position;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
 		return result;
 	}
 
@@ -38,17 +57,17 @@ public abstract class LinkParameter {
 		if (getClass() != obj.getClass())
 			return false;
 		final LinkParameter other = (LinkParameter) obj;
-		if (name == null) {
-			if (other.name != null)
+		if (uid == null) {
+			if (other.uid != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!uid.equals(other.uid))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return this.name;
+		return this.connector;
 	}
 
 }
