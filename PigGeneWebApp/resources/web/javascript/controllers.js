@@ -389,13 +389,13 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		for(var i = 0; i < refWf.parameter.inputParameter.length; i++) {
 			inputParameterMappingObj[refWf.parameter.inputParameter[i].connector] = "";
 		}
-		modWf.parameterMapping.inputParameterMapping[refWf.name] = inputParameterMappingObj;
+		modWf.parameterMapping.inputParameterMapping[refWf.uid] = inputParameterMappingObj;
 		
 		var outputParameterMappingObj = {}; //output param mapping
 		for(var i = 0; i < refWf.parameter.outputParameter.length; i++) {
 			outputParameterMappingObj[refWf.parameter.outputParameter[i].connector] = "";
 		}
-		modWf.parameterMapping.outputParameterMapping[refWf.name] = outputParameterMappingObj;
+		modWf.parameterMapping.outputParameterMapping[refWf.uid] = outputParameterMappingObj;
 		
 		SharedWfService.prepForBroadcast(modWf);
 		$('#myModal').modal('toggle');
@@ -519,7 +519,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 				var el = elements[i];
 				var HTMLelement = $.find('*[data-id="' + el.uid + '"]');
 				if(el.position != null && el.position.top != null && el.position.left != null) {
-					$(HTMLelement).parent().css({top: el.position.top, left: el.position.left, position:'absolute'});
+					$(HTMLelement).css({top: el.position.top, left: el.position.left, position:'absolute'});
 				}
 			}
 		}

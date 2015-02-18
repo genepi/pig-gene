@@ -40,15 +40,15 @@
 					
 						<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.inputParameter)">
 							<div class="rectangle rectangle-target" ng-repeat="input in component.parameter.inputParameter track by $index">
-								<div data-type="ref-param" data-id="{{component.name}}.{{input.connector}}" plumb-target class="circle circle-target connect2">...</div><span>{{input.description}}</span><br />
-								<input type="text" class="hiddenElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.name][input.connector]" ng-change="updateWfDefinition()"></input>
+								<div data-type="ref-param" data-id="{{component.uid}}.{{input.connector}}" plumb-target class="circle circle-target connect2">...</div><span>{{input.description}}</span><br />
+								<input type="text" class="hiddenElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.uid][input.connector]" ng-change="updateWfDefinition()"></input>
 							</div>
 						</div>
 	
 						<div ng-if="checkType(component.workflowType, 'WORKFLOW_REFERENCE') && parametersExist(component.parameter.outputParameter)">
 							<div class="rectangle rectangle-source" ng-repeat="output in component.parameter.outputParameter track by $index">
-								<div data-type="ref-param" data-id="{{component.name}}.{{output.connector}}" plumb-source class="circle circle-source connect">...</div><span>{{output.description}}</span><br />
-								<input type="text" class="hiddenElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.name][output.connector]" ng-change="updateWfDefinition()"></input> 
+								<div data-type="ref-param" data-id="{{component.uid}}.{{output.connector}}" plumb-source class="circle circle-source connect">...</div><span>{{output.description}}</span><br />
+								<input type="text" class="hiddenElement" ng-model="workflow.parameterMapping.outputParameterMapping[component.uid][output.connector]" ng-change="updateWfDefinition()"></input> 
 							</div>
 						</div>
 					</div>

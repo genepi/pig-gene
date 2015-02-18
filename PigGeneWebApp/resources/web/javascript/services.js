@@ -227,7 +227,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.saveWorkflowComponentPosition = function(newPosInfo) {
 		var modWf = this.workflow;
 		for (var i=0; i<modWf.components.length; i++) {
-			if(modWf.components[i].name === newPosInfo.name) {
+			if(modWf.components[i].uid === newPosInfo.uid) {
 				modWf.components[i].position = newPosInfo.position;
 				break;
 			}
@@ -403,7 +403,7 @@ pigGeneApp.directive('plumbItem', function(SharedWfService) {
 					}
 					if(($(element).attr('data-type') === 'ref-element')) {
 						var positionInformation = {
-								name: $(element).attr("data-id"),
+								uid: $(element).attr("data-id"),
 								position: position
 						};
 						SharedWfService.saveWorkflowComponentPosition(positionInformation);
