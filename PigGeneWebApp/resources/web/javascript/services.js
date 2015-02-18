@@ -402,9 +402,8 @@ pigGeneApp.directive('plumbItem', function(SharedWfService) {
 								left: $(element).position().left
 					}
 					if(($(element).attr('data-type') === 'ref-element')) {
-						var compName = $($($(element).children()[0]).children()[0]).children()[0].innerHTML;
 						var positionInformation = {
-								name: compName,
+								name: $(element).attr("data-id"),
 								position: position
 						};
 						SharedWfService.saveWorkflowComponentPosition(positionInformation);

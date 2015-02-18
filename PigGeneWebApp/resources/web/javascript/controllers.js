@@ -252,9 +252,8 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	
 	$scope.addInput = function() {
 		var modWf = SharedWfService.workflow;
-		var uid = SharedWfService.getUID();
 		var inputObj = {
-				uid: uid,
+				uid: SharedWfService.getUID(),
 				connector: "",
 				description: "", 
 				position: {
@@ -291,9 +290,8 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	
 	$scope.addOutput = function() {
 		var modWf = SharedWfService.workflow;
-		var uid = SharedWfService.getUID();
 		var outputObj = {
-				uid: uid,
+				uid: SharedWfService.getUID(),
 				connector: "",
 				description: "",
 				position: {
@@ -380,6 +378,7 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 	$scope.$on("handleRefWfChange", function() {
 		var modWf = SharedWfService.workflow;
 		var refWf = SharedWfService.refWorkflow;
+		refWf["uid"] = SharedWfService.getUID();
 		if(modWf.components.length == 0) {
 			modWf.components[0] = refWf;
 		} else {
@@ -518,7 +517,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 		if(elements != null || elements != undefined) {
 			for(var i=0; i<elements.length; i++) {
 				var el = elements[i];
-				var HTMLelement = $.find('*[data-id="' + el.name + '"]');
+				var HTMLelement = $.find('*[data-id="' + el.uid + '"]');
 				if(el.position != null && el.position.top != null && el.position.left != null) {
 					$(HTMLelement).parent().css({top: el.position.top, left: el.position.left, position:'absolute'});
 				}

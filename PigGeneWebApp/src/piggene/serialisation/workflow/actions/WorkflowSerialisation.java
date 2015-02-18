@@ -63,7 +63,8 @@ public class WorkflowSerialisation {
 		final List<Workflow> resolvedSteps = new ArrayList<Workflow>();
 		for (final Workflow wf : workflow.getComponents()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
-				resolvedSteps.add(getAllDependingReferencedWorkflowSteps(wf.getName(), ((WorkflowReference) wf).getPosition()));
+				resolvedSteps.add(getAllDependingReferencedWorkflowSteps(((WorkflowReference) wf).getUid(), wf.getName(),
+						((WorkflowReference) wf).getPosition()));
 			} else {
 				resolvedSteps.add(wf);
 			}
@@ -75,10 +76,12 @@ public class WorkflowSerialisation {
 		return wf;
 	}
 
-	private static Workflow getAllDependingReferencedWorkflowSteps(final String workflowName, final Position positionInfo) throws IOException {
+	private static Workflow getAllDependingReferencedWorkflowSteps(final String uid, final String workflowName, final Position positionInfo)
+			throws IOException {
 		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
 		// change type because it is a RESOLVED REFERENCED wf
 		referencedWorkflow.setWorkflowType(WorkflowType.WORKFLOW_REFERENCE);
+		referencedWorkflow.setUid(uid);
 		referencedWorkflow.setPosition(positionInfo);
 
 		// combine content of all recursively used components

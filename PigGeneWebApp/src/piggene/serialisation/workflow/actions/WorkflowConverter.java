@@ -50,7 +50,7 @@ public class WorkflowConverter {
 						.getString("name"))));
 			} else { // referenced workflow element
 				final Position position = getPosition(component);
-				components.add(new WorkflowReference(component.getString("name"), position));
+				components.add(new WorkflowReference(component.getString("uid"), component.getString("name"), position));
 			}
 		}
 		return components;

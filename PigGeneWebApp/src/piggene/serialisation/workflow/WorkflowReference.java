@@ -19,7 +19,8 @@ public class WorkflowReference extends Workflow {
 	public WorkflowReference() {
 	}
 
-	public WorkflowReference(final String name, final Position position) {
+	public WorkflowReference(final String uid, final String name, final Position position) {
+		super.setUid(uid);
 		this.name = name;
 		super.setPosition(position);
 	}
@@ -32,6 +33,14 @@ public class WorkflowReference extends Workflow {
 	@Override
 	public void setWorkflowType(final WorkflowType workflowType) {
 		this.workflowType = workflowType;
+	}
+
+	public static int getIndentation() {
+		return indentation;
+	}
+
+	public static void setIndentation(final int indentation) {
+		WorkflowReference.indentation = indentation;
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 public class Workflow implements IWorkflow {
 	private WorkflowType workflowType = WorkflowType.WORKFLOW;
 
+	private String uid;
 	private String name;
 	private String description;
 	private List<Workflow> components;
@@ -45,6 +46,14 @@ public class Workflow implements IWorkflow {
 
 	public void setWorkflowType(final WorkflowType workflowType) {
 		this.workflowType = workflowType;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(final String uid) {
+		this.uid = uid;
 	}
 
 	public String getName() {
