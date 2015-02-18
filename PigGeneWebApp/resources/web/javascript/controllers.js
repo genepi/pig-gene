@@ -284,7 +284,6 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 			   for (var paramObj in wfObj) {
 				   if(wfObj[paramObj] === connectorName) {
 					  delete modWf.parameterMapping.inputParameterMapping[key][paramObj];
-					  return modWf;
 				   }
 			   }
 		}
@@ -319,17 +318,23 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.deleteOutputParameterMappingEntry = function(modWf, connectorName) {
-		for (var key in modWf.parameterMapping.outputParameterMapping) {
-			   var wfObj = modWf.parameterMapping.outputParameterMapping[key];
-			   for (var paramObj in wfObj) {
-				   if(wfObj[paramObj] === connectorName) {
-					  delete modWf.parameterMapping.outputParameterMapping[key][paramObj];
-					  return modWf;
-				   }
-			   }
+		var numberOfMatchingOutputParameterConnectors = 0;
+		for(var i=0; i<modWf.parameter.outputParameter.length; i++) {
+			if(modWf.parameter.outputParameter[i].connector === connectorName) {
+				numberOfMatchingOutputParameterConnectors = numberOfMatchingOutputParameterConnectors + 1;
+			}
+		}
+		if(numberOfMatchingOutputParameterConnectors == 1) {
+			for (var key in modWf.parameterMapping.outputParameterMapping) {
+				var wfObj = modWf.parameterMapping.outputParameterMapping[key];
+				for (var paramObj in wfObj) {
+					if(wfObj[paramObj] === connectorName) {
+						delete modWf.parameterMapping.outputParameterMapping[key][paramObj];
+					}
+				}
+			}
 		}
 	};
-	
 	
 	$scope.detachJSPlumbConnections = function (element) {
 		jsPlumb.detachAllConnections($(element));
@@ -514,7 +519,9 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 			for(var i=0; i<elements.length; i++) {
 				var el = elements[i];
 				var HTMLelement = $.find('*[data-id="' + el.name + '"]');
-				$(HTMLelement).parent().css({top: el.position.top, left: el.position.left, position:'absolute'});
+				if(el.position != null && el.position.top != null && el.position.left != null) {
+					$(HTMLelement).parent().css({top: el.position.top, left: el.position.left, position:'absolute'});
+				}
 			}
 		}
 	};
@@ -531,16 +538,18 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 	
 	$scope.loadConnections = function() {
 		var connections = $scope.workflow.connections;
-		$.each(connections, function(idx, elem) {
-			var sourceElement = $.find('*[data-id="' + elem.source + '"]');
-			var targetElement = $.find('*[data-id="' + elem.target + '"]');
-			var connection = jsPlumb.connect({
-				source: $(sourceElement).attr('id'),
-				target: $(targetElement).attr('id'),
-				container: 'workflow-graph',
-				anchors: anchors
+		if(connections != null || connections != undefined) {
+			$.each(connections, function(idx, elem) {
+				var sourceElement = $.find('*[data-id="' + elem.source + '"]');
+				var targetElement = $.find('*[data-id="' + elem.target + '"]');
+				var connection = jsPlumb.connect({
+					source: $(sourceElement).attr('id'),
+					target: $(targetElement).attr('id'),
+					container: 'workflow-graph',
+					anchors: anchors
+				});
 			});
-		});
+		}
 	};
 	
 	$scope.deleteExistingComponent = function(event, index) {
@@ -549,10 +558,19 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 		for(var i=0; i<connections.length; i++) {
 			$scope.detachJSPlumbConnections($(connections[i]));
 		}
-		
 		var modWf = $scope.workflow;
 		modWf.components.splice(index,1);
 		var componentName = $($(parentDiv).children()[0]).children()[0].innerHTML;
+		var mapping = modWf.parameterMapping.outputParameterMapping[componentName];
+		var connectorList = [];
+		for (var key in mapping) {
+			   connectorList.push(mapping[key]);
+		}
+		for(var i=0; i<modWf.parameter.outputParameter.length; i++) {
+			if($.inArray(modWf.parameter.outputParameter[i].connector, connectorList) != -1) {
+				modWf.parameter.outputParameter[i].connector = "";
+			}
+		}
 		delete modWf.parameterMapping.inputParameterMapping[componentName];
 		delete modWf.parameterMapping.outputParameterMapping[componentName];
 		SharedWfService.prepForBroadcast(modWf);

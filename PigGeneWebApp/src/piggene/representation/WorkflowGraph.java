@@ -19,33 +19,45 @@ public class WorkflowGraph {
 
 		// component connected with input element
 		for (final LinkParameter p : inputParameters) {
-			for (final String s : parameterMapping.getCorrespondingInputParameterValues(p.getConnector())) {
-				connections.add(new Connection(p.getUid(), s));
+			final String connector = p.getConnector();
+			if (contentCheck(connector)) {
+				for (final String s : parameterMapping.getCorrespondingInputParameterValues(connector)) {
+					connections.add(new Connection(p.getUid(), s));
+				}
 			}
 		}
 
 		// component connected with output element
 		for (final LinkParameter p : outputParameters) {
-			final String name = p.getConnector();
-			for (final String s : parameterMapping.getCorrespondingOutputParameterValues(name)) {
-				connections.add(new Connection(s, p.getUid()));
+			final String connector = p.getConnector();
+			if (contentCheck(connector)) {
+				for (final String s : parameterMapping.getCorrespondingOutputParameterValues(connector)) {
+					connections.add(new Connection(s, p.getUid()));
+				}
 			}
 		}
 
 		for (final String parameterName : parameterMapping.getMatchingInAndOutputParameterValuesFromAllWorkflows()) {
-
-			// just one allowed
-			final List<String> correspondingOutputParameterValues = parameterMapping.getCorrespondingOutputParameterValues(parameterName);
-			if (correspondingOutputParameterValues.size() > 1) {
-				// TODO
-				// throw exception
-			}
-
-			for (final String target : parameterMapping.getCorrespondingInputParameterValues(parameterName)) {
-				connections.add(new Connection(correspondingOutputParameterValues.get(0), target));
+			if (contentCheck(parameterName)) {
+				// just one allowed
+				final List<String> correspondingOutputParameterValues = parameterMapping.getCorrespondingOutputParameterValues(parameterName);
+				if (correspondingOutputParameterValues.size() > 1) {
+					// TODO
+					// throw exception
+				}
+				for (final String target : parameterMapping.getCorrespondingInputParameterValues(parameterName)) {
+					connections.add(new Connection(correspondingOutputParameterValues.get(0), target));
+				}
 			}
 		}
 
 		return connections;
+	}
+
+	private static boolean contentCheck(final String connector) {
+		if (connector == null || connector == "") {
+			return false;
+		}
+		return true;
 	}
 }

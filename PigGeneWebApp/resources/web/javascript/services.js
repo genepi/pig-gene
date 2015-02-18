@@ -302,7 +302,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.generateUniqueID = function() {
-		return this.getUID();
+		return '$connector_' + this.getUID();
 	};
 	
 	/**
