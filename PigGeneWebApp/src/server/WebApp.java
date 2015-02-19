@@ -15,6 +15,7 @@ import piggene.resources.WorkflowLoaderService;
 import piggene.resources.WorkflowOverviewLoaderService;
 import piggene.resources.WorkflowReferenceLoaderService;
 import piggene.resources.WorkflowStorageService;
+import piggene.resources.ZipDownloadService;
 
 /**
  * WebApp class.
@@ -44,6 +45,7 @@ public class WebApp extends Application {
 		router.attach("/save/wf", WorkflowStorageService.class);
 		router.attach("/del/{id}", WorkflowDeletionService.class);
 		router.attach("/dwnld/{id}", ScriptDownloadService.class);
+		router.attach("/dwnldzip/{id}", ZipDownloadService.class);
 
 		// clap protocol for usage in jar files
 		final Directory dir = new Directory(getContext(), new LocalReference("clap://thread/web"));

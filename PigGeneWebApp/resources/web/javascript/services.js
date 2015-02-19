@@ -10,7 +10,8 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 		Ref: $resource("/ref/:id", {id: "@id"}),
 		Save: $resource("/save/wf/"),
 		Delete: $resource("/del/:id", {id: "@id"}),
-		Download: $resource("/dwnld/:id", {id: "@id"})
+		Download: $resource("/dwnld/:id", {id: "@id"}),
+		DownloadZip: $resource("/dwnldzip/:id", {id: "@id"})
 	};
 });
 
@@ -221,6 +222,17 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		    		return result; 
 	    		}
 		    }
+		});
+	};
+	
+	sharedWorkflow.downloadZip = function() {
+		WfPersistency.DownloadZip.get({"id":sharedWorkflow.workflow.name}).$promise.then(function(response) {
+			if(!response.success) {
+				//TODO fix error message
+				alert(response.message);
+				console.log(response.message);
+				return;
+			}
 		});
 	};
 	

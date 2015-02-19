@@ -20,6 +20,9 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 			case "downloadScriptBtn": 
 						SharedWfService.downloadScript();
 						break;
+			case "downloadZipBtn": 
+						SharedWfService.downloadZip();
+						break;
 			default: break;	
 		}
 	};
