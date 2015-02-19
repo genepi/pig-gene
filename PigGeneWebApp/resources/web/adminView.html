@@ -11,7 +11,7 @@
 			<div ng-repeat="input in workflow.parameter.inputParameter track by $index">
 				<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].connector" ng-change="updateWfDefinition()" placeholder="$inputName"></input>
 				<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="input description"></input>
-				<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($index)"></a>
+				<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput(null,$index)"></a>
 			</div>
 			<button class="btn btn-xs btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
 		</div>
@@ -54,7 +54,7 @@
 				<div ng-repeat="output in workflow.parameter.outputParameter track by $index">
 					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].connector" ng-change="updateWfDefinition()" placeholder="$outputName"></input>
 					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="output description"></input>
-					<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($index)"></a>
+					<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput(null,$index)"></a>
 				</div>
 				<button class="btn btn-xs btn-default" ng-click="addOutput()"><span class="glyphicon glyphicon-plus"></span> add output</button>
 			</div>
