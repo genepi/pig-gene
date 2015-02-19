@@ -82,7 +82,7 @@ public class WorkflowReference extends Workflow {
 				sb.append(insertIndentationTabs());
 				final Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName);
 				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName),
-						surroundingWorkflow.getParameterMapping(), surroundingWorkflow.getParameter(), workflowName);
+						surroundingWorkflow.getParameterMapping(), surroundingWorkflow.getParameter(), super.getUid());
 				sb.append(adjustIndentation(pigScriptRepresentation));
 				sb.append(lineSeparator);
 			}
@@ -121,9 +121,9 @@ public class WorkflowReference extends Workflow {
 	}
 
 	private String applyParameterMapping(final String pigScriptRepresentation, final WorkflowParameterMapping parameterMapping,
-			final WorkflowParameter wfParameter, final String workflowName) {
-		final Map<String, String> inputParameterMap = parameterMapping.retrieveInputMapByKey(workflowName);
-		final Map<String, String> outputParameterMap = parameterMapping.retrieveOutputMapByKey(workflowName);
+			final WorkflowParameter wfParameter, final String workflowUID) {
+		final Map<String, String> inputParameterMap = parameterMapping.retrieveInputMapByKey(workflowUID);
+		final Map<String, String> outputParameterMap = parameterMapping.retrieveOutputMapByKey(workflowUID);
 
 		final String regex = "(\\$\\w+)(\\b)";
 		final Pattern p = Pattern.compile(regex);
