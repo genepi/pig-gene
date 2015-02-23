@@ -58,4 +58,9 @@ public class ZipFileGenerator {
 		}
 	}
 
+	public static void extractZipFile(final String source, final String destination) throws ZipException {
+		final ZipFile zipFile = new ZipFile(source);
+		zipFile.extractAll(destination);
+	}
+
 }
