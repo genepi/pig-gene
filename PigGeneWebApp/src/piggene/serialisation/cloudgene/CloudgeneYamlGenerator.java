@@ -116,7 +116,7 @@ public class CloudgeneYamlGenerator {
 		final WdlParameterInput param = new WdlParameterInput();
 		param.setId(parameterName);
 		param.setDescription("input paramter");
-		param.setType("hdfs-file");
+		param.setType("hdfs-folder");
 		return param;
 	}
 
