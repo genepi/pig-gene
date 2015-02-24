@@ -31,14 +31,6 @@ public class WorkflowOverviewLoaderService extends ServerResource {
 				throw new IOException();
 			}
 
-			// TODO
-			// alle vorhandenen Workflows laden
-			// in Abhängigkeit des typs nur die "passenden" (comp od wf) filtern
-			// deren Dateinamen zurückgeben
-
-			// wenn wf keine components aber input/outputs hat: wf
-			// sonst: component
-
 			for (final String workflowName : names) {
 				final Workflow workflow = WorkflowSerialisation.resolveWorkflowReferences(WorkflowSerialisation.load(workflowName));
 
@@ -52,10 +44,9 @@ public class WorkflowOverviewLoaderService extends ServerResource {
 			if (typeMatchingNames.isEmpty()) {
 				throw new IOException();
 			}
-
 		} catch (final IOException e) {
 			obj.setSuccess(false);
-			obj.setMessage("Currently there are no workflow definitions saved on the server.");
+			obj.setMessage("Currently there are no definitions saved on the server.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final JSONException e) {
 			// TODO Auto-generated catch block

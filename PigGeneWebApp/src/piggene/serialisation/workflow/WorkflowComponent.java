@@ -3,8 +3,6 @@ package piggene.serialisation.workflow;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class WorkflowComponent extends Workflow {
 	private WorkflowType workflowType = WorkflowType.WORKFLOW_COMPONENT;
@@ -49,16 +47,7 @@ public class WorkflowComponent extends Workflow {
 
 	@Override
 	public String getPigScriptRepresentation(final String wfName) throws IOException {
-		final String regex = "(\\s)(\\$\\w+)(\\b)";
-		final Pattern p = Pattern.compile(regex);
-		final Matcher m = p.matcher(content);
-		final StringBuffer sb = new StringBuffer();
-		while (m.find()) {
-			final String param = m.group(2);
-			m.appendReplacement(sb, " '\\".concat(param).concat("'"));
-		}
-		m.appendTail(sb);
-		return sb.toString();
+		return this.content;
 	}
 
 	@Override

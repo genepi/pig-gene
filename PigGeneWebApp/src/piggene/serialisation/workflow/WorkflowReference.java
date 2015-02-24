@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import piggene.serialisation.workflow.actions.WorkflowSerialisation;
+import piggene.serialisation.workflow.parameter.LinkParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
@@ -138,16 +139,33 @@ public class WorkflowReference extends Workflow {
 			} else if (outputParameterMap.containsKey(key)) { // outputParam
 				replacementName = outputParameterMap.get(key);
 			}
-			if (replacementName != null && replacementName.startsWith("$")) {
-				replacementName = "\\".concat(replacementName);
+
+			if (replacementName != null) {
+				if (nameMatchesParameterConnector(replacementName, wfParameter)) {
+					replacementName = "'\\$".concat(replacementName).concat("'");
+				} else if (replacementName.startsWith("$")) {
+					replacementName = "\\".concat(replacementName);
+				}
 			} else if (replacementName == null) {
 				replacementName = "\\" + key;
 			}
 			m.appendReplacement(sb, (replacementName != null) ? replacementName : key);
 		}
-
 		m.appendTail(sb);
 		return sb.toString();
 	}
 
+	private boolean nameMatchesParameterConnector(final String name, final WorkflowParameter parameter) {
+		for (final LinkParameter p : parameter.getInputParameter()) {
+			if (p.getConnector().equals(name)) {
+				return true;
+			}
+		}
+		for (final LinkParameter p : parameter.getOutputParameter()) {
+			if (p.getConnector().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

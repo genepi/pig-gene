@@ -148,7 +148,11 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		}
 	};
 	
-	//TODO add addExistingWorkflow function
+	$scope.addExistingWorkflow = function() {
+		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
+			SharedWfService.loadExistingWorkflowNames(false, "wf", true);
+		}
+	};
 	
 	$scope.parametersExist = function(param) {
 		if(param) {
