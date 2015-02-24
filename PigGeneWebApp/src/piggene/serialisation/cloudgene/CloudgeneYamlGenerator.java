@@ -109,7 +109,7 @@ public class CloudgeneYamlGenerator {
 	}
 
 	private static StringBuilder appendParameter(final StringBuilder parameters, final String parameterName) {
-		return parameters.append("-param ").append(parameterName).append("=").append(parameterName).append(" ");
+		return parameters.append("-param ").append(parameterName).append("=$").append(parameterName).append(" ");
 	}
 
 	private static WdlParameter createInputParameter(final String parameterName) {
