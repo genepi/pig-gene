@@ -1,27 +1,16 @@
 pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
 	$scope.buttons = buttons;
-	$scope.scriptType = scriptType;
 	
 	$scope.performNavBarAction = function(index) {
 		switch(buttons[index].name) {
-			case "newCompBtn":
-						SharedWfService.initializeNewComponent();
+			case "components":
+						SharedWfService.showComponentNavBar();
 						break;
-			case "newWfBtn":
-						SharedWfService.initializeNewWorkflow();
+			case "workflows":
+						SharedWfService.showWfNavBar();
 						break;
-			case "openWfBtn":
-						SharedWfService.openDef = true;
-						SharedWfService.loadExistingWorkflowNames(true);
-						break;
-			case "deleteWfBtn": 	
-						SharedWfService.broadcastWfDeletionCheckNotification();
-						break;
-			case "downloadScriptBtn": 
-						SharedWfService.downloadScript();
-						break;
-			case "downloadZipBtn": 
-						SharedWfService.downloadZip();
+			case "library":
+						SharedWfService.broadcastLibraryFileLinkInput();
 						break;
 			default: break;	
 		}
@@ -30,6 +19,72 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 	$scope.hideEverything = function() {
 		SharedWfService.hideParameterElements();
 	};
+	
+}]);
+
+pigGeneApp.controller("ComponentNavBarCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	$scope.componentButtons = componentButtons;
+	$scope.showCompNavBar = false;
+	
+	$scope.performComponentNavBarAction = function(index) {
+		switch(componentButtons[index].name) {
+			case "createComponentBtn":
+						SharedWfService.initializeNewComponent();	
+						break;
+			case "openComponentBtn":
+						SharedWfService.openDef = true;
+						SharedWfService.loadExistingWorkflowNames(true);
+						break;
+			case "deleteComponentBtn": 	
+						SharedWfService.broadcastDeletionCheckNotification();
+						break;
+			default: break;	
+		}
+	};
+	
+	$scope.$on("showCompNavBar", function() {
+		$scope.showCompNavBar = true;
+	});
+	
+	$scope.$on("hideCompNavBar", function() {
+		$scope.showCompNavBar = false;
+	});
+	
+}]);
+
+pigGeneApp.controller("WorkflowNavBarCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	$scope.workflowButtons = workflowButtons;
+	$scope.showWfNavBar = false;
+	
+	$scope.performComponentNavBarAction = function(index) {
+		switch(workflowButtons[index].name) {
+			case "createWfBtn":
+						SharedWfService.initializeNewWorkflow();
+						break;
+			case "openWfBtn":
+						SharedWfService.openDef = true;
+						SharedWfService.loadExistingWorkflowNames(true);
+						break;
+			case "deleteWfBtn": 	
+						SharedWfService.broadcastDeletionCheckNotification();
+						break;
+			case "downloadScriptBtn": 	
+						SharedWfService.downloadScript();
+						break;
+			case "downloadZipBtn": 	
+						SharedWfService.downloadZip();
+						break;
+			default: break;	
+		}
+	};
+	
+	$scope.$on("showWfNavBar", function() {
+		$scope.showWfNavBar = true;
+	});
+	
+	$scope.$on("hideWfNavBar", function() {
+		$scope.showWfNavBar = false;
+	});
 	
 }]);
 
@@ -422,8 +477,8 @@ pigGeneApp.controller("DeletionCheckCtrl", ["$scope", "SharedWfService", functio
 		$('#deletionCheckModal').modal('toggle');
 	});
 	
-	$scope.deleteWf = function() {
-		SharedWfService.deleteCurrentWfDefinition();
+	$scope.delete = function() {
+		SharedWfService.deleteCurrentDefinition();
 	};
 	
 }]);
@@ -433,6 +488,28 @@ pigGeneApp.controller("ScriptCheckCtrl", ["$scope", "SharedWfService", function(
 	$scope.$on("illegalScriptCombination", function() {
 		$('#scriptChangeCheckModal').modal('toggle');
 	});
+	
+}]);
+
+pigGeneApp.controller("ZipCreationCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	
+	$scope.$on("zipCreationMessage", function() {
+		$('#successfulZipCreationModal').modal('toggle');
+	});
+	
+}]);
+
+pigGeneApp.controller("LibraryLinkInputCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	$scope.link = "";
+	
+	$scope.$on("libraryFileLinkInput", function() {
+		$('#libraryLinkInputModal').modal('toggle');
+	});
+	
+	$scope.downloadLibFile = function() {
+		//TODO
+		//call function to send link to server and close modal!
+	};
 	
 }]);
 

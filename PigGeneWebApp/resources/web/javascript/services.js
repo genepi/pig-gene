@@ -108,7 +108,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
-	sharedWorkflow.deleteCurrentWfDefinition = function() {
+	sharedWorkflow.deleteCurrentDefinition = function() {
 		WfPersistency.Delete.remove({"id":this.workflow.name}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
@@ -232,6 +232,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				alert(response.message);
 				console.log(response.message);
 				return;
+			} else {
+				sharedWorkflow.broadcastZipCreation();
 			}
 		});
 	};
@@ -287,7 +289,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		$rootScope.$broadcast("handleExWfNamesChange");
 	};
 	
-	sharedWorkflow.broadcastWfDeletionCheckNotification = function() {
+	sharedWorkflow.broadcastDeletionCheckNotification = function() {
 		if(this.workflow != undefined && !jQuery.isEmptyObject(this.workflow)) {
 			$rootScope.$broadcast("deletionCheckNotification");
 		}
@@ -303,6 +305,24 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.hideParameterElements = function() {
 		$rootScope.$broadcast("hideParameterElements");
+	};
+	
+	sharedWorkflow.showComponentNavBar = function() {
+		$rootScope.$broadcast("showCompNavBar");
+		$rootScope.$broadcast("hideWfNavBar");
+	};
+	
+	sharedWorkflow.showWfNavBar = function() {
+		$rootScope.$broadcast("showWfNavBar");
+		$rootScope.$broadcast("hideCompNavBar");
+	};
+	
+	sharedWorkflow.broadcastLibraryFileLinkInput = function() {
+		$rootScope.$broadcast("libraryFileLinkInput");
+	};
+	
+	sharedWorkflow.broadcastZipCreation = function() {
+		$rootScope.$broadcast("zipCreationMessage");
 	};
 	
 	sharedWorkflow.checkWorkflowNameDefinitionExists = function() {
