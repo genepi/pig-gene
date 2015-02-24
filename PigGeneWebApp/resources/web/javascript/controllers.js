@@ -1,12 +1,16 @@
-pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", function($scope, SharedWfService, $location) {
 	$scope.buttons = buttons;
 	
 	$scope.performNavBarAction = function(index) {
 		switch(buttons[index].name) {
 			case "components":
+						$scope.redirectToHome();
+						$scope.modifyActiveState(index);
 						SharedWfService.showComponentNavBar();
 						break;
 			case "workflows":
+						$scope.redirectToHome();
+						$scope.modifyActiveState(index);
 						SharedWfService.showWfNavBar();
 						break;
 			case "library":
@@ -14,6 +18,17 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", function($scop
 						break;
 			default: break;	
 		}
+	};
+	
+	$scope.redirectToHome = function() {
+		$location.path("/home");
+	};
+	
+	$scope.modifyActiveState = function(activeIndex) {
+		for(var i=0; i<buttons.length; i++) {
+			buttons[i].active = "";
+		}
+		buttons[activeIndex].active = "active";
 	};
 	
 	$scope.hideEverything = function() {
@@ -264,7 +279,6 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		if(modWf.components.length === 0) {
 			modWf.parameter.inputParameter = [];
 			modWf.parameter.outputParameter = [];
-			SharedWfService.hideParameterElements();
 		}
 		SharedWfService.prepForBroadcast(modWf);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "delete");

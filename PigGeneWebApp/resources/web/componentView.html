@@ -18,7 +18,7 @@
 			</div>
 		</div>
 			
-		<div>
+		<div id="componentBlock">
 			<div ng-repeat="component in workflow.components track by $index">
 				<div class="scriptContentBlock">
 					<textarea elastic class="scriptContent component" placeholder="please type your desired pig-operations" ng-click="renderOptionBtns($event,$index,'std')">{{component.content}}</textarea>
@@ -26,6 +26,7 @@
 			</div>
 			<button class="btn btn-xs btn-success" ng-click="addNewComponent()"><span class="glyphicon glyphicon-plus"></span> add new component</button>
 		</div>
+		
 	
 		<div class="paramContainer">
 			<div class="outputParameters">
