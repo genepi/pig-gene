@@ -33,7 +33,7 @@ pigGeneApp.controller("ComponentNavBarCtrl", ["$scope", "SharedWfService", funct
 						break;
 			case "openComponentBtn":
 						SharedWfService.openDef = true;
-						SharedWfService.loadExistingWorkflowNames(true);
+						SharedWfService.loadExistingWorkflowNames(true, "comp", false);
 						break;
 			case "deleteComponentBtn": 	
 						SharedWfService.broadcastDeletionCheckNotification();
@@ -63,7 +63,7 @@ pigGeneApp.controller("WorkflowNavBarCtrl", ["$scope", "SharedWfService", functi
 						break;
 			case "openWfBtn":
 						SharedWfService.openDef = true;
-						SharedWfService.loadExistingWorkflowNames(true);
+						SharedWfService.loadExistingWorkflowNames(true, "wf", false);
 						break;
 			case "deleteWfBtn": 	
 						SharedWfService.broadcastDeletionCheckNotification();
@@ -129,13 +129,11 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	
 	$scope.addExistingComponent = function() {
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
-			SharedWfService.loadExistingWorkflowNames(false);
+			SharedWfService.loadExistingWorkflowNames(false, "comp", true);
 		}
 	};
 	
-	$scope.checkType = function(type, checkVal) {
-		return (type == checkVal);
-	};
+	//TODO add addExistingWorkflow function
 	
 	$scope.parametersExist = function(param) {
 		if(param) {
@@ -408,14 +406,14 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 
 }]);
 	
-pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
+pigGeneApp.controller("WfLoadingCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
 	$scope.radioSelection = "";
 	$scope.openDef = true;
 	
 	$scope.$on("handleExWfNamesChange", function() {
 		$scope.existingWorkflows = SharedWfService.existingWorkflows;
 		$scope.openDef = SharedWfService.openDef;
-		$('#myModal').modal('toggle');
+		$('#WfLoadingModal').modal('toggle');
 	});
 	
 	$scope.openSelectedWorkflow = function() {
@@ -423,7 +421,7 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		if(!(selection == null || selection == "")) {
 			SharedWfService.loadWfDefinition(selection);
 			$location.path("/wf/" + $scope.radioSelection);
-			$('#myModal').modal('toggle');
+			$('#WfLoadingModal').modal('toggle');
 		}
 	};
 	
@@ -458,8 +456,29 @@ pigGeneApp.controller("ModalCtrl", ["$scope", "$location", "SharedWfService", fu
 		modWf.parameterMapping.outputParameterMapping[refWf.uid] = outputParameterMappingObj;
 		
 		SharedWfService.prepForBroadcast(modWf);
-		$('#myModal').modal('toggle');
+		$('#WfLoadingModal').modal('toggle');
 	});
+	
+}]);
+
+pigGeneApp.controller("CompLoadingCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
+	$scope.radioSelection = "";
+	$scope.openDef = true;
+	
+	$scope.$on("handleExCompNamesChange", function() {
+		$scope.existingWorkflows = SharedWfService.existingWorkflows;
+		$scope.openDef = SharedWfService.openDef;
+		$('#CompLoadingModal').modal('toggle');
+	});
+	
+	$scope.openSelectedComponent = function() {
+		var selection = $scope.radioSelection;
+		if(!(selection == null || selection == "")) {
+			SharedWfService.loadWfDefinition(selection);
+			$location.path("/wf/comp/" + $scope.radioSelection);
+			$('#CompLoadingModal').modal('toggle');
+		}
+	};
 	
 }]);
 

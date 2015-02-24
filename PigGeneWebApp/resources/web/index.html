@@ -65,12 +65,12 @@
 	<div id="workflowContainer" class="windowGap" ng-view>
 	</div>
 	
-	<div id="myModal" class="modal fade" ng-controller="ModalCtrl">
+	<div id="WfLoadingModal" class="modal fade" ng-controller="WfLoadingCtrl">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">{{existingWorkflows.title}}</h4>
+					<h4 class="modal-title">open existing workflow</h4>
 				</div>
 				<div class="modal-body">
 					<div class="radio" ng-repeat="workflowName in existingWorkflows.names">
@@ -83,6 +83,28 @@
 					<button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
 					<button ng-if="openDef" type="button" class="btn btn-primary" ng-click="openSelectedWorkflow()">open workflow</button>
 					<button ng-if="!openDef" type="button" class="btn btn-primary" ng-click="addSelectedWorkflow()">add workflow</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="CompLoadingModal" class="modal fade" ng-controller="CompLoadingCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">open existing component</h4>
+				</div>
+				<div class="modal-body">
+					<div class="radio" ng-repeat="workflowName in existingWorkflows.names">
+						<label>
+							<input type="radio" name="optionsRadios" id="optionsRadios{{$index}}" value="{{workflowName}}" ng-model="$parent.radioSelection">{{workflowName}}
+						</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
+					<button ng-if="openDef" type="button" class="btn btn-primary" ng-click="openSelectedComponent()">open component</button>
 				</div>
 			</div>
 		</div>

@@ -39,7 +39,7 @@ public class WebApp extends Application {
 		route.setMatchingMode(Template.MODE_EQUALS);
 
 		// routes
-		router.attach("/wf", WorkflowOverviewLoaderService.class);
+		router.attach("/ex/{type}", WorkflowOverviewLoaderService.class);
 		router.attach("/wf/{id}", WorkflowLoaderService.class);
 		router.attach("/ref/{id}", WorkflowReferenceLoaderService.class);
 		router.attach("/save/wf", WorkflowStorageService.class);

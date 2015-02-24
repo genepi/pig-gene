@@ -6,6 +6,7 @@ pigGeneApp.run(function(editableOptions) {
 
 pigGeneApp.factory("WfPersistency", function($resource) {
 	return {
+		Existing: $resource("/ex/:type", {type: "@type"}),
 		Load: $resource("/wf/:id", {id: "@id"}),
 		Ref: $resource("/ref/:id", {id: "@id"}),
 		Save: $resource("/save/wf/"),
@@ -43,7 +44,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
 		sharedWorkflow.broadcastWfChange();
-		sharedWorkflow.redirectLocation("/wf/admin/", "newWf");
+		sharedWorkflow.redirectLocation("/wf/comp/", "newWf");
 	};
 	
 	sharedWorkflow.initializeNewWorkflow = function() {
@@ -171,25 +172,29 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.redirectLocation = function(oldPath, wfName) {
-		var patternAdmin = /.*\/wf\/admin\/.*/;
-		if(patternAdmin.test(oldPath)) {
-			$location.path("/wf/admin/" + wfName).replace();
+		var patternComp = /.*\/wf\/comp\/.*/;
+		if(patternComp.test(oldPath)) {
+			$location.path("/wf/comp/" + wfName).replace();
 		} else {
 			$location.path("/wf/" + wfName).replace();
 		}
 	};
 	
-	sharedWorkflow.loadExistingWorkflowNames = function(openWfDefinition) {
-		WfPersistency.Load.get({}).$promise.then(function(response) {
+	sharedWorkflow.loadExistingWorkflowNames = function(openWfDefinition, type, wfComposing) {
+		WfPersistency.Existing.get({"type":type}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
 				alert(response.message);
 				console.log(response.message);
 				return;
 			}
-			sharedWorkflow.openDef = openWfDefinition;
 			sharedWorkflow.existingWorkflows = response.data;
-			sharedWorkflow.broadcastExWfNamesChange();
+			if(type === "wf" || wfComposing) {
+				sharedWorkflow.openDef = openWfDefinition;
+				sharedWorkflow.broadcastExWfNamesChange();
+			} else if (type === "comp") {
+				sharedWorkflow.broadcastExCompNamesChange();
+			}
 		});
 	};
 	
@@ -289,6 +294,10 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		$rootScope.$broadcast("handleExWfNamesChange");
 	};
 	
+	sharedWorkflow.broadcastExCompNamesChange = function() {
+		$rootScope.$broadcast("handleExCompNamesChange");
+	};
+	
 	sharedWorkflow.broadcastDeletionCheckNotification = function() {
 		if(this.workflow != undefined && !jQuery.isEmptyObject(this.workflow)) {
 			$rootScope.$broadcast("deletionCheckNotification");
@@ -357,11 +366,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 
 pigGeneApp.config(function($routeProvider, $locationProvider) {
 	$routeProvider
-	.when('/wf/admin/:id', {
-		templateUrl: 'adminView.html'
+	.when('/wf/comp/:id', {
+		templateUrl: 'componentView.html'
 	})
 	.when('/wf/:id', {
-		templateUrl: 'standardView.html'
+		templateUrl: 'workflowView.html'
 	})
 	.otherwise({
 		redirectTo: '/home'
@@ -387,7 +396,7 @@ pigGeneApp.directive('elastic', ['$timeout',
 pigGeneApp.directive('wfmetaInput', function($timeout, SharedWfService) {
     return {
         restrict: 'E',
-        template: '<div><input id="workflowName" class="wfmetaInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/><br><input id="workflowDescription" class="wfmetaInput" type="text" ng-model="workflowDescription" ng-change="update()" placeholder="workflow description"/></div>',
+        template: '<div><input id="workflowName" class="wfmetaInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/><br><input id="workflowDescription" class="wfmetaInput" type="text" ng-model="workflowDescription" ng-change="update()" placeholder="description"/></div>',
         scope: {
             value: '=',
             timeout: '@',
