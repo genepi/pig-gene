@@ -12,23 +12,23 @@
 					<div class="paramTitle"><b>Input</b></div>
 					</span><input ng-model="workflow.parameter.inputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="input description"></input>
 					<div>
-						<a class="input-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($event,$index)"></a>
+						<a class="input-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($event,$index,'wf')"></a>
 						<div data-type="input-param" data-id="{{workflow.parameter.inputParameter[$index].uid}}" plumb-source class="circle circle-source connect3">...</div>
 						<input type="text" class="hiddenElement" ng-model="workflow.parameter.inputParameter[$index].connector" ng-change="updateWfDefinition()"></input>
 					</div>
 				</div>
-				<button class="btn btn-sm btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
+				<button class="btn btn-sm btn-default" ng-click="addInput('wf')"><span class="glyphicon glyphicon-plus"></span> add input</button>
 		
 				<div ng-repeat="output in workflow.parameter.outputParameter track by output.uid" plumb-item style="position: absolute; margin-left:0px;" class="item item-in_out">
 					<div class="paramTitle"><b>Output</b></div>
 					<input ng-model="workflow.parameter.outputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="output description"></input>
 					<div>
-						<a class="output-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($event,$index)"></a>
+						<a class="output-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($event,$index,'wf')"></a>
 						<div data-type="output-param" data-id="{{workflow.parameter.outputParameter[$index].uid}}" plumb-target class="circle circle-target connect3">...</div>
 						<input type="text" class="hiddenElement" ng-model="workflow.parameter.outputParameter[$index].connector" ng-change="updateWfDefinition()"></input>
 					</div>
 				</div>
-				<button class="btn btn-sm btn-default" ng-click="addOutput()"><span class="glyphicon glyphicon-plus"></span> add output</button>
+				<button class="btn btn-sm btn-default" ng-click="addOutput('wf')"><span class="glyphicon glyphicon-plus"></span> add output</button>
 				<button class="btn btn-sm btn-default" ng-click="addExistingComponent()"><span class="glyphicon glyphicon-plus"></span> add existing component</button>
 				<button class="btn btn-sm btn-default" ng-click="addExistingWorkflow()"><span class="glyphicon glyphicon-plus"></span> add existing workflow</button>
 		

@@ -27,3 +27,6 @@ var anchors = [
                [1, 0.5,  1, 0, 0, 0],
                [0, 0.5, -1, 0, 0, 0]
     ];
+
+var wfAbbr = "wf";
+var compAbbr = "comp";

@@ -16,23 +16,24 @@ public class WorkflowDeletionService extends ServerResource {
 
 	@Override
 	protected Representation delete() throws ResourceException {
-		ServerResponseObject obj = new ServerResponseObject();
+		final ServerResponseObject obj = new ServerResponseObject();
 
 		try {
-			String workflowName = getRequest().getAttributes().get("id").toString();
-			if(WorkflowSerialisation.remove(workflowName)) {
+			final String workflowName = getRequest().getAttributes().get("id").toString();
+			final String type = getRequest().getAttributes().get("type").toString();
+			if (WorkflowSerialisation.remove(workflowName, type)) {
 				obj.setSuccess(true);
 				obj.setMessage("success");
 			} else {
 				obj.setSuccess(false);
 				obj.setMessage("An error occured while deleting the workflow data.");
 			}
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			obj.setSuccess(true);
 			obj.setMessage(e.getMessage());
 		}
 
 		return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 	}
-	
+
 }

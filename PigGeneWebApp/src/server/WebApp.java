@@ -40,10 +40,10 @@ public class WebApp extends Application {
 
 		// routes
 		router.attach("/ex/{type}", WorkflowOverviewLoaderService.class);
-		router.attach("/wf/{id}", WorkflowLoaderService.class);
-		router.attach("/ref/{id}", WorkflowReferenceLoaderService.class);
+		router.attach("/wf/{id}/{type}", WorkflowLoaderService.class);
+		router.attach("/ref/{id}/{type}", WorkflowReferenceLoaderService.class);
 		router.attach("/save/wf", WorkflowStorageService.class);
-		router.attach("/del/{id}", WorkflowDeletionService.class);
+		router.attach("/del/{id}/{type}", WorkflowDeletionService.class);
 		router.attach("/dwnld/{id}", ScriptDownloadService.class);
 		router.attach("/dwnldzip/{id}", ZipDownloadService.class);
 

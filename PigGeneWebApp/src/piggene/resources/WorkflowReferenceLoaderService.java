@@ -26,8 +26,9 @@ public class WorkflowReferenceLoaderService extends ServerResource {
 		final ServerResponseObject obj = new ServerResponseObject();
 
 		final String workflowName = getRequest().getAttributes().get("id").toString();
+		final String type = getRequest().getAttributes().get("type").toString();
 		try {
-			final Workflow workflow = WorkflowSerialisation.load(workflowName);
+			final Workflow workflow = WorkflowSerialisation.load(workflowName, type);
 
 			workflow.setWorkflowType(WorkflowType.WORKFLOW_REFERENCE);
 			final String mergedContent = mergeComponents(workflow.getComponents());
@@ -57,7 +58,8 @@ public class WorkflowReferenceLoaderService extends ServerResource {
 		for (int i = 0; i < components.size(); i++) {
 			wf = components.get(i);
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
-				final Workflow referencedWf = WorkflowSerialisation.load(wf.getName());
+				final String workflowName = wf.getName();
+				final Workflow referencedWf = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
 				sb.append(mergeComponents(referencedWf.getComponents()));
 			} else if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_COMPONENT)) {
 				final WorkflowComponent comp = (WorkflowComponent) wf;

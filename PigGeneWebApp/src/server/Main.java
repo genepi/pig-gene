@@ -20,12 +20,13 @@ public class Main {
 	private static Properties prop = new Properties();
 
 	public static void initializeFolders() {
-		List<String> paths = new ArrayList<String>();
+		final List<String> paths = new ArrayList<String>();
 		paths.add(prop.getProperty("workflowDefs"));
+		paths.add(prop.getProperty("componentDefs"));
 		paths.add(prop.getProperty("cloudgeneYamls"));
 		paths.add(prop.getProperty("scriptFiles"));
-		for (String path : paths) {
-			File f = new File(path);
+		for (final String path : paths) {
+			final File f = new File(path);
 			if (!(f.exists() && f.isDirectory())) {
 				f.mkdirs();
 			}

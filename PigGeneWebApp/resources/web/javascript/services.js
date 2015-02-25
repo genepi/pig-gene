@@ -7,13 +7,14 @@ pigGeneApp.run(function(editableOptions) {
 pigGeneApp.factory("WfPersistency", function($resource) {
 	return {
 		Existing: $resource("/ex/:type", {type: "@type"}),
-		Load: $resource("/wf/:id", {id: "@id"}),
-		Ref: $resource("/ref/:id", {id: "@id"}),
-		Save: $resource("/save/wf/"),
-		Delete: $resource("/del/:id", {id: "@id"}),
+		Load: $resource("/wf/:id/:type", {id: "@id", type: "@type"}),
+		Ref: $resource("/ref/:id/:type", {id: "@id", type: "@type"}),
+		Save: $resource("/save/wf"),
+		Delete: $resource("/del/:id/:type", {id: "@id", type: "@type"}),
 		Download: $resource("/dwnld/:id", {id: "@id"}),
 		DownloadZip: $resource("/dwnldzip/:id", {id: "@id"})
 	};
+	
 });
 
 pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency", function($rootScope, $location, WfPersistency) {
@@ -43,7 +44,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				}
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
-		sharedWorkflow.broadcastWfChange();
+		sharedWorkflow.broadcastWfChange(compAbbr);
 		sharedWorkflow.redirectLocation("/wf/comp/", "newWf");
 	};
 	
@@ -63,11 +64,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				}
 		};
 		sharedWorkflow.workflow = emptyWorkflow;
-		sharedWorkflow.broadcastWfChange();
+		sharedWorkflow.broadcastWfChange(wfAbbr);
 		sharedWorkflow.redirectLocation("/wf/", "newWf");
 	};
 	
-	sharedWorkflow.changeWfMetaInfo = function(newWfName, newWfDescription) {
+	sharedWorkflow.changeMetaInfo = function(newWfName, newWfDescription, type) {
 		var oldWfName = this.workflow.name;
 		var modWf = this.workflow;
 		if(newWfName !== undefined) {
@@ -76,16 +77,16 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		if(newWfDescription !== undefined) {
 			modWf.description = newWfDescription;
 		}
-		this.prepForBroadcast(modWf);
+		this.prepForBroadcast(modWf, type);
 		
 		if(oldWfName != undefined && newWfName != undefined && oldWfName != newWfName) {
 			//delete call for oldName WF
-			this.deleteWfDefinition(oldWfName);
+			this.deleteWfDefinition(oldWfName, type);
 		}
 	};
 	
-	sharedWorkflow.loadWfDefinition = function(id) {
-		WfPersistency.Load.get({"id":id}).$promise.then(function(response) {
+	sharedWorkflow.loadWfDefinition = function(id, type) {
+		WfPersistency.Load.get({"id":id, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
 				alert(response.message);
@@ -94,12 +95,12 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 			}
 			sharedWorkflow.workflow = response.data;
 			sharedWorkflow.showParameterElements();
-			sharedWorkflow.broadcastWfChange();
+			sharedWorkflow.broadcastWfChange(type);
 		});
 	};
 	
-	sharedWorkflow.deleteWfDefinition = function(id) {
-		WfPersistency.Delete.remove({"id":id}).$promise.then(function(response) {
+	sharedWorkflow.deleteWfDefinition = function(id, type) {
+		WfPersistency.Delete.remove({"id":id, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
 				alert(response.message);
@@ -121,8 +122,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
-	sharedWorkflow.loadReferencedWfDefinition = function(id) {
-		WfPersistency.Ref.get({"id":id}).$promise.then(function(response) {
+	sharedWorkflow.loadReferencedWfDefinition = function(id, type) {
+		WfPersistency.Ref.get({"id":id, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
 				alert(response.message);
@@ -141,11 +142,12 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
-	sharedWorkflow.persistWfDefinition = function() {
+	sharedWorkflow.persistWfDefinition = function(type) {
 		if(!$.isEmptyObject(this.workflow)) {
 			var wfToStore = {
 					encodedName: encodeURI(this.workflow.name),
-					workflow: this.workflow
+					workflow: this.workflow,
+					type: type
 			}
 			var myWf = new WfPersistency.Save.save(wfToStore).$promise.then(function(response) {
 				if(!response.success) {
@@ -157,18 +159,6 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				sharedWorkflow.redirectLocation($location.$$path, sharedWorkflow.workflow.name);
 			});
 		}
-	};
-	
-	sharedWorkflow.persistWfDefinitionAndRedirectToReferencedWf = function(refWfName) {
-		var myWf = new WfPersistency.Save(this.workflow);
-		myWf.$save(function(u,putResponseHeaders) {
-			sharedWorkflow.redirectLocation($location.$$path, sharedWorkflow.workflow.name);
-			setTimeout(function() {
-				sharedWorkflow.openDef = true;
-				sharedWorkflow.loadWfDefinition(refWfName);
-				sharedWorkflow.redirectLocation($location.$$path, refWfName);
-			},1);
-		});
 	};
 	
 	sharedWorkflow.redirectLocation = function(oldPath, wfName) {
@@ -189,10 +179,10 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				return;
 			}
 			sharedWorkflow.existingWorkflows = response.data;
-			if(type === "wf" || wfComposing) {
+			if(type === wfAbbr || wfComposing) {
 				sharedWorkflow.openDef = openWfDefinition;
 				sharedWorkflow.broadcastExWfNamesChange();
-			} else if (type === "comp") {
+			} else if (type === compAbbr) {
 				sharedWorkflow.broadcastExCompNamesChange();
 			}
 		});
@@ -251,7 +241,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				break;
 			}
 		}
-		this.prepForBroadcast(modWf);
+		this.prepForBroadcast(modWf, wfAbbr);
 	};
 	
 	sharedWorkflow.saveInputParameterPosition = function(newPosInfo) {
@@ -262,7 +252,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				break;
 			}
 		}
-		this.prepForBroadcast(modWf);
+		this.prepForBroadcast(modWf, wfAbbr);
 	};
 	
 	sharedWorkflow.saveOutputParameterPosition = function(newPosInfo) {
@@ -273,17 +263,17 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				break;
 			}
 		}
-		this.prepForBroadcast(modWf);
+		this.prepForBroadcast(modWf, wfAbbr);
 	};
 	
-	sharedWorkflow.prepForBroadcast = function(modWf) {
+	sharedWorkflow.prepForBroadcast = function(modWf, type) {
 		this.workflow = modWf;
-		this.broadcastWfChange();
+		this.broadcastWfChange(type);
 	};
 	
-	sharedWorkflow.broadcastWfChange = function() {
+	sharedWorkflow.broadcastWfChange = function(type) {
 		$rootScope.$broadcast("handleWfChange");
-		this.persistWfDefinition(); //autosave
+		this.persistWfDefinition(type); //autosave
 	};
 	
 	sharedWorkflow.broadcastRefWfChange = function() {
@@ -396,7 +386,7 @@ pigGeneApp.directive('elastic', ['$timeout',
 pigGeneApp.directive('wfmetaInput', function($timeout, SharedWfService) {
     return {
         restrict: 'E',
-        template: '<div><input id="workflowName" class="wfmetaInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/><br><input id="workflowDescription" class="wfmetaInput" type="text" ng-model="workflowDescription" ng-change="update()" placeholder="description"/></div>',
+        template: '<div><input id="workflowName" class="wfmetaInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/><br><input id="workflowDescription" class="wfmetaInput" type="text" ng-model="workflowDescription" ng-change="update()" placeholder="workflow description"/></div>',
         scope: {
             value: '=',
             timeout: '@',
@@ -410,7 +400,31 @@ pigGeneApp.directive('wfmetaInput', function($timeout, SharedWfService) {
                 	$timeout.cancel($scope.pendingPromise); 
                 }
             	$scope.pendingPromise = $timeout(function () { 
-            		SharedWfService.changeWfMetaInfo($scope.workflowName, $scope.workflowDescription);
+            		SharedWfService.changeMetaInfo($scope.workflowName, $scope.workflowDescription, wfAbbr);
+                }, $scope.timeout);
+            };
+        }
+    }
+});
+
+pigGeneApp.directive('compmetaInput', function($timeout, SharedWfService) {
+    return {
+        restrict: 'E',
+        template: '<div><input id="componentName" class="compmetaInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/><br><input id="componentDescription" class="wfmetaInput" type="text" ng-model="workflowDescription" ng-change="update()" placeholder="component description"/></div>',
+        scope: {
+            value: '=',
+            timeout: '@',
+            placeholder: '@'
+        },
+        transclude: true,
+        link: function ($scope) {
+            $scope.timeout = parseInt($scope.timeout);
+            $scope.update = function() {
+                if ($scope.pendingPromise) { 
+                	$timeout.cancel($scope.pendingPromise); 
+                }
+            	$scope.pendingPromise = $timeout(function () { 
+            		SharedWfService.changeMetaInfo($scope.workflowName, $scope.workflowDescription, compAbbr);
                 }, $scope.timeout);
             };
         }

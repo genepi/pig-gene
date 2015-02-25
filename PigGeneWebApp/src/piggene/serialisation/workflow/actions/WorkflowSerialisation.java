@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONException;
 
@@ -27,22 +29,33 @@ import com.esotericsoftware.yamlbeans.YamlWriter;
 public class WorkflowSerialisation {
 	private static Properties prop = new Properties();
 	private static String workflowDefsPath;
+	private static String componentDefsPath;
 	private static String fileExtension = ".yaml";
+	private static String wfAbbr;
+	private static String compAbbr;
 
 	static {
 		try {
 			prop.load(WorkflowSerialisation.class.getClassLoader().getResourceAsStream("config.properties"));
 			workflowDefsPath = prop.getProperty("workflowDefs");
+			componentDefsPath = prop.getProperty("componentDefs");
+			wfAbbr = prop.getProperty("wfAbbr");
+			compAbbr = prop.getProperty("compAbbr");
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public static void store(final Workflow workflow, final String encodedWfName) throws IOException {
+	public static void store(final Workflow workflow, final String encodedWfName, final String type) throws IOException {
 		try {
-			final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(workflowDefsPath.concat(encodedWfName
-					.concat(fileExtension)))));
+			FileOutputStream fos = null;
+			if (type.equals(wfAbbr)) {
+				fos = new FileOutputStream(workflowDefsPath.concat(encodedWfName.concat(fileExtension)));
+			} else if (type.equals(compAbbr)) {
+				fos = new FileOutputStream(componentDefsPath.concat(encodedWfName.concat(fileExtension)));
+			}
+			final YamlWriter writer = new YamlWriter(new OutputStreamWriter(fos));
 			writer.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
 			writer.write(workflow);
 			writer.close();
@@ -51,8 +64,17 @@ public class WorkflowSerialisation {
 		}
 	}
 
-	public static Workflow load(final String name) throws IOException {
-		final YamlReader reader = new YamlReader(new FileReader(workflowDefsPath.concat(name.concat(fileExtension))));
+	public static Workflow load(final String name, final String type) throws IOException {
+		if (type == null) {
+			throw new IOException();
+		}
+		FileReader fr = null;
+		if (type.equals(wfAbbr)) {
+			fr = new FileReader(workflowDefsPath.concat(name.concat(fileExtension)));
+		} else if (type.equals(compAbbr)) {
+			fr = new FileReader(componentDefsPath.concat(name.concat(fileExtension)));
+		}
+		final YamlReader reader = new YamlReader(fr);
 		reader.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
 		final Workflow workflow = (Workflow) reader.read();
 		reader.close();
@@ -78,7 +100,7 @@ public class WorkflowSerialisation {
 
 	private static Workflow getAllDependingReferencedWorkflowSteps(final String uid, final String workflowName, final Position positionInfo)
 			throws IOException {
-		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
+		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName, determineType(workflowName));
 		// change type because it is a RESOLVED REFERENCED wf
 		referencedWorkflow.setWorkflowType(WorkflowType.WORKFLOW_REFERENCE);
 		referencedWorkflow.setUid(uid);
@@ -105,7 +127,8 @@ public class WorkflowSerialisation {
 				}
 				appendLineBreak = true;
 				if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
-					sb.append(mergeContentOfReferencedWorkflow(WorkflowSerialisation.load(wf.getName()).getComponents()));
+					final String workflowName = wf.getName();
+					sb.append(mergeContentOfReferencedWorkflow(WorkflowSerialisation.load(workflowName, determineType(workflowName)).getComponents()));
 				} else if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_COMPONENT)) {
 					sb.append(((WorkflowComponent) wf).getContent());
 				}
@@ -114,25 +137,44 @@ public class WorkflowSerialisation {
 		return sb.toString();
 	}
 
-	public static boolean remove(final String name) throws FileNotFoundException {
-		final File file = new File(workflowDefsPath.concat(name).concat(fileExtension));
-		if (!file.exists()) {
+	public static boolean remove(final String name, final String type) throws FileNotFoundException {
+		File file = null;
+		if (type.equals(wfAbbr)) {
+			file = new File(workflowDefsPath.concat(name).concat(fileExtension));
+		} else if (type.equals(compAbbr)) {
+			file = new File(componentDefsPath.concat(name).concat(fileExtension));
+		}
+		if (file == null || !file.exists()) {
 			throw new FileNotFoundException("file does not exist");
 		}
 		return file.delete();
 	}
 
-	public static List<String> getListOfWorkflowNames() throws IOException {
-		final File file = new File(workflowDefsPath);
-		final File[] files = file.listFiles();
+	public static List<String> getListOfWorkflowNames(final String type) throws IOException {
+		File directory = null;
+		if (type.equals(wfAbbr)) {
+			directory = new File(workflowDefsPath);
+		} else if (type.equals(compAbbr)) {
+			directory = new File(componentDefsPath);
+		}
+		if (directory == null) {
+			return null;
+		}
+		final File[] files = directory.listFiles();
 		if (files == null || files.length == 0) {
 			return null;
 		}
+
 		final List<String> fileNames = new ArrayList<String>();
-		Workflow workflow = null;
 		for (final File f : files) {
-			workflow = WorkflowSerialisation.load(f.getName().replaceAll(fileExtension, ""));
-			fileNames.add(workflow.getName());
+			final String fileName = f.getName();
+			final String regex = "(\\w+).(\\w+\\b)";
+			final Pattern p = Pattern.compile(regex);
+			final Matcher m = p.matcher(fileName);
+			if (m.find()) {
+				fileNames.add(m.group(1));
+			}
+
 		}
 		Collections.sort(fileNames, new Comparator<String>() {
 			@Override
@@ -141,6 +183,18 @@ public class WorkflowSerialisation {
 			}
 		});
 		return fileNames;
+	}
+
+	public static String determineType(final String workflowName) {
+		File f = new File(workflowDefsPath.concat(workflowName).concat(fileExtension));
+		if (f.exists()) {
+			return wfAbbr;
+		}
+		f = new File(compAbbr.concat(workflowName).concat(fileExtension));
+		if (f.exists()) {
+			return compAbbr;
+		}
+		return null;
 	}
 
 }

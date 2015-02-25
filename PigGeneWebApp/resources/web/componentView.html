@@ -1,7 +1,7 @@
 <div class="workflowContainer well" ng-controller="WorkflowCtrl">
 
 	<div class="headlineContainer">
-		<wfmeta-input value="myValue" timeout="2000" placeholder="please type a component name" />
+		<compmeta-input value="myValue" timeout="2000" placeholder="please type a component name" />
 		<br>
 	</div>
 
@@ -12,9 +12,9 @@
 				<div ng-repeat="input in workflow.parameter.inputParameter track by $index">
 					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].connector" ng-change="updateWfDefinition()" placeholder="$inputName"></input>
 					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.inputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="input description"></input>
-					<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput(null,$index)"></a>
+					<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput(null,$index,'comp')"></a>
 				</div>
-				<button class="btn btn-xs btn-default" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> add input</button>
+				<button class="btn btn-xs btn-default" ng-click="addInput('comp')"><span class="glyphicon glyphicon-plus"></span> add input</button>
 			</div>
 		</div>
 			
@@ -34,9 +34,9 @@
 				<div ng-repeat="output in workflow.parameter.outputParameter track by $index">
 					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].connector" ng-change="updateWfDefinition()" placeholder="$outputName"></input>
 					<span class="parameterElementPrefix"></span><input class="parameterElement" ng-model="workflow.parameter.outputParameter[$index].description" ng-change="updateWfDefinition()" placeholder="output description"></input>
-					<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput(null,$index)"></a>
+					<a class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput(null,$index,'comp')"></a>
 				</div>
-				<button class="btn btn-xs btn-default" ng-click="addOutput()"><span class="glyphicon glyphicon-plus"></span> add output</button>
+				<button class="btn btn-xs btn-default" ng-click="addOutput('comp')"><span class="glyphicon glyphicon-plus"></span> add output</button>
 			</div>
 		</div>
 	</div>

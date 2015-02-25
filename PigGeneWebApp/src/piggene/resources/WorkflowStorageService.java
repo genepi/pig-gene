@@ -20,20 +20,22 @@ public class WorkflowStorageService extends ServerResource {
 
 	@Override
 	protected Representation post(final Representation entity) throws ResourceException {
-		ServerResponseObject obj = new ServerResponseObject();
+		final ServerResponseObject obj = new ServerResponseObject();
 		Workflow workflow = null;
 		String encodedWfName = null;
+		String type = null;
 
 		try {
-			JsonRepresentation representation = new JsonRepresentation(entity);
-			org.json.JSONObject transferedData = representation.getJsonObject();
+			final JsonRepresentation representation = new JsonRepresentation(entity);
+			final org.json.JSONObject transferedData = representation.getJsonObject();
 			workflow = WorkflowConverter.processClientJSONData(transferedData.getJSONObject("workflow"));
+			type = transferedData.getString("type");
 			encodedWfName = transferedData.getString("encodedName");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error ocurred while parsing the input data");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			obj.setSuccess(false);
 			obj.setMessage("The data could not be parsed because of a syntax error.");
 			e.printStackTrace();
@@ -41,8 +43,8 @@ public class WorkflowStorageService extends ServerResource {
 		}
 
 		try {
-			WorkflowSerialisation.store(workflow, encodedWfName);
-		} catch (IOException e) {
+			WorkflowSerialisation.store(workflow, encodedWfName, type);
+		} catch (final IOException e) {
 			e.printStackTrace();
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while saving the submitted workflow data.");

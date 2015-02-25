@@ -68,7 +68,7 @@ public class WorkflowReference extends Workflow {
 	public String getPigScriptRepresentation(final String surroundingWorkflowName) throws IOException {
 		WorkflowReference.indentation++;
 		final String workflowName = this.name;
-		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
+		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
 
 		final StringBuilder sb = new StringBuilder();
 		sb.append(lineSeparator);
@@ -81,7 +81,8 @@ public class WorkflowReference extends Workflow {
 			if (wf instanceof WorkflowReference || ((WorkflowComponent) wf).getScriptType().getName().equals("Apache Pig Script")) {
 				sb.append(lineSeparator);
 				sb.append(insertIndentationTabs());
-				final Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName);
+				final Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName,
+						WorkflowSerialisation.determineType(workflowName));
 				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName),
 						surroundingWorkflow.getParameterMapping(), surroundingWorkflow.getParameter(), super.getUid());
 				sb.append(adjustIndentation(pigScriptRepresentation));
@@ -96,7 +97,7 @@ public class WorkflowReference extends Workflow {
 	@Override
 	public Map<String, String> getRMarkDownScriptRepresentations() throws IOException {
 		final String workflowName = this.name;
-		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName);
+		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
 		final Map<String, String> rmdScripts = new HashMap<String, String>();
 
 		Map<String, String> content;

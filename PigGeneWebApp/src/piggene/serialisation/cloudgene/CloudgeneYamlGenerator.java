@@ -136,7 +136,8 @@ public class CloudgeneYamlGenerator {
 	private static List<WdlStep> retrieveRmdSteps(final Workflow surroundingWorkflow, Workflow workflow) throws IOException {
 		final List<WdlStep> rmdSteps = new ArrayList<WdlStep>();
 		if (workflow.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
-			workflow = WorkflowSerialisation.load(workflow.getName());
+			final String workflowName = workflow.getName();
+			workflow = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
 		}
 		if (workflow.getComponents() == null || workflow.getComponents().size() == 0) {
 			return rmdSteps;

@@ -38,7 +38,7 @@ h4 {
 	margin-top: 10px;
 }
 
-.workflowContainer, .wfmetaInput {
+.workflowContainer, .wfmetaInput, .compmetaInput {
 	background-color: #f4f4f4;
 }
 
@@ -71,7 +71,7 @@ h4 {
 	margin: 0px;
 }
 
-#workflowName, #workflowDescription {
+#workflowName, #workflowDescription, #componentName, #componentDescription {
 	font-weight: 500;
 	margin-top: 0px;
 	color: black;
@@ -79,11 +79,11 @@ h4 {
 	width: 100%;
 }
 
-#workflowName {
+#workflowName, #componentName {
 	font-size: 40px;
 }
 
-#workflowDescription {
+#workflowDescription, #componentDescription {
 	font-size: 18px;
 }
 

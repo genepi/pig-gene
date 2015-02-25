@@ -48,7 +48,7 @@ pigGeneApp.controller("ComponentNavBarCtrl", ["$scope", "SharedWfService", funct
 						break;
 			case "openComponentBtn":
 						SharedWfService.openDef = true;
-						SharedWfService.loadExistingWorkflowNames(true, "comp", false);
+						SharedWfService.loadExistingWorkflowNames(true, compAbbr, false);
 						break;
 			case "deleteComponentBtn": 	
 						SharedWfService.broadcastDeletionCheckNotification();
@@ -78,7 +78,7 @@ pigGeneApp.controller("WorkflowNavBarCtrl", ["$scope", "SharedWfService", functi
 						break;
 			case "openWfBtn":
 						SharedWfService.openDef = true;
-						SharedWfService.loadExistingWorkflowNames(true, "wf", false);
+						SharedWfService.loadExistingWorkflowNames(true, wfAbbr, false);
 						break;
 			case "deleteWfBtn": 	
 						SharedWfService.broadcastDeletionCheckNotification();
@@ -108,7 +108,12 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	
 	$scope.workflow = SharedWfService.workflow;
 	if($routeParams.id != "newWf") {
-		SharedWfService.loadWfDefinition($routeParams.id);
+		var type = wfAbbr;
+		var patternComp = /.*\/wf\/comp\/.*/;
+		if(patternComp.test($location.$$url)) {
+			type = compAbbr;
+		}
+		SharedWfService.loadWfDefinition($routeParams.id, type);
 	};
 	
 	$scope.workflowName = "abc";
@@ -119,9 +124,11 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		
 		$scope.workflowName = SharedWfService.workflow.name;
 		$('#workflowName').val($scope.workflowName);
+		$('#componentName').val($scope.workflowName);
 		
 		$scope.workflowDescription = SharedWfService.workflow.description;
 		$('#workflowDescription').val($scope.workflowDescription);
+		$('#componentDescription').val($scope.workflowDescription);
 	});
 	
 	$scope.addNewComponent = function() {
@@ -136,7 +143,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 				};
 				var modWf = $scope.workflow;
 				modWf.components.push(newComp);
-				SharedWfService.prepForBroadcast(modWf);
+				SharedWfService.prepForBroadcast(modWf, compAbbr);
 				SharedWfService.showParameterElements();
 			}
 		}
@@ -144,13 +151,13 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	
 	$scope.addExistingComponent = function() {
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
-			SharedWfService.loadExistingWorkflowNames(false, "comp", true);
+			SharedWfService.loadExistingWorkflowNames(false, compAbbr, true);
 		}
 	};
 	
 	$scope.addExistingWorkflow = function() {
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
-			SharedWfService.loadExistingWorkflowNames(false, "wf", true);
+			SharedWfService.loadExistingWorkflowNames(false, wfAbbr, true);
 		}
 	};
 	
@@ -171,10 +178,6 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		$scope.pendingPromise = $timeout(function () { 
 			SharedWfService.changeWfMetaInfo($scope.workflowName, $scope.workflowDescription);
 		}, $scope.timeout);
-	};
-	
-	$scope.editReferencedWf = function(id) {
-		SharedWfService.persistWfDefinitionAndRedirectToReferencedWf(id);
 	};
 	
 	$scope.renderOptionBtns = function(event, index, mode) {
@@ -238,7 +241,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 			var prevElement = modWf.components[index-1];
 			modWf.components[index-1] = modWf.components[index];
 			modWf.components[index] = prevElement;
-			SharedWfService.prepForBroadcast(modWf);
+			SharedWfService.prepForBroadcast(modWf, compAbbr);
 			$scope.removeOptionBtns(event.currentTarget.parentNode, "up");
 		}
 	};
@@ -250,7 +253,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 			var followingElement = modWf.components[index+1];
 			modWf.components[index+1] = modWf.components[index];
 			modWf.components[index] = followingElement;
-			SharedWfService.prepForBroadcast(modWf);
+			SharedWfService.prepForBroadcast(modWf, compAbbr);
 			$scope.removeOptionBtns(event.currentTarget.parentNode, "down");
 		}
 	};
@@ -259,7 +262,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		var index = parseInt(event.currentTarget.name);
 		var modWf = $scope.workflow;
 		modWf.components[index].content = $(event.currentTarget.parentElement.parentElement.children[0]).val();
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, compAbbr);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "save");
 	};
 	
@@ -267,7 +270,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		var index = parseInt(event.currentTarget.name);
 		var modWf = $scope.workflow;
 		$(event.currentTarget.parentElement.parentElement.children[0]).val(modWf.components[index].content);
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, compAbbr);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "cancel");
 	};
 	
@@ -284,7 +287,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 			modWf.parameter.inputParameter = [];
 			modWf.parameter.outputParameter = [];
 		}
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, compAbbr);
 		$scope.removeOptionBtns(event.currentTarget.parentNode, "delete");
 	};
 	
@@ -304,7 +307,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 				$scope.pigScriptOnly = true;
 			}
 			
-			SharedWfService.prepForBroadcast(modWf);
+			SharedWfService.prepForBroadcast(modWf, compAbbr);
 			$('#scriptType').html(scriptType[scriptTypeID].name + " ");
 			$scope.removeOptionBtns(event.currentTarget.parentElement.parentElement.parentElement, "changeScript");
 		}
@@ -324,7 +327,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		return $scope.visible;
 	};
 	
-	$scope.addInput = function() {
+	$scope.addInput = function(type) {
 		var modWf = SharedWfService.workflow;
 		var inputObj = {
 				uid: SharedWfService.getUID(),
@@ -336,10 +339,10 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 				}
 		};
 		modWf.parameter.inputParameter.push(inputObj);
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, type);
 	};
 	
-	$scope.removeInput = function(event, index) {
+	$scope.removeInput = function(event, index, type) {
 		var modWf = SharedWfService.workflow;
 		if(event != null) {
 			$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
@@ -349,7 +352,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 			}
 		}
 		modWf.parameter.inputParameter.splice(index,1);
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, type);
 	};
 	
 	$scope.deleteInputParameterMappingEntry = function(modWf, connectorName) {
@@ -363,7 +366,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		}
 	};
 	
-	$scope.addOutput = function() {
+	$scope.addOutput = function(type) {
 		var modWf = SharedWfService.workflow;
 		var outputObj = {
 				uid: SharedWfService.getUID(),
@@ -375,10 +378,10 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 				}
 		};
 		modWf.parameter.outputParameter.push(outputObj);
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, type);
 	};
 	
-	$scope.removeOutput = function(event,index) {
+	$scope.removeOutput = function(event, index, type) {
 		var modWf = SharedWfService.workflow;
 		if(event != null) {
 			$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
@@ -388,7 +391,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 			}
 		}
 		modWf.parameter.outputParameter.splice(index,1);
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, type);
 	};
 	
 	$scope.deleteOutputParameterMappingEntry = function(modWf, connectorName) {
@@ -437,7 +440,7 @@ pigGeneApp.controller("WfLoadingCtrl", ["$scope", "$location", "SharedWfService"
 	$scope.openSelectedWorkflow = function() {
 		var selection = $scope.radioSelection;
 		if(!(selection == null || selection == "")) {
-			SharedWfService.loadWfDefinition(selection);
+			SharedWfService.loadWfDefinition(selection, wfAbbr);
 			$location.path("/wf/" + $scope.radioSelection);
 			$('#WfLoadingModal').modal('toggle');
 		}
@@ -447,7 +450,7 @@ pigGeneApp.controller("WfLoadingCtrl", ["$scope", "$location", "SharedWfService"
 		var selection = $scope.radioSelection;
 		if(!(selection == null || selection == "")) {
 			//AJAX call to get important wf data
-			SharedWfService.loadReferencedWfDefinition(selection);
+			SharedWfService.loadReferencedWfDefinition(selection, wfAbbr);
 		}
 	};
 	
@@ -473,7 +476,7 @@ pigGeneApp.controller("WfLoadingCtrl", ["$scope", "$location", "SharedWfService"
 		}
 		modWf.parameterMapping.outputParameterMapping[refWf.uid] = outputParameterMappingObj;
 		
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, wfAbbr);
 		$('#WfLoadingModal').modal('toggle');
 	});
 	
@@ -492,7 +495,7 @@ pigGeneApp.controller("CompLoadingCtrl", ["$scope", "$location", "SharedWfServic
 	$scope.openSelectedComponent = function() {
 		var selection = $scope.radioSelection;
 		if(!(selection == null || selection == "")) {
-			SharedWfService.loadWfDefinition(selection);
+			SharedWfService.loadWfDefinition(selection, compAbbr);
 			$location.path("/wf/comp/" + $scope.radioSelection);
 			$('#CompLoadingModal').modal('toggle');
 		}
@@ -691,7 +694,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 		}
 		delete modWf.parameterMapping.inputParameterMapping[componentName];
 		delete modWf.parameterMapping.outputParameterMapping[componentName];
-		SharedWfService.prepForBroadcast(modWf);
+		SharedWfService.prepForBroadcast(modWf, wfAbbr);
 	};
 	
 }]);

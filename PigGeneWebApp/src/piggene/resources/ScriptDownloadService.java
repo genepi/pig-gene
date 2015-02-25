@@ -1,6 +1,7 @@
 package piggene.resources;
 
 import java.io.IOException;
+import java.util.Properties;
 
 import net.sf.json.JSONObject;
 
@@ -18,23 +19,35 @@ import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 
 public class ScriptDownloadService extends ServerResource {
+	private static Properties prop = new Properties();
+	private static String wfAbbr;
+
+	static {
+		try {
+			prop.load(WorkflowSerialisation.class.getClassLoader().getResourceAsStream("config.properties"));
+			wfAbbr = prop.getProperty("wfAbbr");
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	protected Representation get() throws ResourceException {
-		ServerResponseObject obj = new ServerResponseObject();
+		final ServerResponseObject obj = new ServerResponseObject();
 
-		String workflowName = getRequest().getAttributes().get("id").toString();
+		final String workflowName = getRequest().getAttributes().get("id").toString();
 		try {
-			Workflow workflow = WorkflowSerialisation.load(workflowName);
+			final Workflow workflow = WorkflowSerialisation.load(workflowName, wfAbbr);
 			PigScriptGenerator.generateAndStoreScript(workflow);
 			RMarkDownGenerator.generateAndStoreScripts(workflow);
 			CloudgeneYamlGenerator.generateAndStoreFile(workflow);
-			String script = PigScript.load(workflowName);
+			final String script = PigScript.load(workflowName);
 			if (script == null) {
 				throw new IOException("could not load generated pig script.");
 			}
 			obj.setData(script);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while generating the script.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);

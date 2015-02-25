@@ -19,12 +19,14 @@ public class ZipFileGenerator {
 	private static String configurationFiles = "";
 	private static String zipFilesPath = "";
 	private static String zipExtension = ".zip";
+	private static String wfAbbr;
 
 	static {
 		try {
 			prop.load(CloudgeneYamlGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
 			configurationFiles = prop.getProperty("scriptFiles");
 			zipFilesPath = prop.getProperty("zipFiles");
+			wfAbbr = prop.getProperty("wfAbbr");
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,7 +34,7 @@ public class ZipFileGenerator {
 	}
 
 	public static void generateAndStoreFile(final String workflowName) throws IOException, ZipException {
-		final Workflow workflow = WorkflowSerialisation.load(workflowName);
+		final Workflow workflow = WorkflowSerialisation.load(workflowName, wfAbbr);
 		PigScriptGenerator.generateAndStoreScript(workflow);
 		RMarkDownGenerator.generateAndStoreScripts(workflow);
 		CloudgeneYamlGenerator.generateAndStoreFile(workflow);
