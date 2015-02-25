@@ -33,6 +33,7 @@ public class PigScriptGenerator {
 	public static void generateAndStoreScript(final Workflow workflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(insertHeader());
+		sb.append(insertDefinedFunctionNames());
 		sb.append(workflow.getPigScriptRepresentation(workflow.getName()));
 		createNeededFolders(workflow.getName());
 		PigScriptGenerator.write(sb.toString(), workflow.getName());
@@ -69,6 +70,23 @@ public class PigScriptGenerator {
 			sb.append(";");
 			sb.append(System.getProperty("line.separator"));
 		}
+		return sb.toString();
+	}
+
+	private static String insertDefinedFunctionNames() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("DEFINE ReadPaired fi.aalto.seqpig.filter.SAMFlagsFilter('HasMultipleSegments');");
+		sb.append("DEFINE ReadMappedInPair fi.aalto.seqpig.filter.SAMFlagsFilter('IsProperlyAligned');");
+		sb.append("DEFINE ReadUnmapped fi.aalto.seqpig.filter.SAMFlagsFilter('HasSegmentUnmapped');");
+		sb.append("DEFINE MateUnmapped fi.aalto.seqpig.filter.SAMFlagsFilter('NextSegmentUnmapped');");
+		sb.append("DEFINE ReadReverseStrand fi.aalto.seqpig.filter.SAMFlagsFilter('IsReverseComplemented');");
+		sb.append("DEFINE MateReverseStrand fi.aalto.seqpig.filter.SAMFlagsFilter('NextSegmentReversed');");
+		sb.append("DEFINE FirstInPair fi.aalto.seqpig.filter.SAMFlagsFilter('IsFirstSegment');");
+		sb.append("DEFINE SecondInPair fi.aalto.seqpig.filter.SAMFlagsFilter('IsLastSegment');");
+		sb.append("DEFINE NotPrimaryAlignment fi.aalto.seqpig.filter.SAMFlagsFilter('HasSecondaryAlignment');");
+		sb.append("DEFINE ReadFailsQC fi.aalto.seqpig.filter.SAMFlagsFilter('FailsQC');");
+		sb.append("DEFINE IsDuplicate fi.aalto.seqpig.filter.SAMFlagsFilter('IsDuplicate');");
+		sb.append(System.getProperty("line.separator"));
 		return sb.toString();
 	}
 
