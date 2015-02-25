@@ -7,15 +7,15 @@ var buttons =  [
 var componentButtons = [
         {name:"createComponentBtn", title:"create new component", showState: true, active:"", text:"new", logo:"file"},
         {name:"openComponentBtn", title:"open existing component", showState: true, active:"", text:"open", logo:"folder-open"},
-		{name:"deleteComponentBtn", title:"delete component", showState: true, active:"", text:"delete", logo:"trash"},           
+		{name:"deleteComponentBtn", title:"delete component", showState: false, active:"", text:"delete", logo:"trash"},           
     ];
 
 var workflowButtons = [
         {name:"createWfBtn", title:"create new workflow", showState: true, active:"", text:"new", logo:"file"},
         {name:"openWfBtn", title:"open existing workflow", showState: true, active:"", text:"open", logo:"folder-open"},
-		{name:"deleteWfBtn", title:"delete workflow", showState: true, active:"", text:"delete", logo:"trash"},
-		{name:"downloadScriptBtn", title:"download pig script", showState: true, active:"", text:"download pig", logo:"cloud-download"},
-		{name:"downloadZipBtn", title:"download workflow zip-file", showState: true, active:"", text:"download zip", logo:"briefcase"}
+		{name:"deleteWfBtn", title:"delete workflow", showState: false, active:"", text:"delete", logo:"trash"},
+		{name:"downloadScriptBtn", title:"download pig script", showState: false, active:"", text:"download pig", logo:"cloud-download"},
+		{name:"downloadZipBtn", title:"download workflow zip-file", showState: false, active:"", text:"download zip", logo:"briefcase"}
     ];
 
 var scriptType = [

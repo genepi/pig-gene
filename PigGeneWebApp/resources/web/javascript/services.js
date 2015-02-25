@@ -69,6 +69,41 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		sharedWorkflow.redirectLocation("/wf/", "newWf");
 	};
 	
+	sharedWorkflow.showAdditionalComponentButtons = function() {
+		componentButtons[2].showState = true;
+	};
+	
+	sharedWorkflow.showAdditionalWorkflowButtons = function() {
+		for(var i=2; i<workflowButtons.length; i++) {
+			workflowButtons[i].showState = true;
+		}
+	};
+	
+	sharedWorkflow.hideAdditionalComponentButtons = function() {
+		componentButtons[2].showState = false;
+	};
+	
+	sharedWorkflow.hideAdditionalWorkflowButtons = function() {
+		for(var i=2; i<workflowButtons.length; i++) {
+			workflowButtons[i].showState = false;
+		}
+	};
+	
+	sharedWorkflow.hideAdditionalButtons = function() {
+		this.hideAdditionalComponentButtons();
+		this.hideAdditionalWorkflowButtons();
+	};
+	
+	sharedWorkflow.onlyShowAdditionalComponentButtons = function() {
+		this.showAdditionalComponentButtons();
+		this.hideAdditionalWorkflowButtons();
+	};
+	
+	sharedWorkflow.onlyShowAdditionalWorkflowButtons = function() {
+		this.hideAdditionalComponentButtons();
+		this.showAdditionalWorkflowButtons();
+	};
+	
 	sharedWorkflow.changeMetaInfo = function(newWfName, newWfDescription, type) {
 		var oldWfName = this.workflow.name;
 		var modWf = this.workflow;
@@ -96,6 +131,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 			}
 			sharedWorkflow.workflow = response.data;
 			sharedWorkflow.showParameterElements();
+			if(type === compAbbr) {
+				sharedWorkflow.onlyShowAdditionalComponentButtons();
+			} else {
+				sharedWorkflow.onlyShowAdditionalWorkflowButtons();
+			}
 			sharedWorkflow.broadcastWfChange(type);
 		});
 	};
@@ -111,8 +151,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		});
 	};
 	
-	sharedWorkflow.deleteCurrentDefinition = function() {
-		WfPersistency.Delete.remove({"id":this.workflow.name}).$promise.then(function(response) {
+	sharedWorkflow.deleteCurrentDefinition = function(type) {
+		WfPersistency.Delete.remove({"id":this.workflow.name, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
 				//TODO fix error message
 				alert(response.message);

@@ -82,7 +82,7 @@ public class WorkflowReference extends Workflow {
 				sb.append(lineSeparator);
 				sb.append(insertIndentationTabs());
 				final Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName,
-						WorkflowSerialisation.determineType(workflowName));
+						WorkflowSerialisation.determineType(surroundingWorkflowName));
 				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName),
 						surroundingWorkflow.getParameterMapping(), surroundingWorkflow.getParameter(), super.getUid());
 				sb.append(adjustIndentation(pigScriptRepresentation));

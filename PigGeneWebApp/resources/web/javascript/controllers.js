@@ -6,11 +6,13 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 			case "components":
 						$scope.redirectToHome();
 						$scope.modifyActiveState(index);
+						SharedWfService.hideAdditionalButtons();
 						SharedWfService.showComponentNavBar();
 						break;
 			case "workflows":
 						$scope.redirectToHome();
 						$scope.modifyActiveState(index);
+						SharedWfService.hideAdditionalButtons();
 						SharedWfService.showWfNavBar();
 						break;
 			case "library":
@@ -33,6 +35,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 	
 	$scope.hideEverything = function() {
 		SharedWfService.hideParameterElements();
+		SharedWfService.hideAdditionalButtons();
 	};
 	
 }]);
@@ -515,14 +518,19 @@ pigGeneApp.controller("MissingInputCtrl", ["$scope", "SharedWfService", function
 	
 }]);
 
-pigGeneApp.controller("DeletionCheckCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+pigGeneApp.controller("DeletionCheckCtrl", ["$scope", "$location", "SharedWfService", function($scope, $location, SharedWfService) {
 	
 	$scope.$on("deletionCheckNotification", function() {
 		$('#deletionCheckModal').modal('toggle');
 	});
 	
 	$scope.delete = function() {
-		SharedWfService.deleteCurrentDefinition();
+		var type = wfAbbr;
+		var patternComp = /.*\/wf\/comp\/.*/;
+		if(patternComp.test($location.$$url)) {
+			type = compAbbr;
+		}
+		SharedWfService.deleteCurrentDefinition(type);
 	};
 	
 }]);
