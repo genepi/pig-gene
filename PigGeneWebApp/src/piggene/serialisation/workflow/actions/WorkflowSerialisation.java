@@ -190,7 +190,7 @@ public class WorkflowSerialisation {
 		if (f.exists()) {
 			return wfAbbr;
 		}
-		f = new File(compAbbr.concat(workflowName).concat(fileExtension));
+		f = new File(componentDefsPath.concat(workflowName).concat(fileExtension));
 		if (f.exists()) {
 			return compAbbr;
 		}

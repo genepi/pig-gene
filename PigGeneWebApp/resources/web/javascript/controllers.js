@@ -170,13 +170,13 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		return false;
 	};
 	
-	$scope.updateWfDefinition = function() {
+	$scope.updateWfDefinition = function(type) {
 		$scope.timeout = 2000
 		if ($scope.pendingPromise) { 
 			$timeout.cancel($scope.pendingPromise); 
 		}
 		$scope.pendingPromise = $timeout(function () { 
-			SharedWfService.changeWfMetaInfo($scope.workflowName, $scope.workflowDescription);
+			SharedWfService.changeMetaInfo($scope.workflowName, $scope.workflowDescription, type);
 		}, $scope.timeout);
 	};
 	
@@ -450,7 +450,11 @@ pigGeneApp.controller("WfLoadingCtrl", ["$scope", "$location", "SharedWfService"
 		var selection = $scope.radioSelection;
 		if(!(selection == null || selection == "")) {
 			//AJAX call to get important wf data
-			SharedWfService.loadReferencedWfDefinition(selection, wfAbbr);
+			var type = wfAbbr;
+			if(SharedWfService.wfComposing) {
+				type = compAbbr;
+			}
+			SharedWfService.loadReferencedWfDefinition(selection, type);
 		}
 	};
 	

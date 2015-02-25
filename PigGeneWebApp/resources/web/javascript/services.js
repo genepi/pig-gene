@@ -23,6 +23,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.workflow = {};
 	sharedWorkflow.existingWorkflows = {};
 	sharedWorkflow.openDef = true;
+	sharedWorkflow.wfComposing = false;
 	
 	sharedWorkflow.initializeNewComponent = function() {
 		var emptyWorkflow = {
@@ -179,6 +180,11 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				return;
 			}
 			sharedWorkflow.existingWorkflows = response.data;
+			if(type === compAbbr && wfComposing) {
+				sharedWorkflow.wfComposing = true;
+			} else {
+				sharedWorkflow.wfComposing = false;
+			}
 			if(type === wfAbbr || wfComposing) {
 				sharedWorkflow.openDef = openWfDefinition;
 				sharedWorkflow.broadcastExWfNamesChange();
