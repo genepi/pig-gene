@@ -7,12 +7,14 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 						$scope.redirectToHome();
 						$scope.modifyActiveState(index);
 						SharedWfService.hideAdditionalButtons();
+						SharedWfService.resetWorkflow();
 						SharedWfService.showComponentNavBar();
 						break;
 			case "workflows":
 						$scope.redirectToHome();
 						$scope.modifyActiveState(index);
 						SharedWfService.hideAdditionalButtons();
+						SharedWfService.resetWorkflow();
 						SharedWfService.showWfNavBar();
 						break;
 			case "library":
@@ -547,7 +549,7 @@ pigGeneApp.controller("ScriptCheckCtrl", ["$scope", "SharedWfService", function(
 pigGeneApp.controller("ZipCreationCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
 	
 	$scope.$on("zipCreationMessage", function() {
-		workflowButtons[4].logo = "glyphicon glyphicon-briefcase";
+		workflowButtons[4].logo = "fa fa-file-archive-o";
 		$('#successfulZipCreationModal').modal('toggle');
 	});
 	

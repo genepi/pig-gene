@@ -69,6 +69,10 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		sharedWorkflow.redirectLocation("/wf/", "newWf");
 	};
 	
+	sharedWorkflow.resetWorkflow = function() {
+		this.workflow = [];
+	};
+	
 	sharedWorkflow.showAdditionalComponentButtons = function() {
 		componentButtons[2].showState = true;
 	};
@@ -219,17 +223,25 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				console.log(response.message);
 				return;
 			}
-			sharedWorkflow.existingWorkflows = response.data;
 			if(type === compAbbr && wfComposing) {
 				sharedWorkflow.wfComposing = true;
 			} else {
 				sharedWorkflow.wfComposing = false;
+				var index = response.data.names.indexOf(sharedWorkflow.workflow.name);
+				if(index != -1) {
+					response.data.names.splice(index,1);
+				}
 			}
-			if(type === wfAbbr || wfComposing) {
-				sharedWorkflow.openDef = openWfDefinition;
-				sharedWorkflow.broadcastExWfNamesChange();
-			} else if (type === compAbbr) {
-				sharedWorkflow.broadcastExCompNamesChange();
+			if(response.data.names.length == 0) {
+				alert("there exists no other workflow definition except the already opened one");
+			} else {
+				sharedWorkflow.existingWorkflows = response.data;
+				if(type === wfAbbr || wfComposing) {
+					sharedWorkflow.openDef = openWfDefinition;
+					sharedWorkflow.broadcastExWfNamesChange();
+				} else if (type === compAbbr) {
+					sharedWorkflow.broadcastExCompNamesChange();
+				}
 			}
 		});
 	};
