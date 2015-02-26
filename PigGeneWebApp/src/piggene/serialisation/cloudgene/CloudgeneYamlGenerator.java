@@ -73,13 +73,13 @@ public class CloudgeneYamlGenerator {
 		final WdlApp app = new WdlApp();
 		app.setName(workflow.getName());
 		app.setDescription(workflow.getDescription());
-		app.setVersion("0.2.1");
+		app.setVersion("0.3.0");
 		app.setCategory("Piggene");
 		app.setMapred(mapred);
 
 		final YamlWriter writer = new YamlWriter(new OutputStreamWriter(new FileOutputStream(cloudgeneYamls.concat(workflow.getName()).concat("/")
 				.concat("cloudgene.yaml"))));
-		writer.getConfig().setClassTag("cloudgene.mapred.apps.WdlApp", WdlApp.class);
+		writer.getConfig().writeConfig.setWriteRootTags(false);
 		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "steps", WdlStep.class);
 		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "inputs", WdlParameterInput.class);
 		writer.getConfig().setPropertyElementType(WdlMapReduce.class, "outputs", WdlParameterOutput.class);
