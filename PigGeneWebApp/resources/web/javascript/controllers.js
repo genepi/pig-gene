@@ -90,6 +90,7 @@ pigGeneApp.controller("WorkflowNavBarCtrl", ["$scope", "SharedWfService", functi
 						SharedWfService.downloadScript();
 						break;
 			case "downloadZipBtn": 	
+						workflowButtons[index].logo = "fa fa-refresh fa-spin";
 						SharedWfService.downloadZip();
 						break;
 			default: break;	
@@ -546,6 +547,7 @@ pigGeneApp.controller("ScriptCheckCtrl", ["$scope", "SharedWfService", function(
 pigGeneApp.controller("ZipCreationCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
 	
 	$scope.$on("zipCreationMessage", function() {
+		workflowButtons[4].logo = "glyphicon glyphicon-briefcase";
 		$('#successfulZipCreationModal').modal('toggle');
 	});
 	
@@ -644,7 +646,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 			$scope.loadConnectorElementPositions(SharedWfService.workflow.parameter.outputParameter);
 			$scope.loadConnections();
 		}, 
-		100);
+		250);
 	});
 	
 	$scope.loadElementPositions = function(elements) {

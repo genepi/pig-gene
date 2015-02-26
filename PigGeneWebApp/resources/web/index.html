@@ -17,6 +17,8 @@
 <!-- twitter bootstrap -->
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<!-- font awesome -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <!-- x-editable -->
 <link href="css/xeditable-0.1.8.css" rel="stylesheet">
 <script src="javascript/xeditable.min-0.1.8.js"></script>
@@ -36,7 +38,7 @@
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
      			<ul class="nav navbar-nav">
-        			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons" ng-click="performNavBarAction($index)"><a><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
+        			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in buttons" ng-click="performNavBarAction($index)"><a><span class="{{button.logo}}"></span> {{button.text}}</a></li>
        			</ul>
 			</div>
 		</div>
@@ -46,7 +48,7 @@
 		<div>
 			<div>
      			<ul class="nav navbar-nav">
-        			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in componentButtons" ng-click="performComponentNavBarAction($index)"><a><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
+        			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in componentButtons" ng-click="performComponentNavBarAction($index)"><a><span class="{{button.logo}}"></span> {{button.text}}</a></li>
        			</ul>
 			</div>
 		</div>
@@ -56,7 +58,7 @@
 		<div>
 			<div>
      			<ul class="nav navbar-nav">
-        			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in workflowButtons" ng-click="performComponentNavBarAction($index)"><a><span class="glyphicon glyphicon-{{button.logo}}"></span> {{button.text}}</a></li>
+        			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in workflowButtons" ng-click="performComponentNavBarAction($index)"><a><span class="{{button.logo}}"></span> {{button.text}}</a></li>
        			</ul>
 			</div>
 		</div>

@@ -30,6 +30,10 @@ h4 {
 	cursor: pointer;
 }
 
+.navbarBtn:hover {
+	font-size: 16px;
+}
+
 .parameterHeadline {
 	margin-left: 2px;
 }
