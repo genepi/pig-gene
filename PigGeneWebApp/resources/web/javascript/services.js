@@ -12,7 +12,8 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 		Save: $resource("/save/wf"),
 		Delete: $resource("/del/:id/:type", {id: "@id", type: "@type"}),
 		Download: $resource("/dwnld/:id", {id: "@id"}),
-		DownloadZip: $resource("/dwnldzip/:id", {id: "@id"})
+		DownloadZip: $resource("/dwnldzip/:id", {id: "@id"}), 
+		DownloadLibFile: $resource("/dwnldlib")
 	};
 	
 });
@@ -206,6 +207,23 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		}
 	};
 	
+	sharedWorkflow.downloadLibFile = function(link) {
+		var jsonLink = '{"link": "' + link + '"}'
+		var libLink = new WfPersistency.DownloadLibFile.save(jQuery.parseJSON(jsonLink)).$promise.then(function(response) {
+			//TODO
+			//give user some information that the download worked/failed...
+			
+			if(!response.success) {
+//				alert(response.message);
+				console.log(response.message);
+				sharedWorkflow.broadcastlibDownloadFailure();
+				return;
+			}
+			sharedWorkflow.broadcastlibDownloadSuccess();
+			
+		});
+	};
+	
 	sharedWorkflow.redirectLocation = function(oldPath, wfName) {
 		var patternComp = /.*\/wf\/comp\/.*/;
 		if(patternComp.test(oldPath)) {
@@ -285,9 +303,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				alert(response.message);
 				console.log(response.message);
 				return;
-			} else {
-				sharedWorkflow.broadcastZipCreation();
 			}
+			sharedWorkflow.broadcastZipCreation();
 		});
 	};
 	
@@ -380,6 +397,14 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	
 	sharedWorkflow.broadcastZipCreation = function() {
 		$rootScope.$broadcast("zipCreationMessage");
+	};
+	
+	sharedWorkflow.broadcastlibDownloadSuccess = function() {
+		$rootScope.$broadcast("libDownloadSuccessMsg");
+	};
+	
+	sharedWorkflow.broadcastlibDownloadFailure = function() {
+		$rootScope.$broadcast("libDownloadFailureMsg");
 	};
 	
 	sharedWorkflow.checkWorkflowNameDefinitionExists = function() {

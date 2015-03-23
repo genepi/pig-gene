@@ -34,7 +34,7 @@
 	<nav id="navBar" class="navbar navbar-inverse windowGap" role="navigation" ng-controller="NavBarCtrl">
 		<div class="container-fluid">
 			<div class="navbar-header">
-		      	<a class="navbar-brand" href="#" ng-click="hideEverything()">pigGene project</a>
+		      	<a id="homeLink" class="navbar-brand" href="#" ng-click="hideEverything()">pigGene project</a>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
      			<ul class="nav navbar-nav">
@@ -198,6 +198,22 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
 					<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="downloadLibFile()">download</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="libraryLinkDownloadNotificationModal" class="modal fade" ng-controller="LibraryLinkNotificationCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">library file download</h4>
+				</div>
+				<div id="libraryLinkDownloadStatusMsg" class="modal-body">
+				</div>
+				<div class="modal-footer">
+					<button id="libraryLinkDownloadStatusBtn" type="button" class="btn" data-dismiss="modal">ok</button>
 				</div>
 			</div>
 		</div>

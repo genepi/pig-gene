@@ -9,6 +9,7 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
+import piggene.resources.LibFileDownloadService;
 import piggene.resources.ScriptDownloadService;
 import piggene.resources.WorkflowDeletionService;
 import piggene.resources.WorkflowLoaderService;
@@ -46,6 +47,7 @@ public class WebApp extends Application {
 		router.attach("/del/{id}/{type}", WorkflowDeletionService.class);
 		router.attach("/dwnld/{id}", ScriptDownloadService.class);
 		router.attach("/dwnldzip/{id}", ZipDownloadService.class);
+		router.attach("/dwnldlib", LibFileDownloadService.class);
 
 		// clap protocol for usage in jar files
 		final Directory dir = new Directory(getContext(), new LocalReference("clap://thread/web"));

@@ -563,9 +563,36 @@ pigGeneApp.controller("LibraryLinkInputCtrl", ["$scope", "SharedWfService", func
 	});
 	
 	$scope.downloadLibFile = function() {
-		//TODO
-		//call function to send link to server and close modal!
+		buttons[2].logo = "fa fa-refresh fa-spin";
+		for(var i=0; i<buttons.length; i++) {
+			buttons[i].active = "";
+		}
+		buttons[2].active = "active";
+		SharedWfService.downloadLibFile($scope.link);
+		$scope.link = "";
 	};
+	
+}]);
+
+pigGeneApp.controller("LibraryLinkNotificationCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	
+	$scope.$on("libDownloadSuccessMsg", function() {
+		buttons[2].logo = "fa fa-puzzle-piece";
+		buttons[2].active = "";
+		$('#libraryLinkDownloadStatusMsg').html('successfully finished');
+		$('#libraryLinkDownloadStatusBtn').removeClass('btn-danger');
+		$('#libraryLinkDownloadStatusBtn').addClass('btn-success');
+		$('#libraryLinkDownloadNotificationModal').modal('toggle');
+	});
+	
+	$scope.$on("libDownloadFailureMsg", function() {
+		buttons[2].logo = "fa fa-puzzle-piece";
+		buttons[2].active = "";
+		$('#libraryLinkDownloadStatusMsg').html('failed');
+		$('#libraryLinkDownloadStatusBtn').removeClass('btn-success');
+		$('#libraryLinkDownloadStatusBtn').addClass('btn-danger');
+		$('#libraryLinkDownloadNotificationModal').modal('toggle');
+	});
 	
 }]);
 
