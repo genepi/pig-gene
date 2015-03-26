@@ -28,7 +28,7 @@ public class ZipFileGenerator {
 			zipFilesPath = prop.getProperty("zipFiles");
 			wfAbbr = prop.getProperty("wfAbbr");
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+			// problem loading the properties file
 			e.printStackTrace();
 		}
 	}

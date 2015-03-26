@@ -30,7 +30,7 @@ public class CloudgeneYamlGenerator {
 			prop.load(CloudgeneYamlGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
 			cloudgeneYamls = prop.getProperty("cloudgeneYamls");
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+			// problem loading the properties file
 			e.printStackTrace();
 		}
 	}
@@ -174,8 +174,8 @@ public class CloudgeneYamlGenerator {
 				}
 			}
 			mapping.put("title", workflow.getName());
-			mapping.put("xaxis", "TODO");
-			mapping.put("yaxis", "TODO");
+			mapping.put("xaxis", "x");
+			mapping.put("yaxis", "y");
 			rmdStep.setMapping(mapping);
 			rmdSteps.add(rmdStep);
 		}

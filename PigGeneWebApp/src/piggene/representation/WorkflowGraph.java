@@ -11,7 +11,7 @@ import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 public class WorkflowGraph {
 
-	public static List<Connection> createConnectionList(final Workflow wf) throws JSONException {
+	public static List<Connection> createConnectionList(final Workflow wf) throws JSONException, WorkflowGraphException {
 		final List<Connection> connections = new ArrayList<Connection>();
 		final List<LinkParameter> inputParameters = wf.getParameter().getInputParameter();
 		final List<LinkParameter> outputParameters = wf.getParameter().getOutputParameter();
@@ -39,18 +39,15 @@ public class WorkflowGraph {
 
 		for (final String parameterName : parameterMapping.getMatchingInAndOutputParameterValuesFromAllWorkflows()) {
 			if (contentCheck(parameterName)) {
-				// just one allowed
 				final List<String> correspondingOutputParameterValues = parameterMapping.getCorrespondingOutputParameterValues(parameterName);
 				if (correspondingOutputParameterValues.size() > 1) {
-					// TODO
-					// throw exception
+					throw new WorkflowGraphException("Only one corresponding output parameter value allowed!");
 				}
 				for (final String target : parameterMapping.getCorrespondingInputParameterValues(parameterName)) {
 					connections.add(new Connection(correspondingOutputParameterValues.get(0), target));
 				}
 			}
 		}
-
 		return connections;
 	}
 
@@ -60,4 +57,5 @@ public class WorkflowGraph {
 		}
 		return true;
 	}
+
 }

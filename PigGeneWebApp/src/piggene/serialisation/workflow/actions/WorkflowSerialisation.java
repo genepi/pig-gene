@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import org.json.JSONException;
 
 import piggene.representation.WorkflowGraph;
+import piggene.representation.WorkflowGraphException;
 import piggene.serialisation.workflow.Position;
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.WorkflowComponent;
@@ -42,7 +43,7 @@ public class WorkflowSerialisation {
 			wfAbbr = prop.getProperty("wfAbbr");
 			compAbbr = prop.getProperty("compAbbr");
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+			// problem loading the properties file
 			e.printStackTrace();
 		}
 	}
@@ -81,7 +82,7 @@ public class WorkflowSerialisation {
 		return workflow;
 	}
 
-	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException, JSONException {
+	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException, JSONException, WorkflowGraphException {
 		final List<Workflow> resolvedSteps = new ArrayList<Workflow>();
 		for (final Workflow wf : workflow.getComponents()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {

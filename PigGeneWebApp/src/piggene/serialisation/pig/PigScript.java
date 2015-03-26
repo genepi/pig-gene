@@ -3,9 +3,8 @@ package piggene.serialisation.pig;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.util.Properties;
 import java.nio.file.Path;
-
+import java.util.Properties;
 
 public class PigScript {
 	private static Properties prop = new Properties();
@@ -16,23 +15,18 @@ public class PigScript {
 		try {
 			prop.load(PigScriptGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
 			scriptFilesPath = prop.getProperty("scriptFiles");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (final IOException e) {
+			// problem loading the properties file
 			e.printStackTrace();
 		}
 	}
 
-	public static String load(String scriptName) {
-		Path path = FileSystems.getDefault().getPath(scriptFilesPath, "/", scriptName, scriptName.concat(fileExtension));
+	public static String load(final String scriptName) throws IOException {
+		final Path path = FileSystems.getDefault().getPath(scriptFilesPath, "/", scriptName, scriptName.concat(fileExtension));
 		String script = null;
-		try {
-			byte[] bytes = Files.readAllBytes(path);
-			script = new String(bytes, "UTF-8");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		final byte[] bytes = Files.readAllBytes(path);
+		script = new String(bytes, "UTF-8");
 		return script;
 	}
-	
+
 }

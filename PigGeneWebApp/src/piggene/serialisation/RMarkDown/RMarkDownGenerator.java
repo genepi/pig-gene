@@ -18,7 +18,7 @@ public class RMarkDownGenerator {
 			prop.load(RMarkDownGenerator.class.getClassLoader().getResourceAsStream("config.properties"));
 			scriptFilesPath = prop.getProperty("scriptFiles");
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+			// problem loading the properties file
 			e.printStackTrace();
 		}
 	}
@@ -46,13 +46,10 @@ public class RMarkDownGenerator {
 		try {
 			out = new BufferedWriter(new FileWriter(scriptFilesPath.concat(folder).concat("/").concat(name.concat(".Rmd"))));
 			out.write(script);
-		} catch (final Exception e) {
-			// TODO change catch clause
-			e.printStackTrace();
 		} finally {
 			try {
 				out.close();
-			} catch (final IOException ignore) {
+			} catch (final Exception ignore) {
 				// ignore
 			}
 		}

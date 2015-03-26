@@ -26,7 +26,7 @@ public class PigScriptGenerator {
 			scriptFilesPath = prop.getProperty("scriptFiles");
 			libFilesPath = prop.getProperty("libFiles");
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+			// problem loading the properties file
 			e.printStackTrace();
 		}
 	}

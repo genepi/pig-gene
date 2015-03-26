@@ -37,16 +37,16 @@ public class WorkflowLibraryAddOnService extends ServerResource {
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
-		// TODO modify exception handling!
-
 		try {
 			LibraryAddOn.downloadLibraryFile(libraryLink);
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			obj.setSuccess(false);
+			obj.setMessage("The given URL is not accessible.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		} catch (final ZipException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			obj.setSuccess(false);
+			obj.setMessage("Server is unable to unzip the downloaded zip-file.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
 		obj.setSuccess(true);
