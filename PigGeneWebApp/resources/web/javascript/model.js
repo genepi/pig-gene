@@ -1,7 +1,7 @@
 var buttons =  [
-		{name:"components", title:"open component view", showState: true, active:"", text:"component", logo:"fa fa-file-code-o"},
-		{name:"workflows", title:"open workflow view", showState: true, active:"", text:"workflow", logo:"fa fa-tasks"},
-		{name:"library", title:"add library file", showState: true, active:"", text:"library file", logo:"fa fa-puzzle-piece"}
+		{name:"components", title:"open component view", showState: true, active:"", logo:"fa fa-file-code-o"},
+		{name:"workflows", title:"open workflow view", showState: true, active:"", logo:"fa fa-tasks"},
+		{name:"library file", title:"add library file", showState: true, active:"", logo:"fa fa-puzzle-piece"}
 	];
 
 var componentButtons = [

@@ -17,7 +17,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 						SharedWfService.resetWorkflow();
 						SharedWfService.showWfNavBar();
 						break;
-			case "library":
+			case "library file":
 						SharedWfService.broadcastLibraryFileLinkInput();
 						break;
 			default: break;	

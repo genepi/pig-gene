@@ -207,6 +207,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		var jsonLink = '{"link": "' + link + '"}'
 		var libLink = new WfPersistency.DownloadLibFile.save(jQuery.parseJSON(jsonLink)).$promise.then(function(response) {
 			if(!response.success) {
+				buttons[2].logo = "fa fa-puzzle-piece";
 				sharedWorkflow.serverExceptionMsg = response.message;
 				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
