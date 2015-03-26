@@ -14,6 +14,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import piggene.helper.LibraryAddOn;
+import piggene.helper.PigGenePackageException;
 
 public class LibFileDownloadService extends ServerResource {
 
@@ -45,6 +46,10 @@ public class LibFileDownloadService extends ServerResource {
 		} catch (final ZipException e) {
 			obj.setSuccess(false);
 			obj.setMessage("The content of the specified library zip-file could not be extracted.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+		} catch (final PigGenePackageException e) {
+			obj.setSuccess(false);
+			obj.setMessage(e.getMessage());
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 

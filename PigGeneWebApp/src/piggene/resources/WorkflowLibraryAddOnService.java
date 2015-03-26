@@ -14,6 +14,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 import piggene.helper.LibraryAddOn;
+import piggene.helper.PigGenePackageException;
 
 public class WorkflowLibraryAddOnService extends ServerResource {
 
@@ -46,6 +47,10 @@ public class WorkflowLibraryAddOnService extends ServerResource {
 		} catch (final ZipException e) {
 			obj.setSuccess(false);
 			obj.setMessage("Server is unable to unzip the downloaded zip-file.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+		} catch (final PigGenePackageException e) {
+			obj.setSuccess(false);
+			obj.setMessage(e.getMessage());
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 
