@@ -219,5 +219,37 @@
 		</div>
 	</div>
 	
+	<div id="pointlessConnectionModal" class="modal fade" ng-controller="pointlessConnectionCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">connection information</h4>
+				</div>
+				<div class="modal-body">
+					you may want to rethink this connection...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="serverExceptionInfoModal" class="modal fade" ng-controller="serverExceptionInfoCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">a problem ocurred</h4>
+				</div>
+				<div id="serverExceptionMsgContainer" class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 </body>
 </html>

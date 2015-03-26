@@ -25,6 +25,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.existingWorkflows = {};
 	sharedWorkflow.openDef = true;
 	sharedWorkflow.wfComposing = false;
+	sharedWorkflow.serverExceptionMsg = "";
 	
 	sharedWorkflow.initializeNewComponent = function() {
 		var emptyWorkflow = {
@@ -129,9 +130,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.loadWfDefinition = function(id, type) {
 		WfPersistency.Load.get({"id":id, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
-				//TODO fix error message
-				alert(response.message);
-				console.log(response.message);
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
 			sharedWorkflow.workflow = response.data;
@@ -148,9 +148,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.deleteWfDefinition = function(id, type) {
 		WfPersistency.Delete.remove({"id":id, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
-				//TODO fix error message
-				alert(response.message);
-				console.log(response.message);
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
 		});
@@ -159,9 +158,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.deleteCurrentDefinition = function(type) {
 		WfPersistency.Delete.remove({"id":this.workflow.name, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
-				//TODO fix error message
-				alert(response.message);
-				console.log(response.message);
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
 			$location.path("").replace();
@@ -171,9 +169,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.loadReferencedWfDefinition = function(id, type) {
 		WfPersistency.Ref.get({"id":id, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
-				//TODO fix error message
-				alert(response.message);
-				console.log(response.message);
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
 			if(response.data.position === undefined) {
@@ -197,9 +194,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 			}
 			var myWf = new WfPersistency.Save.save(wfToStore).$promise.then(function(response) {
 				if(!response.success) {
-					//TODO fix error message
-					alert(response.message);
-					console.log(response.message);
+					sharedWorkflow.serverExceptionMsg = response.message;
+					sharedWorkflow.broadcastServerExceptionInformation();
 					return;
 				}
 				sharedWorkflow.redirectLocation($location.$$path, sharedWorkflow.workflow.name);
@@ -210,13 +206,9 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.downloadLibFile = function(link) {
 		var jsonLink = '{"link": "' + link + '"}'
 		var libLink = new WfPersistency.DownloadLibFile.save(jQuery.parseJSON(jsonLink)).$promise.then(function(response) {
-			//TODO
-			//give user some information that the download worked/failed...
-			
 			if(!response.success) {
-//				alert(response.message);
-				console.log(response.message);
-				sharedWorkflow.broadcastlibDownloadFailure();
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
 			sharedWorkflow.broadcastlibDownloadSuccess();
@@ -236,9 +228,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.loadExistingWorkflowNames = function(openWfDefinition, type, wfComposing) {
 		WfPersistency.Existing.get({"type":type}).$promise.then(function(response) {
 			if(!response.success) {
-				//TODO fix error message
-				alert(response.message);
-				console.log(response.message);
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
 			if(type === compAbbr && wfComposing) {
@@ -267,9 +258,8 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.downloadScript = function() {
 		WfPersistency.Download.get({"id":sharedWorkflow.workflow.name}).$promise.then(function(response) {
 			if(!response.success) {
-				//TODO fix error message
-				alert(response.message);
-				console.log(response.message);
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
 			
@@ -299,9 +289,9 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.downloadZip = function() {
 		WfPersistency.DownloadZip.get({"id":sharedWorkflow.workflow.name}).$promise.then(function(response) {
 			if(!response.success) {
-				//TODO fix error message
-				alert(response.message);
-				console.log(response.message);
+				$rootScope.$broadcast("resetZipIcon");
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
 			sharedWorkflow.broadcastZipCreation();
@@ -403,8 +393,12 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		$rootScope.$broadcast("libDownloadSuccessMsg");
 	};
 	
-	sharedWorkflow.broadcastlibDownloadFailure = function() {
-		$rootScope.$broadcast("libDownloadFailureMsg");
+	sharedWorkflow.broadcastPointlessConnectionOperation = function() {
+		$rootScope.$broadcast("pointlessConnectionMsg");
+	};
+	
+	sharedWorkflow.broadcastServerExceptionInformation = function() {
+		$rootScope.$broadcast("serverExceptionMsg");
 	};
 	
 	sharedWorkflow.checkWorkflowNameDefinitionExists = function() {

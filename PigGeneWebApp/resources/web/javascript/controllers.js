@@ -553,6 +553,10 @@ pigGeneApp.controller("ZipCreationCtrl", ["$scope", "SharedWfService", function(
 		$('#successfulZipCreationModal').modal('toggle');
 	});
 	
+	$scope.$on("resetZipIcon", function() {
+		workflowButtons[4].logo = "fa fa-file-archive-o";
+	});
+	
 }]);
 
 pigGeneApp.controller("LibraryLinkInputCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
@@ -585,16 +589,25 @@ pigGeneApp.controller("LibraryLinkNotificationCtrl", ["$scope", "SharedWfService
 		$('#libraryLinkDownloadNotificationModal').modal('toggle');
 	});
 	
-	$scope.$on("libDownloadFailureMsg", function() {
-		buttons[2].logo = "fa fa-puzzle-piece";
-		buttons[2].active = "";
-		$('#libraryLinkDownloadStatusMsg').html('failed');
-		$('#libraryLinkDownloadStatusBtn').removeClass('btn-success');
-		$('#libraryLinkDownloadStatusBtn').addClass('btn-danger');
-		$('#libraryLinkDownloadNotificationModal').modal('toggle');
+}]);
+
+pigGeneApp.controller("pointlessConnectionCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	
+	$scope.$on("pointlessConnectionMsg", function() {
+		$('#pointlessConnectionModal').modal('toggle');
 	});
 	
 }]);
+
+pigGeneApp.controller("serverExceptionInfoCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	
+	$scope.$on("serverExceptionMsg", function() {
+		$('#serverExceptionInfoModal').modal('toggle');
+		$('#serverExceptionMsgContainer').html(SharedWfService.serverExceptionMsg);
+	});
+	
+}]);
+
 
 pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope, SharedWfService) {
 
@@ -634,9 +647,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 			$(targetInputElement).val(connectionName);
 			$(targetInputElement).trigger('input');
 		} else if(srcDataType === 'input-param' && targetDataType === 'output-param') {
-			//inform user, that this connection doesnt make any sense...
-			//TODO implement better solution than alert!
-			alert("please rethink this connection...");
+			SharedWfService.broadcastPointlessConnectionOperation();
 		} else if(srcDataType === 'ref-param' && targetDataType === 'ref-param') {
 			var srcInputElement = $(srcConnectionPoint).parent().children()[3];
 			var targetInputElement = $(targetConnectionPoint).parent().children()[3];
