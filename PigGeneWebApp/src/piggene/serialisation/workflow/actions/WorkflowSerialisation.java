@@ -168,8 +168,8 @@ public class WorkflowSerialisation {
 
 		final List<String> fileNames = new ArrayList<String>();
 		for (final File f : files) {
-			final String fileName = f.getName();
-			final String regex = "(\\w+).(\\w+\\b)";
+			final String fileName = java.net.URLDecoder.decode(f.getName(), "UTF-8");
+			final String regex = "([\\w\\d -]+).(\\w+\\b)";
 			final Pattern p = Pattern.compile(regex);
 			final Matcher m = p.matcher(fileName);
 			if (m.find()) {
