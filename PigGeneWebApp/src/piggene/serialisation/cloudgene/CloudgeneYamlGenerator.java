@@ -135,8 +135,10 @@ public class CloudgeneYamlGenerator {
 
 	private static List<WdlStep> retrieveRmdSteps(final Workflow surroundingWorkflow, Workflow workflow) throws IOException {
 		final List<WdlStep> rmdSteps = new ArrayList<WdlStep>();
+		String referencedWfUid = null;
 		if (workflow.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
 			final String workflowName = workflow.getName();
+			referencedWfUid = workflow.getUid();
 			workflow = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
 		}
 		if (workflow.getComponents() == null || workflow.getComponents().size() == 0) {
@@ -147,6 +149,9 @@ public class CloudgeneYamlGenerator {
 				rmdSteps.addAll(retrieveRmdSteps(workflow, comp));
 			}
 		} else if (((WorkflowComponent) workflow.getComponents().get(0)).getScriptType().getId() == 1) {
+			if (referencedWfUid == null) {
+				throw new IOException("uid of referenced wf was not properly set");
+			}
 			final WdlStep rmdStep = new WdlStep();
 			rmdStep.setName("RmdScript");
 			rmdStep.setRmd(workflow.getName().concat(RmdfileExtension));
@@ -163,14 +168,12 @@ public class CloudgeneYamlGenerator {
 				if (surroundingWorkflow != null) {
 					final WorkflowParameterMapping parameterMapping = surroundingWorkflow.getParameterMapping();
 					final Map<String, Map<String, String>> inputParameterMapping = parameterMapping.getInputParameterMapping();
-					final Map<String, Map<String, String>> outputParameterMapping = parameterMapping.getOutputParameterMapping();
-					String value = inputParameterMapping.get(workflow.getName()).get(in.getConnector());
-					if (value == null) {
-						value = outputParameterMapping.get(workflow.getName()).get(in.getConnector());
+
+					String connectorVal = inputParameterMapping.get(referencedWfUid).get(in.getConnector());
+					if (connectorVal != null) {
+						connectorVal = "$".concat(connectorVal);
 					}
-					mapping.put(name, value);
-				} else {
-					mapping.put(name, in.getConnector());
+					mapping.put(name, connectorVal);
 				}
 			}
 			mapping.put("title", workflow.getName());
@@ -178,6 +181,8 @@ public class CloudgeneYamlGenerator {
 			mapping.put("yaxis", "y");
 			rmdStep.setMapping(mapping);
 			rmdSteps.add(rmdStep);
+		} else {
+			// skip workflow components with "PigScript Type" (=scripttype: 0)"
 		}
 		return rmdSteps;
 	}
