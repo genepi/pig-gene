@@ -4,7 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -16,6 +18,7 @@ public class PigScriptGenerator {
 	private static String scriptFilesPath;
 	private static String libFilesPath;
 	private static String jarPath = "libs/";
+	private static String fileExtension = ".pig";
 	private static String lineSeparator = System.getProperty("line.separator");
 	private static String[] jarLibNames = new String[] { "pigGene.jar", "SeqPig.jar", "hadoop-bam-6.2.jar", "samtools-1.107.jar", "picard-1.107.jar",
 			"commons-jexl-2.1.1.jar" };
@@ -114,6 +117,14 @@ public class PigScriptGenerator {
 				// ignore
 			}
 		}
+	}
+
+	public static String load(final String scriptName) throws IOException {
+		final Path path = FileSystems.getDefault().getPath(scriptFilesPath, "/", scriptName, scriptName.concat(fileExtension));
+		String script = null;
+		final byte[] bytes = Files.readAllBytes(path);
+		script = new String(bytes, "UTF-8");
+		return script;
 	}
 
 }

@@ -13,7 +13,6 @@ import org.restlet.resource.ServerResource;
 
 import piggene.serialisation.RMarkDown.RMarkDownGenerator;
 import piggene.serialisation.cloudgene.CloudgeneYamlGenerator;
-import piggene.serialisation.pig.PigScript;
 import piggene.serialisation.pig.PigScriptGenerator;
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.actions.WorkflowSerialisation;
@@ -42,7 +41,7 @@ public class ScriptDownloadService extends ServerResource {
 			PigScriptGenerator.generateAndStoreScript(workflow);
 			RMarkDownGenerator.generateAndStoreScripts(workflow);
 			CloudgeneYamlGenerator.generateAndStoreFile(workflow);
-			final String script = PigScript.load(workflowName);
+			final String script = PigScriptGenerator.load(workflowName);
 			if (script == null) {
 				throw new IOException("could not load generated pig script.");
 			}
