@@ -9,6 +9,7 @@ public class WorkflowComponent extends Workflow {
 	private String name;
 	private String content;
 	private ScriptType scriptType;
+	private final int RMD_SCRIPT_ID = 1;
 
 	public WorkflowComponent() {
 	}
@@ -63,7 +64,7 @@ public class WorkflowComponent extends Workflow {
 	@Override
 	public Map<String, String> getRMarkDownScriptRepresentations() throws IOException {
 		final Map<String, String> rMdContent = new HashMap<String, String>();
-		if (scriptType.getName().equals("R Markdown Script")) {
+		if (scriptType.getId() == RMD_SCRIPT_ID) {
 			rMdContent.put(this.getName(), content);
 			return rMdContent;
 		}

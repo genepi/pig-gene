@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 
 import org.json.JSONException;
 
-import piggene.representation.WorkflowGraph;
-import piggene.representation.WorkflowGraphException;
+import piggene.representation.ConnectionGraph;
+import piggene.representation.ConnectionGraphException;
 import piggene.serialisation.workflow.Position;
 import piggene.serialisation.workflow.Workflow;
 import piggene.serialisation.workflow.WorkflowComponent;
@@ -82,7 +82,7 @@ public class WorkflowSerialisation {
 		return workflow;
 	}
 
-	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException, JSONException, WorkflowGraphException {
+	public static Workflow resolveWorkflowReferences(final Workflow workflow) throws IOException, JSONException, ConnectionGraphException {
 		final List<Workflow> resolvedSteps = new ArrayList<Workflow>();
 		for (final Workflow wf : workflow.getComponents()) {
 			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
@@ -95,7 +95,7 @@ public class WorkflowSerialisation {
 
 		final Workflow wf = new Workflow(workflow.getName(), workflow.getDescription(), resolvedSteps, workflow.getParameter(),
 				workflow.getParameterMapping());
-		wf.setConnections(WorkflowGraph.createConnectionList(wf));
+		wf.setConnections(ConnectionGraph.createConnectionList(wf));
 		return wf;
 	}
 

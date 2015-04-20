@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 
+import piggene.representation.WorkflowGraph;
 import piggene.serialisation.workflow.Workflow;
 
 public class PigScriptGenerator {
@@ -39,6 +41,15 @@ public class PigScriptGenerator {
 		sb.append(insertHeader());
 		sb.append(lineSeparator);
 		sb.append(insertDefinedFunctionNames());
+
+		// TODO generate graph and call getPigScriptRepresentation
+		// in the order that the graph defines
+
+		final List<Workflow> workflowOrdering = WorkflowGraph.constructWorkflowGraph(workflow);
+
+		// recursion needed??
+		// calling of dependent (recursive) workflows ?? (workflow in workflow)
+
 		sb.append(workflow.getPigScriptRepresentation(workflow.getName()));
 		createNeededFolders(workflow.getName());
 		PigScriptGenerator.write(sb.toString(), workflow.getName());
