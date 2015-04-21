@@ -19,15 +19,25 @@
 		</div>
 			
 		<div id="componentBlock">
-			<div ng-repeat="component in workflow.components track by $index">
-				<div class="scriptContentBlock">
-					<textarea elastic class="scriptContent component" placeholder="please type your desired pig-operations" ng-click="renderOptionBtns($event,$index,'std')">{{component.content}}</textarea>
-				</div>
+			<div class="scriptContentBlock">
+				<textarea elastic class="scriptContent component" placeholder="please type your desired pig-operations">{{workflow.component[0].content}}</textarea>
+				<span class="dropdown">
+				<button class="btn btn-default dropdown-toggle scriptMenu" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+				<span id="scriptType">{{workflow.components[0].scriptType.name}}</span>
+				<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					<li role="presentation">
+						<a name='0' role="menuitem" ng-click="setScriptType(0)">{{scriptType[0].name}}</a>
+					</li>
+					<li role="presentation">
+						<a name='1' role="menuitem" ng-click="setScriptType(1)">{{scriptType[1].name}}</a>
+					</li>
+				</ul>
+				</span>
 			</div>
-			<button class="btn btn-xs btn-success" ng-click="addNewComponent()"><span class="glyphicon glyphicon-plus"></span> add new component</button>
 		</div>
 		
-	
 		<div class="paramContainer">
 			<div class="outputParameters">
 				output elements:<br>

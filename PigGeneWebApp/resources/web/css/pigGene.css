@@ -140,12 +140,8 @@ h4 {
 	margin-bottom: 15px;
 }
 
-.optionBtns1, .optionBtns2, .scriptMenu {
+.scriptMenu {
 	margin-top: 8px;
-}
-
-.optionBtns2, .scriptMenu {
-	margin-left: 8px;
 }
 
 .parameterElement {
