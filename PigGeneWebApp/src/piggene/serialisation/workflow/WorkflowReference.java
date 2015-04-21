@@ -12,7 +12,7 @@ import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 public class WorkflowReference extends Workflow {
-	private static int indentation = 0;
+	private static int indentation = -1;
 
 	private WorkflowType workflowType = WorkflowType.WORKFLOW_REFERENCE;
 	private String name;

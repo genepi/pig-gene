@@ -37,22 +37,18 @@ public class PigScriptGenerator {
 	}
 
 	public static void generateAndStoreScript(final Workflow workflow) throws IOException {
+		final String workflowName = workflow.getName();
 		final StringBuilder sb = new StringBuilder();
 		sb.append(insertHeader());
 		sb.append(lineSeparator);
 		sb.append(insertDefinedFunctionNames());
 
-		// TODO generate graph and call getPigScriptRepresentation
-		// in the order that the graph defines
-
 		final List<Workflow> workflowOrdering = WorkflowGraph.constructWorkflowGraph(workflow);
-
-		// recursion needed??
-		// calling of dependent (recursive) workflows ?? (workflow in workflow)
-
-		sb.append(workflow.getPigScriptRepresentation(workflow.getName()));
-		createNeededFolders(workflow.getName());
-		PigScriptGenerator.write(sb.toString(), workflow.getName());
+		for (final Workflow wf : workflowOrdering) {
+			sb.append(wf.getPigScriptRepresentation(workflowName));
+		}
+		createNeededFolders(workflowName);
+		PigScriptGenerator.write(sb.toString(), workflowName);
 	}
 
 	private static void createNeededFolders(final String folderName) throws IOException {

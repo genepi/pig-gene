@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import piggene.serialisation.workflow.Workflow;
-import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 import piggene.serialisation.workflow.parameter.LinkParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
@@ -19,33 +18,29 @@ public class WorkflowGraph {
 
 	public static List<Workflow> constructWorkflowGraph(final Workflow workflow) throws IOException {
 		final Map<Workflow, Dependencies> unorderedDependencyMapping = new HashMap<Workflow, Dependencies>();
-
 		for (final Entry<String, Map<String, String>> e : workflow.getParameterMapping().getInputParameterMapping().entrySet()) {
-			final Workflow wf = matchAndLoadWorkflow(e.getKey(), workflow.getComponents());
+			final Workflow wf = matchAndSetWorkflow(e.getKey(), workflow.getComponents());
 			final Dependencies dependencies = assignDependencies(e.getValue().values(), workflow.getParameter(), workflow.getParameterMapping(),
 					workflow.getComponents());
 			unorderedDependencyMapping.put(wf, dependencies);
 		}
-
-		System.out.println(unorderedDependencyMapping);
 		final List<Workflow> dependencyBasedOrdering = orderDependencyMapping(unorderedDependencyMapping);
 		return dependencyBasedOrdering;
 	}
 
-	private static Workflow matchAndLoadWorkflow(final String uid, final List<Workflow> components) throws IOException {
-		final String workflowName = matchWorkflowName(uid, components);
-		return WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
+	private static Workflow matchAndSetWorkflow(final String uid, final List<Workflow> components) throws IOException {
+		return matchWorkflowUID(uid, components);
 	}
 
-	private static String matchWorkflowName(final String uid, final List<Workflow> components) {
-		String workflowName = null;
+	private static Workflow matchWorkflowUID(final String uid, final List<Workflow> components) {
+		Workflow matchingWf = null;
 		for (final Workflow wf : components) {
 			if (wf.getUid().equals(uid)) {
-				workflowName = wf.getName();
+				matchingWf = wf;
 				break;
 			}
 		}
-		return workflowName;
+		return matchingWf;
 	}
 
 	private static Dependencies assignDependencies(final Collection<String> connectorValues, final WorkflowParameter parameters,
@@ -54,7 +49,7 @@ public class WorkflowGraph {
 		for (final String connector : connectorValues) {
 			if (!connectorMatchesInputParameter(connector, parameters.getInputParameter())) {
 				final String dependendWfUID = getCorrespondingWfUID(connector, parameterMapping.getOutputParameterMapping());
-				dependencies.addDependency(matchWorkflowName(dependendWfUID, components));
+				dependencies.addDependency(matchWorkflowUID(dependendWfUID, components).getName());
 			}
 		}
 		return dependencies;
