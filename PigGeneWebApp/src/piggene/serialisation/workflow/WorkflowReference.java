@@ -8,11 +8,14 @@ import java.util.regex.Pattern;
 
 import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 import piggene.serialisation.workflow.parameter.LinkParameter;
+import piggene.serialisation.workflow.parameter.OutputLinkParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
 public class WorkflowReference extends Workflow {
 	private static int indentation = -1;
+	private static final int PIG_SCRIPT_TYPE_ID = 0;
+	private static final int RMD_SCRIPT_TYPE_ID = 1;
 
 	private WorkflowType workflowType = WorkflowType.WORKFLOW_REFERENCE;
 	private String name;
@@ -65,7 +68,7 @@ public class WorkflowReference extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final String surroundingWorkflowName) throws IOException {
+	public String getPigScriptRepresentation(final Workflow surroundingWorkflow) throws IOException {
 		WorkflowReference.indentation++;
 		final String workflowName = this.name;
 		final Workflow referencedWorkflow = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
@@ -77,13 +80,12 @@ public class WorkflowReference extends Workflow {
 		sb.append(insertIndentationTabs());
 		sb.append(preparePigScriptCommand(referencedWorkflow.getDescription()));
 
+		addVirtualInputParametersForRMarkDownScriptsTo(surroundingWorkflow);
 		for (final Workflow wf : referencedWorkflow.getComponents()) {
-			if (wf instanceof WorkflowReference || ((WorkflowComponent) wf).getScriptType().getName().equals("Apache Pig Script")) {
+			if (wf instanceof WorkflowReference || ((WorkflowComponent) wf).getScriptType().getId() == PIG_SCRIPT_TYPE_ID) {
 				sb.append(lineSeparator);
 				sb.append(insertIndentationTabs());
-				final Workflow surroundingWorkflow = WorkflowSerialisation.load(surroundingWorkflowName,
-						WorkflowSerialisation.determineType(surroundingWorkflowName));
-				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(workflowName),
+				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(this),
 						surroundingWorkflow.getParameterMapping(), surroundingWorkflow.getParameter(), super.getUid());
 				sb.append(adjustIndentation(pigScriptRepresentation));
 				sb.append(lineSeparator);
@@ -92,6 +94,21 @@ public class WorkflowReference extends Workflow {
 		sb.append(lineSeparator);
 		WorkflowReference.indentation--;
 		return sb.toString();
+	}
+
+	private void addVirtualInputParametersForRMarkDownScriptsTo(final Workflow surroundingWorkflow) throws IOException {
+		for (final Workflow wf : surroundingWorkflow.getComponents()) {
+			final String workflowName = wf.getName();
+			final Workflow plotWf = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
+			final Workflow plotComponent = plotWf.getComponents().get(0);
+			if (plotComponent != null && plotComponent instanceof WorkflowComponent
+					&& ((WorkflowComponent) plotComponent).getScriptType().getId() == RMD_SCRIPT_TYPE_ID) {
+				final String uid = wf.getUid();
+				for (final String s : surroundingWorkflow.getParameterMapping().retrieveInputMapByKey(uid).values()) {
+					surroundingWorkflow.getParameter().addOutputParameter(new OutputLinkParameter("", s, "", new Position(0, 0)));
+				}
+			}
+		}
 	}
 
 	@Override
@@ -142,6 +159,8 @@ public class WorkflowReference extends Workflow {
 			}
 
 			if (replacementName != null) {
+				// TODO add OR call to if-clause to catch rmd outputs...
+				// no matching parameter connector because of plot-type
 				if (nameMatchesParameterConnector(replacementName, wfParameter)) {
 					replacementName = "'\\$".concat(replacementName).concat("'");
 				} else if (replacementName.startsWith("$")) {

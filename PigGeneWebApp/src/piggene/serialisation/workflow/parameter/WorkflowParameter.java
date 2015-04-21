@@ -30,4 +30,8 @@ public class WorkflowParameter {
 		this.outputParameter = outputParameter;
 	}
 
+	public void addOutputParameter(final LinkParameter outputParameter) {
+		this.outputParameter.add(outputParameter);
+	}
+
 }

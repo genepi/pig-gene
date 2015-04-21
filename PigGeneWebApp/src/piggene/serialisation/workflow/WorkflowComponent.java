@@ -47,7 +47,7 @@ public class WorkflowComponent extends Workflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final String wfName) throws IOException {
+	public String getPigScriptRepresentation(final Workflow surroundingWorkflow) throws IOException {
 		return this.content;
 	}
 

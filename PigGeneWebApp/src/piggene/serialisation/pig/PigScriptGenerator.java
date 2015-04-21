@@ -45,7 +45,7 @@ public class PigScriptGenerator {
 
 		final List<Workflow> workflowOrdering = WorkflowGraph.constructWorkflowGraph(workflow);
 		for (final Workflow wf : workflowOrdering) {
-			sb.append(wf.getPigScriptRepresentation(workflowName));
+			sb.append(wf.getPigScriptRepresentation(workflow));
 		}
 		createNeededFolders(workflowName);
 		PigScriptGenerator.write(sb.toString(), workflowName);

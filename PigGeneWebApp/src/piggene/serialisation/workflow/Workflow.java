@@ -135,7 +135,7 @@ public class Workflow implements IWorkflow {
 	}
 
 	@Override
-	public String getPigScriptRepresentation(final String wfName) throws IOException {
+	public String getPigScriptRepresentation(final Workflow surroundingWorkflow) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(lineSeparator);
 		sb.append(preparePigScriptCommand(name));
@@ -143,7 +143,7 @@ public class Workflow implements IWorkflow {
 
 		String content;
 		for (final Workflow wf : components) {
-			content = wf.getPigScriptRepresentation(wfName);
+			content = wf.getPigScriptRepresentation(surroundingWorkflow);
 			if (content != null) {
 				sb.append(content);
 				sb.append(lineSeparator);
