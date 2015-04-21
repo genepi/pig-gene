@@ -31,7 +31,9 @@ public class WorkflowParameter {
 	}
 
 	public void addOutputParameter(final LinkParameter outputParameter) {
-		this.outputParameter.add(outputParameter);
+		if (!this.outputParameter.contains(outputParameter)) {
+			this.outputParameter.add(outputParameter);
+		}
 	}
 
 }
