@@ -127,6 +127,12 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 		}
 	};
 	
+	sharedWorkflow.updateScriptContent = function(newScriptContent, type) {
+		var modWf = this.workflow;
+		modWf.components[0].content = newScriptContent;
+		this.prepForBroadcast(modWf, type);
+	}
+	
 	sharedWorkflow.loadWfDefinition = function(id, type) {
 		WfPersistency.Load.get({"id":id, "type":type}).$promise.then(function(response) {
 			if(!response.success) {
@@ -503,6 +509,30 @@ pigGeneApp.directive('compmetaInput', function($timeout, SharedWfService) {
                 }
             	$scope.pendingPromise = $timeout(function () { 
             		SharedWfService.changeMetaInfo($scope.workflowName, $scope.workflowDescription, compAbbr);
+                }, $scope.timeout);
+            };
+        }
+    }
+});
+
+pigGeneApp.directive('scriptmetaInput', function($timeout, SharedWfService) {
+    return {
+        restrict: 'E',
+        template: '<textarea id="scriptContent" elastic class="scriptContent component" ng-model="scriptContent" ng-change="update()" placeholder="{{placeholder}}">{{scriptContent}}</textarea>',
+        scope: {
+            value: '=',
+            timeout: '@',
+            placeholder: '@'
+        },
+        transclude: true,
+        link: function ($scope) {
+            $scope.timeout = parseInt($scope.timeout);
+            $scope.update = function() {
+                if ($scope.pendingPromise) { 
+                	$timeout.cancel($scope.pendingPromise); 
+                }
+            	$scope.pendingPromise = $timeout(function () { 
+            		SharedWfService.updateScriptContent($('#scriptContent').html(), compAbbr);
                 }, $scope.timeout);
             };
         }

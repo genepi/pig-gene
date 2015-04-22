@@ -125,6 +125,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	
 	$scope.workflowName = "abc";
 	$scope.workflowDescription = "";
+	$scope.scriptContent = "";
 	
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;
@@ -136,26 +137,10 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		$scope.workflowDescription = SharedWfService.workflow.description;
 		$('#workflowDescription').val($scope.workflowDescription);
 		$('#componentDescription').val($scope.workflowDescription);
+		
+		$scope.scriptContent = SharedWfService.workflow.components[0].content;
+		$('#scriptContent').val($scope.scriptContent);
 	});
-	
-	//TODO remove
-//	$scope.addNewComponent = function() {
-//		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
-//			if(!$scope.pigScriptOnly) {
-//				SharedWfService.broadcastIllegalScriptCombination();
-//			} else {
-//				var newComp = {
-//						workflowType: "WORKFLOW_COMPONENT",
-//						scriptType: scriptType[0],
-//						content: "",
-//				};
-//				var modWf = $scope.workflow;
-//				modWf.components.push(newComp);
-//				SharedWfService.prepForBroadcast(modWf, compAbbr);
-//				SharedWfService.showParameterElements();
-//			}
-//		}
-//	}
 	
 	$scope.addExistingComponent = function() {
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
@@ -188,159 +173,13 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		}, $scope.timeout);
 	};
 	
-	//TODO remove
-//	$scope.renderOptionBtns = function(event, index, mode) {
-//		var targetElement = event.currentTarget;
-//		var options = "options"
-//			
-//			if(!$(targetElement).hasClass(options)) {
-//				var buttonGroup1 = $("<div class='btn-group optionBtns1'></div>");
-//				var buttonGroup2 = $("<div class='btn-group optionBtns2'></div>");
-//				
-//				var upBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentUp($event)'><span class='glyphicon glyphicon-arrow-up'></span></button>")($scope);
-//				var downBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-default' ng-click='moveComponentDown($event)'><span class='glyphicon glyphicon-arrow-down'></span></button>")($scope);
-//				$(buttonGroup1).append(upBtn);
-//				$(buttonGroup1).append(downBtn);
-//				
-//				if(mode === 'std') {
-//					var acceptBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-success' ng-click='saveComponentModification($event)'><span class='glyphicon glyphicon-ok'></span></button>")($scope);
-//					$(buttonGroup2).append(acceptBtn);
-//				}
-//				
-//				var cancelBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-warning' ng-click='cancelComponentModification($event)'><span class='glyphicon glyphicon-remove'></span></button>")($scope);
-//				$(buttonGroup2).append(cancelBtn);
-//				var deleteBtn = $compile("<button name="+index+" type='button' class='btn btn-sm btn-danger' ng-click='deleteComponent($event)'><span class='glyphicon glyphicon-trash'></span></button>")($scope);
-//				$(buttonGroup2).append(deleteBtn);
-//				
-//				$(targetElement.parentNode).append(buttonGroup1);
-//				$(targetElement.parentNode).append(buttonGroup2);
-//				
-//				if(mode === 'std') {
-//					var scriptSelector = $compile('<span class="dropdown"><button class="btn btn-default dropdown-toggle scriptMenu" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"><span id="scriptType">'+ $scope.workflow.components[index].scriptType.name + ' ' + '</span><span class="caret"></span></button><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><li role="presentation"><a name='+index+' role="menuitem" ng-click="setScriptType($event,0)">'+scriptType[0].name+' </a></li><li role="presentation"><a name='+index+' role="menuitem" ng-click="setScriptType($event,1)">'+scriptType[1].name+' </a></li></ul></span>')($scope);
-//					$(targetElement.parentNode).append(scriptSelector);
-//				}
-//				
-//				$(targetElement).addClass(options);
-//			}
-//	};
-	
-	//TODO remove
-//	$scope.removeOptionBtns = function(btnGroupElement, operation) {
-//		if(operation === 'textSave' || operation === 'textCancel') {
-//			$(btnGroupElement.parentNode).removeClass("options");
-//		} else {
-//			$(btnGroupElement.parentNode.children[0]).removeClass("options");
-//		}
-//		if(operation === "up" || operation === "down") {
-//			$(btnGroupElement.nextSibling.nextSibling).remove();
-//			$(btnGroupElement.nextSibling).remove();
-//		} else if(operation === "save" || operation === "cancel" || operation === "delete") {
-//			$(btnGroupElement.previousSibling).remove();
-//			$(btnGroupElement.nextSibling).remove();
-//		} else if(operation == "changeScript") {
-//			$(btnGroupElement.previousSibling.previousSibling).remove();
-//			$(btnGroupElement.previousSibling).remove();
-//		}
-//		$(btnGroupElement).remove();
-//	};
-	
-	//TODO remove
-//	$scope.moveComponentUp = function(event) {
-//		var index = parseInt(event.currentTarget.name);
-//		if(index >= 1) {
-//			var modWf = $scope.workflow;
-//			var prevElement = modWf.components[index-1];
-//			modWf.components[index-1] = modWf.components[index];
-//			modWf.components[index] = prevElement;
-//			SharedWfService.prepForBroadcast(modWf, compAbbr);
-//			$scope.removeOptionBtns(event.currentTarget.parentNode, "up");
-//		}
-//	};
-	
-	//TODO remove
-//	$scope.moveComponentDown = function(event) {
-//		var index = parseInt(event.currentTarget.name);
-//		if(index < $scope.workflow.components.length-1) {
-//			var modWf = $scope.workflow;
-//			var followingElement = modWf.components[index+1];
-//			modWf.components[index+1] = modWf.components[index];
-//			modWf.components[index] = followingElement;
-//			SharedWfService.prepForBroadcast(modWf, compAbbr);
-//			$scope.removeOptionBtns(event.currentTarget.parentNode, "down");
-//		}
-//	};
-	
-	//TODO "autosave"
-	//TODO remove
-//	$scope.saveComponentModification = function(event) {
-//		var index = parseInt(event.currentTarget.name);
-//		var modWf = $scope.workflow;
-//		modWf.components[index].content = $(event.currentTarget.parentElement.parentElement.children[0]).val();
-//		SharedWfService.prepForBroadcast(modWf, compAbbr);
-//		$scope.removeOptionBtns(event.currentTarget.parentNode, "save");
-//	};
-	
-	//TODO remove
-//	$scope.cancelComponentModification = function(event) {
-//		var index = parseInt(event.currentTarget.name);
-//		var modWf = $scope.workflow;
-//		$(event.currentTarget.parentElement.parentElement.children[0]).val(modWf.components[index].content);
-//		SharedWfService.prepForBroadcast(modWf, compAbbr);
-//		$scope.removeOptionBtns(event.currentTarget.parentNode, "cancel");
-//	};
-	
-	//TODO remove
-//	$scope.deleteComponent = function(event) {
-//		var index = parseInt(event.currentTarget.name);
-//		var modWf = $scope.workflow;
-//		
-//		if(!$scope.pigScriptOnly && modWf.components[index].scriptType.id != 0) {
-//			$scope.pigScriptOnly = true;
-//		}
-//		
-//		modWf.components.splice(index, 1);
-//		if(modWf.components.length === 0) {
-//			modWf.parameter.inputParameter = [];
-//			modWf.parameter.outputParameter = [];
-//		}
-//		SharedWfService.prepForBroadcast(modWf, compAbbr);
-//		$scope.removeOptionBtns(event.currentTarget.parentNode, "delete");
-//	};
-	
-	//TODO remove
-//	$scope.pigScriptOnly = true;
-	
 	$scope.setScriptType = function(scriptTypeID) {
-		//TODO remove
-//		if(scriptTypeID != 0 && $scope.workflow.components.length > 1) {
-//			SharedWfService.broadcastIllegalScriptCombination();
-//		} else {
-			var modWf = $scope.workflow;
-			modWf.components[0].scriptType = scriptType[scriptTypeID];
-			
-			//TODO remove
-//			if(scriptTypeID != 0) {
-//				$scope.pigScriptOnly = false;
-//			} else if (scriptTypeID == 0 && $scope.noRmdScriptExists()) {
-//				$scope.pigScriptOnly = true;
-//			}
-			
-			SharedWfService.prepForBroadcast(modWf, compAbbr);
-			$('#scriptType').html(scriptType[scriptTypeID].name + " ");
-//			$scope.removeOptionBtns(event.currentTarget.parentElement.parentElement.parentElement, "changeScript");
-//		}
+		var modWf = $scope.workflow;
+		modWf.components[0].scriptType = scriptType[scriptTypeID];
+		
+		SharedWfService.prepForBroadcast(modWf, compAbbr);
+		$('#scriptType').html(scriptType[scriptTypeID].name + " ");
 	};
-	
-	//TODO remove
-//	$scope.noRmdScriptExists = function() {
-//		var comps = $scope.workflow.components;
-//		for(var i=0; i<comps.length; i++) {
-//			if(comps[i].scriptType.id != 0) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
 	
 	$scope.isVisible = function() {
 		return $scope.visible;
