@@ -155,7 +155,7 @@ public class CloudgeneYamlGenerator {
 			final WdlStep rmdStep = new WdlStep();
 			rmdStep.setName("RmdScript");
 			rmdStep.setRmd(workflow.getName().concat(RmdfileExtension));
-			rmdStep.setOutput("${report}/".concat(workflow.getName().concat(".html")));
+			rmdStep.setOutput("${report}/".concat(workflow.getName().concat(String.valueOf(System.currentTimeMillis()).concat(".html"))));
 
 			final Map<String, String> mapping = new HashMap<String, String>();
 			for (final LinkParameter in : workflow.getParameter().getInputParameter()) {
