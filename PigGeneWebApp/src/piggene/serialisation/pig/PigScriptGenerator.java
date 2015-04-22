@@ -109,6 +109,10 @@ public class PigScriptGenerator {
 		sb.append(lineSeparator);
 		sb.append("DEFINE IsDuplicate fi.aalto.seqpig.filter.SAMFlagsFilter('IsDuplicate');");
 		sb.append(lineSeparator);
+		sb.append("DEFINE AvgBaseQualCounts fi.aalto.seqpig.stats.AvgBaseQualCounts();");
+		sb.append(lineSeparator);
+		sb.append("DEFINE FormatAvgBaseQualCounts fi.aalto.seqpig.stats.FormatAvgBaseQualCounts();");
+		sb.append(lineSeparator);
 		return sb.toString();
 	}
 
