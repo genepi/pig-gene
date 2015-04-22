@@ -31,9 +31,20 @@ public class WorkflowParameter {
 	}
 
 	public void addOutputParameter(final LinkParameter outputParameter) {
-		if (!this.outputParameter.contains(outputParameter)) {
+		if (!connectorAlreadyContained(outputParameter)) {
 			this.outputParameter.add(outputParameter);
 		}
+	}
+
+	private boolean connectorAlreadyContained(final LinkParameter outputParameter) {
+		boolean contained = false;
+		for (final LinkParameter p : this.outputParameter) {
+			if (p.getConnector().equals(outputParameter.getConnector())) {
+				contained = true;
+				break;
+			}
+		}
+		return contained;
 	}
 
 }
