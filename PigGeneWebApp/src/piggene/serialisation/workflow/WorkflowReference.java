@@ -159,8 +159,6 @@ public class WorkflowReference extends Workflow {
 			}
 
 			if (replacementName != null) {
-				// TODO add OR call to if-clause to catch rmd outputs...
-				// no matching parameter connector because of plot-type
 				if (nameMatchesParameterConnector(replacementName, wfParameter)) {
 					replacementName = "'\\$".concat(replacementName).concat("'");
 				} else if (replacementName.startsWith("$")) {
