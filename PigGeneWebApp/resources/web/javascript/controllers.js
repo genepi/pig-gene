@@ -138,8 +138,11 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		$('#workflowDescription').val($scope.workflowDescription);
 		$('#componentDescription').val($scope.workflowDescription);
 		
-		$scope.scriptContent = SharedWfService.workflow.components[0].content;
-		$('#scriptContent').val($scope.scriptContent);
+		var comp = SharedWfService.workflow.components[0];
+		if(comp != undefined) {
+			$scope.scriptContent = comp.content;
+			$('#scriptContent').val($scope.scriptContent);
+		}
 	});
 	
 	$scope.addExistingComponent = function() {
@@ -586,6 +589,7 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 			$scope.detachJSPlumbConnections($(connections[i]));
 		}
 		var modWf = $scope.workflow;
+		var componentUID = modWf.components[index].uid;
 		modWf.components.splice(index,1);
 		var componentName = $($(parentDiv).children()[0]).children()[0].innerHTML;
 		var mapping = modWf.parameterMapping.outputParameterMapping[componentName];
@@ -598,8 +602,8 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 				modWf.parameter.outputParameter[i].connector = "";
 			}
 		}
-		delete modWf.parameterMapping.inputParameterMapping[componentName];
-		delete modWf.parameterMapping.outputParameterMapping[componentName];
+		delete modWf.parameterMapping.inputParameterMapping[componentUID];
+		delete modWf.parameterMapping.outputParameterMapping[componentUID];
 		SharedWfService.prepForBroadcast(modWf, wfAbbr);
 	};
 	
