@@ -103,11 +103,13 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	sharedWorkflow.onlyShowAdditionalComponentButtons = function() {
 		this.showAdditionalComponentButtons();
 		this.hideAdditionalWorkflowButtons();
+		this.showComponentNavBar();
 	};
 	
 	sharedWorkflow.onlyShowAdditionalWorkflowButtons = function() {
 		this.hideAdditionalComponentButtons();
 		this.showAdditionalWorkflowButtons();
+		this.showWfNavBar();
 	};
 	
 	sharedWorkflow.changeMetaInfo = function(newWfName, newWfDescription, type) {
