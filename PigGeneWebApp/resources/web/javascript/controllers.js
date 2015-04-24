@@ -1,5 +1,9 @@
 pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", function($scope, SharedWfService, $location) {
 	$scope.buttons = buttons;
+	$scope.storeIndicator =  {
+			showState: false,
+			logo: ""
+	};
 	
 	$scope.performNavBarAction = function(index) {
 		switch(buttons[index].name) {
@@ -26,6 +30,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 	
 	$scope.redirectToHome = function() {
 		$location.path("/home");
+		$scope.storeIndicator.showState = false;
 	};
 	
 	$scope.modifyActiveState = function(activeIndex) {
@@ -39,6 +44,21 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 		SharedWfService.hideParameterElements();
 		SharedWfService.hideAdditionalButtons();
 	};
+	
+	$scope.$on("showSpinningIndicator", function() {
+		$scope.storeIndicator.logo = "fa fa-refresh fa-spin"
+		$scope.storeIndicator.showState = true;
+	});
+	
+	$scope.$on("showTickIndicator", function() {
+		$scope.storeIndicator.logo = "fa fa-check";
+		$scope.storeIndicator.showState = true;
+	});
+	
+	$scope.$on("showProblemIndicator", function() {
+		$scope.storeIndicator.logo = "fa fa-exclamation";
+		$scope.storeIndicator.showState = true;
+	});
 	
 }]);
 
@@ -466,9 +486,10 @@ pigGeneApp.controller("serverExceptionInfoCtrl", ["$scope", "SharedWfService", f
 
 pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope, SharedWfService) {
 
-	$scope.redraw = function() {
-		jsPlumb.detachEveryConnection();
-	};
+	//TODO remove
+//	$scope.redraw = function() {
+//		jsPlumb.detachEveryConnection();
+//	};
 	
 	$scope.init = function() {
 		jsPlumb.bind("ready", function() {

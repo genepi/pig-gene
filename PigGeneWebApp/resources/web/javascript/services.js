@@ -200,13 +200,15 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 					workflow: this.workflow,
 					type: type
 			}
-			var myWf = new WfPersistency.Save.save(wfToStore).$promise.then(function(response) {
+			var myWf = new WfPersistency.Save.save(wfToStore, function success() {}, function err() { $rootScope.$broadcast("showProblemIndicator"); } ).$promise.then(function(response) {
 				if(!response.success) {
 					sharedWorkflow.serverExceptionMsg = response.message;
 					sharedWorkflow.broadcastServerExceptionInformation();
+					$rootScope.$broadcast("showProblemIndicator");
 					return;
 				}
 				sharedWorkflow.redirectLocation($location.$$path, sharedWorkflow.workflow.name);
+				$rootScope.$broadcast("showTickIndicator");
 			});
 		}
 	};
@@ -469,7 +471,7 @@ pigGeneApp.directive('elastic', ['$timeout',
 	  }
 ]);
 
-pigGeneApp.directive('wfmetaInput', function($timeout, SharedWfService) {
+pigGeneApp.directive('wfmetaInput', function($timeout, SharedWfService, $rootScope) {
     return {
         restrict: 'E',
         template: '<div><input id="workflowName" class="wfmetaInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/><br><input id="workflowDescription" class="wfmetaInput" type="text" ng-model="workflowDescription" ng-change="update()" placeholder="workflow description"/></div>',
@@ -482,6 +484,7 @@ pigGeneApp.directive('wfmetaInput', function($timeout, SharedWfService) {
         link: function ($scope) {
             $scope.timeout = parseInt($scope.timeout);
             $scope.update = function() {
+            	$rootScope.$broadcast("showSpinningIndicator");
                 if ($scope.pendingPromise) { 
                 	$timeout.cancel($scope.pendingPromise); 
                 }
@@ -493,7 +496,7 @@ pigGeneApp.directive('wfmetaInput', function($timeout, SharedWfService) {
     }
 });
 
-pigGeneApp.directive('compmetaInput', function($timeout, SharedWfService) {
+pigGeneApp.directive('compmetaInput', function($timeout, SharedWfService, $rootScope) {
     return {
         restrict: 'E',
         template: '<div><input id="componentName" class="compmetaInput" type="text" ng-model="workflowName" ng-change="update()" placeholder="{{placeholder}}"/><br><input id="componentDescription" class="wfmetaInput" type="text" ng-model="workflowDescription" ng-change="update()" placeholder="component description"/></div>',
@@ -506,6 +509,7 @@ pigGeneApp.directive('compmetaInput', function($timeout, SharedWfService) {
         link: function ($scope) {
             $scope.timeout = parseInt($scope.timeout);
             $scope.update = function() {
+            	$rootScope.$broadcast("showSpinningIndicator");
                 if ($scope.pendingPromise) { 
                 	$timeout.cancel($scope.pendingPromise); 
                 }
@@ -517,7 +521,7 @@ pigGeneApp.directive('compmetaInput', function($timeout, SharedWfService) {
     }
 });
 
-pigGeneApp.directive('scriptmetaInput', function($timeout, SharedWfService) {
+pigGeneApp.directive('scriptmetaInput', function($timeout, SharedWfService, $rootScope) {
     return {
         restrict: 'E',
         template: '<textarea id="scriptContent" elastic class="scriptContent component" ng-model="scriptContent" ng-change="update()" placeholder="{{placeholder}}">{{scriptContent}}</textarea>',
@@ -530,6 +534,7 @@ pigGeneApp.directive('scriptmetaInput', function($timeout, SharedWfService) {
         link: function ($scope) {
             $scope.timeout = parseInt($scope.timeout);
             $scope.update = function() {
+            	$rootScope.$broadcast("showSpinningIndicator");
                 if ($scope.pendingPromise) { 
                 	$timeout.cancel($scope.pendingPromise); 
                 }
@@ -546,9 +551,7 @@ pigGeneApp.directive('postRender', [ '$timeout', function($timeout) {
 		restrict : 'A', 
 		terminal : true,
 		transclude : true,
-		link : function(scope, element, attrs) {
-			$timeout(scope.redraw, 0);  //Calling a scoped method
-		}
+		link : function(scope, element, attrs) { }
 	};
 	return def;
 }]);

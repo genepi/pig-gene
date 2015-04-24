@@ -290,3 +290,10 @@ h4 {
 	margin-top: 5px;
 	width: 100%;
 }
+
+#storeIndicator {
+	float: right;
+	color: #f8f8f8;
+	font-size: 30px;
+	margin-top: 9px;
+}
