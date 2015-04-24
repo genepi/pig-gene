@@ -539,7 +539,7 @@ pigGeneApp.directive('scriptmetaInput', function($timeout, SharedWfService, $roo
                 	$timeout.cancel($scope.pendingPromise); 
                 }
             	$scope.pendingPromise = $timeout(function () { 
-            		SharedWfService.updateScriptContent($('#scriptContent').html(), compAbbr);
+            		SharedWfService.updateScriptContent($('#scriptContent').val(), compAbbr);
                 }, $scope.timeout);
             };
         }
