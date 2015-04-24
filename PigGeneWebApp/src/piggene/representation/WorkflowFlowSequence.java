@@ -14,9 +14,9 @@ import piggene.serialisation.workflow.parameter.LinkParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameter;
 import piggene.serialisation.workflow.parameter.WorkflowParameterMapping;
 
-public class WorkflowGraph {
+public class WorkflowFlowSequence {
 
-	public static List<Workflow> constructWorkflowGraph(final Workflow workflow) throws IOException {
+	public static List<Workflow> constructWorkflowFlowSequence(final Workflow workflow) throws IOException {
 		final Map<Workflow, Dependencies> unorderedDependencyMapping = new HashMap<Workflow, Dependencies>();
 		for (final Entry<String, Map<String, String>> e : workflow.getParameterMapping().getInputParameterMapping().entrySet()) {
 			final Workflow wf = matchAndSetWorkflow(e.getKey(), workflow.getComponents());

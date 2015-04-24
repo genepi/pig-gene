@@ -12,7 +12,7 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 
-import piggene.representation.WorkflowGraph;
+import piggene.representation.WorkflowFlowSequence;
 import piggene.serialisation.workflow.Workflow;
 
 public class PigScriptGenerator {
@@ -43,7 +43,7 @@ public class PigScriptGenerator {
 		sb.append(lineSeparator);
 		sb.append(insertDefinedFunctionNames());
 
-		final List<Workflow> workflowOrdering = WorkflowGraph.constructWorkflowGraph(workflow);
+		final List<Workflow> workflowOrdering = WorkflowFlowSequence.constructWorkflowFlowSequence(workflow);
 		for (final Workflow wf : workflowOrdering) {
 			sb.append(wf.getPigScriptRepresentation(workflow));
 		}
