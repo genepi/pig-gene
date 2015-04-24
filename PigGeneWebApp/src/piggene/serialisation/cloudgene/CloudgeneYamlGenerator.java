@@ -93,7 +93,7 @@ public class CloudgeneYamlGenerator {
 		final List<LinkParameter> inputParameters = workflowParameter.getInputParameter();
 		for (final LinkParameter in : inputParameters) {
 			appendParameter(pigScriptParameters, in.getConnector());
-			pigScriptInputs.add(createInputParameter(in.getConnector()));
+			pigScriptInputs.add(createInputParameter(in.getConnector(), in.getDescription()));
 		}
 		return pigScriptInputs;
 	}
@@ -103,7 +103,7 @@ public class CloudgeneYamlGenerator {
 		final List<LinkParameter> outputParameters = workflowParameter.getOutputParameter();
 		for (final LinkParameter out : outputParameters) {
 			appendParameter(pigScriptParameters, out.getConnector());
-			pigScriptOutputs.add(createOutputParameter(out.getConnector()));
+			pigScriptOutputs.add(createOutputParameter(out.getConnector(), out.getDescription()));
 		}
 		return pigScriptOutputs;
 	}
@@ -112,18 +112,22 @@ public class CloudgeneYamlGenerator {
 		return parameters.append("-param ").append(parameterName).append("=$").append(parameterName).append(" ");
 	}
 
-	private static WdlParameter createInputParameter(final String parameterName) {
+	private static WdlParameter createInputParameter(final String parameterName, final String description) {
 		final WdlParameterInput param = new WdlParameterInput();
 		param.setId(parameterName);
-		param.setDescription("input paramter");
+		param.setDescription(description);
 		param.setType("hdfs-folder");
 		return param;
 	}
 
-	private static WdlParameter createOutputParameter(final String parameterName) {
+	private static WdlParameter createOutputParameter(final String parameterName, final String description) {
 		final WdlParameterOutput param = new WdlParameterOutput();
 		param.setId(parameterName);
-		param.setDescription("output parameter");
+		if (description.equals("")) {
+			param.setDescription("plot output param");
+		} else {
+			param.setDescription(description);
+		}
 		param.setType("hdfs-folder");
 		param.setDownload(true);
 		param.setTemp(false);
