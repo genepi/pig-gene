@@ -297,3 +297,7 @@ h4 {
 	font-size: 30px;
 	margin-top: 9px;
 }
+
+#componentNameLink:hover {
+	cursor: pointer;
+} 

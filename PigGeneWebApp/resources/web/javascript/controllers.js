@@ -294,6 +294,10 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		}
 	};
 	
+	$scope.openComponentDefinition = function(workflowName) {
+		SharedWfService.redirectLocation("/wf/comp/", workflowName);
+	};
+	
 	$scope.detachJSPlumbConnections = function (element) {
 		jsPlumb.detachAllConnections($(element));
 	};
