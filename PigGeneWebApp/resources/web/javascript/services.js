@@ -12,13 +12,13 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 		Save: $resource("/save/wf"),
 		Delete: $resource("/del/:id/:type", {id: "@id", type: "@type"}),
 		Download: $resource("/dwnld/:id", {id: "@id"}),
-		DownloadZip: $resource("/dwnldzip/:id", {id: "@id"}), 
+		DownloadZipReq: $resource("/dwnldzipreq/:id", {id: "@id"}), 
 		DownloadLibFile: $resource("/dwnldlib")
 	};
 	
 });
 
-pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency", function($rootScope, $location, WfPersistency) {
+pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "WfPersistency", function($rootScope, $location, $window, WfPersistency) {
 	var sharedWorkflow = {};
 	
 	sharedWorkflow.workflow = {};
@@ -298,7 +298,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 	};
 	
 	sharedWorkflow.downloadZip = function() {
-		WfPersistency.DownloadZip.get({"id":sharedWorkflow.workflow.name}).$promise.then(function(response) {
+		WfPersistency.DownloadZipReq.get({"id":sharedWorkflow.workflow.name}).$promise.then(function(response) {
 			if(!response.success) {
 				$rootScope.$broadcast("resetZipIcon");
 				sharedWorkflow.serverExceptionMsg = response.message;
@@ -306,7 +306,16 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "WfPersistency
 				return;
 			}
 			sharedWorkflow.broadcastZipCreation();
+			sharedWorkflow.downloadServerGeneratedZipFile();
 		});
+	};
+	
+	sharedWorkflow.downloadServerGeneratedZipFile = function() {
+		var protocol = $location.$$protocol;
+		var host = $location.$$host;
+		var port = $location.$$port;
+		var zipDownloadLink = protocol + "://" + host + ":" + port + "/dwnldzip/" + sharedWorkflow.workflow.name;
+		$window.location.href = zipDownloadLink;
 	};
 	
 	sharedWorkflow.saveWorkflowComponentPosition = function(newPosInfo) {

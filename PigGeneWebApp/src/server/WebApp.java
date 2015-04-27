@@ -16,6 +16,7 @@ import piggene.resources.WorkflowLoaderService;
 import piggene.resources.WorkflowOverviewLoaderService;
 import piggene.resources.WorkflowReferenceLoaderService;
 import piggene.resources.WorkflowStorageService;
+import piggene.resources.ZipDownloadRequest;
 import piggene.resources.ZipDownloadService;
 
 /**
@@ -46,6 +47,7 @@ public class WebApp extends Application {
 		router.attach("/save/wf", WorkflowStorageService.class);
 		router.attach("/del/{id}/{type}", WorkflowDeletionService.class);
 		router.attach("/dwnld/{id}", ScriptDownloadService.class);
+		router.attach("/dwnldzipreq/{id}", ZipDownloadRequest.class);
 		router.attach("/dwnldzip/{id}", ZipDownloadService.class);
 		router.attach("/dwnldlib", LibFileDownloadService.class);
 

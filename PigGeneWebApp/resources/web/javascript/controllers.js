@@ -433,7 +433,6 @@ pigGeneApp.controller("ZipCreationCtrl", ["$scope", "SharedWfService", function(
 	
 	$scope.$on("zipCreationMessage", function() {
 		workflowButtons[4].logo = "fa fa-file-archive-o";
-		$('#successfulZipCreationModal').modal('toggle');
 	});
 	
 	$scope.$on("resetZipIcon", function() {
