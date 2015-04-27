@@ -7,6 +7,7 @@ pigGeneApp.run(function(editableOptions) {
 pigGeneApp.factory("WfPersistency", function($resource) {
 	return {
 		Existing: $resource("/ex/:type", {type: "@type"}),
+		Involve: $resource("/involve/:id", {id: "@id"}),
 		Load: $resource("/wf/:id/:type", {id: "@id", type: "@type"}),
 		Ref: $resource("/ref/:id/:type", {id: "@id", type: "@type"}),
 		Save: $resource("/save/wf"),
@@ -26,6 +27,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 	sharedWorkflow.openDef = true;
 	sharedWorkflow.wfComposing = false;
 	sharedWorkflow.serverExceptionMsg = "";
+	sharedWorkflow.componentInvolvedList = [];
 	
 	sharedWorkflow.initializeNewComponent = function() {
 		var emptyWorkflow = {
@@ -144,6 +146,25 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 		modWf.components[0].content = newScriptContent;
 		this.prepForBroadcast(modWf, type);
 	}
+	
+	sharedWorkflow.loadComponentAndInvolvedList = function(id, type) {
+		WfPersistency.Involve.get({"id":id}).$promise.then(function(response) {
+			if(!response.success) {
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
+				return;
+			}
+			
+			var a = response.data;
+			
+			//TODO
+			//fill the involved component list
+			
+			
+			sharedWorkflow.loadWfDefinition(id, type);
+			
+		});
+	};
 	
 	sharedWorkflow.loadWfDefinition = function(id, type) {
 		WfPersistency.Load.get({"id":id, "type":type}).$promise.then(function(response) {

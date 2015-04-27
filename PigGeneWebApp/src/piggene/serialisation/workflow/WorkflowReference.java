@@ -85,8 +85,9 @@ public class WorkflowReference extends Workflow {
 			if (wf instanceof WorkflowReference || ((WorkflowComponent) wf).getScriptType().getId() == PIG_SCRIPT_TYPE_ID) {
 				sb.append(lineSeparator);
 				sb.append(insertIndentationTabs());
-				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(this),
-						surroundingWorkflow.getParameterMapping(), surroundingWorkflow.getParameter(), super.getUid());
+				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(WorkflowSerialisation.load(this.getName(),
+						WorkflowSerialisation.determineType(this.getName()))), surroundingWorkflow.getParameterMapping(),
+						surroundingWorkflow.getParameter(), super.getUid());
 				sb.append(adjustIndentation(pigScriptRepresentation));
 				sb.append(lineSeparator);
 			}
@@ -97,15 +98,17 @@ public class WorkflowReference extends Workflow {
 	}
 
 	private void addVirtualInputParametersForRMarkDownScriptsTo(final Workflow surroundingWorkflow) throws IOException {
-		for (final Workflow wf : surroundingWorkflow.getComponents()) {
-			final String workflowName = wf.getName();
-			final Workflow plotWf = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
-			final Workflow plotComponent = plotWf.getComponents().get(0);
-			if (plotComponent != null && plotComponent instanceof WorkflowComponent
-					&& ((WorkflowComponent) plotComponent).getScriptType().getId() == RMD_SCRIPT_TYPE_ID) {
-				final String uid = wf.getUid();
-				for (final String s : surroundingWorkflow.getParameterMapping().retrieveInputMapByKey(uid).values()) {
-					surroundingWorkflow.getParameter().addOutputParameter(new OutputLinkParameter("", s, "", new Position(0, 0)));
+		if (surroundingWorkflow.getComponents() != null) {
+			for (final Workflow wf : surroundingWorkflow.getComponents()) {
+				final String workflowName = wf.getName();
+				final Workflow plotWf = WorkflowSerialisation.load(workflowName, WorkflowSerialisation.determineType(workflowName));
+				final Workflow plotComponent = plotWf.getComponents().get(0);
+				if (plotComponent != null && plotComponent instanceof WorkflowComponent
+						&& ((WorkflowComponent) plotComponent).getScriptType().getId() == RMD_SCRIPT_TYPE_ID) {
+					final String uid = wf.getUid();
+					for (final String s : surroundingWorkflow.getParameterMapping().retrieveInputMapByKey(uid).values()) {
+						surroundingWorkflow.getParameter().addOutputParameter(new OutputLinkParameter("", s, "", new Position(0, 0)));
+					}
 				}
 			}
 		}

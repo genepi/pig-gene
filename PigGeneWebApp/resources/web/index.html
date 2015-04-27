@@ -53,6 +53,7 @@
      			<ul class="nav navbar-nav">
         			<li class="navbarBtn {{button.active}}" data-toggle="tooltip" data-placement="bottom" title="{{button.title}}" ng-show="button.showState" title="{{button.title}}" ng-repeat="button in componentButtons" ng-click="performComponentNavBarAction($index)"><a><span class="{{button.logo}}"></span> {{button.text}}</a></li>
        			</ul>
+       			<button id="warning-icon" type="button" class="close" data-toggle="collapse" data-target="#collapseExample" ng-if="componentInvolvedList!==[]"><i class="warning fa fa-exclamation-triangle"></i></button>
 			</div>
 		</div>
 	</nav>

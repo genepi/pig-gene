@@ -4,6 +4,7 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 			showState: false,
 			logo: ""
 	};
+	$scope.componentInvolvedList = SharedWfService.componentInvolvedList;
 	
 	$scope.performNavBarAction = function(index) {
 		switch(buttons[index].name) {
@@ -146,6 +147,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	$scope.workflowName = "abc";
 	$scope.workflowDescription = "";
 	$scope.scriptContent = "";
+	$scope.componentInvolvedList = SharedWfService.componentInvolvedList;
 	
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;
@@ -295,7 +297,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.openComponentDefinition = function(workflowName) {
-		SharedWfService.loadWfDefinition(workflowName, compAbbr);
+		SharedWfService.loadComponentAndInvolvedList(workflowName, compAbbr);
 		$location.path("/wf/comp/" + workflowName);
 		setTimeout(function() {
 			$('#scriptContent').val(SharedWfService.workflow.components[0].content);
@@ -388,7 +390,7 @@ pigGeneApp.controller("CompLoadingCtrl", ["$scope", "$location", "SharedWfServic
 	$scope.openSelectedComponent = function() {
 		var selection = $scope.radioSelection;
 		if(!(selection == null || selection == "")) {
-			SharedWfService.loadWfDefinition(selection, compAbbr);
+			SharedWfService.loadComponentAndInvolvedList(selection, compAbbr);
 			$location.path("/wf/comp/" + $scope.radioSelection);
 			$('#CompLoadingModal').modal('toggle');
 		}

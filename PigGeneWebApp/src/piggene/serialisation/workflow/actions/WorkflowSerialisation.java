@@ -9,8 +9,10 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -197,6 +199,25 @@ public class WorkflowSerialisation {
 			return compAbbr;
 		}
 		return null;
+	}
+
+	public static Set<String> getWorkflowsThatIncludeComponent(final String componentName) throws IOException, JSONException,
+			ConnectionGraphException {
+		final Set<String> includingWfNames = new HashSet<String>();
+
+		final File workflowDirectory = new File(workflowDefsPath);
+		final File[] workflowDefinitions = workflowDirectory.listFiles();
+
+		for (final File f : workflowDefinitions) {
+			final Workflow wf = WorkflowSerialisation.load(f.getName().substring(0, f.getName().indexOf(".")), wfAbbr);
+			for (final Workflow comp : wf.getComponents()) {
+				if (comp.getName().equals(componentName)) {
+					includingWfNames.add(wf.getName());
+					break;
+				}
+			}
+		}
+		return includingWfNames;
 	}
 
 }

@@ -387,3 +387,18 @@ h4 {
 	vertical-align: middle;
 	line-height: 40px;
 }
+
+#modificationInfoDialogue {
+	background-color: white;
+}
+
+.warning {
+	color: #f0ad4e;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+#warning-icon {
+	padding-right: 35px;
+	padding-top: 15px;
+}

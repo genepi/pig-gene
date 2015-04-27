@@ -9,6 +9,7 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.restlet.routing.TemplateRoute;
 
+import piggene.resources.ComponentInvolvedService;
 import piggene.resources.LibFileDownloadService;
 import piggene.resources.ScriptDownloadService;
 import piggene.resources.WorkflowDeletionService;
@@ -44,6 +45,7 @@ public class WebApp extends Application {
 		router.attach("/ex/{type}", WorkflowOverviewLoaderService.class);
 		router.attach("/wf/{id}/{type}", WorkflowLoaderService.class);
 		router.attach("/ref/{id}/{type}", WorkflowReferenceLoaderService.class);
+		router.attach("/involve/{id}", ComponentInvolvedService.class);
 		router.attach("/save/wf", WorkflowStorageService.class);
 		router.attach("/del/{id}/{type}", WorkflowDeletionService.class);
 		router.attach("/dwnld/{id}", ScriptDownloadService.class);
@@ -59,5 +61,4 @@ public class WebApp extends Application {
 		route.setMatchingMode(Template.MODE_STARTS_WITH);
 		return router;
 	}
-
 }
