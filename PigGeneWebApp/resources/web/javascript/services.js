@@ -38,7 +38,17 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 					content: "",
 				}],
 				parameter: {
-					inputParameter: [],
+					inputParameter: [
+					                 	{
+											uid: sharedWorkflow.getUID(),
+											connector: "",
+											description: "", 
+											position: {
+												top: 0,
+												left: 0
+											}
+				                 		}
+				                 	],
 					outputParameter: []
 				},
 				parameterMapping: {
