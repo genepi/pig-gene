@@ -29,6 +29,13 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 	sharedWorkflow.serverExceptionMsg = "";
 	sharedWorkflow.componentInvolvedList = [];
 	
+	sharedWorkflow.componentInvolvedListIsNotEmpty = function() {
+		if(sharedWorkflow.componentInvolvedList != null && Object.keys(sharedWorkflow.componentInvolvedList).length > 0) {
+			return true;
+		}
+		return false;
+	};
+	
 	sharedWorkflow.initializeNewComponent = function() {
 		var emptyWorkflow = {
 				name: "newWf",
@@ -154,15 +161,12 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 				sharedWorkflow.broadcastServerExceptionInformation();
 				return;
 			}
-			
-			var a = response.data;
-			
-			//TODO
-			//fill the involved component list
-			
-			
+			sharedWorkflow.componentInvolvedList = [];
+			for(var i=0; i<response.data.length; i++) {
+				sharedWorkflow.componentInvolvedList.push(response.data[i]);
+			}
+			sharedWorkflow.broadcastComponentInvolvedChange();
 			sharedWorkflow.loadWfDefinition(id, type);
-			
 		});
 	};
 	
@@ -385,6 +389,10 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 	sharedWorkflow.prepForBroadcast = function(modWf, type) {
 		this.workflow = modWf;
 		this.broadcastWfChange(type);
+	};
+	
+	sharedWorkflow.broadcastComponentInvolvedChange = function() {
+		$rootScope.$broadcast("componentInvolvedListChange");
 	};
 	
 	sharedWorkflow.broadcastWfChange = function(type) {

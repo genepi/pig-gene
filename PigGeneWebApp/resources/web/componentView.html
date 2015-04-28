@@ -1,6 +1,6 @@
 <div class="workflowContainer well" ng-controller="WorkflowCtrl">
 	
-	<div id="collapseExample" class="collapse in" ng-if="componentInvolvedList!==[]">
+	<div id="collapseExample" class="collapse in" ng-if="componentInvolvedListIsNotEmpty()">
   		<div id="modificationInfoDialogue" class="well">
   			<h2 class="warning">Warning!</h2>
   			<h4>Any changes you apply to this component will affect the following workflow definitions:</h2> <br>

@@ -61,11 +61,19 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 		$scope.storeIndicator.showState = true;
 	});
 	
+	$scope.$on("componentInvolvedListChange", function() {
+		$scope.componentInvolvedList = SharedWfService.componentInvolvedList;
+	});
+	
 }]);
 
 pigGeneApp.controller("ComponentNavBarCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
 	$scope.componentButtons = componentButtons;
 	$scope.showCompNavBar = false;
+	
+	$scope.componentInvolvedListIsNotEmpty = function() {
+		return SharedWfService.componentInvolvedListIsNotEmpty();	
+	};
 	
 	$scope.performComponentNavBarAction = function(index) {
 		switch(componentButtons[index].name) {
@@ -148,6 +156,13 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	$scope.workflowDescription = "";
 	$scope.scriptContent = "";
 	$scope.componentInvolvedList = SharedWfService.componentInvolvedList;
+	$scope.componentInvolvedListIsNotEmpty = function() {
+		return SharedWfService.componentInvolvedListIsNotEmpty();
+	};
+	
+	$scope.$on("componentInvolvedListChange", function() {
+		$scope.componentInvolvedList = SharedWfService.componentInvolvedList;
+	});
 	
 	$scope.$on("handleWfChange", function() {
 		$scope.workflow = SharedWfService.workflow;

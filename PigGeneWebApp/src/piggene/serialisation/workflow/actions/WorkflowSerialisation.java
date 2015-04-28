@@ -210,12 +210,23 @@ public class WorkflowSerialisation {
 
 		for (final File f : workflowDefinitions) {
 			final Workflow wf = WorkflowSerialisation.load(f.getName().substring(0, f.getName().indexOf(".")), wfAbbr);
-			for (final Workflow comp : wf.getComponents()) {
+			includingWfNames.addAll(checkWorkflowNames(componentName, wf));
+		}
+		return includingWfNames;
+	}
+
+	private static Set<String> checkWorkflowNames(final String componentName, final Workflow wf) {
+		final Set<String> includingWfNames = new HashSet<String>();
+		for (final Workflow comp : wf.getComponents()) {
+			if (WorkflowSerialisation.determineType(comp.getName()).equals(compAbbr)) {
 				if (comp.getName().equals(componentName)) {
 					includingWfNames.add(wf.getName());
 					break;
 				}
+			} else {
+				includingWfNames.addAll(checkWorkflowNames(componentName, comp));
 			}
+
 		}
 		return includingWfNames;
 	}
