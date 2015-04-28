@@ -28,6 +28,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 	sharedWorkflow.wfComposing = false;
 	sharedWorkflow.serverExceptionMsg = "";
 	sharedWorkflow.componentInvolvedList = [];
+	sharedWorkflow.connectionIndex = 0;
 	
 	sharedWorkflow.componentInvolvedListIsNotEmpty = function() {
 		if(sharedWorkflow.componentInvolvedList != null && Object.keys(sharedWorkflow.componentInvolvedList).length > 0) {
@@ -460,6 +461,16 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 		$rootScope.$broadcast("serverExceptionMsg");
 	};
 	
+	sharedWorkflow.broadcastConnectorRemovalWarning = function(index, kind) {
+		sharedWorkflow.connectionIndex = index;
+		if(kind == "input") {
+			$rootScope.$broadcast("setKindToInput");
+		} else {
+			$rootScope.$broadcast("setKindToOutput");
+		}
+		$rootScope.$broadcast("showConnectorRemovalModal");
+	};
+	
 	sharedWorkflow.checkWorkflowNameDefinitionExists = function() {
 		if(this.workflow.name === "newWf") {
 			$rootScope.$broadcast("missingWfNameDefinition");
@@ -485,6 +496,18 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 	        return s ? "_" + p.substr(0,4) + "_" + p.substr(4,4) : p ;
 	    }
 	    return _p8() + _p8(true) + _p8(true) + _p8();
+	};
+	
+	sharedWorkflow.deleteInput = function(index, type) {
+		var modWf = sharedWorkflow.workflow;
+		modWf.parameter.inputParameter.splice(index,1);
+		sharedWorkflow.prepForBroadcast(modWf, type);
+	};
+	
+	sharedWorkflow.deleteOutput = function(index, type) {
+		var modWf = sharedWorkflow.workflow;
+		modWf.parameter.outputParameter.splice(index,1);
+		sharedWorkflow.prepForBroadcast(modWf, type);
 	};
 	
 	return sharedWorkflow;

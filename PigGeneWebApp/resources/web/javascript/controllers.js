@@ -241,16 +241,20 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.removeInput = function(event, index, type) {
-		var modWf = SharedWfService.workflow;
-		if(event != null) {
-			$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
-			var deleted = $scope.deleteInputParameterMappingEntry(modWf, modWf.parameter.inputParameter[index].connector)
-			if(deleted != null || deleted != undefined) {
-				modWf = deleted;
+		if(SharedWfService.componentInvolvedListIsNotEmpty()) {
+			SharedWfService.broadcastConnectorRemovalWarning(index,"input");
+		} else {
+			var modWf = SharedWfService.workflow;
+			if(event != null) {
+				$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
+				var deleted = $scope.deleteInputParameterMappingEntry(modWf, modWf.parameter.inputParameter[index].connector)
+				if(deleted != null || deleted != undefined) {
+					modWf = deleted;
+				}
 			}
+			modWf.parameter.inputParameter.splice(index,1);
+			SharedWfService.prepForBroadcast(modWf, type);
 		}
-		modWf.parameter.inputParameter.splice(index,1);
-		SharedWfService.prepForBroadcast(modWf, type);
 	};
 	
 	$scope.deleteInputParameterMappingEntry = function(modWf, connectorName) {
@@ -280,16 +284,20 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.removeOutput = function(event, index, type) {
-		var modWf = SharedWfService.workflow;
-		if(event != null) {
-			$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
-			var deleted = $scope.deleteOutputParameterMappingEntry(modWf, modWf.parameter.outputParameter[index].connector)
-			if(deleted != null || deleted != undefined) {
-				modWf = deleted;
+		if(SharedWfService.componentInvolvedListIsNotEmpty()) {
+			SharedWfService.broadcastConnectorRemovalWarning(index,"output");
+		} else {
+			var modWf = SharedWfService.workflow;
+			if(event != null) {
+				$scope.detachJSPlumbConnections($(event.currentTarget).parent().children()[1]);
+				var deleted = $scope.deleteOutputParameterMappingEntry(modWf, modWf.parameter.outputParameter[index].connector)
+				if(deleted != null || deleted != undefined) {
+					modWf = deleted;
+				}
 			}
+			modWf.parameter.outputParameter.splice(index,1);
+			SharedWfService.prepForBroadcast(modWf, type);
 		}
-		modWf.parameter.outputParameter.splice(index,1);
-		SharedWfService.prepForBroadcast(modWf, type);
 	};
 	
 	$scope.deleteOutputParameterMappingEntry = function(modWf, connectorName) {
@@ -507,14 +515,36 @@ pigGeneApp.controller("serverExceptionInfoCtrl", ["$scope", "SharedWfService", f
 	
 }]);
 
+pigGeneApp.controller("connectorRemovalCtrl", ["$scope", "SharedWfService", function($scope, SharedWfService) {
+	$scope.index = 0;
+	$scope.kind = "";
+	
+	$scope.$on("showConnectorRemovalModal", function() {
+		$('#connectorRemovalModal').modal('toggle');
+	});
+	
+	$scope.$on("setKindToOutput", function() {
+		$scope.index = SharedWfService.connectionIndex;
+		$scope.kind = "output";
+	});
+	
+	$scope.$on("setKindToInput", function() {
+		$scope.index = SharedWfService.connectionIndex;
+		$scope.kind = "input";
+	});
+	
+	$scope.deleteConnection = function() {
+		if($scope.kind == "input") {
+			SharedWfService.deleteInput($scope.index,'comp');
+		} else {
+			SharedWfService.deleteOutput($scope.index,'comp');
+		}
+	};
+	
+}]);
 
 pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope, SharedWfService) {
 
-	//TODO remove
-//	$scope.redraw = function() {
-//		jsPlumb.detachEveryConnection();
-//	};
-	
 	$scope.init = function() {
 		jsPlumb.bind("ready", function() {
 			jsPlumb.bind("connection", function (connection) {

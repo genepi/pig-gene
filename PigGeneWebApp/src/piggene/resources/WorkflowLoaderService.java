@@ -24,6 +24,7 @@ public class WorkflowLoaderService extends ServerResource {
 			final Workflow workflow = WorkflowSerialisation.resolveWorkflowReferences(WorkflowSerialisation.load(workflowName, type));
 			obj.setData(workflow);
 		} catch (final Exception e) {
+			e.printStackTrace();
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while loading the workflow data.");
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
