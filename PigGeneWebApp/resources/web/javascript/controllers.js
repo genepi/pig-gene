@@ -46,6 +46,14 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 		SharedWfService.hideAdditionalButtons();
 	};
 	
+	$scope.$on("setMenuToComponentView", function() {
+		$scope.redirectToHome();
+		$scope.modifyActiveState(0);
+		SharedWfService.hideAdditionalButtons();
+		SharedWfService.resetWorkflow();
+		SharedWfService.showComponentNavBar();
+	});
+	
 	$scope.$on("showSpinningIndicator", function() {
 		$scope.storeIndicator.logo = "fa fa-refresh fa-spin"
 		$scope.storeIndicator.showState = true;
@@ -138,7 +146,7 @@ pigGeneApp.controller("WorkflowNavBarCtrl", ["$scope", "SharedWfService", functi
 	
 }]);
 
-pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$filter", "$compile", "$timeout", "SharedWfService", function($scope, $routeParams, $location, $filter, $compile, $timeout, SharedWfService) {
+pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$filter", "$compile", "$timeout", "$rootScope", "SharedWfService", function($scope, $routeParams, $location, $filter, $compile, $timeout, $rootScope, SharedWfService) {
 	$scope.visible = false;
 	$scope.scriptType = scriptType;
 	
@@ -241,7 +249,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.removeInput = function(event, index, type) {
-		if(SharedWfService.componentInvolvedListIsNotEmpty()) {
+		if(event == null && SharedWfService.componentInvolvedListIsNotEmpty()) {
 			SharedWfService.broadcastConnectorRemovalWarning(index,"input");
 		} else {
 			var modWf = SharedWfService.workflow;
@@ -284,7 +292,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.removeOutput = function(event, index, type) {
-		if(SharedWfService.componentInvolvedListIsNotEmpty()) {
+		if(event == null && SharedWfService.componentInvolvedListIsNotEmpty()) {
 			SharedWfService.broadcastConnectorRemovalWarning(index,"output");
 		} else {
 			var modWf = SharedWfService.workflow;
@@ -321,6 +329,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	
 	$scope.openComponentDefinition = function(workflowName) {
 		SharedWfService.loadComponentAndInvolvedList(workflowName, compAbbr);
+		$rootScope.$broadcast("setMenuToComponentView");
 		$location.path("/wf/comp/" + workflowName);
 		setTimeout(function() {
 			$('#scriptContent').val(SharedWfService.workflow.components[0].content);
