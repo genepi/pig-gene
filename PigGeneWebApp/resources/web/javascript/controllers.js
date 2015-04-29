@@ -2,7 +2,8 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 	$scope.buttons = buttons;
 	$scope.storeIndicator =  {
 			showState: false,
-			logo: ""
+			logo: "",
+			logo2: ""
 	};
 	$scope.componentInvolvedList = SharedWfService.componentInvolvedList;
 	
@@ -55,17 +56,26 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 	});
 	
 	$scope.$on("showSpinningIndicator", function() {
-		$scope.storeIndicator.logo = "fa fa-refresh fa-spin"
+		$scope.storeIndicator.logo = "fa fa-refresh fa-spin";
+		$scope.storeIndicator.logo2 = "";
 		$scope.storeIndicator.showState = true;
 	});
 	
 	$scope.$on("showTickIndicator", function() {
 		$scope.storeIndicator.logo = "fa fa-check";
+		$scope.storeIndicator.logo2 = "";
+		$scope.storeIndicator.showState = true;
+	});
+	
+	$scope.$on("showMistakeIndicator", function() {
+		$scope.storeIndicator.logo = "fa fa-exclamation-triangle";
+		$scope.storeIndicator.logo2 = "";
 		$scope.storeIndicator.showState = true;
 	});
 	
 	$scope.$on("showProblemIndicator", function() {
 		$scope.storeIndicator.logo = "fa fa-exclamation";
+		$scope.storeIndicator.logo2 = "fa fa-server";
 		$scope.storeIndicator.showState = true;
 	});
 	
@@ -190,6 +200,11 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		}
 	});
 	
+	$scope.openClickedWorkflow = function(name) {
+		SharedWfService.loadWfDefinition(name, wfAbbr);
+		$location.path("/wf/" + name);
+	};
+	
 	$scope.addExistingComponent = function() {
 		if(SharedWfService.checkWorkflowNameDefinitionExists()) {
 			SharedWfService.loadExistingWorkflowNames(false, compAbbr, true);
@@ -212,6 +227,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.updateWfDefinition = function(type) {
+		$rootScope.$broadcast("showSpinningIndicator");
 		$scope.timeout = 2000
 		if ($scope.pendingPromise) { 
 			$timeout.cancel($scope.pendingPromise); 

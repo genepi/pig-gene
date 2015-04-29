@@ -244,10 +244,36 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 					return;
 				}
 				sharedWorkflow.redirectLocation($location.$$path, sharedWorkflow.workflow.name);
-				$rootScope.$broadcast("showTickIndicator");
+				
+				if(type == compAbbr && sharedWorkflow.userInputMistakesExist()) {
+					$rootScope.$broadcast("showMistakeIndicator");
+				} else {
+					$rootScope.$broadcast("showTickIndicator");
+				}
 			});
 		}
 	};
+	
+	sharedWorkflow.userInputMistakesExist = function() {
+		var inputParameter = sharedWorkflow.workflow.parameter.inputParameter;
+		//check input parameters
+		for(var i=0; i<inputParameter.length; i++) {
+			if(inputParameter[i].connector == "" || inputParameter[i].description == "") {
+				return true;
+			}
+		}
+		//check output parameters
+		var outputParameter = sharedWorkflow.workflow.parameter.outputParameter;
+		for(var i=0; i<outputParameter.length; i++) {
+			if(outputParameter[i].connector == "" || outputParameter[i].description == "") {
+				return true;
+			}
+		}
+		if(sharedWorkflow.workflow.components[0].content == "") {
+			return true;
+		}
+		return false;
+	}
 	
 	sharedWorkflow.downloadLibFile = function(link) {
 		var jsonLink = '{"link": "' + link + '"}'

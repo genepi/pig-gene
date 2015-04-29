@@ -6,7 +6,7 @@
   			<h4>Any changes you apply to this component will affect the following workflow definitions:</h2> <br>
   			<ul>
   				<li ng-repeat="entry in componentInvolvedList">
-  					<span>{{entry.name}}</span>
+  					<a class="workflowLink" ng-click="openClickedWorkflow(entry.name)"><span>{{entry.name}}</span></a>
   				</li>
   			</ul>
   		</div>

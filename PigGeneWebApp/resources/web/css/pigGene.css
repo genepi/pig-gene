@@ -279,6 +279,10 @@ h4 {
 	bottom: 9px;
 }
 
+.input-trash:hover {
+	cursor: pointer;
+}
+
 .output-trash {
 	position: absolute;
 	font-size: 90%;
@@ -287,11 +291,8 @@ h4 {
 	bottom: 9px;
 }
 
-.component-trash {
-	position: absolute;
-	font-size: 90%;
-	right: 8px;
-	top: 8px; 
+.output-trash:hover {
+	cursor: pointer;
 }
 
 .hiddenElement {
@@ -304,6 +305,15 @@ h4 {
 }
 
 #storeIndicator {
+	float: right;
+	color: #f8f8f8;
+	font-size: 30px;
+	margin-top: 9px;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+#storeIndicator2 {
 	float: right;
 	color: #f8f8f8;
 	font-size: 30px;
@@ -401,4 +411,50 @@ h4 {
 #warning-icon {
 	padding-right: 35px;
 	padding-top: 15px;
+}
+
+#openDeclarationIcon {
+	position: absolute;
+	font-size: 110%;
+	left: 8px;
+	top: 6px; 
+}
+
+#openDeclarationIcon:hover {
+	cursor: pointer;
+}
+
+#componentTrash {
+	position: absolute;
+	right: 8px;
+	top: 8px; 
+}
+
+#componentTrash:hover {
+	cursor: pointer;
+}
+
+.navbar-default .navbar-nav>li>a {
+	color: #4B4B4B;
+}
+
+#inputParamContainer {
+	margin-top: 10px;
+}
+
+.workflowLink {
+	color: #333;
+}
+
+.workflowLink:hover {
+	cursor: pointer;
+}
+
+#modificationInfoDialogue > ul {
+	font-size: 15px;
+	padding-left: 30px;
+}
+
+.connectorTitle:hover {
+	cursor: not-allowed;
 }

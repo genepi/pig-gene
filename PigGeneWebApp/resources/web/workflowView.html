@@ -9,10 +9,10 @@
 		<div id="workflow-graph"class="drop-container" droppable style="width:800px; height:500px;" ng-click="addEvent($event)" >
 			<div class="paramContainer" ng-if="isVisible()">
 				<div ng-repeat="input in workflow.parameter.inputParameter track by input.uid" bn-log-dom-creation="With" plumb-item style="position: absolute; margin-left:0px;" class="item item-in_out">
-					<div class="paramTitle"><b>Input</b></div>
+					<div class="paramTitle"><b class="connectorTitle">Input</b></div>
 					</span><input ng-model="workflow.parameter.inputParameter[$index].description" ng-change="updateWfDefinition('wf')" placeholder="input description"></input>
 					<div>
-						<a class="input-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($event,$index,'wf')"></a>
+						<a class="input-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($event,$index,'wf')" title="delete input component"></a>
 						<div data-type="input-param" data-id="{{workflow.parameter.inputParameter[$index].uid}}" plumb-source class="circle circle-source connect3">...</div>
 						<input type="text" class="hiddenElement" ng-model="workflow.parameter.inputParameter[$index].connector" ng-change="updateWfDefinition('wf')"></input>
 					</div>
@@ -20,10 +20,10 @@
 				<button class="btn btn-sm btn-default" ng-click="addInput('wf')"><span class="glyphicon glyphicon-plus"></span> add input</button>
 		
 				<div ng-repeat="output in workflow.parameter.outputParameter track by output.uid" plumb-item style="position: absolute; margin-left:0px;" class="item item-in_out">
-					<div class="paramTitle"><b>Output</b></div>
+					<div class="paramTitle"><b class="connectorTitle">Output</b></div>
 					<input ng-model="workflow.parameter.outputParameter[$index].description" ng-change="updateWfDefinition('wf')" placeholder="output description"></input>
 					<div>
-						<a class="output-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($event,$index,'wf')"></a>
+						<a class="output-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($event,$index,'wf')" title="delete output component"></a>
 						<div data-type="output-param" data-id="{{workflow.parameter.outputParameter[$index].uid}}" plumb-target class="circle circle-target connect3">...</div>
 						<input type="text" class="hiddenElement" ng-model="workflow.parameter.outputParameter[$index].connector" ng-change="updateWfDefinition('wf')"></input>
 					</div>
@@ -34,9 +34,10 @@
 		
 				<div ng-repeat="component in workflow.components track by component.uid" data-id="{{component.uid}}" bn-log-dom-creation="With" plumb-item style="position: absolute; margin-left:0px;" class="item">
 					<div>
-						<div class="paramTitle"><b id="componentNameLink" ng-click="openComponentDefinition(component.name)">{{component.name}}</b></div>
-						<a class="component-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="deleteExistingComponent($event,$index)"></a>
-						<div ng-if="parametersExist(component.parameter.inputParameter)">
+						<div class="paramTitle"><b id="componentNameLink" title="click and hold to move component">{{component.name}}</b></div>
+						<a id="openDeclarationIcon" class="pigGeneGlyphicon" ng-click="openComponentDefinition(component.name)" title="open declaration"><i class="fa fa-external-link"></i></a>
+ 						<a id="componentTrash" class="pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="deleteExistingComponent($event,$index)" title="delete component"></a>
+						<div id="inputParamContainer" ng-if="parametersExist(component.parameter.inputParameter)">
 							<div class="rectangle rectangle-target" ng-repeat="input in component.parameter.inputParameter track by $index">
 								<div data-type="ref-param" data-id="{{component.uid}}.{{input.connector}}" plumb-target class="circle circle-target connect2">...</div><span>{{input.description}}</span><br />
 								<input type="text" class="hiddenElement" ng-model="workflow.parameterMapping.inputParameterMapping[component.uid][input.connector]" ng-change="updateWfDefinition('wf')"></input>
