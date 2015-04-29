@@ -11,6 +11,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import piggene.helper.MissingConnectionException;
 import piggene.serialisation.zip.ZipFileGenerator;
 
 public class ZipDownloadRequest extends ServerResource {
@@ -29,6 +30,10 @@ public class ZipDownloadRequest extends ServerResource {
 		} catch (final ZipException e) {
 			obj.setSuccess(false);
 			obj.setMessage("An error occured while generating the zip-file.");
+			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
+		} catch (final MissingConnectionException e) {
+			obj.setSuccess(false);
+			obj.setMessage(e.getMessage());
 			return new StringRepresentation(JSONObject.fromObject(obj).toString(), MediaType.APPLICATION_JSON);
 		}
 

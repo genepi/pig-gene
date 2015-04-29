@@ -8,6 +8,7 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
+import piggene.helper.MissingConnectionException;
 import piggene.serialisation.RMarkDown.RMarkDownGenerator;
 import piggene.serialisation.cloudgene.CloudgeneYamlGenerator;
 import piggene.serialisation.pig.PigScriptGenerator;
@@ -33,7 +34,7 @@ public class ZipFileGenerator {
 		}
 	}
 
-	public static void generateAndStoreFile(final String workflowName) throws IOException, ZipException {
+	public static void generateAndStoreFile(final String workflowName) throws IOException, ZipException, MissingConnectionException {
 		final Workflow workflow = WorkflowSerialisation.load(workflowName, wfAbbr);
 		PigScriptGenerator.generateAndStoreScript(workflow);
 		RMarkDownGenerator.generateAndStoreScripts(workflow);

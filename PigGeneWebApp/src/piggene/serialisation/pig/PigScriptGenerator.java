@@ -12,6 +12,8 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 
+import piggene.helper.MissingConnectionException;
+import piggene.helper.WorkabilityChecker;
 import piggene.representation.WorkflowFlowSequence;
 import piggene.serialisation.workflow.Workflow;
 
@@ -36,13 +38,15 @@ public class PigScriptGenerator {
 		}
 	}
 
-	public static void generateAndStoreScript(final Workflow workflow) throws IOException {
+	public static void generateAndStoreScript(final Workflow workflow) throws IOException, MissingConnectionException {
 		final String workflowName = workflow.getName();
 		final StringBuilder sb = new StringBuilder();
 		sb.append(insertHeader());
 		sb.append(lineSeparator);
 		sb.append(insertDefinedFunctionNames());
 
+		// tests if all input and output connections are set may throw Exception
+		WorkabilityChecker.checkConnectionIntegrity(workflow);
 		final List<Workflow> workflowOrdering = WorkflowFlowSequence.constructWorkflowFlowSequence(workflow);
 		for (final Workflow wf : workflowOrdering) {
 			sb.append(wf.getPigScriptRepresentation(workflow));
