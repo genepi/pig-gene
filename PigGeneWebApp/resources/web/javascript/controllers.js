@@ -194,9 +194,11 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 		$('#componentDescription').val($scope.workflowDescription);
 		
 		var comp = SharedWfService.workflow.components[0];
-		if(comp != undefined) {
-			$scope.scriptContent = comp.content;
-			$('#scriptContent').val($scope.scriptContent);
+		if(comp != undefined && $('#scriptContent') != []) {
+			setTimeout(function() {
+				$scope.scriptContent = comp.content;
+				$('#scriptContent').val($scope.scriptContent);
+			},200);
 		}
 	});
 	
