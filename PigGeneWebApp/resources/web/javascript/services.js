@@ -8,6 +8,7 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 	return {
 		Existing: $resource("/ex/:type", {type: "@type"}),
 		Involve: $resource("/involve/:id", {id: "@id"}),
+		DetermineType: $resource("/type/:id", {id: "@id"}),
 		Load: $resource("/wf/:id/:type", {id: "@id", type: "@type"}),
 		Ref: $resource("/ref/:id/:type", {id: "@id", type: "@type"}),
 		Save: $resource("/save/wf"),
@@ -170,6 +171,28 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 			sharedWorkflow.loadWfDefinition(id, type);
 		});
 	};
+	
+	sharedWorkflow.determineElementType = function(id) {
+		WfPersistency.DetermineType.get({"id":id}).$promise.then(function(response) {
+			if(!response.success) {
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
+				return;
+			}
+			if(response.data == "comp") {
+				sharedWorkflow.loadComponentAndInvolvedList(id, compAbbr);
+				$rootScope.$broadcast("setMenuToComponentView");
+				$location.path("/wf/comp/" + id);
+			} else {
+				sharedWorkflow.loadComponentAndInvolvedList(id, wfAbbr);
+				$rootScope.$broadcast("setMenuToWorkflowView");
+				$location.path("/wf/" + id);
+			}
+			setTimeout(function() {
+				$('#scriptContent').val(sharedWorkflow.workflow.components[0].content);
+			}, 200);
+		});
+	}
 	
 	sharedWorkflow.loadWfDefinition = function(id, type) {
 		WfPersistency.Load.get({"id":id, "type":type}).$promise.then(function(response) {

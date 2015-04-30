@@ -55,6 +55,14 @@ pigGeneApp.controller("NavBarCtrl", ["$scope", "SharedWfService", "$location", f
 		SharedWfService.showComponentNavBar();
 	});
 	
+	$scope.$on("setMenuToWorkflowView", function() {
+		$scope.redirectToHome();
+		$scope.modifyActiveState(1);
+		SharedWfService.hideAdditionalButtons();
+		SharedWfService.resetWorkflow();
+		SharedWfService.showWfNavBar();
+	});
+	
 	$scope.$on("showSpinningIndicator", function() {
 		$scope.storeIndicator.logo = "fa fa-refresh fa-spin";
 		$scope.storeIndicator.logo2 = "";
@@ -205,6 +213,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	$scope.openClickedWorkflow = function(name) {
 		SharedWfService.loadWfDefinition(name, wfAbbr);
 		$location.path("/wf/" + name);
+		$rootScope.$broadcast("setMenuToWorkflowView");
 	};
 	
 	$scope.addExistingComponent = function() {
@@ -348,12 +357,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.openComponentDefinition = function(workflowName) {
-		SharedWfService.loadComponentAndInvolvedList(workflowName, compAbbr);
-		$rootScope.$broadcast("setMenuToComponentView");
-		$location.path("/wf/comp/" + workflowName);
-		setTimeout(function() {
-			$('#scriptContent').val(SharedWfService.workflow.components[0].content);
-		}, 200);
+		SharedWfService.determineElementType(workflowName);
 	};
 	
 	$scope.detachJSPlumbConnections = function (element) {

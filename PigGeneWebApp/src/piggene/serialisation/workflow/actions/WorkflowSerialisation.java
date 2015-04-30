@@ -215,7 +215,7 @@ public class WorkflowSerialisation {
 		return includingWfNames;
 	}
 
-	private static Set<String> checkWorkflowNames(final String componentName, final Workflow wf) {
+	private static Set<String> checkWorkflowNames(final String componentName, final Workflow wf) throws IOException {
 		final Set<String> includingWfNames = new HashSet<String>();
 		for (final Workflow comp : wf.getComponents()) {
 			if (WorkflowSerialisation.determineType(comp.getName()).equals(compAbbr)) {
@@ -224,7 +224,8 @@ public class WorkflowSerialisation {
 					break;
 				}
 			} else {
-				includingWfNames.addAll(checkWorkflowNames(componentName, comp));
+				includingWfNames.addAll(checkWorkflowNames(componentName,
+						WorkflowSerialisation.load(comp.getName(), WorkflowSerialisation.determineType(comp.getName()))));
 			}
 
 		}
