@@ -2,10 +2,12 @@ package piggene.serialisation.workflow;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import piggene.representation.WorkflowFlowSequence;
 import piggene.serialisation.workflow.actions.WorkflowSerialisation;
 import piggene.serialisation.workflow.parameter.LinkParameter;
 import piggene.serialisation.workflow.parameter.OutputLinkParameter;
@@ -81,7 +83,14 @@ public class WorkflowReference extends Workflow {
 		sb.append(preparePigScriptCommand(referencedWorkflow.getDescription()));
 
 		addVirtualInputParametersForRMarkDownScriptsTo(surroundingWorkflow);
-		for (final Workflow wf : referencedWorkflow.getComponents()) {
+		final List<Workflow> workflowOrdering;
+		if (workflowContainsWorkflowReferences(referencedWorkflow)) {
+			workflowOrdering = WorkflowFlowSequence.constructWorkflowFlowSequence(referencedWorkflow);
+		} else {
+			workflowOrdering = referencedWorkflow.getComponents();
+		}
+
+		for (final Workflow wf : workflowOrdering) {
 			if (wf instanceof WorkflowComponent && ((WorkflowComponent) wf).getScriptType().getId() == PIG_SCRIPT_TYPE_ID) {
 				sb.append(lineSeparator);
 				sb.append(insertIndentationTabs());
@@ -107,6 +116,15 @@ public class WorkflowReference extends Workflow {
 		sb.append(lineSeparator);
 		WorkflowReference.indentation--;
 		return sb.toString();
+	}
+
+	private boolean workflowContainsWorkflowReferences(final Workflow referencedWf) {
+		for (final Workflow wf : referencedWf.getComponents()) {
+			if (wf.getWorkflowType().equals(WorkflowType.WORKFLOW_REFERENCE)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private String getComponentUID(final Workflow surroundingWorkflow, final Workflow referencedWorkflow) {
