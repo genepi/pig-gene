@@ -21,7 +21,7 @@
 		<div class="paramContainer">
 			<div class="inputParameters">
 				input elements:<br>
-				<div ng-class="inputElementLine" ng-repeat="input in workflow.parameter.inputParameter track by $index">
+				<div class="connectorLine" ng-repeat="input in workflow.parameter.inputParameter track by $index">
 					<div class="required-field-block">
             			<input type="text" placeholder="$inputName" class="form-control parameterElement" ng-model="workflow.parameter.inputParameter[$index].connector" ng-change="updateWfDefinition('comp')"></input>
         				<div class="required-icon" ng-if="workflow.parameter.inputParameter[$index].connector==''">
@@ -34,7 +34,9 @@
                 			<div class="text">*</div>
            				</div>
 					</div>
-       				<a class="pigGeneGlyphicon glyphicon glyphicon-trash trash" ng-click="removeInput(null,$index,'comp')" ng-if="$index!=0"></a>
+					<div class="trash-icon">
+ 	      				<a class="pigGeneGlyphicon glyphicon glyphicon-trash trash" ng-click="removeInput(null,$index,'comp')" ng-if="$index!=0"></a>
+					</div>
 				</div>
 				<button class="btn btn-xs btn-default" ng-click="addInput('comp')"><span class="glyphicon glyphicon-plus"></span> add input</button>
 			</div>
@@ -65,7 +67,7 @@
 		<div class="paramContainer">
 			<div class="outputParameters">
 				output elements:<br>
-				<div ng-repeat="output in workflow.parameter.outputParameter track by $index">
+				<div class="connectorLine" ng-repeat="output in workflow.parameter.outputParameter track by $index">
 					<div class="required-field-block">
 						<input type="text" placeholder="$outputName" class="form-control parameterElement" ng-model="workflow.parameter.outputParameter[$index].connector" ng-change="updateWfDefinition('comp')"></input>
 						<div class="required-icon" ng-if="workflow.parameter.outputParameter[$index].connector==''">
@@ -78,7 +80,9 @@
 	                			<div class="text">*</div>
 	           			</div>
 					</div>
-					<a class="pigGeneGlyphicon glyphicon glyphicon-trash trash" ng-click="removeOutput(null,$index,'comp')"></a>
+					<div class="trash-icon">
+						<a class="pigGeneGlyphicon glyphicon glyphicon-trash trash" ng-click="removeOutput(null,$index,'comp')"></a>
+					</div>
 				</div>
 				<button class="btn btn-xs btn-default" ng-click="addOutput('comp')"><span class="glyphicon glyphicon-plus"></span> add output</button>
 			</div>

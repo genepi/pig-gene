@@ -655,13 +655,14 @@ pigGeneApp.directive('postRender', [ '$timeout', function($timeout) {
 
 
 
-pigGeneApp.directive('plumbItem', function(SharedWfService) {
+pigGeneApp.directive('plumbItem', function(SharedWfService, $rootScope) {
 	return {
 		replace: true,
 		controller: 'PlumbCtrl',
 		link: function (scope, element, attrs) {
 			jsPlumb.draggable(element, {
 				stop: function() {
+					$rootScope.$broadcast("showSpinningIndicator");
 					var position = {
 								top: $(element).position().top,
 								left: $(element).position().left
@@ -707,10 +708,11 @@ pigGeneApp.directive('plumbSource', function(SharedWfService) {
 	};
 });
 
-pigGeneApp.directive('plumbTarget', function(SharedWfService) {
+pigGeneApp.directive('plumbTarget', function(SharedWfService, $rootScope) {
 	return {
 		replace: true,
 		link: function (scope, element, attrs) {
+			$rootScope.$broadcast("showSpinningIndicator");
 			jsPlumb.makeTarget(element, {
 				anchor: 'LeftMiddle',
 				container: 'workflow-graph',

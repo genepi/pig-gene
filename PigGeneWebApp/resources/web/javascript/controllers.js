@@ -252,6 +252,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.addInput = function(type) {
+		$rootScope.$broadcast("showSpinningIndicator");
 		var modWf = SharedWfService.workflow;
 		var inputObj = {
 				uid: SharedWfService.getUID(),
@@ -295,6 +296,7 @@ pigGeneApp.controller("WorkflowCtrl", ["$scope", "$routeParams", "$location", "$
 	};
 	
 	$scope.addOutput = function(type) {
+		$rootScope.$broadcast("showSpinningIndicator");
 		var modWf = SharedWfService.workflow;
 		var outputObj = {
 				uid: SharedWfService.getUID(),
