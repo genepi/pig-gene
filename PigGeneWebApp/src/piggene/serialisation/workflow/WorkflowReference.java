@@ -238,14 +238,14 @@ public class WorkflowReference extends Workflow {
 	}
 
 	private String replaceQuotesResultingFromNestedWorkflowDefinitions(final String script) {
-		final String regex = "(\\')(\\w+)(\\'[' '])";
+		final String regex = "(\\')([a-zA-Z_0-9']+)(\\'[' '])";
 		final Pattern p = Pattern.compile(regex);
 		final Matcher m = p.matcher(script);
 		final StringBuffer sb = new StringBuffer();
 
 		while (m.find()) {
 			System.out.println(m.group(2));
-			m.appendReplacement(sb, " ".concat(m.group(2)).concat(" "));
+			m.appendReplacement(sb, m.group(2).replace("'", "").concat(" "));
 		}
 		m.appendTail(sb);
 		return sb.toString();
