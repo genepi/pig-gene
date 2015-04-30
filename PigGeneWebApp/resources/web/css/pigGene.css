@@ -456,5 +456,5 @@ h4 {
 }
 
 .connectorTitle:hover {
-	cursor: not-allowed;
+	cursor: pointer;
 }

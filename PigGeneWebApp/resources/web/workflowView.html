@@ -9,7 +9,7 @@
 		<div id="workflow-graph"class="drop-container" droppable style="width:800px; height:500px;" ng-click="addEvent($event)" >
 			<div class="paramContainer" ng-if="isVisible()">
 				<div ng-repeat="input in workflow.parameter.inputParameter track by input.uid" bn-log-dom-creation="With" plumb-item style="position: absolute; margin-left:0px;" class="item item-in_out">
-					<div class="paramTitle"><b class="connectorTitle">Input</b></div>
+					<div class="paramTitle"><b class="connectorTitle" title="click and hold to move component">Input</b></div>
 					</span><input ng-model="workflow.parameter.inputParameter[$index].description" ng-change="updateWfDefinition('wf')" placeholder="input description"></input>
 					<div>
 						<a class="input-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeInput($event,$index,'wf')" title="delete input component"></a>
@@ -20,7 +20,7 @@
 				<button class="btn btn-sm btn-default" ng-click="addInput('wf')"><span class="glyphicon glyphicon-plus"></span> add input</button>
 		
 				<div ng-repeat="output in workflow.parameter.outputParameter track by output.uid" plumb-item style="position: absolute; margin-left:0px;" class="item item-in_out">
-					<div class="paramTitle"><b class="connectorTitle">Output</b></div>
+					<div class="paramTitle"><b class="connectorTitle" title="click and hold to move component">Output</b></div>
 					<input ng-model="workflow.parameter.outputParameter[$index].description" ng-change="updateWfDefinition('wf')" placeholder="output description"></input>
 					<div>
 						<a class="output-trash pigGeneGlyphicon glyphicon glyphicon-trash" ng-click="removeOutput($event,$index,'wf')" title="delete output component"></a>
