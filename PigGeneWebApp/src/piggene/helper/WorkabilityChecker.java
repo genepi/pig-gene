@@ -2,7 +2,6 @@ package piggene.helper;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,35 +11,25 @@ import piggene.serialisation.workflow.parameter.LinkParameter;
 
 public class WorkabilityChecker {
 
-	public static void checkConnectionIntegrity(final Workflow workflow) throws MissingConnectionException, IOException {
-		final Map<String, Map<String, String>> inputParameterMapping = workflow.getParameterMapping().getInputParameterMapping();
-		final Map<String, Map<String, String>> outputParameterMapping = workflow.getParameterMapping().getOutputParameterMapping();
-		for (final Workflow comp : workflow.getComponents()) {
+	public static void checkConnectionIntegrity(final Workflow surroundingWorkflow) throws MissingConnectionException, IOException {
+		final Map<String, Map<String, String>> inputParameterMapping = surroundingWorkflow.getParameterMapping().getInputParameterMapping();
+		final Map<String, Map<String, String>> outputParameterMapping = surroundingWorkflow.getParameterMapping().getOutputParameterMapping();
+		for (final Workflow comp : surroundingWorkflow.getComponents()) {
 			final String name = comp.getName();
-			final Map<String, String> inputParamMap = WorkabilityChecker.removeTemporaryEntries(inputParameterMapping.get(comp.getUid()));
-			final Map<String, String> outputParamMap = WorkabilityChecker.removeTemporaryEntries(outputParameterMapping.get(comp.getUid()));
+			final Map<String, String> inputParamMap = inputParameterMapping.get(comp.getUid());
+			final Map<String, String> outputParamMap = outputParameterMapping.get(comp.getUid());
 
-			WorkabilityChecker.checkInputConnectors(name, inputParamMap);
+			WorkabilityChecker.checkInputConnectors(name, inputParamMap, surroundingWorkflow);
 			WorkabilityChecker.checkOutputConnectors(name, outputParamMap);
 			WorkabilityChecker.checkConnectedToItself(name, inputParamMap, outputParamMap);
 		}
 	}
 
-	private static Map<String, String> removeTemporaryEntries(final Map<String, String> tempMap) {
-		final Map<String, String> newMap = new HashMap<String, String>();
-		for (final String key : tempMap.keySet()) {
-			if (key.startsWith("$")) {
-				newMap.put(key, tempMap.get(key));
-			}
-		}
-		return newMap;
-	}
-
-	private static void checkInputConnectors(final String name, final Map<String, String> parameterMap) throws IOException,
-			MissingConnectionException {
+	private static void checkInputConnectors(final String name, final Map<String, String> parameterMap, final Workflow surroundingWorkflow)
+			throws IOException, MissingConnectionException {
 		final Workflow component = WorkflowSerialisation.load(name, WorkflowSerialisation.determineType(name));
 		final List<LinkParameter> inputParameters = component.getParameter().getInputParameter();
-		if (compareParameterQuantityNotEqual(parameterMap, inputParameters)) {
+		if (parameterIsMissing(inputParameters, parameterMap)) {
 			final List<String> unconnectedInputParams = getListOfEmptyConnectors(parameterMap, inputParameters);
 			throw new MissingConnectionException(getErrorMsgString(name, "input", unconnectedInputParams));
 		}
@@ -50,14 +39,19 @@ public class WorkabilityChecker {
 			MissingConnectionException {
 		final Workflow component = WorkflowSerialisation.load(name, WorkflowSerialisation.determineType(name));
 		final List<LinkParameter> outputParameters = component.getParameter().getOutputParameter();
-		if (compareParameterQuantityNotEqual(parameterMap, outputParameters)) {
+		if (parameterIsMissing(outputParameters, parameterMap)) {
 			final List<String> unconnectedOutputParams = getListOfEmptyConnectors(parameterMap, outputParameters);
 			throw new MissingConnectionException(getErrorMsgString(name, "output", unconnectedOutputParams));
 		}
 	}
 
-	private static boolean compareParameterQuantityNotEqual(final Map<String, String> parameterMap, final List<LinkParameter> parameterList) {
-		return parameterList.size() != parameterMap.keySet().size();
+	private static boolean parameterIsMissing(final List<LinkParameter> parameterList, final Map<String, String> parameterMap) {
+		for (final LinkParameter p : parameterList) {
+			if (!parameterMap.containsKey(p.getConnector()) || parameterMap.get(p.getConnector()).equals("")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static List<String> getListOfEmptyConnectors(final Map<String, String> parameterMap, final List<LinkParameter> parameterList) {
@@ -106,6 +100,10 @@ public class WorkabilityChecker {
 				sb.append(s);
 			}
 			sb.append("are not connected. ");
+		} else if (unconnectedParams.size() == 0) {
+			sb.append("Missing ");
+			sb.append(type);
+			sb.append(" parameter connection. ");
 		} else {
 			sb.append("The ");
 			sb.append(type);
