@@ -244,7 +244,6 @@ public class WorkflowReference extends Workflow {
 		final StringBuffer sb = new StringBuffer();
 
 		while (m.find()) {
-			System.out.println(m.group(2));
 			m.appendReplacement(sb, m.group(2).replace("'", "").concat(" "));
 		}
 		m.appendTail(sb);

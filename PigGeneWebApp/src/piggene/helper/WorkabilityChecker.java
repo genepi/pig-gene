@@ -2,6 +2,7 @@ package piggene.helper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,13 +17,23 @@ public class WorkabilityChecker {
 		final Map<String, Map<String, String>> outputParameterMapping = workflow.getParameterMapping().getOutputParameterMapping();
 		for (final Workflow comp : workflow.getComponents()) {
 			final String name = comp.getName();
-			final Map<String, String> inputParamMap = inputParameterMapping.get(comp.getUid());
-			final Map<String, String> outputParamMap = outputParameterMapping.get(comp.getUid());
+			final Map<String, String> inputParamMap = WorkabilityChecker.removeTemporaryEntries(inputParameterMapping.get(comp.getUid()));
+			final Map<String, String> outputParamMap = WorkabilityChecker.removeTemporaryEntries(outputParameterMapping.get(comp.getUid()));
 
-			checkInputConnectors(name, inputParamMap);
-			checkOutputConnectors(name, outputParamMap);
-			checkConnectedToItself(name, inputParamMap, outputParamMap);
+			WorkabilityChecker.checkInputConnectors(name, inputParamMap);
+			WorkabilityChecker.checkOutputConnectors(name, outputParamMap);
+			WorkabilityChecker.checkConnectedToItself(name, inputParamMap, outputParamMap);
 		}
+	}
+
+	private static Map<String, String> removeTemporaryEntries(final Map<String, String> tempMap) {
+		final Map<String, String> newMap = new HashMap<String, String>();
+		for (final String key : tempMap.keySet()) {
+			if (key.startsWith("$")) {
+				newMap.put(key, tempMap.get(key));
+			}
+		}
+		return newMap;
 	}
 
 	private static void checkInputConnectors(final String name, final Map<String, String> parameterMap) throws IOException,
@@ -98,9 +109,9 @@ public class WorkabilityChecker {
 		} else {
 			sb.append("The ");
 			sb.append(type);
-			sb.append(" parameter: ");
+			sb.append(" parameter: '");
 			sb.append(unconnectedParams.get(0));
-			sb.append("is not connected. ");
+			sb.append("' is not connected. ");
 		}
 		sb.append("Please fix this problem to be able to proceed.");
 		return sb.toString();
