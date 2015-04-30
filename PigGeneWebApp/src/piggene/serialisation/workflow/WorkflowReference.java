@@ -82,7 +82,7 @@ public class WorkflowReference extends Workflow {
 
 		addVirtualInputParametersForRMarkDownScriptsTo(surroundingWorkflow);
 		for (final Workflow wf : referencedWorkflow.getComponents()) {
-			if (wf instanceof WorkflowReference || ((WorkflowComponent) wf).getScriptType().getId() == PIG_SCRIPT_TYPE_ID) {
+			if (wf instanceof WorkflowComponent && ((WorkflowComponent) wf).getScriptType().getId() == PIG_SCRIPT_TYPE_ID) {
 				sb.append(lineSeparator);
 				sb.append(insertIndentationTabs());
 				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(WorkflowSerialisation.load(this.getName(),
@@ -90,11 +90,72 @@ public class WorkflowReference extends Workflow {
 						surroundingWorkflow.getParameter(), super.getUid());
 				sb.append(adjustIndentation(pigScriptRepresentation));
 				sb.append(lineSeparator);
+			} else if (wf instanceof WorkflowReference) {
+				final String uid = getComponentUID(surroundingWorkflow, referencedWorkflow);
+				adaptSurroundingWorkflowParameterMapping(surroundingWorkflow, referencedWorkflow, uid);
+
+				sb.append(lineSeparator);
+				sb.append(insertIndentationTabs());
+				final String pigScriptRepresentation = applyParameterMapping(wf.getPigScriptRepresentation(WorkflowSerialisation.load(this.getName(),
+						WorkflowSerialisation.determineType(this.getName()))), surroundingWorkflow.getParameterMapping(),
+						surroundingWorkflow.getParameter(), super.getUid());
+				sb.append(adjustIndentation(pigScriptRepresentation));
+				sb.append(lineSeparator);
+
 			}
 		}
 		sb.append(lineSeparator);
 		WorkflowReference.indentation--;
 		return sb.toString();
+	}
+
+	private String getComponentUID(final Workflow surroundingWorkflow, final Workflow referencedWorkflow) {
+		String uid = "";
+		for (final Workflow zw : surroundingWorkflow.getComponents()) {
+			if (zw.getName().equals(referencedWorkflow.getName())) {
+				uid = zw.getUid();
+				break;
+			}
+		}
+		return uid;
+	}
+
+	private void adaptSurroundingWorkflowParameterMapping(final Workflow surroundingWorkflow, final Workflow referencedWorkflow, final String uid) {
+		adaptSurroundingWorkflowInputParameterMapping(surroundingWorkflow, referencedWorkflow, uid);
+		adaptSurroundingWorkflowOutputParameterMapping(surroundingWorkflow, referencedWorkflow, uid);
+	}
+
+	private void adaptSurroundingWorkflowInputParameterMapping(final Workflow surroundingWorkflow, final Workflow referencedWorkflow, final String uid) {
+		final Map<String, String> map = surroundingWorkflow.getParameterMapping().getInputParameterMapping().get(uid);
+		for (final String outerKey : referencedWorkflow.getParameterMapping().getInputParameterMapping().keySet()) {
+			for (final String innerKey : referencedWorkflow.getParameterMapping().getInputParameterMapping().get(outerKey).keySet()) {
+				final String value = referencedWorkflow.getParameterMapping().getInputParameterMapping().get(outerKey).get(innerKey);
+				if (map.containsKey(value)) {
+					final Map<String, Map<String, String>> modifiedInputParamMap = surroundingWorkflow.getParameterMapping()
+							.getInputParameterMapping();
+					modifiedInputParamMap.get(uid).put("$".concat(value), modifiedInputParamMap.get(uid).get(value));
+					modifiedInputParamMap.get(uid).remove(value);
+					surroundingWorkflow.getParameterMapping().setInputParameterMapping(modifiedInputParamMap);
+				}
+			}
+		}
+	}
+
+	private void adaptSurroundingWorkflowOutputParameterMapping(final Workflow surroundingWorkflow, final Workflow referencedWorkflow,
+			final String uid) {
+		final Map<String, String> map = surroundingWorkflow.getParameterMapping().getOutputParameterMapping().get(uid);
+		for (final String outerKey : referencedWorkflow.getParameterMapping().getOutputParameterMapping().keySet()) {
+			for (final String innerKey : referencedWorkflow.getParameterMapping().getOutputParameterMapping().get(outerKey).keySet()) {
+				final String value = referencedWorkflow.getParameterMapping().getOutputParameterMapping().get(outerKey).get(innerKey);
+				if (map.containsKey(value)) {
+					final Map<String, Map<String, String>> modifiedOutputParamMap = surroundingWorkflow.getParameterMapping()
+							.getOutputParameterMapping();
+					modifiedOutputParamMap.get(uid).put("$".concat(value), modifiedOutputParamMap.get(uid).get(value));
+					modifiedOutputParamMap.get(uid).remove(value);
+					surroundingWorkflow.getParameterMapping().setOutputParameterMapping(modifiedOutputParamMap);
+				}
+			}
+		}
 	}
 
 	private void addVirtualInputParametersForRMarkDownScriptsTo(final Workflow surroundingWorkflow) throws IOException {
@@ -171,6 +232,20 @@ public class WorkflowReference extends Workflow {
 				replacementName = "\\" + key;
 			}
 			m.appendReplacement(sb, (replacementName != null) ? replacementName : key);
+		}
+		m.appendTail(sb);
+		return replaceQuotesResultingFromNestedWorkflowDefinitions(sb.toString());
+	}
+
+	private String replaceQuotesResultingFromNestedWorkflowDefinitions(final String script) {
+		final String regex = "(\\')(\\w+)(\\'[' '])";
+		final Pattern p = Pattern.compile(regex);
+		final Matcher m = p.matcher(script);
+		final StringBuffer sb = new StringBuffer();
+
+		while (m.find()) {
+			System.out.println(m.group(2));
+			m.appendReplacement(sb, " ".concat(m.group(2)).concat(" "));
 		}
 		m.appendTail(sb);
 		return sb.toString();
