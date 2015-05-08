@@ -91,6 +91,19 @@ public class PigScriptGenerator {
 
 	private static String insertDefinedFunctionNames() {
 		final StringBuilder sb = new StringBuilder();
+		//loaders
+		sb.append("DEFINE BamLoader fi.aalto.seqpig.io.BamLoader('yes');");
+		sb.append(lineSeparator);
+		sb.append("DEFINE SamLoader fi.aalto.seqpig.io.SamLoader('yes');");
+		sb.append(lineSeparator);
+		sb.append("DEFINE FastqLoader fi.aalto.seqpig.io.FastqLoader();");
+		sb.append(lineSeparator);
+		sb.append("DEFINE FastaLoader fi.aalto.seqpig.io.FastaLoader();");
+		sb.append(lineSeparator);
+		sb.append("DEFINE QseqLoader fi.aalto.seqpig.io.QseqLoader();");
+		sb.append(lineSeparator);
+		
+		//UDF's
 		sb.append("DEFINE ReadPaired fi.aalto.seqpig.filter.SAMFlagsFilter('HasMultipleSegments');");
 		sb.append(lineSeparator);
 		sb.append("DEFINE ReadMappedInPair fi.aalto.seqpig.filter.SAMFlagsFilter('IsProperlyAligned');");

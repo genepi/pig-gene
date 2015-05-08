@@ -71,12 +71,11 @@ public class WorkflowSerialisation {
 		if (type == null) {
 			throw new IOException();
 		}
-		final String decodedWorkflowName = java.net.URLDecoder.decode(name, "UTF-8");
 		FileReader fr = null;
 		if (type.equals(wfAbbr)) {
-			fr = new FileReader(workflowDefsPath.concat(decodedWorkflowName.concat(fileExtension)));
+			fr = new FileReader(workflowDefsPath.concat(name.concat(fileExtension)));
 		} else if (type.equals(compAbbr)) {
-			fr = new FileReader(componentDefsPath.concat(decodedWorkflowName.concat(fileExtension)));
+			fr = new FileReader(componentDefsPath.concat(name.concat(fileExtension)));
 		}
 		final YamlReader reader = new YamlReader(fr);
 		reader.getConfig().setPropertyElementType(Workflow.class, "components", Workflow.class);
