@@ -15,7 +15,8 @@ pigGeneApp.factory("WfPersistency", function($resource) {
 		Delete: $resource("/del/:id/:type", {id: "@id", type: "@type"}),
 		Download: $resource("/dwnld/:id", {id: "@id"}),
 		DownloadZipReq: $resource("/dwnldzipreq/:id", {id: "@id"}), 
-		DownloadLibFile: $resource("/dwnldlib")
+		DownloadLibFile: $resource("/dwnldlib"),
+		CleanUp: $resource("/cleanup")
 	};
 	
 });
@@ -276,6 +277,48 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 				}
 			});
 		}
+	};
+	
+	sharedWorkflow.cleanupWfDefinitions = function(componentName, connectorName, type) {
+		var properties = {
+				componentName: componentName,
+				connectorName: connectorName,
+				type: type
+		}
+		var cleanup = new WfPersistency.CleanUp.save(properties, function success() {}, function err() { $rootScope.$broadcast("showProblemIndicator"); } ).$promise.then(function(response) {
+			if(!response.success) {
+				sharedWorkflow.serverExceptionMsg = response.message;
+				sharedWorkflow.broadcastServerExceptionInformation();
+				$rootScope.$broadcast("showProblemIndicator");
+				return;
+			}
+		});
+		
+		
+		/*
+		 * var wfToStore = {
+					encodedName: encodeURI(this.workflow.name),
+					workflow: this.workflow,
+					type: type
+			}
+			var myWf = new WfPersistency.Save.save(wfToStore, function success() {}, function err() { $rootScope.$broadcast("showProblemIndicator"); } ).$promise.then(function(response) {
+				if(!response.success) {
+					sharedWorkflow.serverExceptionMsg = response.message;
+					sharedWorkflow.broadcastServerExceptionInformation();
+					$rootScope.$broadcast("showProblemIndicator");
+					return;
+				}
+				sharedWorkflow.redirectLocation($location.$$path, sharedWorkflow.workflow.name);
+				
+				if(type == compAbbr && sharedWorkflow.userInputMistakesExist()) {
+					$rootScope.$broadcast("showMistakeIndicator");
+				} else {
+					$rootScope.$broadcast("showTickIndicator");
+				}
+			});
+			*/
+		
+		
 	};
 	
 	sharedWorkflow.removeSpecialSymbolsInConnectorNames = function() {
@@ -563,12 +606,14 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 	
 	sharedWorkflow.deleteInput = function(index, type) {
 		var modWf = sharedWorkflow.workflow;
+		sharedWorkflow.cleanupWfDefinitions(modWf.name, modWf.parameter.inputParameter[index].connector, "input");
 		modWf.parameter.inputParameter.splice(index,1);
 		sharedWorkflow.prepForBroadcast(modWf, type);
 	};
 	
 	sharedWorkflow.deleteOutput = function(index, type) {
 		var modWf = sharedWorkflow.workflow;
+		sharedWorkflow.cleanupWfDefinitions(modWf.name, modWf.parameter.outputParameter[index].connector, "output");
 		modWf.parameter.outputParameter.splice(index,1);
 		sharedWorkflow.prepForBroadcast(modWf, type);
 	};

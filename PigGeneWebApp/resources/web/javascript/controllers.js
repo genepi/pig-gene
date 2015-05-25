@@ -680,12 +680,14 @@ pigGeneApp.controller('PlumbCtrl', ["$scope", "SharedWfService", function($scope
 			$.each(connections, function(idx, elem) {
 				var sourceElement = $.find('*[data-id="' + elem.source + '"]');
 				var targetElement = $.find('*[data-id="' + elem.target + '"]');
-				var connection = jsPlumb.connect({
-					source: $(sourceElement).attr('id'),
-					target: $(targetElement).attr('id'),
-					container: 'workflow-graph',
-					anchors: anchors
-				});
+				if(!(sourceElement.length == 0 || targetElement.length == 0)) {
+					var connection = jsPlumb.connect({
+						source: $(sourceElement).attr('id'),
+						target: $(targetElement).attr('id'),
+						container: 'workflow-graph',
+						anchors: anchors
+					});
+				}
 			});
 		}
 	};
