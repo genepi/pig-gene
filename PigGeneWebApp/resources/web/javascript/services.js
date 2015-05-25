@@ -254,6 +254,7 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 	
 	sharedWorkflow.persistWfDefinition = function(type) {
 		if(!$.isEmptyObject(this.workflow)) {
+			sharedWorkflow.removeSpecialSymbolsInConnectorNames();
 			var wfToStore = {
 					encodedName: encodeURI(this.workflow.name),
 					workflow: this.workflow,
@@ -274,6 +275,19 @@ pigGeneApp.factory("SharedWfService", ["$rootScope", "$location", "$window", "Wf
 					$rootScope.$broadcast("showTickIndicator");
 				}
 			});
+		}
+	};
+	
+	sharedWorkflow.removeSpecialSymbolsInConnectorNames = function() {
+		for(var i=0; i<sharedWorkflow.workflow.parameter.inputParameter.length; i++) {
+			var param = sharedWorkflow.workflow.parameter.inputParameter[i].connector.replace(/\./g,'');
+			param = param.replace(/\,/g,'');
+			sharedWorkflow.workflow.parameter.inputParameter[i].connector = param.replace(/\;/g,'');
+		}
+		for(var i=0; i<sharedWorkflow.workflow.parameter.outputParameter.length; i++) {
+			var param = sharedWorkflow.workflow.parameter.outputParameter[i].connector.replace(/\./g,'');
+			param = param.replace(/\,/g,'');
+			sharedWorkflow.workflow.parameter.outputParameter[i].connector = param.replace(/\;/g,'');
 		}
 	};
 	

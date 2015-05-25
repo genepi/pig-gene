@@ -77,7 +77,7 @@ public class WorkflowConverter {
 		}
 		return parameters;
 	}
-
+	
 	private static Position getPosition(final JSONObject comp) throws JSONException {
 		Position position = null;
 		if (comp.has("position") && !comp.isNull("position")) {
