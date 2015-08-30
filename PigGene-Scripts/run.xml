@@ -38,12 +38,5 @@
             <fileset dir="/bin"/>
         </jar>
     </target>
-	
-	<target name="copy_jar_file" depends="create_jar">
-		<echo>copy pigGene jar file...</echo>
-		<scp file="dist/${app.jar}"  todir="${cloud.username}@${cloud.host}:${cloud.dir}/lib" password="${cloud.password}" trust="true"></scp>
-		<echo>copy pig scripts...</echo>
-		<scp todir="${cloud.username}@${cloud.host}:${cloud.dir}/pigScripts" password="${cloud.password}" trust="true"><fileset dir="${local.pig}"></fileset></scp>
-	</target>
 
 </project>
