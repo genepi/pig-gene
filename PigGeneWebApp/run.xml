@@ -39,8 +39,6 @@
 		
 		<echo>starting pigGene server application</echo>
 		<sshexec host="${cloud.host}" username="${cloud.username}" password="${cloud.password}" trust="true" command="cd ${cloud.dir}; java -jar pigGene_server.jar"></sshexec>
-		
-		<echo>application is reachable under: genepi-calc.uibk.ac.at:8080/</echo>
 	</target>
 		
 </project>
