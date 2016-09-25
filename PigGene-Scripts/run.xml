@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="copy_jar_file" name="" >
     
-	<property name="cloud.host" value="genepi-calc.uibk.ac.at" />
-	<property name="cloud.username" value="clemens" />
-	<property name="cloud.dir" value="/home/clemens/pigGeneApp" />
 	<property name="local.pig" value="pigFiles" />
 	
 	<property name="src.dir" value="src" />
